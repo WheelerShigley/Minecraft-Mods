@@ -8,7 +8,7 @@ public class ModConfigs {
     public static SimpleConfig CONFIG;
     private static ModConfigProvider configs;
 
-    public static boolean BUDDING_AMETHYST, REINFORCED_DEEPSLATE, SPAWNER, SUSPICIOUS_SAND, SUSPICIOUS_GRAVEL;
+    public static boolean BUDDING_AMETHYST, REINFORCED_DEEPSLATE, SPAWNER, SUSPICIOUS_SAND, SUSPICIOUS_GRAVEL, TRIAL_SPAWNER;
 
     public static void registerConfigs() {
         configs = new ModConfigProvider();
@@ -25,6 +25,7 @@ public class ModConfigs {
         configs.addKeyValuePair( new Pair<>("silktouch.spawner",              true) );
         configs.addKeyValuePair( new Pair<>("silktouch.suspicious_gravel",    true) );
         configs.addKeyValuePair( new Pair<>("silktouch.suspicious_sand",      true) );
+        //configs.addKeyValuePair( new Pair<>("silktouch.trial_spawner",      true) );
     }
 
     private static void assignConfigs() {
@@ -33,5 +34,6 @@ public class ModConfigs {
         SPAWNER =              CONFIG.getOrDefault("silktouch.spawner",              true);
         SUSPICIOUS_GRAVEL =    CONFIG.getOrDefault("silktouch.suspicious_gravel",    true);
         SUSPICIOUS_SAND =      CONFIG.getOrDefault("silktouch.suspicious_sand",      true);
+        //TRIAL_SPAWNER =        CONFIG.getOrDefault("silktouch.trial_spawner",        true);
     }
 }

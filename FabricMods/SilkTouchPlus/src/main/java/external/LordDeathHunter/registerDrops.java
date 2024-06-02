@@ -1,4 +1,4 @@
-package external;
+package external.LordDeathHunter;
 
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
@@ -15,12 +15,13 @@ import net.minecraft.predicate.item.EnchantmentPredicate;
 import net.minecraft.predicate.item.ItemPredicate;
 import net.minecraft.resource.ResourceManager;
 
-public class LordDeatHunter {
+public class registerDrops {
     //https://github.com/LordDeatHunter/SilkSpawners/blob/master/src/main/java/wraith/silkspawners/SilkSpawners.java
+    //TODO: remove EXP drops
     public static void registerSilkTouchDrop(ResourceManager resourceManager, LootManager manager, LootTable.Builder supplier, Item blockItem, int minimum_level) {
         LootPool.Builder builder = LootPool.builder();
-        builder.rolls(ConstantLootNumberProvider.create(1))
-                .with(ItemEntry.builder(blockItem).build())
+        builder.rolls( ConstantLootNumberProvider.create(1) )
+                .with( ItemEntry.builder(blockItem).build() )
                 .conditionally(
                         MatchToolLootCondition.builder(
                                 ItemPredicate.Builder.create().enchantment(
@@ -28,12 +29,13 @@ public class LordDeatHunter {
                                 )
                         ).build()
                 );
-        supplier.pool(builder.build());
+        supplier.pool( builder.build() );
     }
+
     public static void registerSilkTouchDropWithNBT(ResourceManager resourceManager, LootManager manager, LootTable.Builder supplier, Item blockItem, int minimum_level) {
         LootPool.Builder builder = LootPool.builder();
-        builder.rolls(ConstantLootNumberProvider.create(1))
-                .with(ItemEntry.builder(blockItem).build())
+        builder.rolls( ConstantLootNumberProvider.create(1) )
+                .with( ItemEntry.builder(blockItem).build() )
                 .apply(
                         CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
                                 .withOperation("SpawnData", "BlockEntityTag.SpawnData")
@@ -47,6 +49,6 @@ public class LordDeatHunter {
                                 )
                         ).build()
                 );
-        supplier.pool(builder.build());
+        supplier.pool( builder.build() );
     }
 }

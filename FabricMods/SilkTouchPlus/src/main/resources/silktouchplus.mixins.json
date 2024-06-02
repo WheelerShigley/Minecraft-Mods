@@ -3,7 +3,8 @@
   "package": "me.wheelershigley.silktouchplus.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "BlockItemMixin"
+    "BlockItemMixin",
+    "SpawnerBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1
