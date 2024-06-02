@@ -1,0 +1,11 @@
+name: TurtlesPlus
+version: '0'
+main: me.solacekairos.turtlesplus.Turtles_Plus
+api-version: '1.20'
+authors: SolaceKairos
+description: Improves Turtle Utilities
+commands:
+  turtles:
+    description: reloads turtle settings in config
+    usage: /turtles
+    permission: turtlesplus.reload

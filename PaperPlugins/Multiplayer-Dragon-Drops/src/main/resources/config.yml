@@ -1,0 +1,22 @@
+#Individual (exp) drop
+
+do-individual-exp-drops: true
+exp-drop-quantity: 12000
+
+# Item drops
+
+drop-location:
+  - 0
+  - 0
+  - 0
+
+### Currently, there is only support for single items that are already in the game
+drop-probabilities:
+  - 0.0
+drop-items:
+  - "DRAGON_EGG"
+
+#dimension/space (-1.0 for no limit)
+
+dimension-name: "world_the_end"
+maximum-distance-for-rewards: 256.0

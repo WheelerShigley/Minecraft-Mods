@@ -1,0 +1,2 @@
+# Graphfun
+ Slimefun graph maker

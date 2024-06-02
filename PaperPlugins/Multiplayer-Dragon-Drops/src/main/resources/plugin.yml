@@ -1,0 +1,9 @@
+name: CustomDragon
+version: '${version}'
+authors: ["SolaceKairos"]
+main: me.solacekairos.customdragon.CustomDragon
+api-version: '1.19'
+commands:
+  dragons:
+    description: reloads plugin
+    usage: '/dragons reload'

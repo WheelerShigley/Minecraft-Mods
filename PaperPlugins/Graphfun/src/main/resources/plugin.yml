@@ -1,0 +1,11 @@
+name: GraphMaker
+version: '${project.version}'
+author: WheelerShigley
+main: me.wheelershigley.graphmaker.GraphingPlugin
+api-version: '1.20'
+dependencies: [Slimefun]
+commands:
+  graphmaker:
+    description: Plugin command, for reload and constructing digraphs
+    usage: /graphmaker <subcommand>( <subcommand argument(s)>)
+    permission: graphmaker.digraph

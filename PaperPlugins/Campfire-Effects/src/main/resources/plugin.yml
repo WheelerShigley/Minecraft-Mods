@@ -1,0 +1,7 @@
+name: CampfireEffects
+version: '${project.version}'
+main: me.solacekairos.campfireeffects.CampfireEffects
+api-version: 1.19
+authors: [ SolaceKairos ]
+description: Configurable effects when near campfires
+website: SolaceKairos.me
