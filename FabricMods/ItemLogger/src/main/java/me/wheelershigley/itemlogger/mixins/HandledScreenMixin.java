@@ -45,7 +45,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
             DefaultedList<Slot> slots = screen.getScreenHandler().slots;
 
             //remove player inventory
-            for(int i = 0; i <= 27; i++) {
+            for(int i = 0; i <= 27+1; i++) {
                 slots.removeLast();
             }
 
