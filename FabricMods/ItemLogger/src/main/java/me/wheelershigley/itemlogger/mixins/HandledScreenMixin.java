@@ -52,7 +52,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
             contents
                 .append("\r\n\r\n# \"")
                 .append( container.getNarratedTitle().getString() )
-                .append("\":\r\n---\r\n")
+                .append("\"\r\n")
             ;
 
             //Contents
@@ -74,7 +74,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
                     Set<ComponentType<?>> components_set = stack.getComponents().getTypes();
                     for(ComponentType<?> component : components_set) {
                         component_builder
-                            .append(TAB).append(TAB).append("* ")
+                                .append("*** ")
                             .append("\"").append(component.toString()).append("\": ")
                             .append(stack.get(component))
                             .append("\r\n")
@@ -83,15 +83,15 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
                     components = component_builder.toString();
                 }
                 contents
-                    .append("slot[").append(slot_iterator).append("]:\r\n")
-                    .append(TAB).append("* name = \"").append(stack.getItem().getName().getString()).append("\"\r\n")
-                    .append(TAB).append("* amount: ").append(stack.getCount()).append("\r\n")
-                    .append(TAB).append("* components:\r\n").append(components)
+                    .append("* slot[").append(slot_iterator).append("]:\r\n")
+                    .append("** name = \"").append(stack.getItem().getName().getString()).append("\"\r\n")
+                    .append("** amount: ").append(stack.getCount()).append("\r\n")
+                    .append("** components:\r\n").append(components)
                 ;
                 slot_iterator++;
             }
             if(is_empty) {
-                contents.append("! EMPTY !\n");
+                contents.append("! EMPTY !\r\n");
             }
         }
 
