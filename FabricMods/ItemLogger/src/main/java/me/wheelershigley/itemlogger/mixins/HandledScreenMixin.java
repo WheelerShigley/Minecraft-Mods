@@ -45,16 +45,25 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
             DefaultedList<Slot> slots = screen.getScreenHandler().slots;
 
             //remove player inventory
-            for(int i = 0; i <= 27+1; i++) {
+            for(int i = 0; i <= 27+8; i++) {
                 slots.removeLast();
             }
 
+            StringBuilder contents = new StringBuilder();
+            contents
+                .append("\n\n# \"")
+                    .append( screen.getNarratedTitle().getString() )
+                .append(":\n---\n")
+            ;
+
+            boolean includes_non_air = false;
             int slot_iterator = 0;
             for(Slot slot : slots) {
                 if( slot.getStack().getItem() == Items.AIR) {
                     slot_iterator++;
                     continue;
                 }
+                includes_non_air = true;
 
                 ItemStack stack = slot.getStack();
                 String components; {
@@ -62,7 +71,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
                     Set<ComponentType<?>> components_set = stack.getComponents().getTypes();
                     for(ComponentType<?> component : components_set) {
                         component_builder
-                            .append("    \"").append( component.toString() ).append("\": ")
+                            .append("\t\t\"").append( component.toString() ).append("\": ")
                             .append(
                                 stack.get(component)
                             )
@@ -71,14 +80,16 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
                     }
                     components = component_builder.toString();
                 }
-                LOGGER.info(
-                        "slot: "+ slot_iterator +"\n"
-                        +"name: "+ stack.getItem().getName().getString() +"\n"
-                        +"amount: "+ stack.getCount() + "\n"
-                        +"components:\n" + components
-                );
+                contents
+                    .append("slot[").append(slot_iterator).append("]:\n")
+                    .append("\tname = \"").append( stack.getItem().getName().getString() ).append("\"\n")
+                    .append("\tamount: ").append( stack.getCount() ).append("\n")
+                    .append("\tcomponents:\n").append(components)
+                ;
                 slot_iterator++;
             }
+
+            LOGGER.info( contents.toString() + (includes_non_air ? "" : "! EMPTY !\n") );
         }
     }
 }
