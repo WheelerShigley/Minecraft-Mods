@@ -9,7 +9,7 @@
     "repo": "https://github.com/solac/ItemLogger"
   },
   "license": "All-Rights-Reserved",
-  "icon": "assets/itemlogger/ItemLoggerLogo.png",
+  "icon": "/assets/itemlogger/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
