@@ -74,7 +74,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
                     Set<ComponentType<?>> components_set = stack.getComponents().getTypes();
                     for(ComponentType<?> component : components_set) {
                         component_builder
-                                .append("*** ")
+                            .append("\t\t- ")
                             .append("\"").append(component.toString()).append("\": ")
                             .append(stack.get(component))
                             .append("\r\n")
@@ -84,9 +84,9 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
                 }
                 contents
                     .append("* slot[").append(slot_iterator).append("]:\r\n")
-                    .append("** name = \"").append(stack.getItem().getName().getString()).append("\"\r\n")
-                    .append("** amount: ").append(stack.getCount()).append("\r\n")
-                    .append("** components:\r\n").append(components)
+                    .append("\t+ name = \"").append(stack.getItem().getName().getString()).append("\"\r\n")
+                    .append("\t+ count: ").append( stack.getCount() ).append("\r\n")
+                    .append("\t+ components:\r\n").append(components)
                 ;
                 slot_iterator++;
             }
