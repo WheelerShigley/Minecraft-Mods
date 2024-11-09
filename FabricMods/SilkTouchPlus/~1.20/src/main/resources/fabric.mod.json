@@ -3,7 +3,7 @@
 	"id": "silktouchplus",
 	"version": "${version}",
 	"name": "SilkTouchPlus",
-	"description": "a",
+	"description": "Makes un-silk-touch-able blocks configurably silk-touch-able.",
 	"authors": [
 		"Wheeler-Shigley"
 	],
@@ -24,12 +24,8 @@
       "silktouchplus.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.15.0",
-		"minecraft": "~1.20.1",
-		"java": ">=17",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
+		"minecraft": ">=1.20.5 <=1.20.6",
+		"java": ">=21",
+		"fabric": "*"
 	}
 }

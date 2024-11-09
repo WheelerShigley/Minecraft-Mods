@@ -4,7 +4,10 @@ import external.LordDeathHunter.*;
 import external.kaupenjoe.ModConfigs;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
+import net.fabricmc.fabric.api.loot.v2.LootTableSource;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootTable;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 
@@ -21,25 +24,29 @@ public class SilkTouchPlus implements ModInitializer {
     public void onInitialize() {
         ModConfigs.registerConfigs();
 
+        LOGGER.info("a");
+        //silk-touch ability loot table modifications
         LootTableEvents.MODIFY.register(
-            (resourceManager, manager, id, supplier, setter) -> {
+            (RegistryKey<LootTable> key, LootTable.Builder tableBuilder, LootTableSource source) -> {
+                Identifier id = key.getValue();
                 if(  ModConfigs.BUDDING_AMETHYST  &&  ( new Identifier("minecraft","blocks/spawner") ).equals(id)  ) {
-                    registerDrops.registerSilkTouchDropWithNBT(resourceManager, manager, supplier, Items.SPAWNER, 1);
+                    registerDrops.registerSilkTouchDropWithNBT(tableBuilder, Items.SPAWNER);
                 }
                 if(  ModConfigs.REINFORCED_DEEPSLATE  &&  ( new Identifier("minecraft", "blocks/reinforced_deepslate") ).equals(id)  ) {
-                    registerDrops.registerSilkTouchDrop(resourceManager, manager, supplier, Items.REINFORCED_DEEPSLATE, 1);
+                    registerDrops.registerSilkTouchDrop(tableBuilder, Items.REINFORCED_DEEPSLATE);
                 }
                 if(  ModConfigs.SPAWNER  &&  ( new Identifier("minecraft", "blocks/budding_amethyst") ).equals(id)  ) {
-                    registerDrops.registerSilkTouchDrop(resourceManager, manager, supplier, Items.BUDDING_AMETHYST, 1);
+                    registerDrops.registerSilkTouchDrop(tableBuilder, Items.BUDDING_AMETHYST);
+                    //LOGGER.info("budding_amethyst!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
                 if(  ModConfigs.SUSPICIOUS_GRAVEL  &&  ( new Identifier("minecraft", "blocks/suspicious_gravel") ).equals(id)  ) {
-                    registerDrops.registerSilkTouchDrop(resourceManager, manager, supplier, Items.SUSPICIOUS_GRAVEL, 1);
+                    registerDrops.registerSilkTouchDrop(tableBuilder, Items.SUSPICIOUS_GRAVEL);
                 }
                 if(  ModConfigs.SUSPICIOUS_SAND  &&  ( new Identifier("minecraft", "blocks/suspicious_sand") ).equals(id)  ) {
-                    registerDrops.registerSilkTouchDrop(resourceManager, manager, supplier, Items.SUSPICIOUS_SAND, 1);
+                    registerDrops.registerSilkTouchDrop(tableBuilder, Items.SUSPICIOUS_SAND);
                 }
                 /*if(  ModConfigs.TRIAL_SPAWNER  &&  ( new Identifier("minecraft", "blocks/trial_spawner") ).equals(id)  ) {
-                    LordDeatHunter.registerSilkTouchDropWithNBT(resourceManager, manager, supplier, Items.TRIAL_SPAWNER, 1);
+                    registerDrops.registerSilkTouchDropWithNBT(tableBuilder, Items.TRIAL_SPAWNER);
                 }*/
             }
         );
