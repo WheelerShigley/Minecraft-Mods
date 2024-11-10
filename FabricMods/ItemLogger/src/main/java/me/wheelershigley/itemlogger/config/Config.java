@@ -34,8 +34,8 @@ public class Config {
     }
 
     public String getConfig(String input) {
-        String output = CurrentConfigs.get(input).toLowerCase();
-        return output;
+        String output = CurrentConfigs.get(input);
+        return (output == null) ? "" : output.toLowerCase();
     }
 
     //must run after initialization
