@@ -3,6 +3,7 @@ package me.wheelershigley.itemlogger.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import me.wheelershigley.itemlogger.ItemLogger;
 import me.wheelershigley.itemlogger.client.ItemLoggerClient;
+import me.wheelershigley.itemlogger.config.ConfigHelpers;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.command.CommandRegistryAccess;
@@ -22,6 +23,17 @@ public class ItemLoggerCommand {
                     );
                     return -1;
                 }
+            )
+            .then(
+                ClientCommandManager.literal("reload").executes(
+                    context -> {
+                        ItemLoggerClient.configs.reloadConfigurations();
+                        /*Reset Currently-Saved Configurations*/ {
+                            ItemLoggerClient.mode = ConfigHelpers.getDefaultMode();
+                        }
+                        return 0;
+                    }
+                )
             )
             .then(
                 ClientCommandManager.literal("mode").executes(
