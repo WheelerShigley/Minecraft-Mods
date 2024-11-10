@@ -2,9 +2,10 @@ package me.wheelershigley.itemlogger.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import me.wheelershigley.itemlogger.ItemLogger;
+import me.wheelershigley.itemlogger.client.ItemLoggerClient;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
 public class ItemLoggerCommand {
@@ -12,9 +13,9 @@ public class ItemLoggerCommand {
     private static Text getMessage(String message) {
         return Text.literal(PREFIX + message);
     }
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
+    public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess access) {
         dispatcher.register(
-            CommandManager.literal("itemlogger").executes(
+            ClientCommandManager.literal("itemlogger").executes(
                 context -> {
                     context.getSource().getPlayer().sendMessage(
                         getMessage("Called \"/itemlogger\" with no arguments.")
@@ -23,7 +24,7 @@ public class ItemLoggerCommand {
                 }
             )
             .then(
-                CommandManager.literal("mode").executes(
+                ClientCommandManager.literal("mode").executes(
                     context -> {
                         context.getSource().getPlayer().sendMessage(
                             getMessage("Called \"/itemlogger mode\" with no arguments.")
@@ -33,9 +34,9 @@ public class ItemLoggerCommand {
                 )
                 /* "/itemlogger mode off" */
                 .then(
-                    CommandManager.literal("off").executes(
+                    ClientCommandManager.literal("off").executes(
                         context -> {
-                            ItemLogger.mode = ItemLogger.Mode.OFF;
+                            ItemLoggerClient.mode = ItemLoggerClient.Mode.OFF;
                             context.getSource().getPlayer().sendMessage(
                                  getMessage("Disabled item-logging.")
                             );
@@ -45,9 +46,9 @@ public class ItemLoggerCommand {
                 )
                 /* "/itemlogger mode log" */
                 .then(
-                    CommandManager.literal("log").executes(
+                    ClientCommandManager.literal("log").executes(
                         context -> {
-                            ItemLogger.mode = ItemLogger.Mode.LOG;
+                            ItemLoggerClient.mode = ItemLoggerClient.Mode.LOG;
                             context.getSource().getPlayer().sendMessage(
                                 getMessage("Item-logging to \"latest.log\".")
                             );
@@ -57,9 +58,9 @@ public class ItemLoggerCommand {
                 )
                 /* "/itemlogger mode database" */ //FUTURE FEATURE
                 /*.then(
-                    CommandManager.literal("database").executes(
+                    ClientCommandManager.literal("database").executes(
                         context -> {
-                            ItemLogger.mode = ItemLogger.Mode.DATABASE;
+                            ItemLoggerClient.mode = ItemLoggerClient.Mode.DATABASE;
                             context.getSource().getPlayer().sendMessage(
                                 getMessage("Item-logging to database.")
                             );
