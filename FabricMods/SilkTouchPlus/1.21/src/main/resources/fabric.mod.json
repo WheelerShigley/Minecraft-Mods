@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "silktouchplus",
+  "version": "${version}",
+  "name": "SilkTouchPlus",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/silktouchplus/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.silktouchplus.SilkTouchPlus"
+    ]
+  },
+  "mixins": [
+    "silktouchplus.mixins.json",
+    {
+      "config": "silktouchplus.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
