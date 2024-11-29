@@ -1,6 +1,5 @@
 package me.wheelershigley.treeinaforest.mixins;
 
-import com.sun.source.tree.Tree;
 import me.wheelershigley.treeinaforest.TreeInAForest;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;
