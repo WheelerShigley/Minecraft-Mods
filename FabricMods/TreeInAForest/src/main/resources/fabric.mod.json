@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "treeinaforest",
+  "version": "${version}",
+  "name": "TreeInAForest",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/treeinaforest/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.treeinaforest.TreeInAForest"
+    ]
+  },
+  "mixins": [
+    "treeinaforest.mixins.json",
+    {
+      "config": "treeinaforest.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
