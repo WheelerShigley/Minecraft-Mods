@@ -1,6 +1,7 @@
 package me.wheelershigley.unlimited_anvil;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 
@@ -92,6 +93,9 @@ public class ToolMaterials {
         for( Map.Entry<String, Item[]> MaterialToolEntry : MaterialToolMap.entrySet() ) {
             key = MaterialToolEntry.getKey();
             for( Item tool : MaterialToolEntry.getValue() ) {
+                //Must be damage-able
+                if( !(new ItemStack(tool)).isDamageable() ) { continue; }
+
                 //handle General Cases
                 if(  RepairMaterialsMap.containsKey(key)  ) {
                     ToolMaterialMap.put( tool, RepairMaterialsMap.get(key) );
