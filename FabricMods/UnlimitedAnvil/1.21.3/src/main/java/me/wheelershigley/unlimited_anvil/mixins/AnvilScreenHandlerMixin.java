@@ -2,14 +2,10 @@ package me.wheelershigley.unlimited_anvil.mixins;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import me.wheelershigley.unlimited_anvil.AnvilMode;
-import me.wheelershigley.unlimited_anvil.UnlimitedAnvil;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.component.type.RepairableComponent;
-import net.minecraft.data.server.tag.ItemTagProvider;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,30 +13,21 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.*;
 import net.minecraft.screen.slot.ForgingSlotsManager;
-import net.minecraft.text.Text;
 import net.minecraft.util.StringHelper;
-import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import oshi.jna.platform.mac.SystemB;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import static me.wheelershigley.unlimited_anvil.HelperFunctions.*;
 import static me.wheelershigley.unlimited_anvil.ToolMaterials.ToolMaterialMap;
-import static net.minecraft.screen.AnvilScreenHandler.getNextCost;
 
 @Mixin(value = AnvilScreenHandler.class, priority = 800)
 public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
@@ -97,9 +84,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
     public static final int INPUT_2_ID = 1;
     @Shadow @Final
     public static final int OUTPUT_ID = 2;
+
     private static int TRUE_OUTPUT_ID = OUTPUT_ID-(INPUT_2_ID+1);
-    @Shadow
-    private boolean keepSecondSlot;
+
+
     @Shadow @Final
     private Property levelCost;
     @Shadow
@@ -107,6 +95,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
     @Shadow
     @Nullable
     private String newItemName;
+    @Shadow
+    public boolean setNewItemName(String newItemName) { return false; }
     /**
      * @author wheeler-shigley
      * @reason complete anvil-functionality overhaul
@@ -144,13 +134,17 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             case AnvilMode.Enchant:
             case AnvilMode.Combine: {
                 ItemEnchantmentsComponent enchants = combineEnchants(PrimaryInput, SecondaryInput);
-                EnchantmentHelper.set(output, enchants);
+
+                boolean isEnchantedBook = PrimaryInput.contains(DataComponentTypes.STORED_ENCHANTMENTS);
+                if(isEnchantedBook) {
+                    //TODO : FIX THIS
+                    output.set(DataComponentTypes.STORED_ENCHANTMENTS, enchants);
+                } else {
+                    EnchantmentHelper.set(output, enchants);
+                }
                 break;
             }
         }
-
-        /*Truncate enchant-levels by maximum-effective levels*/
-        //TODO
 
         levelCost = getEnchantingCost(output);
         if(
@@ -158,8 +152,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             && !StringHelper.isBlank(this.newItemName)
             && !this.newItemName.equals( PrimaryInput.getName().getString() )
         ) {
-            output.set( DataComponentTypes.CUSTOM_NAME, Text.literal(this.newItemName) );
-            levelCost += 1;
+            //output.set(DataComponentTypes.CUSTOM_NAME, Text.literal(this.newItemName));
+            if( setNewItemName(this.newItemName) ) {
+                levelCost += 1;
+            }
         }
 
         /*Outputs*/
