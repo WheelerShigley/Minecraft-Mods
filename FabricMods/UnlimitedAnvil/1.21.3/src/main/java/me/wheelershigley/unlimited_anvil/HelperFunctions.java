@@ -4,13 +4,16 @@ import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
-import java.util.function.Predicate;
+
+import static me.wheelershigley.unlimited_anvil.UnlimitedAnvil.Conflicts;
+import static me.wheelershigley.unlimited_anvil.UnlimitedAnvil.MaximumEnchantLevels;
 
 public class HelperFunctions {
     public static String replaceLast(String text, String regex, String replacement) {
@@ -36,7 +39,25 @@ public class HelperFunctions {
         Set<RegistryEntry<Enchantment>> SecondaryEnchants = SecondaryEnchantments.getEnchantments();
         int previous_level, current_level;
         for(RegistryEntry<Enchantment> SecondaryEnchant : SecondaryEnchants) {
-            //TODO only allow item-specific enchants
+            //*Skip adding the current enchant if it conflicts*/
+            if(  Conflicts.containsKey( SecondaryEnchant.getKey().get().getValue() )  ) {
+                Identifier[] PrimaryIdentifiers = new Identifier[PrimaryEnchantments.getSize()];
+                int index = 0;
+                for(RegistryEntry<Enchantment> PrimaryEnchantment : PrimaryEnchantments.getEnchantments() ) {
+                    if( PrimaryEnchantment.getKey().isEmpty() ) { continue; }
+                    PrimaryIdentifiers[index] = PrimaryEnchantment.getKey().get().getValue();
+                    index++;
+                }
+                if(
+                    identifiersIntersect(
+                        PrimaryIdentifiers,
+                        Conflicts.get( SecondaryEnchant.getKey().get().getValue() )
+                    )
+                ) {
+                    continue;
+                }
+            }
+
             previous_level = PrimaryEnchantments.getLevel(SecondaryEnchant);
             current_level = SecondaryEnchantments.getLevel(SecondaryEnchant);
 
@@ -48,7 +69,7 @@ public class HelperFunctions {
                 EnchantIdentifier = SecondaryEnchant.getKey().get().getValue();
             }
             if(EnchantIdentifier != null) {
-                current_level = Math.min( current_level, MaximumEffectiveEnchantLevels.get(EnchantIdentifier) );
+                current_level = Math.min( current_level, MaximumEnchantLevels.get(EnchantIdentifier) );
             }
 
             ResultBuilder.set(SecondaryEnchant, current_level);
@@ -105,48 +126,88 @@ public class HelperFunctions {
         return accumulator;
     }
 
-    public static HashMap<Identifier, Integer> MaximumEffectiveEnchantLevels = new HashMap<>(); static {
-        MaximumEffectiveEnchantLevels.put(Enchantments.AQUA_AFFINITY        .getValue(), 1                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.BANE_OF_ARTHROPODS   .getValue(), Integer.MAX_VALUE  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.BLAST_PROTECTION     .getValue(), 10                 );
-        MaximumEffectiveEnchantLevels.put(Enchantments.BREACH               .getValue(), Integer.MAX_VALUE  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.CHANNELING           .getValue(), 1                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.BINDING_CURSE        .getValue(), 1                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.VANISHING_CURSE      .getValue(), 1                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.DENSITY              .getValue(), Integer.MAX_VALUE  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.DEPTH_STRIDER        .getValue(), 3                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.EFFICIENCY           .getValue(), 255                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.FEATHER_FALLING      .getValue(), 7                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.FIRE_ASPECT          .getValue(), 255                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.FIRE_PROTECTION      .getValue(), 10                 );
-        MaximumEffectiveEnchantLevels.put(Enchantments.FLAME                .getValue(), 1                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.FORTUNE              .getValue(), 255                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.FROST_WALKER         .getValue(), 14                 );
-        MaximumEffectiveEnchantLevels.put(Enchantments.IMPALING             .getValue(), Integer.MAX_VALUE  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.INFINITY             .getValue(), 1                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.KNOCKBACK            .getValue(), 255                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.LOOTING              .getValue(), 255                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.LOYALTY              .getValue(), 127                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.LUCK_OF_THE_SEA      .getValue(), 255                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.LURE                 .getValue(), 5                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.MENDING              .getValue(), 1                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.MULTISHOT            .getValue(), 1                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.PIERCING             .getValue(), 127                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.POWER                .getValue(), 255                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.PROJECTILE_PROTECTION.getValue(), 10                 );
-        MaximumEffectiveEnchantLevels.put(Enchantments.PROTECTION           .getValue(), 20                 );
-        MaximumEffectiveEnchantLevels.put(Enchantments.PUNCH                .getValue(), 255                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.QUICK_CHARGE         .getValue(), 5                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.RESPIRATION          .getValue(), 255                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.RIPTIDE              .getValue(), 255                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.SHARPNESS            .getValue(), Integer.MAX_VALUE  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.SILK_TOUCH           .getValue(), 1                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.SMITE                .getValue(), Integer.MAX_VALUE  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.SOUL_SPEED           .getValue(), 255                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.SWEEPING_EDGE        .getValue(), 255                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.SWIFT_SNEAK          .getValue(), 5                  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.THORNS               .getValue(), Integer.MAX_VALUE  );
-        MaximumEffectiveEnchantLevels.put(Enchantments.UNBREAKING           .getValue(), 255                );
-        MaximumEffectiveEnchantLevels.put(Enchantments.WIND_BURST           .getValue(), 255                );
+    public static HashMap<Identifier, Integer> getMaximumEffectiveEnchantLevels() {
+        HashMap<Identifier, Integer> MaximumEffectiveEnchantLevels = new HashMap<>(); {
+            MaximumEffectiveEnchantLevels.put(Enchantments.AQUA_AFFINITY        .getValue(), 1                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.BANE_OF_ARTHROPODS   .getValue(), Integer.MAX_VALUE  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.BLAST_PROTECTION     .getValue(), 10                 );
+            MaximumEffectiveEnchantLevels.put(Enchantments.BREACH               .getValue(), Integer.MAX_VALUE  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.CHANNELING           .getValue(), 1                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.BINDING_CURSE        .getValue(), 1                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.VANISHING_CURSE      .getValue(), 1                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.DENSITY              .getValue(), Integer.MAX_VALUE  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.DEPTH_STRIDER        .getValue(), 3                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.EFFICIENCY           .getValue(), 255                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.FEATHER_FALLING      .getValue(), 7                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.FIRE_ASPECT          .getValue(), 255                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.FIRE_PROTECTION      .getValue(), 10                 );
+            MaximumEffectiveEnchantLevels.put(Enchantments.FLAME                .getValue(), 1                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.FORTUNE              .getValue(), 255                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.FROST_WALKER         .getValue(), 14                 );
+            MaximumEffectiveEnchantLevels.put(Enchantments.IMPALING             .getValue(), Integer.MAX_VALUE  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.INFINITY             .getValue(), 1                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.KNOCKBACK            .getValue(), 255                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.LOOTING              .getValue(), 255                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.LOYALTY              .getValue(), 127                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.LUCK_OF_THE_SEA      .getValue(), 255                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.LURE                 .getValue(), 5                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.MENDING              .getValue(), 1                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.MULTISHOT            .getValue(), 1                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.PIERCING             .getValue(), 127                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.POWER                .getValue(), 255                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.PROJECTILE_PROTECTION.getValue(), 10                 );
+            MaximumEffectiveEnchantLevels.put(Enchantments.PROTECTION           .getValue(), 20                 );
+            MaximumEffectiveEnchantLevels.put(Enchantments.PUNCH                .getValue(), 255                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.QUICK_CHARGE         .getValue(), 5                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.RESPIRATION          .getValue(), 255                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.RIPTIDE              .getValue(), 255                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.SHARPNESS            .getValue(), Integer.MAX_VALUE  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.SILK_TOUCH           .getValue(), 1                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.SMITE                .getValue(), Integer.MAX_VALUE  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.SOUL_SPEED           .getValue(), 255                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.SWEEPING_EDGE        .getValue(), 255                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.SWIFT_SNEAK          .getValue(), 5                  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.THORNS               .getValue(), Integer.MAX_VALUE  );
+            MaximumEffectiveEnchantLevels.put(Enchantments.UNBREAKING           .getValue(), 255                );
+            MaximumEffectiveEnchantLevels.put(Enchantments.WIND_BURST           .getValue(), 255                );
+        }
+        return MaximumEffectiveEnchantLevels;
+    }
+
+    public static HashMap<Identifier, Identifier[]> getConflicts() {
+        HashMap<Identifier, Identifier[]> Conflicts = new HashMap<>();
+
+        //TODO - Genericize this
+        /*Silk_Touch & Fortune*/
+        Conflicts.put(
+            Enchantments.SILK_TOUCH.getValue(),
+            new Identifier[]{
+                Enchantments.FORTUNE.getValue()
+            }
+        );
+        Conflicts.put(
+                Enchantments.FORTUNE.getValue(),
+                new Identifier[]{
+                        Enchantments.SILK_TOUCH.getValue()
+                }
+        );
+
+        return Conflicts;
+    }
+
+    public static HashMap<Item, RegistryEntry<Enchantment> > getAllowedEnchants() {
+        //TODO
+        return null;
+    }
+
+    public static boolean identifiersIntersect(Identifier[] LeftSet, Identifier[] RightSet) {
+        for(Identifier LeftSubset : LeftSet) {
+            for(Identifier RightSubset : RightSet) {
+                if( LeftSubset.equals(RightSubset) ) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
