@@ -15,6 +15,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.*;
 import net.minecraft.screen.slot.ForgingSlotsManager;
+import net.minecraft.text.Text;
 import net.minecraft.util.StringHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -97,6 +98,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
     private String newItemName;
     @Shadow
     public boolean setNewItemName(String newItemName) { return false; }
+
     /**
      * @author wheeler-shigley
      * @reason complete anvil-functionality overhaul
@@ -135,9 +137,19 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             case AnvilMode.Combine: {
                 ItemEnchantmentsComponent enchants = combineEnchants(PrimaryInput, SecondaryInput);
 
-                boolean isEnchantedBook = PrimaryInput.contains(DataComponentTypes.STORED_ENCHANTMENTS);
-                if(isEnchantedBook) {
-                    //TODO : FIX THIS
+                //Repair
+                if(  PrimaryInput.getItem().equals( SecondaryInput.getItem() )  ) {
+                    output.setDamage(
+                        Math.max(
+                            PrimaryInput.getDamage() + SecondaryInput.getDamage() - PrimaryInput.getMaxDamage(),
+                            0
+                        )
+                    );
+                }
+
+                boolean useStoredEnchants = PrimaryInput.contains(DataComponentTypes.STORED_ENCHANTMENTS);
+                if(useStoredEnchants) {
+                    //TODO; DOES NOT WORK
                     output.set(DataComponentTypes.STORED_ENCHANTMENTS, enchants);
                 } else {
                     EnchantmentHelper.set(output, enchants);
@@ -147,20 +159,29 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         }
 
         levelCost = getEnchantingCost(output);
-        if(
-               newItemName != null
+        boolean hasNewName = (
+            newItemName != null
             && !StringHelper.isBlank(this.newItemName)
             && !this.newItemName.equals( PrimaryInput.getName().getString() )
-        ) {
-            //output.set(DataComponentTypes.CUSTOM_NAME, Text.literal(this.newItemName));
-            if( setNewItemName(this.newItemName) ) {
-                levelCost += 1;
-            }
+        );
+        if(hasNewName) {
+            output.set( DataComponentTypes.CUSTOM_NAME, Text.literal(this.newItemName) );
+            levelCost += 1;
         }
 
         /*Outputs*/
-        this.output.setStack(TRUE_OUTPUT_ID, output);
-        this.levelCost.set(levelCost);
+        boolean outputIsTheSame = (
+            !hasNewName
+            && enchantsAreTheSame(PrimaryInput, output)
+            && PrimaryInput.getDamage() == output.getDamage()
+        );
+        if(outputIsTheSame) {
+            this.output.setStack(TRUE_OUTPUT_ID, new ItemStack(Items.AIR) );
+            this.levelCost.set(0);
+        } else {
+            this.output.setStack(TRUE_OUTPUT_ID, output);
+            this.levelCost.set(levelCost);
+        }
         this.sendContentUpdates();
 
         //vanilla; I have no idea why, but if I comment out bl4, the mixin breaks.

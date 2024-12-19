@@ -12,6 +12,7 @@ import java.util.Map;
 public class ToolMaterials {
 
     public static final HashMap<Item, Item[]> ToolMaterialMap = new HashMap<>();
+
     public static void initializeToolMaterials() {
         //
         final HashMap<String, Item[]> MaterialToolMap = new HashMap<>(); {
@@ -52,7 +53,6 @@ public class ToolMaterials {
             }
         }
 
-        //more?
         HashMap<String, Item[]> RepairMaterialsMap = new HashMap<>(); {
             //single-material items
             RepairMaterialsMap.put("carrot",        new Item[]{Items.CARROT}            );
