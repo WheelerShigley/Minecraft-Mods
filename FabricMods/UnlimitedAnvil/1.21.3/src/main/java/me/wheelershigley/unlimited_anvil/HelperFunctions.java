@@ -2,6 +2,7 @@ package me.wheelershigley.unlimited_anvil;
 
 import me.wheelershigley.unlimited_anvil.item_categories.ItemCategories;
 import me.wheelershigley.unlimited_anvil.item_categories.ItemCategory;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -57,6 +58,7 @@ public class HelperFunctions {
             }
 
             /*Skip adding the current enchant if it conflicts*/
+            //TODO: change out with vanilla-like, overridden system
             if(  Conflicts.containsKey( SecondaryEnchant.getKey().get().getValue() )  ) {
                 Identifier[] PrimaryIdentifiers = new Identifier[PrimaryEnchantments.getSize()];
                 int index = 0;
@@ -132,16 +134,22 @@ public class HelperFunctions {
         return sortedEnchants.build();
     }*/
 
-    public static int getEnchantingCost(ItemStack enchantedItem) {
-        int accumulator = 0;
-        for(RegistryEntry<Enchantment> enchant : enchantedItem.getEnchantments().getEnchantments() ) {
-            accumulator +=
-                enchant.value().getAnvilCost() * enchantedItem.getEnchantments().getLevel(enchant)
-            ;
-        }
-        return (int)Math.ceil(
-            Math.pow( accumulator, Math.sqrt(2.0) )
+
+    private static int getStoredEnchantmentLevel(RegistryEntry<Enchantment> enchantment, ItemStack stack, boolean useStoredEnchants) {
+        ItemEnchantmentsComponent itemEnchantmentsComponent = stack.getOrDefault(
+            useStoredEnchants ? DataComponentTypes.STORED_ENCHANTMENTS : DataComponentTypes.ENCHANTMENTS,
+            ItemEnchantmentsComponent.DEFAULT
         );
+        return itemEnchantmentsComponent.getLevel(enchantment);
+    }
+    public static int getEnchantingCost(ItemStack enchantedItem, boolean useStoredEnchants) {
+        int accumulator = 0, level;
+        Set< RegistryEntry<Enchantment> > Enchantments = EnchantmentHelper.getEnchantments(enchantedItem).getEnchantments();
+        for(RegistryEntry<Enchantment> enchant : Enchantments) {
+            level = getStoredEnchantmentLevel(enchant, enchantedItem, useStoredEnchants);
+            accumulator += enchant.value().getAnvilCost() * level;
+        }
+        return 2*accumulator;
     }
 
     public static HashMap<Identifier, Integer> getMaximumEffectiveEnchantLevels() {

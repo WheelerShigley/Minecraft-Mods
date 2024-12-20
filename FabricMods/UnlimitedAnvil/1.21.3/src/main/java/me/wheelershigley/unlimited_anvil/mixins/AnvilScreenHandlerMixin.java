@@ -2,10 +2,12 @@ package me.wheelershigley.unlimited_anvil.mixins;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import me.wheelershigley.unlimited_anvil.AnvilMode;
+import me.wheelershigley.unlimited_anvil.UnlimitedAnvil;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +24,9 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +65,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
         if( SecondaryInput.getItem() == Items.ENCHANTED_BOOK) { mode = AnvilMode.Enchant; }
         if( SecondaryInput.getItem() == PrimaryInput.getItem() ) { mode = AnvilMode.Combine; }
+        //TODO: override rules in ItemStack.canRepairWith(ItemStack)
         if( contains(ToolMaterialMap.get( PrimaryInput.getItem() ), SecondaryInput.getItem() ) ) { mode = AnvilMode.Repair; }
         if(
             mode == AnvilMode.Disabled
@@ -118,6 +124,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         }
         if(mode == AnvilMode.Disabled) { return; }
 
+        boolean useStoredEnchants = PrimaryInput.contains(DataComponentTypes.STORED_ENCHANTMENTS);
+
         //Handles modes
         ItemStack output = PrimaryInput.copy();
         int levelCost = 0;
@@ -138,18 +146,20 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 ItemEnchantmentsComponent enchants = combineEnchants(PrimaryInput, SecondaryInput);
 
                 //Repair
-                if(  PrimaryInput.getItem().equals( SecondaryInput.getItem() )  ) {
+                if(
+                       PrimaryInput.isDamageable()
+                    && PrimaryInput.getItem().equals( SecondaryInput.getItem() )
+                ) {
                     output.setDamage(
                         Math.max(
+                            /*Add healths with damages*/
                             PrimaryInput.getDamage() + SecondaryInput.getDamage() - PrimaryInput.getMaxDamage(),
                             0
                         )
                     );
                 }
 
-                boolean useStoredEnchants = PrimaryInput.contains(DataComponentTypes.STORED_ENCHANTMENTS);
                 if(useStoredEnchants) {
-                    //TODO; DOES NOT WORK
                     output.set(DataComponentTypes.STORED_ENCHANTMENTS, enchants);
                 } else {
                     EnchantmentHelper.set(output, enchants);
@@ -158,7 +168,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             }
         }
 
-        levelCost = getEnchantingCost(output);
+        levelCost = getEnchantingCost(output, useStoredEnchants);
         boolean hasNewName = (
             newItemName != null
             && !StringHelper.isBlank(this.newItemName)
@@ -176,7 +186,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             && PrimaryInput.getDamage() == output.getDamage()
         );
         if(outputIsTheSame) {
-            this.output.setStack(TRUE_OUTPUT_ID, new ItemStack(Items.AIR) );
+            this.output.setStack(TRUE_OUTPUT_ID, ItemStack.EMPTY );
             this.levelCost.set(0);
         } else {
             this.output.setStack(TRUE_OUTPUT_ID, output);
@@ -185,10 +195,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         this.sendContentUpdates();
 
         //vanilla; I have no idea why, but if I comment out bl4, the mixin breaks.
-        ItemStack itemStack = new ItemStack(Items.AIR);
+        ItemStack itemStack = ItemStack.EMPTY;
         if (!itemStack.isEmpty() && EnchantmentHelper.canHaveEnchantments(itemStack)) {
-            ItemStack itemStack2 = new ItemStack(Items.AIR);
-            ItemStack itemStack3 = new ItemStack(Items.AIR);
+            ItemStack itemStack2 = ItemStack.EMPTY;
+            ItemStack itemStack3 = ItemStack.EMPTY;
             if (!itemStack3.isEmpty()) {
                 if (itemStack2.isDamageable() && itemStack.canRepairWith(itemStack3)) {
                 } else {
@@ -204,5 +214,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 }
             }
         }
+    }
+
+    @Inject(method = "onTakeOutput", at = @At("HEAD") )
+    protected void onTakeOutput(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
+        UnlimitedAnvil.LOGGER.info("onTakeOutput");
     }
 }
