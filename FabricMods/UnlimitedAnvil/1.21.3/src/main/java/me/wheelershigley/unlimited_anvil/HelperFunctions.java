@@ -14,7 +14,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import org.apache.commons.lang3.ArrayUtils;
-import oshi.jna.platform.mac.SystemB;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -143,11 +142,10 @@ public class HelperFunctions {
         return itemEnchantmentsComponent.getLevel(enchantment);
     }
     public static int getEnchantingCost(ItemStack enchantedItem, boolean useStoredEnchants) {
-        int accumulator = 0, level;
+        int accumulator = 0;
         Set< RegistryEntry<Enchantment> > Enchantments = EnchantmentHelper.getEnchantments(enchantedItem).getEnchantments();
         for(RegistryEntry<Enchantment> enchant : Enchantments) {
-            level = getStoredEnchantmentLevel(enchant, enchantedItem, useStoredEnchants);
-            accumulator += enchant.value().getAnvilCost() * level;
+            accumulator += enchant.value().getAnvilCost() * getStoredEnchantmentLevel(enchant, enchantedItem, useStoredEnchants);
         }
         return 2*accumulator;
     }
@@ -219,7 +217,14 @@ public class HelperFunctions {
         return ConflictMappings;
     }
 
+
     public static ArrayList< RegistryKey<Enchantment> > getValidEnchants(ItemStack item) {
+        ArrayList< RegistryKey<Enchantment> > ValidEnchants = new ArrayList<>();
+        /*Special case, I should probably re-work how this works to avoid this*/
+        if( item.getItem().equals(Items.CARVED_PUMPKIN) ) {
+            ValidEnchants.add(Enchantments.BINDING_CURSE);
+        }
+
         String ItemName = item.getItem().toString().split(":")[1];
 
         ArrayList< ItemCategory > categories = new ArrayList<>();
@@ -233,14 +238,15 @@ public class HelperFunctions {
             }
         }
 
-        ArrayList< RegistryKey<Enchantment> > ValidEnchants = new ArrayList<>();
         //If this isn't enchantable, return nothing
         if(categories.size() <= 0) { return ValidEnchants; }
 
         /*Always valid enchants*/
-        ValidEnchants.add(Enchantments.UNBREAKING);
-        ValidEnchants.add(Enchantments.MENDING);
         ValidEnchants.add(Enchantments.VANISHING_CURSE);
+        if( item.isDamageable() ) {
+            ValidEnchants.add(Enchantments.UNBREAKING);
+            ValidEnchants.add(Enchantments.MENDING);
+        }
 
         /*Tools*/
         if(
