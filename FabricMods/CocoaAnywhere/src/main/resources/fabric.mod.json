@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "cocoa_anywhere",
+  "version": "${version}",
+  "name": "CocoaAnywhere",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/cocoa_anywhere/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.cocoa_anywhere.Cocoa_anywhere"
+    ]
+  },
+  "mixins": [
+    "cocoa_anywhere.mixins.json",
+    {
+      "config": "",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

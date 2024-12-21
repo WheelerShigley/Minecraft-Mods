@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.wheelershigley.cocoa_anywhere.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "CocoaBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
