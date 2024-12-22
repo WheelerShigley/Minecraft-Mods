@@ -1,10 +1,10 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "me.wheelershigley.villagermaxxing.mixins",
+  "package": "me.wheelershigley.tradesmaxxing.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "VillagerMixin"
+    "TradeOffersMixin"
   ],
   "injectors": {
     "defaultRequire": 1

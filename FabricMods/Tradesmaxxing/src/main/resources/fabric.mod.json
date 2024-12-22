@@ -1,23 +1,23 @@
 {
   "schemaVersion": 1,
-  "id": "villagermaxxing",
+  "id": "tradesmaxxing",
   "version": "${version}",
-  "name": "Villagermaxxing",
+  "name": "Tradesmaxxing",
   "description": "",
   "authors": [],
   "contact": {},
   "license": "All-Rights-Reserved",
-  "icon": "assets/villagermaxxing/icon.png",
+  "icon": "assets/tradesmaxxing/icon.png",
   "environment": "server",
   "entrypoints": {
     "main": [
-      "me.wheelershigley.villagermaxxing.Villagermaxxing"
+      "me.wheelershigley.tradesmaxxing.Tradesmaxxing"
     ]
   },
   "mixins": [
-    "villagermaxxing.mixins.json",
+    "tradesmaxxing.mixins.json",
     {
-      "config": "",
+      "config": "tradesmaxxing.client.mixins.json",
       "environment": "client"
     }
   ],
