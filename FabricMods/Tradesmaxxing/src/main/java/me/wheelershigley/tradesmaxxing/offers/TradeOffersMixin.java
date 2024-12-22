@@ -1,20 +1,11 @@
-package me.wheelershigley.tradesmaxxing.mixins;
+package me.wheelershigley.tradesmaxxing.offers;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import me.wheelershigley.tradesmaxxing.TradeMaps;
-import net.minecraft.util.Util;
 import net.minecraft.village.TradeOffers;
-import net.minecraft.village.VillagerProfession;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-
-import java.util.Map;
 
 @Mixin(value = TradeOffers.class, priority = 800)
 public class TradeOffersMixin {
-    @Shadow
+    /*@Shadow
     private static Int2ObjectMap<TradeOffers.Factory[]> copyToFastUtilMap(ImmutableMap<Integer, TradeOffers.Factory[]> map) { return null; }
 
     @Shadow
@@ -37,5 +28,5 @@ public class TradeOffersMixin {
                 map.put(VillagerProfession.WEAPONSMITH,     copyToFastUtilMap(TradeMaps.WEAPONSMITHTRADES)  );
                 }
         );
-    }
+    }*/
 }

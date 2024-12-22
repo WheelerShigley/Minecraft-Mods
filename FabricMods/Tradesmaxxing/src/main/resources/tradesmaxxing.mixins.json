@@ -4,7 +4,16 @@
   "package": "me.wheelershigley.tradesmaxxing.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "TradeOffersMixin"
+    "TradeOffersBuyItemFactoryMixin",
+    "TradeOffersEnchantBookFactoryMixin",
+    "TradeOffersProcessItemFactoryMixin",
+    "TradeOffersSellDyedArmorFactoryMixin",
+    "TradeOffersSellEnchantedToolFactoryMixin",
+    "TradeOffersSellItemFactoryMixin",
+    "TradeOffersSellMapFactoryMixin",
+    "TradeOffersSellPotionHoldingItemFactoryMixin",
+    "TradeOffersSellSuspiciousStewFactoryMixin",
+    "TradeOffersTypeAwareBuyForOneEmeraldFactoryFactoryMixin"
   ],
   "injectors": {
     "defaultRequire": 1

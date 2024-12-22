@@ -1,6 +1,7 @@
-package me.wheelershigley.tradesmaxxing;
+package me.wheelershigley.tradesmaxxing.offers;
 
 import com.google.common.collect.ImmutableMap;
+import me.wheelershigley.tradesmaxxing.tradehelpers.SellEnchantedToolFactory;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
@@ -318,45 +319,35 @@ public class TradeMaps {
         1,
         new TradeOffers.Factory[]{
             new TradeOffers.BuyItemFactory(Items.COAL, 15, 16, 2),
-            new TradeOffers.SellItemFactory(
-            new ItemStack(Items.IRON_LEGGINGS), 7, 1, 12, 1, 0.2F),
-            new TradeOffers.SellItemFactory(
-            new ItemStack(Items.IRON_BOOTS), 4, 1, 12, 1, 0.2F),
-            new TradeOffers.SellItemFactory(
-            new ItemStack(Items.IRON_HELMET), 5, 1, 12, 1, 0.2F),
-            new TradeOffers.SellItemFactory(
-            new ItemStack(Items.IRON_CHESTPLATE), 9, 1, 12, 1, 0.2F)
+            new TradeOffers.SellItemFactory(new ItemStack(Items.IRON_LEGGINGS), 7, 1, 12, 1, 0.2F),
+            new TradeOffers.SellItemFactory(new ItemStack(Items.IRON_BOOTS), 4, 1, 12, 1, 0.2F),
+            new TradeOffers.SellItemFactory(new ItemStack(Items.IRON_HELMET), 5, 1, 12, 1, 0.2F),
+            new TradeOffers.SellItemFactory(new ItemStack(Items.IRON_CHESTPLATE), 9, 1, 12, 1, 0.2F)
         },
         2,
         new TradeOffers.Factory[]{
             new TradeOffers.BuyItemFactory(Items.IRON_INGOT, 4, 12, 10),
-            new TradeOffers.SellItemFactory(
-            new ItemStack(Items.BELL), 36, 1, 12, 5, 0.2F),
-            new TradeOffers.SellItemFactory(
-            new ItemStack(Items.CHAINMAIL_BOOTS), 1, 1, 12, 5, 0.2F),
-            new TradeOffers.SellItemFactory(
-            new ItemStack(Items.CHAINMAIL_LEGGINGS), 3, 1, 12, 5, 0.2F)
+            new TradeOffers.SellItemFactory(new ItemStack(Items.BELL), 36, 1, 12, 5, 0.2F),
+            new TradeOffers.SellItemFactory(new ItemStack(Items.CHAINMAIL_BOOTS), 1, 1, 12, 5, 0.2F),
+            new TradeOffers.SellItemFactory(new ItemStack(Items.CHAINMAIL_LEGGINGS), 3, 1, 12, 5, 0.2F)
         },
         3,
         new TradeOffers.Factory[]{
             new TradeOffers.BuyItemFactory(Items.LAVA_BUCKET, 1, 12, 20),
             new TradeOffers.BuyItemFactory(Items.DIAMOND, 1, 12, 20),
-            new TradeOffers.SellItemFactory(
-            new ItemStack(Items.CHAINMAIL_HELMET), 1, 1, 12, 10, 0.2F),
-            new TradeOffers.SellItemFactory(
-            new ItemStack(Items.CHAINMAIL_CHESTPLATE), 4, 1, 12, 10, 0.2F),
-            new TradeOffers.SellItemFactory(
-            new ItemStack(Items.SHIELD), 5, 1, 12, 10, 0.2F)
+            new TradeOffers.SellItemFactory(new ItemStack(Items.CHAINMAIL_HELMET), 1, 1, 12, 10, 0.2F),
+            new TradeOffers.SellItemFactory(new ItemStack(Items.CHAINMAIL_CHESTPLATE), 4, 1, 12, 10, 0.2F),
+            new TradeOffers.SellItemFactory(new ItemStack(Items.SHIELD), 5, 1, 12, 10, 0.2F)
         },
         4,
         new TradeOffers.Factory[]{
-            new TradeOffers.SellEnchantedToolFactory(Items.DIAMOND_LEGGINGS, 14, 3, 15, 0.2F),
-            new TradeOffers.SellEnchantedToolFactory(Items.DIAMOND_BOOTS, 8, 3, 15, 0.2F)
+            new SellEnchantedToolFactory(Items.DIAMOND_LEGGINGS, 19, 15, 0.2F),
+            new SellEnchantedToolFactory(Items.DIAMOND_BOOTS, 13, 15, 0.2F)
         },
         5,
         new TradeOffers.Factory[]{
-            new TradeOffers.SellEnchantedToolFactory(Items.DIAMOND_HELMET, 8, 3, 30, 0.2F),
-            new TradeOffers.SellEnchantedToolFactory(Items.DIAMOND_CHESTPLATE, 16, 3, 30, 0.2F)
+            new SellEnchantedToolFactory(Items.DIAMOND_HELMET, 13, 30, 0.2F),
+            new SellEnchantedToolFactory(Items.DIAMOND_CHESTPLATE, 21, 30, 0.2F)
         }
     );
 
