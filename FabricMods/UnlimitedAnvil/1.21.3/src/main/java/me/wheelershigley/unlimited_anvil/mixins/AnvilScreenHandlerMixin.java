@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import static me.wheelershigley.unlimited_anvil.HelperFunctions.*;
+import static me.wheelershigley.unlimited_anvil.helpers.HelperFunctions.*;
 import static me.wheelershigley.unlimited_anvil.ToolMaterials.ToolMaterialMap;
 
 @Mixin(value = AnvilScreenHandler.class, priority = 800)
@@ -105,13 +105,17 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
     @Shadow
     public boolean setNewItemName(String newItemName) { return false; }
 
+    @Shadow private boolean keepSecondSlot;
+
     /**
      * @author wheeler-shigley
      * @reason complete anvil-functionality overhaul
      */
     @Overwrite
     public void updateResult() {
-        this.output.setStack(TRUE_OUTPUT_ID, new ItemStack(Items.AIR) );
+        this.output.setStack(TRUE_OUTPUT_ID, ItemStack.EMPTY);
+        this.levelCost.set(1);
+        this.keepSecondSlot = false;
 
         ItemStack PrimaryInput, SecondaryInput;
         AnvilMode mode;
@@ -128,7 +132,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
         //Handles modes
         ItemStack output = PrimaryInput.copy();
-        int levelCost = 0;
+        int doubleLevelCost = 0;
         switch(mode) {
             case AnvilMode.Repair: {
                 int repair_amount_per_material = PrimaryInput.getMaxDamage()/3;
@@ -168,7 +172,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             }
         }
 
-        levelCost = getEnchantingCost(output, useStoredEnchants);
+        doubleLevelCost = getEnchantingCost(output, useStoredEnchants);
         boolean hasNewName = (
             newItemName != null
             && !StringHelper.isBlank(this.newItemName)
@@ -176,7 +180,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         );
         if(hasNewName) {
             output.set( DataComponentTypes.CUSTOM_NAME, Text.literal(this.newItemName) );
-            levelCost += 1;
+            doubleLevelCost += 1;
         }
 
         /*Outputs*/
@@ -185,34 +189,34 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             && enchantsAreTheSame(PrimaryInput, output)
             && PrimaryInput.getDamage() == output.getDamage()
         );
+        boolean repairOnly = (
+            hasNewName
+            && enchantsAreTheSame(PrimaryInput, output)
+            && PrimaryInput.getDamage() == output.getDamage()
+        );
+        if(repairOnly) {
+            //mode = AnvilMode.Repair;
+            this.keepSecondSlot = true;
+        }
         if(outputIsTheSame) {
             this.output.setStack(TRUE_OUTPUT_ID, ItemStack.EMPTY );
             this.levelCost.set(0);
         } else {
             this.output.setStack(TRUE_OUTPUT_ID, output);
-            this.levelCost.set(levelCost);
+            this.levelCost.set(doubleLevelCost);
         }
         this.sendContentUpdates();
 
         //vanilla; I have no idea why, but if I comment out bl4, the mixin breaks.
         ItemStack itemStack = ItemStack.EMPTY;
-        if (!itemStack.isEmpty() && EnchantmentHelper.canHaveEnchantments(itemStack)) {
-            ItemStack itemStack2 = ItemStack.EMPTY;
-            ItemStack itemStack3 = ItemStack.EMPTY;
-            if (!itemStack3.isEmpty()) {
-                if (itemStack2.isDamageable() && itemStack.canRepairWith(itemStack3)) {
-                } else {
-                    ItemEnchantmentsComponent itemEnchantmentsComponent = EnchantmentHelper.getEnchantments(itemStack3);
-                    Iterator var26 = itemEnchantmentsComponent.getEnchantmentEntries().iterator();
+        ItemEnchantmentsComponent itemEnchantmentsComponent = EnchantmentHelper.getEnchantments(itemStack);
+        Iterator var26 = itemEnchantmentsComponent.getEnchantmentEntries().iterator();
 
-                    while(var26.hasNext()) {
-                        Object2IntMap.Entry<RegistryEntry<Enchantment>> entry = (Object2IntMap.Entry)var26.next();
-                        RegistryEntry<Enchantment> registryEntry = (RegistryEntry)entry.getKey();
-                        Enchantment enchantment = (Enchantment)registryEntry.value();
-                        boolean bl4 = enchantment.isAcceptableItem(itemStack);
-                    }
-                }
-            }
+        while( var26.hasNext() ) {
+            Object2IntMap.Entry<RegistryEntry<Enchantment>> entry = (Object2IntMap.Entry)var26.next();
+            RegistryEntry<Enchantment> registryEntry = (RegistryEntry)entry.getKey();
+            Enchantment enchantment = (Enchantment)registryEntry.value();
+            boolean bl4 = enchantment.isAcceptableItem(itemStack);
         }
     }
 

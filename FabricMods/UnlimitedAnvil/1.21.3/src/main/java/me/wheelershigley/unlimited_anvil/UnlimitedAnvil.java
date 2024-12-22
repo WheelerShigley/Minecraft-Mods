@@ -1,5 +1,6 @@
 package me.wheelershigley.unlimited_anvil;
 
+import me.wheelershigley.unlimited_anvil.helpers.HelperFunctions;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;

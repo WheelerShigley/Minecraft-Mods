@@ -1,5 +1,6 @@
 package me.wheelershigley.unlimited_anvil;
 
+import me.wheelershigley.unlimited_anvil.helpers.HelperFunctions;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

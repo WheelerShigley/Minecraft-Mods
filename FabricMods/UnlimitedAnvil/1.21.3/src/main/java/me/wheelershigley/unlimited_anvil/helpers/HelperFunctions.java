@@ -1,4 +1,4 @@
-package me.wheelershigley.unlimited_anvil;
+package me.wheelershigley.unlimited_anvil.helpers;
 
 import me.wheelershigley.unlimited_anvil.item_categories.ItemCategories;
 import me.wheelershigley.unlimited_anvil.item_categories.ItemCategory;
@@ -271,6 +271,7 @@ public class HelperFunctions {
             ValidEnchants.add(Enchantments.BANE_OF_ARTHROPODS);
             ValidEnchants.add(Enchantments.KNOCKBACK);
             ValidEnchants.add(Enchantments.FIRE_ASPECT);
+            ValidEnchants.add(Enchantments.LOOTING);
         }
         if( categories.contains(ItemCategories.SwordCategory) ) {
             ValidEnchants.add(Enchantments.SWEEPING_EDGE);
@@ -281,11 +282,13 @@ public class HelperFunctions {
             ValidEnchants.add(Enchantments.POWER);
             ValidEnchants.add(Enchantments.PUNCH);
             ValidEnchants.add(Enchantments.FLAME);
+            ValidEnchants.add(Enchantments.INFINITY);
             ValidEnchants.add(Enchantments.LOOTING);
         }
         if( categories.contains(ItemCategories.CrossbowCategory) ) {
             ValidEnchants.add(Enchantments.MULTISHOT);
             ValidEnchants.add(Enchantments.PIERCING);
+            ValidEnchants.add(Enchantments.LOOTING);
         }
         if( categories.contains(ItemCategories.FishingRodCategory) ) {
             ValidEnchants.add(Enchantments.LUCK_OF_THE_SEA);
