@@ -1,9 +1,10 @@
-package me.wheelershigley.tradesmaxxing.offers;
+package me.wheelershigley.tradesmaxxing.server.offers;
 
 import net.minecraft.village.TradeOffers;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = TradeOffers.class, priority = 800)
+@Deprecated
 public class TradeOffersMixin {
     /*@Shadow
     private static Int2ObjectMap<TradeOffers.Factory[]> copyToFastUtilMap(ImmutableMap<Integer, TradeOffers.Factory[]> map) { return null; }

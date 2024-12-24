@@ -1,7 +1,7 @@
-package me.wheelershigley.tradesmaxxing.offers;
+package me.wheelershigley.tradesmaxxing.server.offers;
 
 import com.google.common.collect.ImmutableMap;
-import me.wheelershigley.tradesmaxxing.tradehelpers.SellEnchantedToolFactory;
+import me.wheelershigley.tradesmaxxing.server.tradehelpers.SellEnchantedToolFactory;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;

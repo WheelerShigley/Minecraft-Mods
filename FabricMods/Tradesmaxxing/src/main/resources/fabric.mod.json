@@ -1,29 +1,32 @@
 {
   "schemaVersion": 1,
   "id": "tradesmaxxing",
-  "version": "${version}",
+  "version": "0",
   "name": "Tradesmaxxing",
   "description": "",
-  "authors": [],
+  "authors": ["Wheeler-Shigley"],
   "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/tradesmaxxing/icon.png",
   "environment": "server",
   "entrypoints": {
     "main": [
-      "me.wheelershigley.tradesmaxxing.Tradesmaxxing"
+      "me.wheelershigley.tradesmaxxing.server.Tradesmaxxing"
     ]
   },
   "mixins": [
-    "tradesmaxxing.mixins.json",
+    {
+      "config": "tradesmaxxing.server.mixins.json",
+      "environment": "server"
+    },
     {
       "config": "tradesmaxxing.client.mixins.json",
       "environment": "client"
     }
   ],
   "depends": {
-    "fabricloader": ">=${loader_version}",
-    "fabric": "*",
-    "minecraft": "${minecraft_version}"
+    "fabricloader": "0.16.9",
+    "fabric": "0.112.1+1.21.3",
+    "minecraft": "1.21.3"
   }
 }

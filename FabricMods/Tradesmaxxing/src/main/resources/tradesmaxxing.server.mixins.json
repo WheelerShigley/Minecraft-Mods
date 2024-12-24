@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.wheelershigley.tradesmaxxing.server.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "TradeOffersMixins$BuyItemFactory",
+    "TradeOffersMixins$TradeOffersEnchantBookFactoryMixin",
+    "TradeOffersMixins$TradeOffersProcessItemFactoryMixin",
+    "TradeOffersMixins$TradeOffersSellDyedArmorFactoryMixin",
+    "TradeOffersMixins$TradeOffersSellEnchantedToolFactoryMixin",
+    "TradeOffersMixins$TradeOffersSellItemFactoryMixin",
+    "TradeOffersMixins$TradeOffersSellMapFactoryMixin",
+    "TradeOffersMixins$TradeOffersSellPotionHoldingItemFactoryMixin",
+    "TradeOffersMixins$TradeOffersSellSuspiciousStewFactoryMixin",
+    "TradeOffersMixins$TradeOffersTypeAwareBuyForOneEmeraldFactoryFactoryMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

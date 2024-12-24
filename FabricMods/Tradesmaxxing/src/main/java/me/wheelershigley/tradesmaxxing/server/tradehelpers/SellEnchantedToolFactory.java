@@ -1,4 +1,4 @@
-package me.wheelershigley.tradesmaxxing.tradehelpers;
+package me.wheelershigley.tradesmaxxing.server.tradehelpers;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -35,11 +35,26 @@ public class SellEnchantedToolFactory implements TradeOffers.Factory {
     }
 
     public TradeOffer create(Entity entity, Random random) {
-        int i = 5 + random.nextInt(15);
         DynamicRegistryManager dynamicRegistryManager = entity.getWorld().getRegistryManager();
-        Optional<RegistryEntryList.Named<Enchantment>> optional = dynamicRegistryManager.getOrThrow(RegistryKeys.ENCHANTMENT).getOptional(EnchantmentTags.ON_TRADED_EQUIPMENT);
-        ItemStack itemStack = EnchantmentHelper.enchant(random, new ItemStack(this.tool.getItem()), i, dynamicRegistryManager, optional);
+        Optional<RegistryEntryList.Named<Enchantment>> optional = dynamicRegistryManager
+            .getOrThrow(RegistryKeys.ENCHANTMENT)
+            .getOptional(EnchantmentTags.ON_TRADED_EQUIPMENT);
+
+        ItemStack itemStack = EnchantmentHelper.enchant(
+            random,
+            new ItemStack( this.tool.getItem() ),
+            5 + random.nextInt(15),
+            dynamicRegistryManager,
+            optional
+        );
+
         TradedItem tradedItem = new TradedItem(Items.EMERALD, this.basePrice);
-        return new TradeOffer(tradedItem, itemStack, Integer.MAX_VALUE, this.experience, this.multiplier);
+        return new TradeOffer(
+            tradedItem,
+            itemStack,
+            Integer.MAX_VALUE,
+            this.experience,
+            this.multiplier
+        );
     }
 }
