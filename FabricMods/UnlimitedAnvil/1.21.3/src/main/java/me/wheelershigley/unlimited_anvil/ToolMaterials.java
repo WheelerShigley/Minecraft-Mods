@@ -24,7 +24,7 @@ public class ToolMaterials {
                 "brush", "flint_and_steel", "fishing_rod", "shears",
                 "on_a_stick",
 
-                "helmet", "chestplate", "leggings", "boots",
+                "helmet", "chestplate", "elytra", "leggings", "boots",
                 "wolf_armor"
             };
 
@@ -128,6 +128,9 @@ public class ToolMaterials {
                         if( SpecialCase.equals(Items.WOLF_ARMOR) ) {
                             ToolMaterialMap.put(SpecialCase, new Item[]{Items.ARMADILLO_SCUTE});
                             handled = true;
+                        }
+                        if( SpecialCase.equals(Items.ELYTRA) ) {
+                            ToolMaterialMap.put(SpecialCase, new Item[]{Items.PHANTOM_MEMBRANE});
                         }
                     }
                 }

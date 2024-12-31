@@ -297,7 +297,7 @@ public class HelperFunctions {
 
         /*Armor*/
         if(
-            categories.contains(ItemCategories.HelmetCategory)
+               categories.contains(ItemCategories.HelmetCategory)
             || categories.contains(ItemCategories.ChestplateCategory)
             || categories.contains(ItemCategories.LeggingsCategory)
             || categories.contains(ItemCategories.BootsCategory)

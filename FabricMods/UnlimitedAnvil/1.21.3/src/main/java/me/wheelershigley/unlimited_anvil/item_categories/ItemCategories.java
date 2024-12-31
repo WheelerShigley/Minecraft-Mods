@@ -7,6 +7,7 @@ public class ItemCategories {
     public static ItemCategory         BrushCategory = new ItemCategory("brush");
     public static ItemCategory    ChestplateCategory = new ItemCategory("chestplate");
     public static ItemCategory      CrossbowCategory = new ItemCategory("crossbow");
+    public static ItemCategory        ElytraCategory = new ItemCategory("elytra");
     public static ItemCategory    FishingRodCategory = new ItemCategory("fishing_rod");
     public static ItemCategory FlintAndSteelCategory = new ItemCategory("flint_and_steel");
     public static ItemCategory        HelmetCategory = new ItemCategory("helmet");
@@ -30,6 +31,7 @@ public class ItemCategories {
             BrushCategory,
             ChestplateCategory,
             CrossbowCategory,
+            ElytraCategory,
             FishingRodCategory,
             FlintAndSteelCategory,
             HelmetCategory,
