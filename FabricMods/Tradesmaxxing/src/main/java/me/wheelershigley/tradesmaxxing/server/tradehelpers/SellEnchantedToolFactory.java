@@ -23,9 +23,11 @@ public class SellEnchantedToolFactory implements TradeOffers.Factory {
     private final int experience;
     private final float multiplier;
 
+    /*
     public SellEnchantedToolFactory(Item item, int basePrice, int experience) {
         this(item, basePrice, experience, 0.05F);
     }
+     */
 
     public SellEnchantedToolFactory(Item item, int basePrice, int experience, float multiplier) {
         this.tool = new ItemStack(item);

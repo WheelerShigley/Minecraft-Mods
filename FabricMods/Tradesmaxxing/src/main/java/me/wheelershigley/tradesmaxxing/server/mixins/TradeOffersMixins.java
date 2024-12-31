@@ -1,7 +1,6 @@
 package me.wheelershigley.tradesmaxxing.server.mixins;
 
 import com.google.common.collect.Lists;
-import me.wheelershigley.tradesmaxxing.server.Tradesmaxxing;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.component.type.PotionContentsComponent;
@@ -33,10 +32,7 @@ import net.minecraft.village.*;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.Structure;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 
 import java.util.List;
 import java.util.Map;
@@ -45,6 +41,8 @@ import java.util.stream.Collectors;
 
 @Mixin(TradeOffers.class)
 public class TradeOffersMixins {
+    @Unique private static final int MAXVALUE = Integer.MAX_VALUE;
+
     @Mixin(TradeOffers.BuyItemFactory.class)
     public static class BuyItemFactory {
         @Shadow
@@ -63,7 +61,7 @@ public class TradeOffersMixins {
             return new TradeOffer(
                     this.stack,
                     new ItemStack( Items.EMERALD, this.price ),
-                    Integer.MAX_VALUE,
+                    MAXVALUE,
                     this.experience,
                     this.multiplier
             );
@@ -106,7 +104,7 @@ public class TradeOffersMixins {
                     new TradedItem(Items.EMERALD, level),
                     Optional.of( new TradedItem(Items.BOOK) ),
                     itemStack,
-                    Integer.MAX_VALUE,
+                    MAXVALUE,
                     this.experience,
                     0.2F
             );
@@ -120,7 +118,7 @@ public class TradeOffersMixins {
         @Shadow @Final private ItemStack processed;
         @Shadow @Final private int experience;
         @Shadow @Final private float multiplier;
-        @Shadow @Final private Optional<RegistryKey<EnchantmentProvider>> enchantmentProviderKey;
+        @Shadow @Final private Optional< RegistryKey<EnchantmentProvider> > enchantmentProviderKey;
 
         /**
          * @author Wheeler-Shigley
@@ -147,7 +145,7 @@ public class TradeOffersMixins {
                     Optional.of(this.toBeProcessed),
                     itemStack,
                     0,
-                    Integer.MAX_VALUE,
+                    MAXVALUE,
                     this.experience,
                     this.multiplier
             );
@@ -186,7 +184,7 @@ public class TradeOffersMixins {
             return new TradeOffer(
                     tradedItem,
                     itemStack,
-                    Integer.MAX_VALUE,
+                    MAXVALUE,
                     this.experience,
                     0.2F
             );
@@ -207,8 +205,6 @@ public class TradeOffersMixins {
          */
         @Overwrite
         public TradeOffer create(Entity entity, Random random) {
-            Tradesmaxxing.LOGGER.info(this.basePrice +" -> "+ (this.basePrice+2) );
-
             DynamicRegistryManager dynamicRegistryManager = entity.getWorld().getRegistryManager();
             Optional< RegistryEntryList.Named<Enchantment> > optional = dynamicRegistryManager
                     .getOrThrow(RegistryKeys.ENCHANTMENT)
@@ -225,7 +221,7 @@ public class TradeOffersMixins {
             return new TradeOffer(
                     new TradedItem(Items.EMERALD, this.basePrice+5),
                     itemStack,
-                    Integer.MAX_VALUE,
+                    MAXVALUE,
                     this.experience,
                     this.multiplier
             );
@@ -263,7 +259,7 @@ public class TradeOffersMixins {
             return new TradeOffer(
                     new TradedItem(Items.EMERALD, this.price),
                     itemStack,
-                    Integer.MAX_VALUE,
+                    MAXVALUE,
                     this.experience,
                     this.multiplier
             );
@@ -306,7 +302,7 @@ public class TradeOffersMixins {
                     new TradedItem(Items.EMERALD, this.price),
                     Optional.of( new TradedItem(Items.COMPASS) ),
                     itemStack,
-                    Integer.MAX_VALUE,
+                    MAXVALUE,
                     this.experience,
                     0.2F
             );
@@ -333,12 +329,12 @@ public class TradeOffersMixins {
             TradedItem tradedItem = new TradedItem(Items.EMERALD, this.price);
             /*Get a random potion*/
             List< RegistryEntry<Potion> > list = Registries.POTION.streamEntries().filter(
-                    (entry) -> {
-                        return
-                                !( entry.value() ).getEffects().isEmpty()
-                                        && entity.getWorld().getBrewingRecipeRegistry().isBrewable(entry)
-                                ;
-                    }
+                (entry) -> {
+                    return
+                        !( entry.value() ).getEffects().isEmpty()
+                                && entity.getWorld().getBrewingRecipeRegistry().isBrewable(entry)
+                        ;
+                }
             ).collect( Collectors.toList() );
             RegistryEntry<Potion> registryEntry = Util.getRandom(list, random);
 
@@ -348,7 +344,7 @@ public class TradeOffersMixins {
                     tradedItem,
                     Optional.of( new TradedItem(this.secondBuy, this.secondCount) ),
                     itemStack,
-                    Integer.MAX_VALUE,
+                    MAXVALUE,
                     this.experience,
                     this.priceMultiplier
             );
@@ -373,7 +369,7 @@ public class TradeOffersMixins {
             return new TradeOffer(
                     new TradedItem(Items.EMERALD),
                     itemStack,
-                    Integer.MAX_VALUE,
+                    MAXVALUE,
                     this.experience,
                     this.multiplier
             );
@@ -384,7 +380,7 @@ public class TradeOffersMixins {
     public static class TradeOffersTypeAwareBuyForOneEmeraldFactoryFactoryMixin {
         @Shadow @Final private Map<VillagerType, Item> map;
         @Shadow @Final private int count;
-        @Shadow @Final private int maxUses;
+        //@Shadow @Final private int maxUses;
         @Shadow @Final private int experience;
 
         /**
@@ -396,7 +392,7 @@ public class TradeOffersMixins {
         public TradeOffer create(Entity entity, Random random) {
             if (entity instanceof VillagerDataContainer villagerDataContainer) {
                 TradedItem tradedItem = new TradedItem((ItemConvertible)this.map.get(villagerDataContainer.getVillagerData().getType()), this.count);
-                return new TradeOffer(tradedItem, new ItemStack(Items.EMERALD), this.maxUses, this.experience, 0.05F);
+                return new TradeOffer(tradedItem, new ItemStack(Items.EMERALD), MAXVALUE, this.experience, 0.05F);
             } else {
                 return null;
             }

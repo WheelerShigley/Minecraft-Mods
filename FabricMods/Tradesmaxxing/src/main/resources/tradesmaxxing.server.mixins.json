@@ -4,6 +4,8 @@
   "package": "me.wheelershigley.tradesmaxxing.server.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "DemandSuppressorMixin",
+    "TradeOffersMixins",
     "TradeOffersMixins$BuyItemFactory",
     "TradeOffersMixins$TradeOffersEnchantBookFactoryMixin",
     "TradeOffersMixins$TradeOffersProcessItemFactoryMixin",
