@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "scotty",
+  "version": "${version}",
+  "name": "Scotty",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "/assets/scotty/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.scotty.Scotty"
+    ]
+  },
+  "mixins": [
+    "scotty.mixins.json",
+    {
+      "config": "scotty.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
