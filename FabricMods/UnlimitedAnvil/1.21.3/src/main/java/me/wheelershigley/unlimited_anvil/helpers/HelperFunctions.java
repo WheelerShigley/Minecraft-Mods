@@ -13,6 +13,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import net.minecraft.village.TradeOffers;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.*;
@@ -319,6 +320,7 @@ public class HelperFunctions {
             ValidEnchants.add(Enchantments.SWIFT_SNEAK);
         }
         if( categories.contains(ItemCategories.BootsCategory) ) {
+            ValidEnchants.add(Enchantments.FEATHER_FALLING);
             ValidEnchants.add(Enchantments.DEPTH_STRIDER);
             ValidEnchants.add(Enchantments.SOUL_SPEED);
         }
