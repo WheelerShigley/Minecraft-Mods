@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "default_arms",
+  "version": "${version}",
+  "name": "DefaultArms",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/default_arms/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.default_arms.Default_arms"
+    ]
+  },
+  "mixins": [
+    "default_arms.mixins.json",
+    {
+      "config": "",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
