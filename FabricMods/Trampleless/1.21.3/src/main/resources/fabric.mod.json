@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "trampleless",
+  "version": "${version}",
+  "name": "Trampleless",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/trampleless/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.trampleless.Trampleless"
+    ]
+  },
+  "mixins": [
+    "trampleless.mixins.json",
+    {
+      "config": "trampleless.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
