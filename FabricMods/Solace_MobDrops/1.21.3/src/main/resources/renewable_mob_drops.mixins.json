@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.wheelershigley.renewable_mob_drops.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BedrockTridentDroppingMixin",
+    "MobLootTableChangesMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

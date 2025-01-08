@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "renewable_mob_drops",
+  "version": "${version}",
+  "name": "RenewableMobDrops",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/renewable_mob_drops/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.renewable_mob_drops.RenewableMobDrops"
+    ]
+  },
+  "mixins": [
+    "renewable_mob_drops.mixins.json",
+    {
+      "config": "",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
