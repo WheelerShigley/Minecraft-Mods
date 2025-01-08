@@ -77,7 +77,7 @@ public abstract class TramplePreventionMixin extends Block {
                 randomlyBreaks
                 && (
                     (isNotPlayer && doMobGriefing && sufficientlyVoluminous)
-                    || playerMayBreak
+                    || ( (entity instanceof PlayerEntity) && playerMayBreak )
                 )
             ) {
                 setToDirt(entity, state, world, pos);
