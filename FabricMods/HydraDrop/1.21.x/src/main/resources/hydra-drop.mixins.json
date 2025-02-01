@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.wheelershigley.hydra_drop.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "CreeperMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
