@@ -4,7 +4,8 @@
   "package": "me.wheelershigley.hydra_drop.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "CreeperMixin"
+    "CreeperMixin",
+    "PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

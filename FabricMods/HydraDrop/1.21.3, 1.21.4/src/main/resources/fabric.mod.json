@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "hydra-drop",
-  "version": "${version}",
+  "version": "0.2.1-a",
   "name": "HydraDrop",
   "description": "",
   "authors": [],
   "contact": {},
   "license": "All-Rights-Reserved",
-  "icon": "assets/hydra-drop/icon.png",
+  "icon": "assets/hydra_drop/ChargedCreeperHead.png",
   "environment": "server",
   "entrypoints": {
     "main": [
@@ -20,6 +20,6 @@
   "depends": {
     "fabricloader": ">=0.16.10",
     "fabric": "*",
-    "minecraft": "1.21-1.21.4"
+    "minecraft": ">=1.21.3 <=1.21.4"
   }
 }
