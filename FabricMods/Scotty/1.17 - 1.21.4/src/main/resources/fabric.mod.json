@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "lil-guy",
+  "version": "0.1.2",
+  "name": "Lil Guy",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "/assets/lil_guy/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.lil_guy.LilGuy"
+    ]
+  },
+  "mixins": [
+    "lil_guy.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "fabric": "*",
+    "minecraft": ">=1.17 <=1.21.4"
+  }
+}

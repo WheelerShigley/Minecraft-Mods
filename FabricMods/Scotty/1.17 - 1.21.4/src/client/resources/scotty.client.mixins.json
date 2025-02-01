@@ -1,10 +1,9 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "me.wheelershigley.scotty.mixin",
+  "package": "me.wheelershigley.lil-guy.mixin.client",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "PassiveEntityMixin"
+  "client": [
   ],
   "injectors": {
     "defaultRequire": 1

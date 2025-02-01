@@ -1,4 +1,4 @@
-package me.wheelershigley.scotty.mixin;
+package me.wheelershigley.lil_guy.mixin;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.PathAwareEntity;
