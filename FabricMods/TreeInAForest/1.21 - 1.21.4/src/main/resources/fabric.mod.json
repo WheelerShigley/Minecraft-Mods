@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "treeinaforest",
-  "version": "${version}",
+  "version": "0.1.1-b",
   "name": "TreeInAForest",
-  "description": "",
-  "authors": [],
+  "description": "Time stops when no players are online.",
+  "authors": ["Wheeler-Shigley"],
   "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/treeinaforest/icon.png",
@@ -15,15 +15,11 @@
     ]
   },
   "mixins": [
-    "treeinaforest.mixins.json",
-    {
-      "config": "treeinaforest.client.mixins.json",
-      "environment": "client"
-    }
+    "treeinaforest.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=${loader_version}",
+    "fabricloader": ">=0.16.10",
     "fabric": "*",
-    "minecraft": "${minecraft_version}"
+    "minecraft": ">=1.21 <=1.21.4"
   }
 }
