@@ -314,7 +314,6 @@ public class TradeOffersMixins {
         @Shadow @Final private ItemStack sell;
         @Shadow @Final private int sellCount;
         @Shadow @Final private int price;
-        @Shadow @Final private int maxUses;
         @Shadow @Final private int experience;
         @Shadow @Final private Item secondBuy;
         @Shadow @Final private int secondCount;
