@@ -1,0 +1,6 @@
+name: DualShells
+version: '${project.version}'
+main: me.solacekairos.dualshells.DualShells
+api-version: 1.20
+authors: [ tbg20, Solace ]
+description: Shulkers drop two shells

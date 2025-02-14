@@ -1,0 +1,11 @@
+name: ExperienceBottler
+version: "${version}"
+main: me.solacekairos.experiencebottler.ExperienceBottler
+author: "SolaceKairos"
+api-version: "1.20"
+commands:
+  exp:
+    aliases: ["xp"]
+    description: "experience bottler/informer"
+    permission: "experience.bottle"
+    usage: "/experience <bottle> <amount>"

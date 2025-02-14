@@ -1,0 +1,6 @@
+name: FoodEffects
+version: '${project.version}'
+main: me.solacekairos.foodeffects.FoodEffects
+api-version: 1.20
+authors: [ OzzyMar, Solace ]
+description: Get potion effects from specific foods
