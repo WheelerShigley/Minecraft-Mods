@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "trampleless",
-  "version": "0.2.1",
+  "version": "0.2.3-a",
   "name": "Trampleless",
   "description": "The Feather_Falling Enchantment (on boots) prevents Farmland from being Trampled.",
   "authors": ["Wheeler-Shigley"],
@@ -18,8 +18,8 @@
     "trampleless.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.9",
+    "fabricloader": ">=0.16.10",
     "fabric": "*",
-    "minecraft": ">=1.21"
+    "minecraft": ">=1.21.2 <=1.21.4"
   }
 }
