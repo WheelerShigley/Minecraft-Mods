@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "forever_rare",
-  "version": "0.0.1-a",
+  "version": "0.1.0-a",
   "name": "ForeverRare",
-  "description": "Fishing catches live fish!",
-  "authors": [],
+  "description": "Blue Axolotl Variant would be only from chance; very rare!",
+  "authors": ["Wheeler-Shigley"],
   "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/forever_rare/icon.png",
@@ -20,6 +20,6 @@
   "depends": {
     "fabricloader": ">=0.16.10",
     "fabric": "*",
-    "minecraft": ">=1.19 <=1.21.4"
+    "minecraft": ">=1.21.2 <=1.21.4"
   }
 }
