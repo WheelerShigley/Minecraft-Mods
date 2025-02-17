@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "forever_rare",
+  "version": "0.0.1-a",
+  "name": "ForeverRare",
+  "description": "Fishing catches live fish!",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/forever_rare/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.forever_rare.Forever_rare"
+    ]
+  },
+  "mixins": [
+    "forever_rare.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "fabric": "*",
+    "minecraft": ">=1.19 <=1.21.4"
+  }
+}

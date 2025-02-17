@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.wheelershigley.forever_rare.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AxolotlMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
