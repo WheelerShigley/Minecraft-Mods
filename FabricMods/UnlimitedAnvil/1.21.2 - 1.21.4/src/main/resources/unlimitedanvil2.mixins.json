@@ -5,8 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "AnvilMixin",
-    "CompatibilityMixin",
-    "EnchantmentLevelsMixin"
+    "EnchantmentMixin"
   ],
   "injectors": {
     "defaultRequire": 1

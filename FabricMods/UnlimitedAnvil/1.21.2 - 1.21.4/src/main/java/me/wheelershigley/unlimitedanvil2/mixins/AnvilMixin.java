@@ -106,11 +106,11 @@ public abstract class AnvilMixin extends ForgingScreenHandler  {
                         ItemEnchantmentsComponent itemEnchantmentsComponent = EnchantmentHelper.getEnchantments(SecondaryInput);
                         boolean bl2 = false;
                         boolean bl3 = false;
-                        Iterator var26 = itemEnchantmentsComponent.getEnchantmentEntries().iterator();
+                        Iterator<Object2IntMap.Entry<RegistryEntry<Enchantment>>> var26 = itemEnchantmentsComponent.getEnchantmentEntries().iterator();
 
                         while(var26.hasNext()) {
-                            Object2IntMap.Entry<RegistryEntry<Enchantment>> entry = (Object2IntMap.Entry)var26.next();
-                            RegistryEntry<Enchantment> registryEntry = (RegistryEntry)entry.getKey();
+                            Object2IntMap.Entry<RegistryEntry<Enchantment>> entry = var26.next();
+                            RegistryEntry<Enchantment> registryEntry = entry.getKey();
                             int q = builder.getLevel(registryEntry);
                             int r = entry.getIntValue();
                             r = q == r ? r + 1 : Math.max(r, q);
@@ -120,10 +120,10 @@ public abstract class AnvilMixin extends ForgingScreenHandler  {
                                 bl4 = true;
                             }
 
-                            Iterator var20 = builder.getEnchantments().iterator();
+                            Iterator<RegistryEntry<Enchantment>> var20 = builder.getEnchantments().iterator();
 
                             while(var20.hasNext()) {
-                                RegistryEntry<Enchantment> registryEntry2 = (RegistryEntry)var20.next();
+                                RegistryEntry<Enchantment> registryEntry2 = var20.next();
                                 if (!registryEntry2.equals(registryEntry) && !Enchantment.canBeCombined(registryEntry, registryEntry2)) {
                                     bl4 = false;
                                     ++i;
@@ -230,35 +230,4 @@ public abstract class AnvilMixin extends ForgingScreenHandler  {
             this.sendContentUpdates();
         }
     }
-
-    //## LOGGING
-    /*@Inject(
-        method = "updateResult",
-        at = @At("HEAD")
-    )
-    public void updateResult(CallbackInfo ci) {
-        ItemStack[] items = new ItemStack[]{
-            this.input.getStack(0),
-            this.input.getStack(1),
-            this.output.getStack(0)
-        };
-
-        int accumulator = 0;
-        for(ItemStack item : items) {
-            Unlimitedanvil2.LOGGER.info( Integer.toString(accumulator) );
-
-            ItemEnchantmentsComponent itemEnchantmentsComponent = EnchantmentHelper.getEnchantments(item);
-            Iterator EnchantIterator = itemEnchantmentsComponent.getEnchantmentEntries().iterator();
-
-            while( EnchantIterator.hasNext() ) {
-                Object2IntMap.Entry<RegistryEntry<Enchantment>> entry = (Object2IntMap.Entry)EnchantIterator.next();
-                RegistryEntry<Enchantment> registryEntry = entry.getKey();
-                Enchantment enchantment = registryEntry.value();
-                Unlimitedanvil2.LOGGER.info(entry.toString() +"@ L_M"+ enchantment.getMaxLevel() );
-
-            }
-
-            accumulator++;
-        }
-    }*/
 }
