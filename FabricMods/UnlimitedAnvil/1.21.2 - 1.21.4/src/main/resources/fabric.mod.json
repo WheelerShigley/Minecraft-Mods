@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "unlimited-anvil",
-  "version": "1.0.0-a",
+  "version": "1.0.1-a",
   "name": "UnlimitedAnvil",
   "description": "Enchanted Books may be combined to their maximum effective level! This is expensive.",
   "authors": ["Wheeler-Shigley"],

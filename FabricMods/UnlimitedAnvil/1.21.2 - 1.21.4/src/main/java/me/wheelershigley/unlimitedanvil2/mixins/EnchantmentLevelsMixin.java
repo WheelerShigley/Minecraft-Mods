@@ -26,7 +26,9 @@ public class EnchantmentLevelsMixin {
      */
     @Overwrite
     public int getMaxLevel() {
-        Identifier Enchant = of( this.description.getString().toLowerCase() ).getValue();
+        Identifier Enchant = of(
+            this.description.getString().toLowerCase().replace(' ','_')
+        ).getValue();
         return EnchantmentsHelper.getMaximumEffectiveLevel(Enchant);
     }
 }
