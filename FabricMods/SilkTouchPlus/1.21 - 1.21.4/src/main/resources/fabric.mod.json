@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "silktouchplus",
-  "version": "0.6.0-b",
+  "version": "0.7.0-b",
   "name": "SilkTouchPlus",
   "description": "",
   "authors": ["Wheeler-Shigley"],
@@ -21,6 +21,6 @@
   "depends": {
     "fabricloader": ">=0.16.10",
     "fabric": "*",
-    "minecraft": ">=1.20.5 <=1.20.6"
+    "minecraft": ">=1.21 <=1.21.4"
   }
 }
