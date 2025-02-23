@@ -102,6 +102,58 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
         tableBuilder.pool( builder.build() );
     }
 
+    public static void dropsTrialSpawnerNBTWithSilkTouchPickaxe(LootTable.Builder tableBuilder, Block drop, RegistryWrapper.WrapperLookup registries) {
+        LootCondition.Builder silkTouchCondition = _createSilkTouchCondition(registries);
+        LootPool.Builder builder = LootPool.builder()
+            .rolls( ConstantLootNumberProvider.create(1.0F) )
+            .with(
+                ItemEntry.builder(drop)
+                    .conditionally(pickaxesCondition)
+                    .conditionally(silkTouchCondition)
+            )
+            .apply(
+                CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
+                    /*  Components on a pick-block-ed trial-spawner BLOCK:
+                        next_mob_spawns_at, current_mobs, registered_players,
+                        total_mobs_spawned, normal_config, spawn_data, id, ominous_config
+
+                        Components on a pick-block-ed trial-spawner ITEM:
+                        normal_config, spawn_data, id, ominous_config
+                     */
+                    .withOperation("normal_config", "normal_config")
+                    .withOperation("normal_config.spawn_potentials[0].data", "spawn_data")
+                    .withOperation("id", "id")
+                    .withOperation("ominous_config", "ominous_config")
+                    .build()
+            )
+        ;
+        tableBuilder.pool( builder.build() );
+    }
+
+    public static void dropVaultNBTWithSilkTouchPickaxe(LootTable.Builder tableBuilder, Block drop, RegistryWrapper.WrapperLookup registries) {
+        LootCondition.Builder silkTouchCondition = _createSilkTouchCondition(registries);
+        LootPool.Builder builder = LootPool.builder()
+            .rolls( ConstantLootNumberProvider.create(1.0F) )
+            .with(
+                ItemEntry.builder(drop)
+                    .conditionally(pickaxesCondition)
+                    .conditionally(silkTouchCondition)
+            )
+            .apply(
+                CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
+                    /*  Components on a pick-block-ed vault:
+                        server_data, id, config, shared_data
+                     */
+                    .withOperation("server_data", "server_data")
+                    .withOperation("id", "id")
+                    .withOperation("config", "config")
+                    .withOperation("shared_data", "shared_data")
+                    .build()
+            )
+        ;
+        tableBuilder.pool( builder.build() );
+    }
+
     private static final LootCondition.Builder shovelsCondition =
         MatchToolLootCondition.builder(
             ItemPredicate.Builder.create().tag(

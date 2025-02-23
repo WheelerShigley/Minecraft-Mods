@@ -4,16 +4,8 @@ import external.kaupenjoe.ModConfigs;
 import me.wheelershigley.silktouchplus.helpers.LootPoolHelpers;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
-import net.fabricmc.fabric.api.loot.v3.LootTableSource;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.loot.LootTable;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,10 +46,14 @@ public class SilkTouchPlus implements ModInitializer {
                     Blocks.SUSPICIOUS_SAND,
                     Identifier.of("minecraft", "blocks/suspicious_sand")
                 );
-                /*Identifiers.put(
+                Identifiers.put(
                     Blocks.TRIAL_SPAWNER,
                     Identifier.of("minecraft", "blocks/trial_spawner")
-                );*/
+                );
+                Identifiers.put(
+                    Blocks.VAULT,
+                    Identifier.of("minecraft", "blocks/vault")
+                );
             }
 
             LootTableEvents.MODIFY.register(
@@ -79,10 +75,12 @@ public class SilkTouchPlus implements ModInitializer {
                     if(ModConfigs.SUSPICIOUS_SAND && Identifiers.get(Blocks.SUSPICIOUS_SAND).equals(identifier) ) {
                         LootPoolHelpers.dropsWithSilkTouchShovel(tableBuilder, Blocks.SUSPICIOUS_SAND, registries);
                     }
-                    /*if(ModConfigs.TRIAL_SPAWNER && Identifiers.get(Blocks.TRIAL_SPAWNER).equals(identifier) ) {
-                        //TODO: TRIAL_SPAWNER NBT (pickaxe)
-                        LootPoolHelpers.dropsSpawnerNBTWithSilkTouchPickaxe(tableBuilder, Blocks.TRIAL_SPAWNER);
-                    }*/
+                    if(ModConfigs.TRIAL_SPAWNER && Identifiers.get(Blocks.TRIAL_SPAWNER).equals(identifier) ) {
+                        LootPoolHelpers.dropsTrialSpawnerNBTWithSilkTouchPickaxe(tableBuilder, Blocks.TRIAL_SPAWNER, registries);
+                    }
+                    if(ModConfigs.VAULT && Identifiers.get(Blocks.VAULT).equals(identifier) ) {
+                        LootPoolHelpers.dropVaultNBTWithSilkTouchPickaxe(tableBuilder, Blocks.VAULT, registries);
+                    }
                 }
             );
         }
@@ -96,7 +94,8 @@ public class SilkTouchPlus implements ModInitializer {
             if(ModConfigs.SPAWNER)              { configsList.add("Spawner");              }
             if(ModConfigs.SUSPICIOUS_GRAVEL)    { configsList.add("Suspicious-Gravel");    }
             if(ModConfigs.SUSPICIOUS_SAND)      { configsList.add("Suspicious-Sand");      }
-            //if(ModConfigs.TRIAL_SPAWNER)        { configsList.add("Trial-Spawner");        }
+            if(ModConfigs.TRIAL_SPAWNER)        { configsList.add("Trial-Spawner");        }
+            if(ModConfigs.VAULT)                { configsList.add("Vault");                }
         }
         LOGGER.info(configsList.toString() + " are now Silk_Touch-able.");
     }

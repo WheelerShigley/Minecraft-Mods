@@ -3,7 +3,7 @@
   "id": "silktouchplus",
   "version": "0.7.0-b",
   "name": "SilkTouchPlus",
-  "description": "",
+  "description": "Many Vanilla Blocks are Configurable SilkTouch-able!",
   "authors": ["Wheeler-Shigley"],
   "contact": {},
   "license": "All-Rights-Reserved",
@@ -21,6 +21,6 @@
   "depends": {
     "fabricloader": ">=0.16.10",
     "fabric": "*",
-    "minecraft": ">=1.21 <=1.21.4"
+    "minecraft": ">=1.21 <=1.21.1"
   }
 }

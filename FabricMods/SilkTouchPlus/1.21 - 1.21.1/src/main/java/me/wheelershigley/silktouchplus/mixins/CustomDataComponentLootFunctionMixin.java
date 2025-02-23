@@ -3,6 +3,7 @@ package me.wheelershigley.silktouchplus.mixins;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.condition.LootCondition;
@@ -32,7 +33,13 @@ public abstract class CustomDataComponentLootFunctionMixin extends ConditionalLo
      */
     @Overwrite
     public ItemStack process(ItemStack stack, LootContext context) {
-        ComponentType<NbtComponent> type = stack.getItem().equals(Items.SPAWNER) ? DataComponentTypes.BLOCK_ENTITY_DATA : DataComponentTypes.CUSTOM_DATA;
+        final ComponentType<NbtComponent> type;
+        Item item = stack.getItem();
+        if( item.equals(Items.SPAWNER) || item.equals(Items.TRIAL_SPAWNER) ) {
+            type = DataComponentTypes.BLOCK_ENTITY_DATA;
+        } else {
+            type = DataComponentTypes.CUSTOM_DATA;
+        }
 
         NbtElement nbtElement = this.source.getNbt(context);
         if(nbtElement == null) {

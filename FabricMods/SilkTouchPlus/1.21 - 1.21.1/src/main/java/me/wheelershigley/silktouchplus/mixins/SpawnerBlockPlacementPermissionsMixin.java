@@ -31,7 +31,14 @@ public class SpawnerBlockPlacementPermissionsMixin {
             NbtComponent nbtComponent = stack.getOrDefault(DataComponentTypes.BLOCK_ENTITY_DATA, NbtComponent.DEFAULT);
             if( !nbtComponent.isEmpty() ) {
                 BlockEntity blockEntity = world.getBlockEntity(pos);
-                if(blockEntity != null && stack.getItem().equals(Items.SPAWNER) ) {
+                if(
+                    blockEntity != null
+                    && (
+                           stack.getItem().equals(Items.SPAWNER)
+                        || stack.getItem().equals(Items.TRIAL_SPAWNER)
+                        || stack.getItem().equals(Items.VAULT)
+                    )
+                ) {
                     cir.setReturnValue(
                         nbtComponent.applyToBlockEntity(
                             blockEntity,
