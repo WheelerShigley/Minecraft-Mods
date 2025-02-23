@@ -55,7 +55,7 @@ public class LootPoolHelpers {
             )
             .apply(
                 CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
-                    /* Components on a pick-block-ed spawner:
+                    /*  Components on a pick-block-ed spawner:
                         MaxNearbyEntities, RequiredPlayerRange, SpawnCount, SpawnData,
                         MaxSpawnDelay, id, SpawnRange, Delay, MinSpawnDelay, SpawnPotentials
                      */
@@ -70,14 +70,6 @@ public class LootPoolHelpers {
                     .withOperation("MinSpawnDelay", "MinSpawnDelay")
                     .withOperation("SpawnPotentials", "SpawnPotentials")
                     .build()
-                /*
-                CopyComponentsLootFunction.builder(
-                    CopyComponentsLootFunction.Source.BLOCK_ENTITY
-                )
-                .include(DataComponentTypes.BLOCK_ENTITY_DATA)
-                .include(DataComponentTypes.CUSTOM_NAME)
-                .include(DataComponentTypes.CUSTOM_MODEL_DATA)
-                 */
             )
         ;
         tableBuilder.pool( builder.build() );
@@ -100,6 +92,16 @@ public class LootPoolHelpers {
                 ItemEntry.builder(drop)
                     .conditionally(shovels_condition)
                     .conditionally(WITH_SILK_TOUCH)
+            )
+            .apply(
+                CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
+                /*  Components on a pick-block-ed suspicious gravel/sand:
+                    LootTable, id, LootTableSeed
+                 */
+                .withOperation("LootTable", "LootTable")
+                .withOperation("id", "id")
+                .withOperation("LootTableSeed", "LootTableSeed")
+                .build()
             )
         ;
         tableBuilder.pool( builder.build() );

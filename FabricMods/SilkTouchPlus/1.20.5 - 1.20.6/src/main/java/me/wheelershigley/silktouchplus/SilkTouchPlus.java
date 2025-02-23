@@ -69,11 +69,9 @@ public class SilkTouchPlus implements ModInitializer {
                         LootPoolHelpers.dropsSpawnerNBTWithSilkTouchPickaxe(tableBuilder, Blocks.SPAWNER);
                     }
                     if(ModConfigs.SUSPICIOUS_GRAVEL && Identifiers.get(Blocks.SUSPICIOUS_GRAVEL).equals(identifier) ) {
-                        //TODO: += NBT
                         LootPoolHelpers.dropsWithSilkTouchShovel(tableBuilder, Blocks.SUSPICIOUS_GRAVEL);
                     }
                     if(ModConfigs.SUSPICIOUS_SAND && Identifiers.get(Blocks.SUSPICIOUS_SAND).equals(identifier) ) {
-                        //TODO: += NBT
                         LootPoolHelpers.dropsWithSilkTouchShovel(tableBuilder, Blocks.SUSPICIOUS_SAND);
                     }
                     /*if(ModConfigs.TRIAL_SPAWNER && Identifiers.get(Blocks.TRIAL_SPAWNER).equals(identifier) ) {
