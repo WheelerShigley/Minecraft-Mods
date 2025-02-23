@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "silktouchplus",
+  "version": "0.6.0-a",
+  "name": "SilkTouchPlus",
+  "description": "",
+  "authors": ["Wheeler-Shigley"],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/silktouchplus/icon.png",
+  "environment": "server",
+  "accessWidener" : "silktouchplus.accesswidener",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.silktouchplus.SilkTouchPlus"
+    ]
+  },
+  "mixins": [
+    "silktouchplus.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "fabric": "*",
+    "minecraft": ">=1.20.5 <=1.21.4"
+  }
+}
