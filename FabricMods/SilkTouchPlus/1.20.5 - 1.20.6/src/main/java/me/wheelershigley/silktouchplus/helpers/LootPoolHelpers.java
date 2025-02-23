@@ -51,7 +51,7 @@ public class LootPoolHelpers {
             .with(
                 ItemEntry.builder(drop)
                     .conditionally(pickaxes_condition)
-                    //.conditionally(WITH_SILK_TOUCH)
+                    .conditionally(WITH_SILK_TOUCH)
             )
             .apply(
                 CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
