@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "live_catch",
+  "version": "0",
+  "name": "Live Catch",
+  "description": "Fishing catches live fish!",
+  "authors": ["Wheeler-Shigley"],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/live_catch/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.live_catch.LiveCatch"
+    ]
+  },
+  "mixins": [
+    "live_catch.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "fabric": "*",
+    "minecraft": "1.21.4"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.wheelershigley.live_catch.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "FishingBobberEntityMixin",
+    "WorldTickMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
