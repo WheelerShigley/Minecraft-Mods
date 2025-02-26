@@ -91,7 +91,7 @@ public abstract class FishingBobberEntityMixin extends ProjectileEntity {
                         );
                         Catch.setPos(
                             this.getX(),
-                            Math.ceil( this.getY() )+1.0 + Catch.getHeight(),
+                            Math.ceil( this.getY() )+0.5 + Catch.getHeight(),
                             this.getZ()
                         );
                         /*

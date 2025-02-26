@@ -2,7 +2,6 @@ package me.wheelershigley.live_catch;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 
@@ -12,7 +11,7 @@ public class EntityLink {
     private final Entity parent, child;
     private final Vec3d start, end;
 
-    public static final int MAXIMUM_TICK_COUNT = 3*20;
+    public static final int MAXIMUM_TICK_COUNT = 30; //1.5seconds -> 1.5*20 = 30
     private int accumulator = 0;
 
     public EntityLink(Entity parent, Entity child) {
@@ -35,6 +34,7 @@ public class EntityLink {
         LinkedEntities.remove(link);
     }
 
+    @Deprecated
     public static void removeEntriesFromListWithParent(Entity parent) {
         ArrayList<EntityLink> completedLinks = new ArrayList<>();
         for(EntityLink linkedEntity : LinkedEntities) {
@@ -61,15 +61,15 @@ public class EntityLink {
     }
 
     private EntityLink tick() {
-        LiveCatch.LOGGER.info(
-            "\n"+ Integer.toString( this.hashCode() ) +":\n"+
-            "\t"+ Integer.toString(MAXIMUM_TICK_COUNT) +" <=? "+ Integer.toString(accumulator) +" -> "+ Boolean.toString(MAXIMUM_TICK_COUNT <= accumulator)
-        );
-        LiveCatch.LOGGER.info(
-            "\n"+ Integer.toString( this.hashCode() )+":\n"+
-            "\tparent: ("+ parent.getX() +", "+ parent.getY() +", "+ parent.getZ() +")\n"+
-            "\tchild: ("+ child.getX() +", "+ child.getY() +", "+ child.getZ() +")"
-        );
+//        LiveCatch.LOGGER.info(
+//            "\n"+ Integer.toString( this.hashCode() ) +":\n"+
+//            "\t"+ Integer.toString(MAXIMUM_TICK_COUNT) +" <=? "+ Integer.toString(accumulator) +" -> "+ Boolean.toString(MAXIMUM_TICK_COUNT <= accumulator)
+//        );
+//        LiveCatch.LOGGER.info(
+//            "\n"+ Integer.toString( this.hashCode() )+":\n"+
+//            "\tparent: ("+ parent.getX() +", "+ parent.getY() +", "+ parent.getZ() +")\n"+
+//            "\tchild: ("+ child.getX() +", "+ child.getY() +", "+ child.getZ() +")"
+//        );
 
         double dx = end.getX() - start.getX();
         double dy = end.getY() - start.getY();
@@ -79,18 +79,18 @@ public class EntityLink {
         if(distance <= 1.0) {
             return this;
         }
-        child.setVelocity(0.2*dx, 0.2*dy, 0.2*dz);
+        child.setVelocity(dx/8.2, dy/7.2, dz/8.2);
         //If the fish is physically restricted, remove link
         if(    child.verticalCollision || child.horizontalCollision
             || child.collidedSoftly    || child.groundCollision
         ) {
-            LiveCatch.LOGGER.info(
-                "\n"+ Integer.toString( this.hashCode() ) +":\n"+
-                "\tsoftly: "+ Boolean.toString(child.collidedSoftly) +"\n"+
-                "\tground: "+ Boolean.toString(child.groundCollision) +"\n"+
-                "\tvertical: "+ Boolean.toString(child.verticalCollision) +"\n"+
-                "\thorizontal: "+ Boolean.toString(child.horizontalCollision)
-            );
+//            LiveCatch.LOGGER.info(
+//                "\n"+ Integer.toString( this.hashCode() ) +":\n"+
+//                "\tsoftly: "+ Boolean.toString(child.collidedSoftly) +"\n"+
+//                "\tground: "+ Boolean.toString(child.groundCollision) +"\n"+
+//                "\tvertical: "+ Boolean.toString(child.verticalCollision) +"\n"+
+//                "\thorizontal: "+ Boolean.toString(child.horizontalCollision)
+//            );
             return this;
         }
 
