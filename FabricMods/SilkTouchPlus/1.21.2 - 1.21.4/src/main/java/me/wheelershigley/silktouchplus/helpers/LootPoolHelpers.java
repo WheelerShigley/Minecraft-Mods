@@ -3,34 +3,25 @@ package me.wheelershigley.silktouchplus.helpers;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.condition.MatchToolLootCondition;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.function.CopyNbtLootFunction;
 import net.minecraft.loot.provider.nbt.ContextLootNbtProvider;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.predicate.NumberRange;
-import net.minecraft.predicate.item.EnchantmentPredicate;
-import net.minecraft.predicate.item.EnchantmentsPredicate;
-import net.minecraft.predicate.item.ItemPredicate;
-import net.minecraft.predicate.item.ItemSubPredicateTypes;
+import net.minecraft.predicate.item.*;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.registry.tag.ItemTags;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static net.minecraft.loot.context.LootContextParameters.BLOCK_STATE;
-
+//I used VanillaLootTableGenerator.class as a reference for the static members of this class
 public class LootPoolHelpers extends FabricBlockLootTableProvider {
     protected LootPoolHelpers(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         super(dataOutput, registryLookup);
@@ -38,13 +29,13 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
     @Override public void generate() {}
 
     private static LootCondition.Builder _createSilkTouchCondition(RegistryWrapper.WrapperLookup registries) {
-        RegistryEntry<Enchantment> SilkTouchRegistryEntry = registries.createRegistryLookup().getOrThrow(RegistryKeys.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH);
         return MatchToolLootCondition.builder(
             ItemPredicate.Builder.create().subPredicate(
-                ItemSubPredicateTypes.ENCHANTMENTS, EnchantmentsPredicate.enchantments(
+                ItemSubPredicateTypes.ENCHANTMENTS,
+                EnchantmentsPredicate.enchantments(
                     List.of(
                         new EnchantmentPredicate(
-                            SilkTouchRegistryEntry,
+                            registries.getOrThrow(RegistryKeys.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH),
                             NumberRange.IntRange.atLeast(1)
                         )
                     )
@@ -53,23 +44,22 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
         );
     }
 
-    private static final LootCondition.Builder pickaxesCondition =
-        MatchToolLootCondition.builder(
+    private static LootCondition.Builder pickaxesCondition(RegistryWrapper.WrapperLookup registries) {
+        return MatchToolLootCondition.builder(
             ItemPredicate.Builder.create().tag(
-                TagKey.of(
-                    RegistryKeys.ITEM,
-                    Identifier.of("minecraft", "pickaxes")
-                )
+                registries.getOrThrow(RegistryKeys.ITEM),
+                ItemTags.PICKAXES
             )
-        )
-    ;
+        );
+    }
+
     public static void dropsWithSilkTouchPickaxe(LootTable.Builder tableBuilder, Block drop, RegistryWrapper.WrapperLookup registries) {
         LootCondition.Builder silkTouchCondition = _createSilkTouchCondition(registries);
         LootPool.Builder builder = LootPool.builder()
             .rolls( ConstantLootNumberProvider.create(1.0F) )
             .with(
                 ItemEntry.builder(drop)
-                    .conditionally(pickaxesCondition)
+                    .conditionally( pickaxesCondition(registries) )
                     .conditionally(silkTouchCondition)
             )
         ;
@@ -81,7 +71,7 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
             .rolls( ConstantLootNumberProvider.create(1.0F) )
             .with(
                 ItemEntry.builder(drop)
-                    .conditionally(pickaxesCondition)
+                    .conditionally( pickaxesCondition(registries) )
                     .conditionally(silkTouchCondition)
             )
             .apply(
@@ -112,7 +102,7 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
             .rolls( ConstantLootNumberProvider.create(1.0F) )
             .with(
                 ItemEntry.builder(drop)
-                    .conditionally(pickaxesCondition)
+                    .conditionally( pickaxesCondition(registries) )
                     .conditionally(silkTouchCondition)
             )
             .apply(
@@ -125,7 +115,7 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
                         normal_config, spawn_data, id, ominous_config
                      */
                     .withOperation("normal_config", "normal_config")
-                    .withOperation("normal_config.spawn_potentials[0].data", "spawn_data")
+                    .withOperation("spawn_data", "spawn_data")
                     .withOperation("id", "id")
                     .withOperation("ominous_config", "ominous_config")
                     .build()
@@ -140,7 +130,7 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
             .rolls( ConstantLootNumberProvider.create(1.0F) )
             .with(
                 ItemEntry.builder(drop)
-                    .conditionally(pickaxesCondition)
+                    .conditionally( pickaxesCondition(registries) )
                     .conditionally(silkTouchCondition)
             )
             .apply(
@@ -158,26 +148,25 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
         tableBuilder.pool( builder.build() );
     }
 
-    private static final LootCondition.Builder shovelsCondition =
-        MatchToolLootCondition.builder(
+    private static LootCondition.Builder shovelsCondition(RegistryWrapper.WrapperLookup registries) {
+        return MatchToolLootCondition.builder(
             ItemPredicate.Builder.create().tag(
-                TagKey.of(
-                    RegistryKeys.ITEM,
-                    Identifier.of("minecraft", "shovels")
-                )
+                registries.getOrThrow(RegistryKeys.ITEM),
+                ItemTags.SHOVELS
             )
-        )
-    ;
+        );
+    }
     public static void dropsWithSilkTouchShovel(LootTable.Builder tableBuilder, Block drop, RegistryWrapper.WrapperLookup registries) {
         LootCondition.Builder silkTouchCondition = _createSilkTouchCondition(registries);
         LootPool.Builder builder = LootPool.builder()
             .rolls( ConstantLootNumberProvider.create(1.0F) )
             .with(
                 ItemEntry.builder(drop)
-                    .conditionally(shovelsCondition)
+                    .conditionally( shovelsCondition(registries) )
                     .conditionally(silkTouchCondition)
             )
             .apply(
+                //TODO Fix that this uses "custom_data" from the Provider below
                 CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
                 /*  Components on a pick-block-ed suspicious gravel/sand:
                     LootTable, id, LootTableSeed
