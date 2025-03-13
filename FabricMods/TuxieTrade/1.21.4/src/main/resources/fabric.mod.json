@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "tuxie_trade",
+  "version": "0.1-a",
+  "name": "TuxieTrade",
+  "description": "Wandering-Traders' Trade Improvements.",
+  "authors": ["Wheeler-Shigley"],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/tuxietrade/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.tuxietrade.TuxieTrade"
+    ]
+  },
+  "mixins": [
+    "tuxietrade.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "fabric": "*",
+    "minecraft": ">=1.21.4"
+  }
+}
