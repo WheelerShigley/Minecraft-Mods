@@ -4,9 +4,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.TippedArrowItem;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.Potions;
 import net.minecraft.registry.entry.RegistryEntry;
 
 public class ItemHelpers {

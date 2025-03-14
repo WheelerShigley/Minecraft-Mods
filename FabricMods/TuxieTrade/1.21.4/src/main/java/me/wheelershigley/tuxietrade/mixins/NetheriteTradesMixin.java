@@ -20,7 +20,10 @@ import java.util.Optional;
 
 import static me.wheelershigley.tuxietrade.item.ItemGroups.isSpawnEgg;
 
-@Mixin(TradeOffers.SellItemFactory.class)
+@Mixin(
+    value = TradeOffers.SellItemFactory.class,
+    priority = 1300
+)
 public class NetheriteTradesMixin {
     @Shadow @Final private ItemStack sell;
     @Shadow @Final private Optional< RegistryKey<EnchantmentProvider> > enchantmentProviderKey;
@@ -56,7 +59,7 @@ public class NetheriteTradesMixin {
                 this.price
             ),
             itemStack,
-            this.maxUses,
+            Integer.MAX_VALUE, //this.maxUses,
             this.experience,
             this.multiplier
         );

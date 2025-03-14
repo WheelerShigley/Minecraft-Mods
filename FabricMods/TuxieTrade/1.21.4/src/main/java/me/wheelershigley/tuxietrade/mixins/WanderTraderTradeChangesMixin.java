@@ -447,7 +447,7 @@ public abstract class WanderTraderTradeChangesMixin extends MerchantEntity  {
         }
         CUSTOM_TRADER_TRADES.add(
             tradingPair(
-                PassiveSpawnEggTrades.toArray( new TradeOffers.Factory[0] ), //TODO Custom-Factory? for second item in trade
+                PassiveSpawnEggTrades.toArray( new TradeOffers.Factory[0] ),
                 1
             )
         );
