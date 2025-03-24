@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "id": "unlimited-anvil",
-  "version": "1.0.2-a",
-  "name": "UnlimitedAnvil",
+  "version": "1.1.0-a",
+  "name": "Unlimited Anvil",
   "description": "Enchanted Books may be combined to their maximum effective level! This is expensive.",
   "authors": ["Wheeler-Shigley"],
   "contact": {},
@@ -11,7 +11,7 @@
   "environment": "server",
   "entrypoints": {
     "main": [
-      "me.wheelershigley.unlimitedanvil2.Unlimitedanvil2"
+      "me.wheelershigley.unlimitedanvil2.UnlimitedAnvil"
     ]
   },
   "mixins": [

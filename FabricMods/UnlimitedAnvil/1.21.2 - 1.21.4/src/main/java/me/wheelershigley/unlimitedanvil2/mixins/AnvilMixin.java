@@ -1,7 +1,9 @@
 package me.wheelershigley.unlimitedanvil2.mixins;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import me.wheelershigley.unlimitedanvil2.EnchantmentsHelper;
+import me.wheelershigley.unlimitedanvil2.UnlimitedAnvil;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -13,6 +15,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.*;
 import net.minecraft.screen.slot.ForgingSlotsManager;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.StringHelper;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
@@ -20,8 +23,12 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 
 import java.util.Iterator;
+
+import static me.wheelershigley.unlimitedanvil2.EnchantmentsHelper.getMaximumEffectiveLevel;
 
 @Mixin(value = AnvilScreenHandler.class, priority = 800)
 public abstract class AnvilMixin extends ForgingScreenHandler  {
@@ -36,7 +43,10 @@ public abstract class AnvilMixin extends ForgingScreenHandler  {
 
     @Shadow
     public static int getNextCost(int cost) {
-        return (int)Math.min((long)cost * 2L + 1L, 2147483647L);
+        return (int)Math.min(
+            (long)cost * 2L + 1L,
+            (long)Integer.MIN_VALUE
+        );
     }
 
     /**
@@ -48,6 +58,7 @@ public abstract class AnvilMixin extends ForgingScreenHandler  {
         ItemStack PrimaryInput = this.input.getStack(0);
         ItemStack SecondaryInput = this.input.getStack(1);
         ItemStack Output = this.output.getStack(0);
+        int final_cost = 0;
         /*Vanilla* Implementation*/ {
             this.keepSecondSlot = false;
             this.levelCost.set(1);
@@ -106,25 +117,22 @@ public abstract class AnvilMixin extends ForgingScreenHandler  {
                         ItemEnchantmentsComponent itemEnchantmentsComponent = EnchantmentHelper.getEnchantments(SecondaryInput);
                         boolean bl2 = false;
                         boolean bl3 = false;
-                        Iterator<Object2IntMap.Entry<RegistryEntry<Enchantment>>> var26 = itemEnchantmentsComponent.getEnchantmentEntries().iterator();
+                        Iterator<  Object2IntMap.Entry< RegistryEntry<Enchantment> >  > var26 = itemEnchantmentsComponent.getEnchantmentEntries().iterator();
 
                         while(var26.hasNext()) {
                             Object2IntMap.Entry<RegistryEntry<Enchantment>> entry = var26.next();
                             RegistryEntry<Enchantment> registryEntry = entry.getKey();
                             int q = builder.getLevel(registryEntry);
-                            int r = entry.getIntValue();
-                            r = q == r ? r + 1 : Math.max(r, q);
-                            Enchantment enchantment = (Enchantment)registryEntry.value();
+                            int level = entry.getIntValue();
+                            level = q == level ? level + 1 : Math.max(level, q);
+                            Enchantment enchantment = registryEntry.value();
                             boolean bl4 = enchantment.isAcceptableItem(PrimaryInput);
                             if (this.player.getAbilities().creativeMode || PrimaryInput.isOf(Items.ENCHANTED_BOOK)) {
                                 bl4 = true;
                             }
 
-                            Iterator<RegistryEntry<Enchantment>> var20 = builder.getEnchantments().iterator();
-
-                            while(var20.hasNext()) {
-                                RegistryEntry<Enchantment> registryEntry2 = var20.next();
-                                if (!registryEntry2.equals(registryEntry) && !Enchantment.canBeCombined(registryEntry, registryEntry2)) {
+                            for( RegistryEntry<Enchantment> registryEntry2 : builder.getEnchantments() ) {
+                                if( !registryEntry2.equals(registryEntry) && !Enchantment.canBeCombined(registryEntry, registryEntry2) ) {
                                     bl4 = false;
                                     ++i;
                                 }
@@ -134,20 +142,22 @@ public abstract class AnvilMixin extends ForgingScreenHandler  {
                                 bl3 = true;
                             } else {
                                 bl2 = true;
-                                if( r > enchantment.getMaxLevel() ) {
-                                    r = enchantment.getMaxLevel();
-                                }
 
-                                builder.set(registryEntry, r);
-                                int s = enchantment.getAnvilCost();
+                                //use custom maximum levels
+                                int max_level = getMaximumEffectiveLevel(
+                                    Identifier.of(
+                                        enchantment.description().getString().toLowerCase().replace(' ', '_')
+                                    )
+                                );
+                                level = Math.min(max_level, level);
+
+                                builder.set(registryEntry, level);
+                                int cost = 2*enchantment.getAnvilCost(); //Double level-price
                                 if (bl) {
-                                    s = Math.max(1, s / 2);
+                                    cost = Math.max(1, cost / 2);
                                 }
 
-                                i += s * r;
-                                if (PrimaryInput.getCount() > 1) {
-                                    i = 40;
-                                }
+                                i += cost * level;
                             }
                         }
 
@@ -158,33 +168,31 @@ public abstract class AnvilMixin extends ForgingScreenHandler  {
                     }
                 }
 
-                if (this.newItemName != null && !StringHelper.isBlank(this.newItemName)) {
-                    if (!this.newItemName.equals(PrimaryInput.getName().getString())) {
+                if( this.newItemName != null && !StringHelper.isBlank(this.newItemName) ) {
+                    if( !this.newItemName.equals(PrimaryInput.getName().getString()) ) {
                         j = 1;
-                        i += j;
+                        i++;
                         itemStack2.set(DataComponentTypes.CUSTOM_NAME, Text.literal(this.newItemName));
                     }
-                } else if (PrimaryInput.contains(DataComponentTypes.CUSTOM_NAME)) {
+                } else if( PrimaryInput.contains(DataComponentTypes.CUSTOM_NAME) ) {
                     j = 1;
-                    i += j;
+                    i++;
                     itemStack2.remove(DataComponentTypes.CUSTOM_NAME);
                 }
 
-                int t = i <= 0 ? 0 : (int) MathHelper.clamp(l + (long)i, 0L, 2147483647L);
-                this.levelCost.set(t);
+                final_cost = i <= 0 ? 0 : (int) MathHelper.clamp(2*(l + (long)i), 0L, 2147483647L);
+//                UnlimitedAnvil.LOGGER.info( "a "+Integer.toString(final_cost) );
+//                UnlimitedAnvil.LOGGER.info( "b "+Integer.toString( this.levelCost.get() ) );
+                this.levelCost.set(final_cost);
                 if (i <= 0) {
                     itemStack2 = ItemStack.EMPTY;
                 }
 
                 if (j == i && j > 0) {
-                    if (this.levelCost.get() >= 40) {
-                        this.levelCost.set(39);
-                    }
-
                     this.keepSecondSlot = true;
                 }
 
-                if (this.levelCost.get() >= 40 && !this.player.getAbilities().creativeMode) {
+                if( !this.player.getAbilities().creativeMode ) {
                     itemStack2 = ItemStack.EMPTY;
                 }
 
@@ -211,23 +219,24 @@ public abstract class AnvilMixin extends ForgingScreenHandler  {
             }
         }
         /*Custom Addition(s)*/ {
-            boolean useStoredEnchants = PrimaryInput.contains(DataComponentTypes.STORED_ENCHANTMENTS);
-            int updatedLevel = EnchantmentsHelper.getEnchantingCost(Output, useStoredEnchants);
+            //boolean useStoredEnchants = PrimaryInput.contains(DataComponentTypes.STORED_ENCHANTMENTS);
+            //int updatedLevel = EnchantmentsHelper.getEnchantingCost(Output, useStoredEnchants);
 
-            boolean has_new_custom_name =
-                this.newItemName != null
-                && !StringHelper.isBlank(this.newItemName)
-                && Output.contains(DataComponentTypes.CUSTOM_NAME)
-            ;
-            if(has_new_custom_name) {
-                ++updatedLevel;
-            }
+//            boolean has_new_custom_name =
+//                this.newItemName != null
+//                && !StringHelper.isBlank(this.newItemName)
+//                && Output.contains(DataComponentTypes.CUSTOM_NAME)
+//            ;
+//            if(has_new_custom_name) {
+//                ++updatedLevel;
+//            }
 
             //Remove compounding cost multiplier
+            //this.levelCost.set(final_cost);
             Output.set(DataComponentTypes.REPAIR_COST, 0);
 
-            this.levelCost.set(updatedLevel);
-            this.sendContentUpdates();
+            //this.levelCost.set(updatedLevel);
         }
+        this.sendContentUpdates();
     }
 }
