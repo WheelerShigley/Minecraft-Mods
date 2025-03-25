@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "silktouchplus",
+  "version": "0.7.1-a",
+  "name": "SilkTouch+",
+  "description": "Makes many unobtainables configurably silk-touch-able!",
+  "authors": ["Wheeler-Shigley"],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/silktouchplus/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.silktouchplus.SilkTouchPlus"
+    ]
+  },
+  "mixins": [
+    "silktouchplus.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "fabric": "*",
+    "minecraft": "1.21.5"
+  }
+}
