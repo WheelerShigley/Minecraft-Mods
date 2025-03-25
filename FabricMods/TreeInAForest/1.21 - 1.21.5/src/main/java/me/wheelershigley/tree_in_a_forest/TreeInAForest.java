@@ -1,4 +1,4 @@
-package me.wheelershigley.treeinaforest;
+package me.wheelershigley.tree_in_a_forest;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -14,6 +14,7 @@ public class TreeInAForest implements ModInitializer {
 
     public static ArrayList<UUID> players = new ArrayList<>();
     public static ArrayList<ServerWorld> worlds = new ArrayList<>();
+
     private void onServerStart(ServerWorld world) {
         if( worlds.contains(world) ) { return; }
         TreeInAForest.worlds.add(world);

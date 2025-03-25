@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "me.wheelershigley.treeinaforest.mixins",
+  "package": "me.wheelershigley.tree_in_a_forest.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "PlayerConnectionMixin"

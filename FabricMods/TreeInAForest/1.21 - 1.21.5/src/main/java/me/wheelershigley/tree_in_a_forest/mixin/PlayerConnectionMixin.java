@@ -1,6 +1,6 @@
-package me.wheelershigley.treeinaforest.mixins;
+package me.wheelershigley.tree_in_a_forest.mixin;
 
-import me.wheelershigley.treeinaforest.TreeInAForest;
+import me.wheelershigley.tree_in_a_forest.TreeInAForest;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ConnectedClientData;

@@ -1,25 +1,25 @@
 {
   "schemaVersion": 1,
-  "id": "treeinaforest",
+  "id": "tree_in_a_forest",
   "version": "0.1.1-b",
   "name": "TreeInAForest",
-  "description": "Time stops when no players are online.",
+  "description": "Time only progresses if players are online.",
   "authors": ["Wheeler-Shigley"],
   "contact": {},
   "license": "All-Rights-Reserved",
-  "icon": "assets/treeinaforest/icon.png",
+  "icon": "assets/tree_in_a_forest/icon.png",
   "environment": "server",
   "entrypoints": {
     "main": [
-      "me.wheelershigley.treeinaforest.TreeInAForest"
+      "me.wheelershigley.tree_in_a_forest.TreeInAForest"
     ]
   },
   "mixins": [
-    "treeinaforest.mixins.json"
+    "tree_in_a_forest.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.10",
     "fabric": "*",
-    "minecraft": ">=1.21 <=1.21.4"
+    "minecraft": ">=1.21 <=1.21.5"
   }
 }
