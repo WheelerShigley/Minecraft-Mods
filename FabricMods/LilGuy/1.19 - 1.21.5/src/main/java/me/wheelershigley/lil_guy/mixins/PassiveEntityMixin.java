@@ -30,7 +30,7 @@ public class PassiveEntityMixin extends PathAwareEntity {
         if(this.getWorld().isClient) {
             if(0 < this.happyTicksRemaining) {
                 if(this.happyTicksRemaining % 4 == 0) {
-                    this.getWorld().addParticle(
+                    this.getWorld().addParticleClient(
                         ParticleTypes.HAPPY_VILLAGER,
                         this.getParticleX(1.0),
                         this.getRandomBodyY() + 0.5,
