@@ -1,4 +1,4 @@
-package me.wheelershigley.hydra_drop.mixin;
+package me.wheelershigley.charged.mixins;
 
 import net.minecraft.entity.mob.CreeperEntity;
 import org.spongepowered.asm.mixin.Mixin;

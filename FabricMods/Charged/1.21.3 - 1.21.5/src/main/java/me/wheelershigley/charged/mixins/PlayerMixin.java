@@ -1,4 +1,4 @@
-package me.wheelershigley.hydra_drop.mixin;
+package me.wheelershigley.charged.mixins;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
