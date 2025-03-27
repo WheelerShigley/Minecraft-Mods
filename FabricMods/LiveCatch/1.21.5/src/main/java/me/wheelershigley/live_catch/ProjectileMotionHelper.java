@@ -18,7 +18,7 @@ public class ProjectileMotionHelper {
         x_direction /= xz_distance;
         z_direction /= xz_distance;
 
-        LiveCatch.LOGGER.info("\nVelocity: ("+x_direction+", "+speed+", "+z_direction+")");
+//        LiveCatch.LOGGER.info("\nVelocity: ("+x_direction+", "+speed+", "+z_direction+")");
 
         return new Vec3d(x_direction, speed, z_direction);
     }

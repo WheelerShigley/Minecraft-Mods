@@ -56,6 +56,7 @@ public class EntityLink {
             }
         }
         for(EntityLink completedLink : completedLinks) {
+            completedLink.child.setVelocity(0.0, 0.0, 0.0);
             RemoveFromList(completedLink);
         }
     }
@@ -79,7 +80,7 @@ public class EntityLink {
         if(distance <= 1.0) {
             return this;
         }
-        child.setVelocity(dx/8.2, dy/7.2, dz/8.2);
+        child.setVelocity(dx/10.0, dy/10.0, dz/10.0);
         //If the fish is physically restricted, remove link
         if(    child.verticalCollision || child.horizontalCollision
             || child.collidedSoftly    || child.groundCollision

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "live_catch",
   "version": "0",
-  "name": "Live Catch",
+  "name": "LiveCatch",
   "description": "Fishing catches live fish!",
   "authors": ["Wheeler-Shigley"],
   "contact": {},
@@ -20,6 +20,6 @@
   "depends": {
     "fabricloader": ">=0.16.10",
     "fabric": "*",
-    "minecraft": "1.21.4"
+    "minecraft": "1.21.5"
   }
 }
