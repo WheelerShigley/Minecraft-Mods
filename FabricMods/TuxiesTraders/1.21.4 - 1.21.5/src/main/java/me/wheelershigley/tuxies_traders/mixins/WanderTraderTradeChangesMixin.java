@@ -1,7 +1,6 @@
-package me.wheelershigley.tuxietrade.mixins;
+package me.wheelershigley.tuxies_traders.mixins;
 
-import me.wheelershigley.tuxietrade.item.ItemConvertibleSpecific;
-import me.wheelershigley.tuxietrade.item.ItemGroups;
+import me.wheelershigley.tuxies_traders.item.ItemGroups;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -11,7 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Potions;
-import net.minecraft.predicate.ComponentPredicate;
+import net.minecraft.predicate.component.ComponentMapPredicate;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOfferList;
 import net.minecraft.village.TradeOffers;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static me.wheelershigley.tuxietrade.item.ItemHelpers.createPotionStack;
+import static me.wheelershigley.tuxies_traders.item.ItemHelpers.createPotionStack;
 
 @Mixin(WanderingTraderEntity.class)
 public abstract class WanderTraderTradeChangesMixin extends MerchantEntity  {
@@ -75,7 +74,7 @@ public abstract class WanderTraderTradeChangesMixin extends MerchantEntity  {
                                 new TradedItem(
                                     drop.getItem().getRegistryEntry(),
                                     drop.getMaxCount(),
-                                    ComponentPredicate.of( drop.getComponents() ),
+                                    ComponentMapPredicate.of( drop.getComponents() ),
                                     drop
                                 )
                             ),

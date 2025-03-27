@@ -1,4 +1,4 @@
-package me.wheelershigley.tuxietrade.item;
+package me.wheelershigley.tuxies_traders.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;

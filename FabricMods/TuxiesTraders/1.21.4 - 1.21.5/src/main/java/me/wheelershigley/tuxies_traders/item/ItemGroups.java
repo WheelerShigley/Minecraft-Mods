@@ -1,4 +1,4 @@
-package me.wheelershigley.tuxietrade.item;
+package me.wheelershigley.tuxies_traders.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -7,8 +7,8 @@ import net.minecraft.potion.Potions;
 
 import java.util.HashMap;
 
-import static me.wheelershigley.tuxietrade.item.ItemHelpers.createPotionStack;
-import static me.wheelershigley.tuxietrade.item.ItemHelpers.createTippedArrowStack;
+import static me.wheelershigley.tuxies_traders.item.ItemHelpers.createPotionStack;
+import static me.wheelershigley.tuxies_traders.item.ItemHelpers.createTippedArrowStack;
 
 public class ItemGroups {
     public static boolean isSpawnEgg(Item item) {

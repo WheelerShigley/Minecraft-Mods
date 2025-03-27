@@ -1,4 +1,4 @@
-//package me.wheelershigley.solstraders;
+package me.wheelershigley.tuxies_traders.tag;//package me.wheelershigley.solstraders;
 //
 //import net.minecraft.block.Block;
 //import net.minecraft.data.DataOutput;

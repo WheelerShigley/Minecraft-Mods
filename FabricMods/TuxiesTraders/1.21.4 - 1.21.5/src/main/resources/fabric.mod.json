@@ -1,25 +1,25 @@
 {
   "schemaVersion": 1,
-  "id": "tuxie_trade",
+  "id": "tuxies_trades",
   "version": "0.1.3-a",
-  "name": "TuxieTrade",
-  "description": "Wandering-Traders' Trade Improvements.",
+  "name": "TuxiesTrades",
+  "description": "Custom Wander Trader Trades.",
   "authors": ["Wheeler-Shigley"],
   "contact": {},
   "license": "All-Rights-Reserved",
-  "icon": "assets/tuxietrade/icon.png",
+  "icon": "assets/tuxies_trades/icon.png",
   "environment": "server",
   "entrypoints": {
     "main": [
-      "me.wheelershigley.tuxietrade.TuxieTrade"
+      "me.wheelershigley.tuxies_traders.TuxiesTraders"
     ]
   },
   "mixins": [
-    "tuxietrade.mixins.json"
+    "tuxies_trades.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.10",
     "fabric": "*",
-    "minecraft": ">=1.21.4"
+    "minecraft": ">=1.21.4 <=1.21.5"
   }
 }

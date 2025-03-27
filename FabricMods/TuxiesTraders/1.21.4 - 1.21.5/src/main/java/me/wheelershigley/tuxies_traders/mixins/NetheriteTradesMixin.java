@@ -1,5 +1,6 @@
-package me.wheelershigley.tuxietrade.mixins;
+package me.wheelershigley.tuxies_traders.mixins;
 
+import me.wheelershigley.tuxies_traders.item.ItemGroups;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.provider.EnchantmentProvider;
 import net.minecraft.entity.Entity;
@@ -17,8 +18,6 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Optional;
-
-import static me.wheelershigley.tuxietrade.item.ItemGroups.isSpawnEgg;
 
 @Mixin(
     value = TradeOffers.SellItemFactory.class,
@@ -55,7 +54,7 @@ public class NetheriteTradesMixin {
 
         return new TradeOffer(
             new TradedItem(
-                isSpawnEgg( sell.getItem() ) ? Items.NETHERITE_INGOT : Items.EMERALD,
+                ItemGroups.isSpawnEgg( sell.getItem() ) ? Items.NETHERITE_INGOT : Items.EMERALD,
                 this.price
             ),
             itemStack,
