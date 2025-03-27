@@ -1,8 +1,7 @@
-package me.wheelershigley.forever_rare.mixin;
+package me.wheelershigley.bleu.mixin;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.AxolotlEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -28,7 +27,7 @@ public abstract class AxolotlMixin extends AnimalEntity  {
         return null;
     }
 
-    @Shadow @Final private static TrackedData<Integer> VARIANT;
+//    @Shadow @Final private static TrackedData<Integer> VARIANT;
 
     /**
      * @author Wheeler-Shigley
@@ -64,7 +63,7 @@ public abstract class AxolotlMixin extends AnimalEntity  {
                 }
             }
 
-            axolotlEntity.setVariant(variant);
+            axolotlEntity.setVariant(variant); //see bleu.accesswidener
             axolotlEntity.setPersistent();
         }
 
