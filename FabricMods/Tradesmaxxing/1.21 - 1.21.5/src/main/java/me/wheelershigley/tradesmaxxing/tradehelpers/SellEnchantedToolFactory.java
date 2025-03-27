@@ -1,4 +1,4 @@
-package me.wheelershigley.tradesmaxxing.server.tradehelpers;
+package me.wheelershigley.tradesmaxxing.tradehelpers;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;

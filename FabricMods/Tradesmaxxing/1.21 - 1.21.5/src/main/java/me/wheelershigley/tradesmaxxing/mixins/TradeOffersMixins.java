@@ -1,4 +1,4 @@
-package me.wheelershigley.tradesmaxxing.server.mixins;
+package me.wheelershigley.tradesmaxxing.mixins;
 
 import com.google.common.collect.Lists;
 import net.minecraft.component.DataComponentTypes;
@@ -45,9 +45,7 @@ public class TradeOffersMixins {
 
     @Mixin(TradeOffers.BuyItemFactory.class)
     public static class BuyItemFactory {
-        @Shadow
-        @Final
-        private TradedItem stack;
+        @Shadow @Final private TradedItem stack;
         @Shadow @Final private int experience;
         @Shadow @Final private int price;
         @Shadow @Final private float multiplier;
@@ -58,13 +56,15 @@ public class TradeOffersMixins {
          */
         @Overwrite
         public TradeOffer create(Entity entity, Random random) {
-            return new TradeOffer(
+            TradeOffer offer = new TradeOffer(
                     this.stack,
                     new ItemStack( Items.EMERALD, this.price ),
                     MAXVALUE,
                     this.experience,
                     this.multiplier
             );
+
+            return offer;
         }
     }
 
@@ -390,8 +390,16 @@ public class TradeOffersMixins {
         @Nullable
         public TradeOffer create(Entity entity, Random random) {
             if (entity instanceof VillagerDataContainer villagerDataContainer) {
-                TradedItem tradedItem = new TradedItem((ItemConvertible)this.map.get(villagerDataContainer.getVillagerData().getType()), this.count);
-                return new TradeOffer(tradedItem, new ItemStack(Items.EMERALD), MAXVALUE, this.experience, 0.05F);
+                RegistryKey<VillagerType> registryKey = (RegistryKey<VillagerType>)villagerDataContainer.getVillagerData().type().getKey().orElse( (RegistryKey<VillagerType>)null );
+                if(registryKey == null) {
+                    return null;
+                } else {
+                    TradedItem tradedItem = new TradedItem(
+                        (ItemConvertible)this.map.get(registryKey),
+                        this.count
+                    );
+                    return new TradeOffer(tradedItem, new ItemStack(Items.EMERALD), Integer.MAX_VALUE, this.experience, 0.05F);
+                }
             } else {
                 return null;
             }

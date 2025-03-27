@@ -1,4 +1,4 @@
-package me.wheelershigley.tradesmaxxing.server.mixins;
+package me.wheelershigley.tradesmaxxing.mixins;
 
 import net.minecraft.village.TradeOffer;
 import org.spongepowered.asm.mixin.Mixin;

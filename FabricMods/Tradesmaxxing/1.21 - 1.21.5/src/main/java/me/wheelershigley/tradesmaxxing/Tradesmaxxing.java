@@ -1,4 +1,4 @@
-package me.wheelershigley.tradesmaxxing.server;
+package me.wheelershigley.tradesmaxxing;
 
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;

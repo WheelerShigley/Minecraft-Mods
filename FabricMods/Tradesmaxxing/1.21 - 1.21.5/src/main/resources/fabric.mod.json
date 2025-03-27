@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "tradesmaxxing",
-  "version": "0.2.1-b",
+  "version": "0.2.1-a",
   "name": "Tradesmaxxing",
   "description": "All merchants (including Villagers) have infinite trades!",
   "authors": ["Wheeler-Shigley"],
@@ -11,18 +11,15 @@
   "environment": "server",
   "entrypoints": {
     "main": [
-      "me.wheelershigley.tradesmaxxing.server.Tradesmaxxing"
+      "me.wheelershigley.tradesmaxxing.Tradesmaxxing"
     ]
   },
   "mixins": [
-    {
-      "config": "tradesmaxxing.server.mixins.json",
-      "environment": "server"
-    }
+    "tradesmaxxing.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.10",
+    "fabricloader": ">=0.16.9",
     "fabric": "*",
-    "minecraft": ">=1.21 <=1.21.4"
+    "minecraft": ">=1.21 <=1.21.5"
   }
 }
