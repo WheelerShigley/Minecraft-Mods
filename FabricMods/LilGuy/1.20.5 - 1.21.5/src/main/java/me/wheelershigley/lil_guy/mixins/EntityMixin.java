@@ -1,6 +1,5 @@
 package me.wheelershigley.lil_guy.mixins;
 
-import me.wheelershigley.lil_guy.LilGuy;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.data.DataTracked;
@@ -10,10 +9,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextCodecs;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Nameable;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,8 +27,6 @@ public abstract class EntityMixin implements DataTracked {
     @Shadow @Final private static TrackedData< Optional<Text> > CUSTOM_NAME;
     @Shadow @Final protected DataTracker dataTracker;
     @Shadow @Nullable public abstract Text getCustomName();
-
-    @Shadow public abstract void setCustomName(@Nullable Text name);
 
     @Inject(
         method = "interact",
