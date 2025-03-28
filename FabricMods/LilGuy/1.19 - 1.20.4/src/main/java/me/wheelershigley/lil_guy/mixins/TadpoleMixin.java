@@ -3,10 +3,6 @@ package me.wheelershigley.lil_guy.mixins;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.FishEntity;
 import net.minecraft.entity.passive.TadpoleEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -34,14 +30,5 @@ public abstract class TadpoleMixin extends FishEntity {
         ) {
             this.setTadpoleAge(this.tadpoleAge + 1);
         }
-    }
-
-    @Override
-    protected SoundEvent getFlopSound() {
-        return SoundEvents.ENTITY_TADPOLE_FLOP;
-    }
-    @Override
-    public ItemStack getBucketItem() {
-        return new ItemStack(Items.TADPOLE_BUCKET);
     }
 }

@@ -4,6 +4,7 @@
   "package": "me.wheelershigley.lil_guy.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "EntityMixin",
     "PassiveEntityMixin",
     "TadpoleMixin"
   ],

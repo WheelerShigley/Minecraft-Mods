@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "lil_guy",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "name": "Lil Guy",
   "description": "Named, baby animals will never age!",
-  "authors": [],
+  "authors": ["Wheeler-Shigley"],
   "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/lil_guy/icon.png",
@@ -20,6 +20,6 @@
   "depends": {
     "fabricloader": ">=0.16.10",
     "fabric": "*",
-    "minecraft": ">=1.19 <=1.21.5"
+    "minecraft": ">=1.19 <=1.20.4"
   }
 }
