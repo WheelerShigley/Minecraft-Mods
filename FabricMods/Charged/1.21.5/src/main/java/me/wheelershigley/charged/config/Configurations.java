@@ -63,7 +63,10 @@ public class Configurations {
                 return null;
             }
 
-            unparsedPair = new Pair<>(splitPair[0], splitPair[1]);
+            unparsedPair = new Pair<>(
+                splitPair[0].trim(),
+                splitPair[1].trim()
+            );
         }
 
         //determine the data-type of the stored data
@@ -76,13 +79,13 @@ public class Configurations {
                 Boolean.parseBoolean( unparsedPair.getRight() )
             );
         }
-        if( unparsedPair.getRight().matches("^[0-9]*$") ) {
+        if( unparsedPair.getRight().matches("^[-+0-9]*$") ) {
             return new Configuration<Long>(
                 unparsedPair.getLeft(),
                 Long.parseLong( unparsedPair.getRight() )
             );
         }
-        if( unparsedPair.getRight().matches("^[0-9.]*$") ) {
+        if( unparsedPair.getRight().matches("^[-+0-9.]*$") ) {
             return new Configuration<Double>(
                 unparsedPair.getLeft(),
                 Double.parseDouble( unparsedPair.getRight() )

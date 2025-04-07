@@ -1,6 +1,7 @@
 package me.wheelershigley.charged.mixins;
 
 import com.mojang.authlib.GameProfile;
+import me.wheelershigley.charged.Charged;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LoreComponent;
 import net.minecraft.component.type.ProfileComponent;
@@ -34,6 +35,10 @@ public abstract class PlayerMixin extends PlayerEntity {
         at = @At("HEAD")
     )
     public void onDeath(DamageSource damageSource, CallbackInfo ci) {
+        if( !(boolean)Charged.configurations.getConfiguration("enablePlayerHeadDrops").getValue() ) {
+            return;
+        }
+
         Entity e_Killer = damageSource.getAttacker();
         if(
             (e_Killer instanceof CreeperEntity)
@@ -41,10 +46,12 @@ public abstract class PlayerMixin extends PlayerEntity {
         ) {
             ItemStack head = Items.PLAYER_HEAD.getDefaultStack();
 
-            head.set(
-                DataComponentTypes.PROFILE,
-                new ProfileComponent( this.getGameProfile() )
-            );
+            if( (boolean)Charged.configurations.getConfiguration("PlayerHeadsUseSkins").getValue() ) {
+                head.set(
+                    DataComponentTypes.PROFILE,
+                    new ProfileComponent( this.getGameProfile() )
+                );
+            }
 //            head.set(
 //                DataComponentTypes.LORE,
 //                LoreComponent.DEFAULT.with( this.getName() )

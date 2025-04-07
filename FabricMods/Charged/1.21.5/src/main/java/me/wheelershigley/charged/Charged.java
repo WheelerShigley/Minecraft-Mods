@@ -37,13 +37,13 @@ public class Charged implements ModInitializer {
                 "When enabled, dropped player-heads will use the victim's texture; otherwise, it will be the default (Steve) texture."
             )
         );
-        configurations.addConfiguration(
-            new Configuration<>(
-                "PlayerHeadTextureWashing",
-                true,
-                "When enabled, player-head textures can be washed off with water, in a Cauldron, to the default (Steve) texture."
-            )
-        );
+//        configurations.addConfiguration(
+//            new Configuration<>(
+//                "PlayerHeadTextureWashing",
+//                true,
+//                "When enabled, player-head textures can be washed off with water, in a Cauldron, to the default (Steve) texture."
+//            )
+//        );
 
         configurations.addConfiguration(
             new Configuration<>(
