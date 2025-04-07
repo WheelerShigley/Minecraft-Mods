@@ -1,7 +1,5 @@
 package me.wheelershigley.charged.config;
 
-import me.wheelershigley.charged.Charged;
-
 public class Configuration<T> {
     private final String name;
     private final String description;
@@ -36,8 +34,11 @@ public class Configuration<T> {
         this.description = builder.toString();
     }
 
-    public void setValue(T value) {
-        this.value = value;
+
+    public void setValue(Object value) {
+        if(value != null) {
+            this.value = (T)value;
+        }
     }
 
     public String getName() {

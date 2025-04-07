@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -126,7 +128,7 @@ public class Configurations {
             try {
                 createConfigurationFile();
             } catch(IOException ioException) {
-                Charged.LOGGER.error("Error creating Configuration File.");
+                Charged.LOGGER.error("Error creating configuration file.");
             }
         }
 
@@ -135,13 +137,85 @@ public class Configurations {
             measuredConfigurations = loadConfigurations(this.configurationFile, this.configurationFileName);
         } catch(IOException ioException) {
             measuredConfigurations = null;
-            Charged.LOGGER.error("Failed to load Configurations");
+            Charged.LOGGER.error("Failed to load configurations.");
         }
 
-        //write missing values to file
-        //TODO
-        Charged.LOGGER.info("Measured configurations as: {" + measuredConfigurations.toString() + "}");
+        //write missing values to file and set custom values
+        ArrayList<  Pair< String, Configuration<?> >  > missingConfigurations = new ArrayList<>();
+        boolean add_current_configuration;
+        for(Map.Entry< String, Configuration<?> > configuration : this.configurations.entrySet() ) {
+            add_current_configuration = false;
+            if(measuredConfigurations == null) {
+                add_current_configuration = true;
+            } else {
+                if( measuredConfigurations.configurations.containsKey(configuration.getKey() ) ) {
+                    Charged.configurations
+                        .getConfiguration( configuration.getKey() )
+                        .setValue( measuredConfigurations.getConfiguration( configuration.getKey() ).getValue() )
+                    ;
+                } else {
+                    add_current_configuration = true;
+                }
+            }
 
-        Charged.LOGGER.info("Loaded configurations as: {" + configurations.toString() + "}");
+
+            if(add_current_configuration) {
+                missingConfigurations.add(
+                    new Pair<>( configuration.getKey(), configuration.getValue() )
+                );
+            }
+        }
+
+        if( configurationFile.exists() ) {
+            //read current file
+            Scanner reader;
+            try {
+                reader = new Scanner(this.configurationFile);
+            } catch (IOException ioException) {
+                Charged.LOGGER.error("Error reading configuration file.");
+                return;
+            }
+            StringBuilder fileContentBuilder = new StringBuilder();
+            try {
+                fileContentBuilder
+                    .append(
+                        Files.readString(  Paths.get( configurationFile.getAbsolutePath() )  )
+                    )
+                    .append("\r\n")
+                ;
+            } catch(IOException ioException) {
+                Charged.LOGGER.error("Error reading configuration file.");
+                return;
+            }
+            for(Pair< String, Configuration<?> > missingConfiguration : missingConfigurations) {
+                fileContentBuilder.append( missingConfiguration.getRight().getDefaultConfiguration() ).append("\r\n");
+            }
+            reader.close();
+
+            //write missing configurations (at the end of the file)
+            PrintWriter writer;
+            try {
+                writer = new PrintWriter(this.configurationFile, StandardCharsets.UTF_8);
+            } catch (IOException ioException) {
+                Charged.LOGGER.error("Error writing configuration file.");
+                return;
+            }
+            writer.write( fileContentBuilder.toString() );
+            writer.close();
+
+        } else {
+            try {
+                createConfigurationFile();
+            } catch (IOException ioException) {
+                Charged.LOGGER.error("Error creating configuration file.");
+            }
+        }
+
+        //set valuess
+
+        if (measuredConfigurations != null) {
+            Charged.LOGGER.info("Measured configurations as: {" + measuredConfigurations.toString() + "}");
+        }
+        Charged.LOGGER.info("Loaded configurations as: {" + this + "}");
     }
 }

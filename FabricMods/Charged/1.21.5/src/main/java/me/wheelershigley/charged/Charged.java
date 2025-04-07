@@ -8,7 +8,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,6 @@ public class Charged implements ModInitializer {
     public static final Configurations configurations; static {
         final String configurationsFileName = (MOD_ID + ".properties").toLowerCase();
         final File configurationsFile = FabricLoader.getInstance().getConfigDir().resolve(configurationsFileName).toFile();
-        LOGGER.info( configurationsFile.getAbsolutePath() );
         configurations = new Configurations(configurationsFile, configurationsFileName);
 
         configurations.addConfiguration(
@@ -76,7 +74,6 @@ public class Charged implements ModInitializer {
                             .executes(
                                 (context) -> {
                                     String sublet = StringArgumentType.getString(context, "sublet");
-                                    Charged.LOGGER.info("sublet: \""+sublet+"\"");
                                     if( sublet.equalsIgnoreCase("reload") ) {
                                         configurations.reload();
 
