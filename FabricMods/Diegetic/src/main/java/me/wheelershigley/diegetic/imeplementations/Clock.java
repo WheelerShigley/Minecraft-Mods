@@ -1,24 +1,14 @@
 package me.wheelershigley.diegetic.imeplementations;
 
-import me.wheelershigley.diegetic.Diegetic;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.Calendar;
-import java.util.UUID;
 
 public class Clock {
-    public static void useClock(ServerPlayerEntity player, String name) {
-        String prefix = "<§e"+name+"§r> ";
-        UUID playerUuid = player.getUuid();
-
-        if(
-            Diegetic.LastUsageMap.containsKey(playerUuid)
-            && player.getWorld().getServer() != null
-            && ( player.getWorld().getServer().getTimeReference() - Diegetic.LastUsageMap.get(playerUuid) ) < Diegetic.COOLDOWN_TICKS
-        ) {
-            return;
-        }
+    public static void use(ServerPlayerEntity player, ItemStack clock) {
+        String prefix = "<§e"+ clock.getName().getString() +"§r> ";
 
         player.sendMessage(
             Text.literal(
@@ -35,13 +25,6 @@ public class Clock {
                 prefix+"World Time:   "+ convertToTime( player.getWorld().getTimeOfDay() % MINECRAFT_DAY_IN_TICKS )
             )
         );
-
-        if(player.getWorld().getServer() != null) {
-            Diegetic.LastUsageMap.put(
-                    playerUuid,
-                    player.getWorld().getServer().getTimeReference()
-            );
-        }
     }
 
     private static final int SECOND_IN_TICKS = 20; //assumed 20tps
