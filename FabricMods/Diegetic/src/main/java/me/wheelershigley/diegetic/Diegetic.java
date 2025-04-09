@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class Diegetic implements ModInitializer {
-    public static final Long COOLDOWN_TICKS = 2L;
+    public static final Long COOLDOWN_TICKS = 1L;
     public static final Map<UUID, Long> LastUsageMap = new HashMap<>();
 
     public static final String MOD_ID = "diegetic";
