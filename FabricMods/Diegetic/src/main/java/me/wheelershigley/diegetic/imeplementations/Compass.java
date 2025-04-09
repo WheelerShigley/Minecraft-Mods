@@ -1,14 +1,10 @@
 package me.wheelershigley.diegetic.imeplementations;
 
-import me.wheelershigley.diegetic.Diegetic;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 public class Compass {
     public static void use(ServerPlayerEntity player, ItemStack compass) {
@@ -43,7 +39,7 @@ public class Compass {
                 coordinateBuilder.append( (int)position.x ).append(", ");
 
                 if(relative) { coordinateBuilder.append('~'); }
-                coordinateBuilder.append( 1+(int)position.y ).append(", ");
+                coordinateBuilder.append( (int)position.y-1 ).append(", ");
 
                 if(relative) { coordinateBuilder.append('~'); }
                 coordinateBuilder.append( (int)position.z );

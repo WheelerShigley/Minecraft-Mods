@@ -3,6 +3,7 @@ package me.wheelershigley.diegetic.mixins;
 import me.wheelershigley.diegetic.Diegetic;
 import me.wheelershigley.diegetic.imeplementations.Clock;
 import me.wheelershigley.diegetic.imeplementations.Compass;
+import me.wheelershigley.diegetic.imeplementations.RecoveryCompass;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
@@ -41,6 +42,9 @@ public class ItemsMixin {
         }
         if( itemStack.getItem().equals(Items.COMPASS) ) {
             Compass.use(this.player, itemStack);
+        }
+        if( itemStack.getItem().equals(Items.RECOVERY_COMPASS) ) {
+            RecoveryCompass.use(this.player, itemStack);
         }
 
         if(player.getWorld().getServer() != null) {
