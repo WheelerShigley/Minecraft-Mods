@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "diegetic",
+  "version": "${version}",
+  "name": "Diegetic",
+  "description": "x",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/diegetic/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.diegetic.Diegetic"
+    ]
+  },
+  "mixins": [
+    "diegetic.mixins.json",
+    {
+      "config": "diegetic.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

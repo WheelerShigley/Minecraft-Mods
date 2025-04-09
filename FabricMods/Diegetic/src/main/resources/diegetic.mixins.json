@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.wheelershigley.diegetic.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ItemsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
