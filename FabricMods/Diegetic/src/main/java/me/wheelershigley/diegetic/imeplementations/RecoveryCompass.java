@@ -1,36 +1,30 @@
 package me.wheelershigley.diegetic.imeplementations;
 
-import net.minecraft.item.ItemStack;
+import me.wheelershigley.diegetic.MessageHelper;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 
 public class RecoveryCompass {
-    public static void use(ServerPlayerEntity player, ItemStack recoveryCompass) {
-        String prefix = "<§9"+ recoveryCompass.getName().getString() +"§r> ";
-
+    public static void use(ServerPlayerEntity player) {
         StringBuilder locationBuilder = new StringBuilder();
-        locationBuilder.append(prefix);
+        locationBuilder.append("§7");
 
-        if( !player.getLastDeathPos().isPresent() ) {
-            locationBuilder.append("Unknown last death location.");
+        if(
+            !player.getLastDeathPos().isPresent()
+            || !player.getWorld().getDimension().effects().equals(
+                player.getLastDeathPos().get().dimension().getValue()
+            )
+        ) {
+            locationBuilder.append("Last death location is in another dimension or does not exist.");
         } else {
             Vec3d relativePosition = player.getLastDeathPos().get().pos().toCenterPos();
             relativePosition = relativePosition.subtract( player.getPos() );
 
-            locationBuilder.append('('); {
-                locationBuilder.append('~').append( (int)relativePosition.x ).append(", ");
-                locationBuilder.append('~').append( (int)relativePosition.y-1 ).append(", ");
-                locationBuilder.append('~').append( (int)relativePosition.z );
-            }
-            locationBuilder.append(")");
+            locationBuilder.append('~').append( (int)relativePosition.x ).append(' ');
+            locationBuilder.append('~').append( (int)relativePosition.y-1 ).append(' ');
+            locationBuilder.append('~').append( (int)relativePosition.z );
         }
 
-        player.sendMessage(
-            Text.literal(
-                locationBuilder.toString()
-            )
-        );
-
+        MessageHelper.sendMessage( player, locationBuilder.toString() );
     }
 }

@@ -24,8 +24,8 @@ public class ItemsMixin {
     public ServerPlayerEntity player;
 
     @Inject(
-            method = "onPlayerInteractItem",
-            at = @At("HEAD")
+        method = "onPlayerInteractItem",
+        at = @At("HEAD")
     )
     public void onPlayerInteractItem(PlayerInteractItemC2SPacket packet, CallbackInfo ci) {
         UUID playerUuid = this.player.getUuid();
@@ -39,16 +39,16 @@ public class ItemsMixin {
 
         ItemStack itemStack = this.player.getStackInHand( packet.getHand() );
         if( itemStack.getItem().equals(Items.CLOCK) ) {
-            Clock.use(this.player, itemStack);
+            Clock.use(this.player);
         }
         if( itemStack.getItem().equals(Items.COMPASS) ) {
             Compass.use(this.player, itemStack);
         }
         if( itemStack.getItem().equals(Items.RECOVERY_COMPASS) ) {
-            RecoveryCompass.use(this.player, itemStack);
+            RecoveryCompass.use(this.player);
         }
         if( itemStack.getItem().equals(Items.SLIME_BALL) ) {
-            Slimeball.use(this.player, itemStack);
+            Slimeball.use(this.player);
         }
 
         if(player.getWorld().getServer() != null) {

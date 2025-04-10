@@ -1,15 +1,13 @@
 package me.wheelershigley.diegetic.imeplementations;
 
+import me.wheelershigley.diegetic.MessageHelper;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 
 public class Compass {
     public static void use(ServerPlayerEntity player, ItemStack compass) {
-        String prefix = "<§7"+ compass.getName().getString() +"§r> ";
-
         Vec3d position = null;
         boolean relative = false;
         if( compass.contains(DataComponentTypes.LODESTONE_TRACKER) ) {
@@ -30,31 +28,20 @@ public class Compass {
         }
 
         StringBuilder coordinateBuilder = new StringBuilder();
-        coordinateBuilder.append(prefix);
+        coordinateBuilder.append("§f");
         if(position == null) {
             coordinateBuilder.append("Lodestone is in another dimension or was destroyed.");
         } else {
-            coordinateBuilder.append('('); {
-                if(relative) { coordinateBuilder.append('~'); }
-                coordinateBuilder.append( (int)position.x ).append(", ");
+            if(relative) { coordinateBuilder.append('~'); }
+            coordinateBuilder.append( (int)position.x ).append(' ');
 
-                if(relative) { coordinateBuilder.append('~'); }
-                coordinateBuilder.append( (int)position.y-1 ).append(", ");
+            if(relative) { coordinateBuilder.append('~'); }
+            coordinateBuilder.append( (int)position.y+1 ).append(' ');
 
-                if(relative) { coordinateBuilder.append('~'); }
-                coordinateBuilder.append( (int)position.z );
-            }
-            coordinateBuilder.append(")");
-
-//            coordinateBuilder.append(" in \"").append(
-//                player.getWorld().getDimension().effects().toString()
-//            ).append("\"");
+            if(relative) { coordinateBuilder.append('~'); }
+            coordinateBuilder.append( (int)position.z );
         }
 
-        player.sendMessage(
-            Text.literal(
-                coordinateBuilder.toString()
-            )
-        );
+        MessageHelper.sendMessage( player, coordinateBuilder.toString() );
     }
 }
