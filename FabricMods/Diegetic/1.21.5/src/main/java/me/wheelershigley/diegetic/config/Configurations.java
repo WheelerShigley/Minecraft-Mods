@@ -203,27 +203,28 @@ public class Configurations {
                     .append(
                         Files.readString(  Paths.get( configurationFile.getAbsolutePath() )  )
                     )
-                    .append("\r\n")
                 ;
             } catch(IOException ioException) {
                 Diegetic.LOGGER.error("Error reading configuration file.");
                 return;
             }
             for(Pair< String, Configuration<?> > missingConfiguration : missingConfigurations) {
-                fileContentBuilder.append( missingConfiguration.getRight().getDefaultConfiguration() ).append("\r\n");
+                fileContentBuilder.append("\r\n").append( missingConfiguration.getRight().getDefaultConfiguration() );
             }
             reader.close();
 
             //write missing configurations (at the end of the file)
-            PrintWriter writer;
-            try {
-                writer = new PrintWriter(this.configurationFile, StandardCharsets.UTF_8);
-            } catch (IOException ioException) {
-                Diegetic.LOGGER.error("Error writing configuration file.");
-                return;
+            if( !missingConfigurations.isEmpty()  ) {
+                PrintWriter writer;
+                try {
+                    writer = new PrintWriter(this.configurationFile, StandardCharsets.UTF_8);
+                } catch (IOException ioException) {
+                    Diegetic.LOGGER.error("Error writing configuration file.");
+                    return;
+                }
+                writer.write( fileContentBuilder.toString() );
+                writer.close();
             }
-            writer.write( fileContentBuilder.toString() );
-            writer.close();
 
         } else {
             try {
