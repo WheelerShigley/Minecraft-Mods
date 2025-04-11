@@ -1,11 +1,16 @@
 package me.wheelershigley.diegetic.imeplementations;
 
+import me.wheelershigley.diegetic.Diegetic;
 import me.wheelershigley.diegetic.MessageHelper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
 public class RecoveryCompass {
     public static void use(ServerPlayerEntity player) {
+        if( !(boolean) Diegetic.configurations.getConfiguration("recovery_compass").getValue() ) {
+            return;
+        }
+
         StringBuilder locationBuilder = new StringBuilder();
         locationBuilder.append("§7");
 

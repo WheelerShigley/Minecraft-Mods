@@ -1,5 +1,6 @@
 package me.wheelershigley.diegetic.imeplementations;
 
+import me.wheelershigley.diegetic.Diegetic;
 import me.wheelershigley.diegetic.MessageHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -9,6 +10,10 @@ import net.minecraft.world.chunk.Chunk;
 
 public class Slimeball {
     public static void use(ServerPlayerEntity player) {
+        if( !(boolean) Diegetic.configurations.getConfiguration("slime").getValue() ) {
+            return;
+        }
+
         String chunkValidity;
         if(  !player.getWorld().getDimension().natural() ) {
             chunkValidity = "§l§0☒§r";

@@ -1,10 +1,15 @@
 package me.wheelershigley.diegetic.imeplementations;
 
+import me.wheelershigley.diegetic.Diegetic;
 import me.wheelershigley.diegetic.MessageHelper;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class Clock {
     public static void use(ServerPlayerEntity player) {
+        if( !(boolean)Diegetic.configurations.getConfiguration("clock").getValue() ) {
+            return;
+        }
+
         boolean worldIsNatural = player.getWorld().getDimension().natural();
         int time;
         if(worldIsNatural) {

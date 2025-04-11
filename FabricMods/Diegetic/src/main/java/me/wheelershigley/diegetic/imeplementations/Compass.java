@@ -1,5 +1,6 @@
 package me.wheelershigley.diegetic.imeplementations;
 
+import me.wheelershigley.diegetic.Diegetic;
 import me.wheelershigley.diegetic.MessageHelper;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
@@ -8,6 +9,10 @@ import net.minecraft.util.math.Vec3d;
 
 public class Compass {
     public static void use(ServerPlayerEntity player, ItemStack compass) {
+        if( !(boolean) Diegetic.configurations.getConfiguration("compass").getValue() ) {
+            return;
+        }
+
         Vec3d position = null;
         boolean relative = false;
         if( compass.contains(DataComponentTypes.LODESTONE_TRACKER) ) {
