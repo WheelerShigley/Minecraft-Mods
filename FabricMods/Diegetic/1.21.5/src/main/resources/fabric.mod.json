@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "diegetic",
-  "version": "0.6.0",
+  "version": "0.6.2",
   "name": "Diegetic",
   "description": "Adds some additional functionality for items in-game to learn about the world.",
   "authors": ["Wheeler-Shigley"],

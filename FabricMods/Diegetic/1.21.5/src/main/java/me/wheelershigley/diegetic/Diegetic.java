@@ -32,6 +32,14 @@ public class Diegetic implements ModInitializer {
         );
         configurations.addConfiguration(
             new Configuration<>(
+                "clock_real",
+                false,
+                "If clocks are enabled, clocks will display the server's (IRL) time."
+            )
+        );
+
+        configurations.addConfiguration(
+            new Configuration<>(
                 "compass",
                 true,
                 "Compasses can provide absolute coordinates."
@@ -51,6 +59,7 @@ public class Diegetic implements ModInitializer {
                 "Recovery-compasses will provide relate coordinates to last known death location."
             )
         );
+
         configurations.addConfiguration(
             new Configuration<>(
                 "slime",

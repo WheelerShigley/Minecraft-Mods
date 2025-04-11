@@ -4,6 +4,8 @@ import me.wheelershigley.diegetic.Diegetic;
 import me.wheelershigley.diegetic.MessageHelper;
 import net.minecraft.server.network.ServerPlayerEntity;
 
+import java.util.Calendar;
+
 public class Clock {
     public static void use(ServerPlayerEntity player) {
         if( !(boolean)Diegetic.configurations.getConfiguration("clock").getValue() ) {
@@ -18,37 +20,45 @@ public class Clock {
             time = player.getWorld().random.nextBetween(0, 24000);
         }
 
-//        MessageHelper.sendMessage(
-//            player,
-//            prefix+"Canon Time:   "+ Calendar.getInstance().getTime().toString()
-//        );
-//        MessageHelper.sendMessage(
-//            player,
-//            prefix+"Server Time: "+ convertToTime( player.getWorld().getTime() )
-//        );
-        String namedTime = worldIsNatural ? "§e" : "§0";
-        namedTime += convertToTime(time%MINECRAFT_DAY_IN_TICKS);
-        MessageHelper.sendMessage(player, namedTime);
+        StringBuilder timeBuilder = new StringBuilder();
+        if( (boolean)Diegetic.configurations.getConfiguration("clock_real").getValue() ) {
+            timeBuilder.append("§e");
+            timeBuilder.append( Calendar.getInstance().getTime().toString() );
+        } else {
+            timeBuilder.append( worldIsNatural ? "§e" : "§0" );
+            timeBuilder.append(
+                convertToTime(
+                    time,
+                    player.getWorld().getTickManager().getTickRate()
+                )
+            );
+        }
+
+        MessageHelper.sendMessage(player, timeBuilder.toString() );
     }
 
-    private static final int SECOND_IN_TICKS = 20; //assumed 20tps
-    private static final int MINUTE_IN_TICKS = SECOND_IN_TICKS*60;
-    private static final int MINECRAFT_DAY_IN_TICKS = MINUTE_IN_TICKS*20;
+    private static String convertToTime(int sum_time, float tps) {
+        //input validation
+        if(tps <= 0.0) { tps = 20.0f; }
+        if(sum_time < 0) { sum_time = 0; }
 
-    private static String convertToTime(int sum_time) {
-        double percentage = ( (double)sum_time )/( (double)MINECRAFT_DAY_IN_TICKS );
+        float MINUTE_IN_TICKS = tps*60.0f;
+        float MINECRAFT_DAY_IN_TICKS = MINUTE_IN_TICKS*20.0f;
+        sum_time %= (int)MINECRAFT_DAY_IN_TICKS;
+
+        float percentage = ( (float)sum_time )/MINECRAFT_DAY_IN_TICKS;
 
         StringBuilder timeBuilder = new StringBuilder();
 
         int hour = (int)(24.0*percentage);
         timeBuilder.append(  forceLeadingZero( Integer.toString(hour) )  ).append(':');
-        percentage -= ( (double)hour )/24.0;
+        percentage -= ( (float)hour )/24.0f;
 
         int minute = (int)(60.0*24.0*percentage);
         timeBuilder.append(  forceLeadingZero( Integer.toString(minute) )  ).append(':');
-        percentage -= ( (double)minute )/(24.0*60.0);
+        percentage -= ( (float)minute )/(24.0f*60.0f);
 
-        int second = (int)(60.0*60.0*24.0*percentage);
+        int second = (int)(60.0f*60.0f*24.0f*percentage);
         timeBuilder.append(  forceLeadingZero( Integer.toString(second) )  );
 
         return timeBuilder.toString();
