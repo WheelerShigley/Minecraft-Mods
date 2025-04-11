@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "charged",
-  "version": "0.8.0",
+  "version": "0.9.1",
   "name": "Charged",
   "description": "All entities killed by Charged Creeper drop their heads, not just the first killed entity.",
   "authors": ["Wheeler-Shigley"],

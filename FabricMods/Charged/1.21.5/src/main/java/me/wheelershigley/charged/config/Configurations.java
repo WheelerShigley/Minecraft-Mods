@@ -161,6 +161,25 @@ public class Configurations {
                 }
             }
 
+            if(
+                measuredConfigurations != null
+                && measuredConfigurations.configurations.containsKey( configuration.getKey() )
+                && !measuredConfigurations.configurations.get( configuration.getKey() ).getValue().getClass().equals(
+                    this.configurations.get( configuration.getKey() ).getDefaultValue().getClass()
+                )
+            ) {
+                Charged.LOGGER.warn(
+                    "Type mismatch for configuration \"" +
+                    this.configurations.get( configuration.getKey() ).getName() +
+                    "\"; set to default value, \"" +
+                    this.configurations.get( configuration.getKey() ).getDefaultValue().toString() +
+                    "\"."
+                );
+
+                this.configurations.get( configuration.getKey() ).setValue(
+                    this.configurations.get( configuration.getKey() ).getDefaultValue()
+                );
+            }
 
             if(add_current_configuration) {
                 missingConfigurations.add(
@@ -184,27 +203,28 @@ public class Configurations {
                     .append(
                         Files.readString(  Paths.get( configurationFile.getAbsolutePath() )  )
                     )
-                    .append("\r\n")
                 ;
             } catch(IOException ioException) {
                 Charged.LOGGER.error("Error reading configuration file.");
                 return;
             }
             for(Pair< String, Configuration<?> > missingConfiguration : missingConfigurations) {
-                fileContentBuilder.append( missingConfiguration.getRight().getDefaultConfiguration() ).append("\r\n");
+                fileContentBuilder.append("\r\n").append( missingConfiguration.getRight().getDefaultConfiguration() );
             }
             reader.close();
 
             //write missing configurations (at the end of the file)
-            PrintWriter writer;
-            try {
-                writer = new PrintWriter(this.configurationFile, StandardCharsets.UTF_8);
-            } catch (IOException ioException) {
-                Charged.LOGGER.error("Error writing configuration file.");
-                return;
+            if( !missingConfigurations.isEmpty()  ) {
+                PrintWriter writer;
+                try {
+                    writer = new PrintWriter(this.configurationFile, StandardCharsets.UTF_8);
+                } catch (IOException ioException) {
+                    Charged.LOGGER.error("Error writing configuration file.");
+                    return;
+                }
+                writer.write( fileContentBuilder.toString() );
+                writer.close();
             }
-            writer.write( fileContentBuilder.toString() );
-            writer.close();
 
         } else {
             try {
@@ -213,12 +233,5 @@ public class Configurations {
                 Charged.LOGGER.error("Error creating configuration file.");
             }
         }
-
-        //set valuess
-
-        if (measuredConfigurations != null) {
-            Charged.LOGGER.info("Measured configurations as: {" + measuredConfigurations.toString() + "}");
-        }
-        Charged.LOGGER.info("Loaded configurations as: {" + this + "}");
     }
 }

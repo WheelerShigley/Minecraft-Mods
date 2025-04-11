@@ -8,6 +8,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,14 +74,21 @@ public class Charged implements ModInitializer {
                             .suggests(new ChargedSuggestionProvider() )
                             .executes(
                                 (context) -> {
+                                    ServerPlayerEntity player = context.getSource().getPlayer();
+
+                                    String message = "<"+MOD_ID+"> ";
+                                    if(player != null && player.getPermissionLevel() == 0 ) {
+                                        message += "§cinsufficient permissions";
+                                    } else {
+                                        message += "reloaded";
+                                    }
+
                                     String sublet = StringArgumentType.getString(context, "sublet");
                                     if( sublet.equalsIgnoreCase("reload") ) {
                                         configurations.reload();
 
-                                        if(context.getSource().getPlayer() != null) {
-                                            context.getSource().getPlayer().sendMessage(
-                                                Text.literal("<"+MOD_ID+"> reloaded")
-                                            );
+                                        if(player != null) {
+                                            context.getSource().getPlayer().sendMessage( Text.literal(message) );
                                         }
 
                                         return 1;

@@ -15,7 +15,7 @@ public class Configuration<T> {
     }
     public Configuration(String name, T defaultValue, String description) {
         this.name = name;
-        this.description = "#"+description;
+        this.description = "# "+description;
         this.defaultValue = defaultValue;
         this.value = defaultValue;
     }
