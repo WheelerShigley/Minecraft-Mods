@@ -1,7 +1,7 @@
-package me.wheelershigley.diegetic.imeplementations;
+package me.wheelershigley.diegetic.items;
 
 import me.wheelershigley.diegetic.Diegetic;
-import me.wheelershigley.diegetic.MessageHelper;
+import me.wheelershigley.diegetic.helper.MessageHelper;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
