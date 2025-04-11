@@ -2,7 +2,6 @@ package me.wheelershigley.diegetic.imeplementations;
 
 import me.wheelershigley.diegetic.Diegetic;
 import me.wheelershigley.diegetic.MessageHelper;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.random.ChunkRandom;
 import net.minecraft.world.StructureWorldAccess;
