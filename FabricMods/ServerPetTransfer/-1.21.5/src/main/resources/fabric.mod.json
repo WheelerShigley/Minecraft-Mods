@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "server_pet_transfer",
+  "version": "0.1.0",
+  "name": "Server Pet Transfer",
+  "description": "Transfer pet ownership by giving another player a leaded pet.",
+  "authors": ["Wheeler-Shigley"],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/server_pet_transfer/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.server_pet_transfer.ServerPetTransfer"
+    ]
+  },
+  "mixins": [
+    "server_pet_transfer.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.13",
+    "fabric": "*",
+    "minecraft": "*"
+  }
+}
