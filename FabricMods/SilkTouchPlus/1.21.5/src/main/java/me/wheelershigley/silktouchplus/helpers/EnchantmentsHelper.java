@@ -1,6 +1,5 @@
 package me.wheelershigley.silktouchplus.helpers;
 
-import me.wheelershigley.silktouchplus.SilkTouchPlus;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;

@@ -50,10 +50,10 @@ public class SilkTouchPlus implements ModInitializer {
                     Blocks.TRIAL_SPAWNER,
                     Identifier.of("minecraft", "blocks/trial_spawner")
                 );
-//                Identifiers.put(
-//                    Blocks.VAULT,
-//                    Identifier.of("minecraft", "blocks/vault")
-//                );
+                Identifiers.put(
+                    Blocks.VAULT,
+                    Identifier.of("minecraft", "blocks/vault")
+                );
             }
 
             LootTableEvents.MODIFY.register(
@@ -78,9 +78,9 @@ public class SilkTouchPlus implements ModInitializer {
                     if(ModConfigs.TRIAL_SPAWNER && Identifiers.get(Blocks.TRIAL_SPAWNER).equals(identifier) ) {
                         LootPoolHelpers.dropsTrialSpawnerNBTWithSilkTouchPickaxe(tableBuilder, Blocks.TRIAL_SPAWNER, registries);
                     }
-//                    if(ModConfigs.VAULT && Identifiers.get(Blocks.VAULT).equals(identifier) ) {
-//                        LootPoolHelpers.dropVaultNBTWithSilkTouchPickaxe(tableBuilder, Blocks.VAULT, registries);
-//                    }
+                    if(ModConfigs.VAULT && Identifiers.get(Blocks.VAULT).equals(identifier) ) {
+                        LootPoolHelpers.dropVaultNBTWithSilkTouchPickaxe(tableBuilder, Blocks.VAULT, registries);
+                    }
                 }
             );
         }
@@ -95,7 +95,7 @@ public class SilkTouchPlus implements ModInitializer {
             if(ModConfigs.SUSPICIOUS_GRAVEL)    { configsList.add("Suspicious-Gravel");    }
             if(ModConfigs.SUSPICIOUS_SAND)      { configsList.add("Suspicious-Sand");      }
             if(ModConfigs.TRIAL_SPAWNER)        { configsList.add("Trial-Spawner");        }
-//            if(ModConfigs.VAULT)                { configsList.add("Vault");                }
+            if(ModConfigs.VAULT)                { configsList.add("Vault");                }
         }
         LOGGER.info(configsList + " are SilkTouch-able!");
     }

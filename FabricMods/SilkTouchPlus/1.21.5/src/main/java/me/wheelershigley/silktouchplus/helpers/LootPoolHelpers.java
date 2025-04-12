@@ -1,15 +1,18 @@
 package me.wheelershigley.silktouchplus.helpers;
 
+import me.wheelershigley.silktouchplus.CopyBlockEntityDataLootFunction;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.VaultBlock;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.condition.MatchToolLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
-import net.minecraft.loot.function.CopyNbtLootFunction;
+import net.minecraft.loot.function.CopyStateLootFunction;
 import net.minecraft.loot.provider.nbt.ContextLootNbtProvider;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.predicate.NumberRange;
@@ -79,7 +82,7 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
                     .conditionally(silkTouchCondition)
             )
             .apply(
-                CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
+                new CopyBlockEntityDataLootFunction.Builder(ContextLootNbtProvider.BLOCK_ENTITY)
                     /*
                     Block:
                         MaxNearbyEntities, RequiredPlayerRange, SpawnCount, SpawnData,
@@ -114,7 +117,7 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
                     .conditionally(silkTouchCondition)
             )
             .apply(
-                CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
+                new CopyBlockEntityDataLootFunction.Builder(ContextLootNbtProvider.BLOCK_ENTITY)
                     /*  Components on a pick-block-ed trial-spawner BLOCK:
                         next_mob_spawns_at, current_mobs, registered_players,
                         total_mobs_spawned, normal_config, spawn_data, id, ominous_config
@@ -142,15 +145,14 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
                     .conditionally(silkTouchCondition)
             )
             .apply(
-                CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
-                    /*  Components on a pick-block-ed vault:
-                        server_data, id, config, shared_data
-                     */
-                    .withOperation("server_data", "server_data")
+                new CopyBlockEntityDataLootFunction.Builder(ContextLootNbtProvider.BLOCK_ENTITY)
                     .withOperation("id", "id")
                     .withOperation("config", "config")
                     .withOperation("shared_data", "shared_data")
                     .build()
+            )
+            .apply(
+                CopyStateLootFunction.builder(Blocks.VAULT).addProperty(VaultBlock.OMINOUS)
             )
         ;
         tableBuilder.pool( builder.build() );
@@ -174,8 +176,7 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
                     .conditionally(silkTouchCondition)
             )
             .apply(
-                //TODO Fix that this uses "custom_data" from the Provider below
-                CopyNbtLootFunction.builder(ContextLootNbtProvider.BLOCK_ENTITY)
+                new CopyBlockEntityDataLootFunction.Builder(ContextLootNbtProvider.BLOCK_ENTITY)
                 /*  Components on a pick-block-ed suspicious gravel/sand:
                     LootTable, id, LootTableSeed
                  */
