@@ -7,13 +7,8 @@
   "authors": ["Wheeler-Shigley"],
   "contact": {},
   "license": "All-Rights-Reserved",
-  "icon": "assets/portal_network/icon.png",
+  "icon": "assets/portalnetwork/icon.png",
   "environment": "server",
-  "entrypoints": {
-    "main": [
-      "me.wheelershigley.portal_network.PortalNetwork"
-    ]
-  },
   "mixins": [
     "portal_network.mixins.json"
   ],
