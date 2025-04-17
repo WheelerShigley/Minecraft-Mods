@@ -4,6 +4,7 @@
   "package": "me.wheelershigley.portal_network.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "FlintAndSteelCustomDataMixin",
     "IgniteReinforcedDeepslateMixin"
   ],
   "injectors": {
