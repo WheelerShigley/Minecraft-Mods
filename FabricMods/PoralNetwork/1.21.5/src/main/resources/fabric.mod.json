@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "portal_network",
+  "version": "0.1.0",
+  "name": "Portal Network",
+  "description": "WIP",
+  "authors": ["Wheeler-Shigley"],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/portal_network/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.portal_network.PortalNetwork"
+    ]
+  },
+  "mixins": [
+    "portal_network.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "fabric": "*",
+    "minecraft": "1.21.5"
+  }
+}
