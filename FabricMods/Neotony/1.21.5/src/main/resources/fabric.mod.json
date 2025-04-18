@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "neotony",
+  "version": "${version}",
+  "name": "Neotony",
+  "description": "x",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/neotony/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-datagen": [
+      "me.wheelershigley.neotony.client.NeotonyDataGenerator"
+    ],
+    "main": [
+      "me.wheelershigley.neotony.Neotony"
+    ]
+  },
+  "mixins": [
+    "neotony.mixins.json",
+    {
+      "config": "neotony.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
