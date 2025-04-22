@@ -4,6 +4,7 @@
   "package": "me.wheelershigley.configure_wandering_frequency.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "WanderingTraderManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
