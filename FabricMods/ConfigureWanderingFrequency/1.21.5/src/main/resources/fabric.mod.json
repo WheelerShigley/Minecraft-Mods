@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "configure_wandering_frequency",
+  "version": "${version}",
+  "name": "ConfigureWanderingFrequency",
+  "description": "Configure how long it takes for Wandering Traders to arrive!",
+  "authors": ["Wheeler-Shigley"],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/configure_wandering_frequency/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.configure_wandering_frequency.ConfigureWanderingFrequency"
+    ]
+  },
+  "mixins": [
+    "configure_wandering_frequency.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "fabric": "*",
+    "minecraft": "1.21.5"
+  }
+}
