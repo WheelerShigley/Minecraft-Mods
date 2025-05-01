@@ -1,4 +1,4 @@
-package me.wheelershigley.unlimited_anvil;
+package me.wheelershigley.unlimited_anvil.helpers;
 
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
