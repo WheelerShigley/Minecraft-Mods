@@ -1,0 +1,10 @@
+{
+  "trade_experience.text.trade": "§aTrading with \"§e%1$s§a\".",
+
+  "trade_experience.text.sent": "§7Sent §f%1$s§7 §aexperience§7.",
+  "trade_experience.text.sent_to_player": "§7Sent \"§e%1$s§7\" §f%2$s§7 §aexperience§7.",
+  "trade_experience.text.send_failure": "§cFailed to send experience.",
+
+  "trade_experience.text.trade_timeout": "§cTrade timed out.",
+  "trade_experience.text.trade_timeout_to_player": "§cTrade with \"§e%1$s§c\" timed out."
+}

@@ -39,7 +39,12 @@ public class Registrations {
                 }
 
                 player.sendMessage(
-                    Text.literal("§aTrading with \"§e"+ target.getName().getString() +"§a\"."),
+                    Text.literal(
+                        Text.translatable(
+                            "trade_experience.text.trade",
+                            target.getName().getString()
+                        ).getString()
+                    ),
                     true
                 );
 
@@ -64,9 +69,12 @@ public class Registrations {
                         if(sender != null) {
                             receiver = server.getPlayerManager().getPlayer( activeTrade.getValue().getReciever() );
                             if(receiver != null) {
-                                message = "§cTrade with \"§e"+receiver.getName().getString()+"§c\" timed out.";
+                                message = Text.translatable(
+                                    "trade_experience.text.trade_timeout_to_player",
+                                    receiver.getName().getString()
+                                ).getString();
                             } else {
-                                message = "§cTrade timed out.";
+                                message = Text.translatable("trade_experience.text.trade_timeout").getString();
                             }
                             sender.sendMessage(
                                 Text.literal(message),

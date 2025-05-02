@@ -55,7 +55,6 @@ public class Trade {
         }
         giveExperience(serverReceiver, amount);
 
-        int test = levelToPoints(serverReceiver.experienceLevel)+getExperiencePoints(serverReceiver);
         return ActionResult.SUCCESS_SERVER;
     }
 }

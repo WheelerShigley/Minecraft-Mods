@@ -41,7 +41,6 @@ public class SendMessageCheckMixin {
 
         //remove old trades
         long delta_time = sender.getWorld().getTime() - activeTrades.get(senderID).getTime();
-        TradeExperience.LOGGER.info("dt = "+delta_time);
         if(Trade.COOLDOWN < delta_time) {
             activeTrades.remove(senderID);
             return ActionResult.PASS;
@@ -59,23 +58,33 @@ public class SendMessageCheckMixin {
         int amount = Integer.parseInt(messageContent);
         ActionResult tradeResult = activeTrades.get(senderID).execute(sender.server, amount);
         if(tradeResult == null || tradeResult != ActionResult.SUCCESS_SERVER) {
+            String failureMessage = Text.translatable("trade_experience.text.send_failure").getString();
             sender.sendMessage(
-                Text.literal("Failed to send experience."),
+                Text.literal(failureMessage),
                 true
             );
+
             return ActionResult.FAIL;
         }
 
-        String sentMessage;
+        String sentMessage = "";
         if(receiver != null) {
-            sentMessage = "§7Sent \"§e"+receiver.getName().getString()+"§7\" §f"+amount+"§7 §aexperience§7.";
+            sentMessage = Text.translatable(
+                "trade_experience.text.sent_to_player",
+                receiver.getName().getString(),
+                amount
+            ).getString();
         } else {
-            sentMessage = "§7Sent §f"+amount+"§7 §aexperience§7.";
+            sentMessage = Text.translatable(
+                "trade_experience.text.sent",
+                amount
+            ).getString();
         }
         sender.sendMessage(
             Text.literal(sentMessage),
             true
         );
+
         return ActionResult.SUCCESS_SERVER;
     }
 }
