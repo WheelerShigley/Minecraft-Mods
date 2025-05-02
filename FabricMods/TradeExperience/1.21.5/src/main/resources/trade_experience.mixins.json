@@ -4,6 +4,7 @@
   "package": "www.wheelershigley.me.trade_experience.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "SendMessageCheckMixin"
   ],
   "injectors": {
     "defaultRequire": 1
