@@ -26,14 +26,14 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Objects;
 
-import static me.wheelershigley.unlimited_anvil.helpers.ExperienceHelper.levelToPoints;
-import static me.wheelershigley.unlimited_anvil.helpers.ExperienceHelper.pointsToLevel;
+import static me.wheelershigley.unlimited_anvil.helpers.ExperienceHelper.*;
 
 @Mixin(value = AnvilScreenHandler.class, priority = 800)
 public abstract class AnvilMixin extends ForgingScreenHandler {
@@ -73,24 +73,24 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
     )
     public void updateResult(CallbackInfo ci) {
         /*Modified Vanilla Implementation*/ {
-            ItemStack itemStack = this.input.getStack(0);
+            ItemStack primaryInput = this.input.getStack(0);
             this.keepSecondSlot = false;
             this.levelCost.set(1);
             int i = 0;
             long sumRepairCost = 0L;
             int j = 0;
-            if( !itemStack.isEmpty() && EnchantmentHelper.canHaveEnchantments(itemStack) ) {
-                ItemStack modifyableStack = itemStack.copy();
+            if( !primaryInput.isEmpty() && EnchantmentHelper.canHaveEnchantments(primaryInput) ) {
+                ItemStack modifyableStack = primaryInput.copy();
                 ItemStack secondaryInput = this.input.getStack(1);
                 ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(EnchantmentHelper.getEnchantments(modifyableStack));
-                sumRepairCost += (long)(Integer)itemStack.getOrDefault(DataComponentTypes.REPAIR_COST, 0) + (long)(Integer)secondaryInput.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
+                sumRepairCost += (long)(Integer)primaryInput.getOrDefault(DataComponentTypes.REPAIR_COST, 0) + (long)(Integer)secondaryInput.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
                 this.repairItemUsage = 0;
                 int resultDamage;
                 if (!secondaryInput.isEmpty()) {
                     boolean useStoredEnchantments = secondaryInput.contains(DataComponentTypes.STORED_ENCHANTMENTS);
                     int resultDamageIndex;
                     int updatedDamage;
-                    if (modifyableStack.isDamageable() && itemStack.canRepairWith(secondaryInput)) {
+                    if (modifyableStack.isDamageable() && primaryInput.canRepairWith(secondaryInput)) {
                         resultDamage = Math.min(modifyableStack.getDamage(), modifyableStack.getMaxDamage() / 4);
                         if (resultDamage <= 0) {
                             this.output.setStack(0, ItemStack.EMPTY);
@@ -114,7 +114,7 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
                         }
 
                         if (modifyableStack.isDamageable() && !useStoredEnchantments) {
-                            resultDamage = itemStack.getMaxDamage() - itemStack.getDamage();
+                            resultDamage = primaryInput.getMaxDamage() - primaryInput.getDamage();
                             resultDamageIndex = secondaryInput.getMaxDamage() - secondaryInput.getDamage();
                             updatedDamage = resultDamageIndex + modifyableStack.getMaxDamage() * 12 / 100;
                             int finalDamage = resultDamage + updatedDamage;
@@ -137,8 +137,8 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
                             int advisedLevel = registryEntryEntry.getIntValue();
                             advisedLevel = currentLevel == advisedLevel ? advisedLevel + 1 : Math.max(advisedLevel, currentLevel);
                             Enchantment enchantment = registryEntry.value();
-                            boolean isAcceptableItem = enchantment.isAcceptableItem(itemStack);
-                            if( this.player.isInCreativeMode() || itemStack.isOf(Items.ENCHANTED_BOOK) ) {
+                            boolean isAcceptableItem = enchantment.isAcceptableItem(primaryInput);
+                            if( this.player.isInCreativeMode() || primaryInput.isOf(Items.ENCHANTED_BOOK) ) {
                                 isAcceptableItem = true;
                             }
 
@@ -177,6 +177,16 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
 //                                if (itemStack.getCount() > 1) {
 //                                    i = MAX_COST;
 //                                }
+
+                                //allow custom stack-sizes
+                                if( !output.getStack(0).getItem().equals(Items.AIR) ) {
+                                    output.getStack(0).setCount(
+                                        Math.min(
+                                            primaryInput.getCount(),
+                                            secondaryInput.getCount()
+                                        )
+                                    );
+                                }
                             }
                         }
 
@@ -189,12 +199,12 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
                 }
 
                 if( this.newItemName != null && !StringHelper.isBlank(this.newItemName) ) {
-                    if(  !this.newItemName.equals( itemStack.getName().getString() )  ) {
+                    if(  !this.newItemName.equals( primaryInput.getName().getString() )  ) {
                         j = 1;
                         i += j;
                         modifyableStack.set( DataComponentTypes.CUSTOM_NAME, Text.literal(this.newItemName) );
                     }
-                } else if( itemStack.contains(DataComponentTypes.CUSTOM_NAME) ) {
+                } else if( primaryInput.contains(DataComponentTypes.CUSTOM_NAME) ) {
                     j = 1;
                     i += j;
                     modifyableStack.remove(DataComponentTypes.CUSTOM_NAME);
@@ -206,7 +216,7 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
                     modifyableStack = ItemStack.EMPTY;
                 }
 
-                if (j == i && j > 0) {
+                if (j == i && 0 < j) {
 //                    if (this.levelCost.get() >= MAX_COST) {
 //                        this.levelCost.set(MAX_COST-1);
 //                    }
@@ -244,7 +254,7 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
         }
         /*Custom Behavior*/ {
             //quadruple level-cost
-            int final_cost = EnchantmentsHelper.getEnchantingCost( this.output.getStack(0) );
+            int final_level_cost = EnchantmentsHelper.getEnchantingCost( this.output.getStack(0) );
             boolean has_new_custom_name = (
                 /*Has some custom name*/
                 this.newItemName != null
@@ -252,17 +262,18 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
                 /*Custom name is new*/
                 && !Objects.equals( this.input.getStack(0).getCustomName(), this.output.getStack(0).getCustomName() )
             );
+
             if(has_new_custom_name) {
-                ++final_cost;
+                ++final_level_cost;
             }
 
             //remove compounding cost
-            ItemStack Output = this.output.getStack(0);
-            Output.remove(DataComponentTypes.REPAIR_COST);
-            this.output.setStack(0, Output);
+            ItemStack output = this.output.getStack(0);
+            output.remove(DataComponentTypes.REPAIR_COST);
+            this.output.setStack(0, output);
 
             //send result to user
-            this.levelCost.set(final_cost);
+            this.levelCost.set(final_level_cost);
             this.sendContentUpdates();
         }
     }
@@ -275,16 +286,7 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
     protected void onTakeOutput(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
         if( !player.isInCreativeMode() ) {
             int cost = levelToPoints( this.levelCost.get() );
-
-            int newPoints = levelToPoints(player.experienceLevel) + player.totalExperience - cost;
-            int newLevel = pointsToLevel(newPoints);
-            newPoints -= levelToPoints(newLevel);
-
-            int levelDifference = newLevel - player.experienceLevel;
-            int pointDifference = newPoints - player.totalExperience;
-
-            player.addExperienceLevels( levelDifference );
-            player.addExperience(       pointDifference );
+            takeExperience(player, cost);
         }
 
         if(this.repairItemUsage > 0) {

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "unlimited_anvil",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "name": "Unlimited Anvil",
   "description": "Enchanted Books may be combined to their maximum effective level! This is expensive.",
   "authors": ["Wheeler-Shigley"],
@@ -18,7 +18,7 @@
     "unlimited_anvil.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.10",
+    "fabricloader": ">=0.16.14",
     "fabric": "*",
     "minecraft": "1.21.5"
   }
