@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static www.wheelershigley.me.trade_experience.helpers.Registrations.registerCheckTimeoutsEachTick;
 import static www.wheelershigley.me.trade_experience.helpers.Registrations.registerPlayerClickListener;
 
 public class TradeExperience implements ModInitializer {
@@ -18,5 +19,6 @@ public class TradeExperience implements ModInitializer {
     @Override
     public void onInitialize() {
         registerPlayerClickListener();
+        registerCheckTimeoutsEachTick();
     }
 }

@@ -54,6 +54,8 @@ public class SendMessageCheckMixin {
             return ActionResult.PASS;
         }
 
+        ServerPlayerEntity receiver = sender.server.getPlayerManager().getPlayer( activeTrades.get(senderID).getReciever() );
+
         int amount = Integer.parseInt(messageContent);
         ActionResult tradeResult = activeTrades.get(senderID).execute(sender.server, amount);
         if(tradeResult == null || tradeResult != ActionResult.SUCCESS_SERVER) {
@@ -64,8 +66,14 @@ public class SendMessageCheckMixin {
             return ActionResult.FAIL;
         }
 
+        String sentMessage;
+        if(receiver != null) {
+            sentMessage = "§7Sent \"§e"+receiver.getName().getString()+"§7\" §f"+amount+"§7 §aexperience§7.";
+        } else {
+            sentMessage = "§7Sent §f"+amount+"§7 §aexperience§7.";
+        }
         sender.sendMessage(
-            Text.literal("Sent \""+"?"+"\" "+amount+" experience."),
+            Text.literal(sentMessage),
             true
         );
         return ActionResult.SUCCESS_SERVER;
