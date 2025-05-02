@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "trade_experience",
+  "version": "0.1.0",
+  "name": "Trade Experience",
+  "description": "Shift-click on a player to trade experience with them.",
+  "authors": ["Wheeler-Shigley"],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/trade_experience/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "www.wheelershigley.me.trade_experience.TradeExperience"
+    ]
+  },
+  "mixins": [
+    "trade_experience.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "fabric": "*",
+    "minecraft": "1.21.5"
+  }
+}
