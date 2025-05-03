@@ -10,6 +10,15 @@ import java.util.UUID;
 import static www.wheelershigley.me.trade_experience.helpers.Registrations.registerCheckTimeoutsEachTick;
 import static www.wheelershigley.me.trade_experience.helpers.Registrations.registerPlayerClickListener;
 
+/* TODO
+ * - pay command
+ * - bal command
+ * - revise failure messages (Trade.execute return & interpretation)
+ * - add receive message
+ * - configuration for COOLDOWN
+ * - icon
+ */
+
 public class TradeExperience implements ModInitializer {
     public static final String MOD_ID = "trade_experience";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);

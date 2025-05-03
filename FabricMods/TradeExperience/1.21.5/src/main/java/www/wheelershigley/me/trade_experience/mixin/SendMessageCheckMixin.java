@@ -2,24 +2,28 @@ package www.wheelershigley.me.trade_experience.mixin;
 
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SignedMessage;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import www.wheelershigley.me.trade_experience.Trade;
-import www.wheelershigley.me.trade_experience.TradeExperience;
 
 import java.util.UUID;
 
 import static www.wheelershigley.me.trade_experience.TradeExperience.activeTrades;
+import static www.wheelershigley.me.trade_experience.helpers.MessageHelper.*;
 
 @Mixin(PlayerManager.class)
 public class SendMessageCheckMixin {
+    @Shadow @Final private MinecraftServer server;
+
     @Inject(
         method = "broadcast(Lnet/minecraft/network/message/SignedMessage;Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/network/message/MessageType$Parameters;)V",
         at = @At("HEAD"),
@@ -58,32 +62,12 @@ public class SendMessageCheckMixin {
         int amount = Integer.parseInt(messageContent);
         ActionResult tradeResult = activeTrades.get(senderID).execute(sender.server, amount);
         if(tradeResult == null || tradeResult != ActionResult.SUCCESS_SERVER) {
-            String failureMessage = Text.translatable("trade_experience.text.send_failure").getString();
-            sender.sendMessage(
-                Text.literal(failureMessage),
-                true
-            );
-
+            sendTellRaw(sender, "trade_experience.text.send_failure");
             return ActionResult.FAIL;
         }
 
-        String sentMessage = "";
-        if(receiver != null) {
-            sentMessage = Text.translatable(
-                "trade_experience.text.sent_to_player",
-                receiver.getName().getString(),
-                amount
-            ).getString();
-        } else {
-            sentMessage = Text.translatable(
-                "trade_experience.text.sent",
-                amount
-            ).getString();
-        }
-        sender.sendMessage(
-            Text.literal(sentMessage),
-            true
-        );
+        sendSentFundsTellRaw(sender, receiver.getName().getString(), messageContent);
+        activeTrades.remove( sender.getUuid() );
 
         return ActionResult.SUCCESS_SERVER;
     }
