@@ -1,4 +1,6 @@
 {
+  "trade_experience.text.mod_name": "§aTrade Experience§r",
+
   "trade_experience.text.trade": "§aTrading with \"§e%1$s§a\".",
 
   "trade_experience.text.initiation": "§7A trade has been initiated to you.",
@@ -19,5 +21,7 @@
 
   "trade_experience.text.balance": "§7Balance: §f%1$s§7 §aexperience§7.",
 
-  "trade_experience.command.text.unknown_amount": "§7Unspecified amount to send."
+  "trade_experience.command.text.unknown_amount": "§7Unspecified amount to send.",
+  "trade_experience.command.text.reloaded": "§aReloaded§7.",
+  "trade_experience.command.text.insufficient_permission": "§cInsufficient permission§7."
 }

@@ -16,8 +16,9 @@ import www.wheelershigley.me.trade_experience.commands.*;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Predicate;
 
-import static www.wheelershigley.me.trade_experience.TradeExperience.activeTrades;
+import static www.wheelershigley.me.trade_experience.TradeExperience.*;
 import static www.wheelershigley.me.trade_experience.helpers.ExperienceHelper.*;
 import static www.wheelershigley.me.trade_experience.helpers.MessageHelper.*;
 
@@ -90,6 +91,20 @@ public class Registrations {
             }
         );
     }
+
+    private static final Predicate<ServerCommandSource> isServerOrOperator = (source) -> {
+        if( !source.isExecutedByPlayer() ) {
+            return true;
+        }
+        ServerPlayerEntity sourcePlayer = source.getPlayer();
+        if(sourcePlayer == null) {
+            return false;
+        }
+
+        return sourcePlayer.server.getPlayerManager().isOperator(
+            sourcePlayer.getGameProfile()
+        );
+    };
 
     public static void registerCommands() {
         //balance command
@@ -174,6 +189,62 @@ public class Registrations {
                         )
                 );
             }
+        );
+
+        //mod command
+        Command<ServerCommandSource> tradeExperienceCommand = (context) -> {
+            String sublet = StringArgumentType.getString(context, "sublet");
+            ServerPlayerEntity player = context.getSource().getPlayer();
+
+            StringBuilder messageBuilder = new StringBuilder();
+            messageBuilder
+                .append('<')
+                .append(
+                    Text.translatable(
+                        "trade_experience.text.mod_name"
+                    ).getString()
+                )
+                .append("> ")
+            ;
+
+            if(player != null && player.getPermissionLevel() == 0) {
+                messageBuilder.append( Text.translatable("trade_experience.command.text.insufficient_permission").getString() );
+            } else {
+                messageBuilder.append( Text.translatable("trade_experience.command.text.reloaded").getString() );
+            }
+
+            if( sublet.equals("reload") ) {
+                configurations.reload();
+
+                if(player != null) {
+                    player.sendMessage(
+                        Text.literal( messageBuilder.toString() )
+                    );
+                }
+
+                return 0;
+            }
+
+            return 1;
+        };
+
+        CommandRegistrationCallback.EVENT.register(
+                (dispatcher, registryAccess, environment) -> {
+                    dispatcher.register(
+                        CommandManager.literal(
+                            MOD_ID.toLowerCase().replaceAll("_","")
+                        )
+                        .requires(isServerOrOperator)
+                        .then(
+                            CommandManager.argument(
+                                "sublet",
+                                StringArgumentType.string()
+                            )
+                            .suggests( new ReloadSuggestionProvider() )
+                            .executes(tradeExperienceCommand)
+                        )
+                    );
+                }
         );
     }
 }
