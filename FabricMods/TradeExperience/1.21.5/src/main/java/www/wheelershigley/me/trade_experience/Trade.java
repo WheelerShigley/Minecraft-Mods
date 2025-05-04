@@ -4,10 +4,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.World;
+import www.wheelershigley.me.trade_experience.helpers.ExperienceHelper;
 
 import java.util.UUID;
 
 import static www.wheelershigley.me.trade_experience.helpers.ExperienceHelper.*;
+import static www.wheelershigley.me.trade_experience.helpers.MessageHelper.*;
 
 public class Trade {
     public static final int COOLDOWN = 30 * 20; //30 seconds
@@ -56,5 +58,32 @@ public class Trade {
         giveExperience(serverReceiver, amount);
 
         return ActionResult.SUCCESS_SERVER;
+    }
+
+    public static void performTrade(ServerPlayerEntity giver, ServerPlayerEntity taker, int amount) {
+        if(giver == null || taker == null) {
+            return;
+        }
+
+        int maximum_experience = levelToPoints(giver.experienceLevel) + ExperienceHelper.getExperiencePoints(giver);
+        if(maximum_experience < amount) {
+            sendMessage(
+                giver,
+                "trade_experience.text.insufficient_funds",
+                false,
+                Integer.toString(maximum_experience),
+                Integer.toString(amount)
+            );
+            return;
+        }
+
+        if( !ExperienceHelper.takeExperience(giver, amount) ) {
+            sendMessage(giver, "trade_experience.text.send_failure", false);
+            return;
+        }
+        ExperienceHelper.giveExperience(taker, amount);
+
+        sendSentFundsChatMessage(giver, taker, Integer.toString(amount) );
+        sendReceivalChatMessage( taker, giver, Integer.toString(amount) );
     }
 }

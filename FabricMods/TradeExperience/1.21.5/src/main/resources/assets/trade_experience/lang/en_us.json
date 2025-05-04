@@ -16,5 +16,7 @@
   "trade_experience.text.trade_timeout": "§cTrade timed out.",
   "trade_experience.text.trade_timeout_to_player": "§cTrade with \"§e%1$s§c\" timed out.",
 
-  "trade_experience.text.balance": "§7Balance: §f%1$s§7 §aexperience§7."
+  "trade_experience.text.balance": "§7Balance: §f%1$s§7 §aexperience§7.",
+
+  "trade_experience.command.text.unknown_amount": "§7Unspecified amount to send."
 }

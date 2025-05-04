@@ -1,6 +1,7 @@
 package www.wheelershigley.me.trade_experience;
 
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +11,7 @@ import java.util.UUID;
 import static www.wheelershigley.me.trade_experience.helpers.Registrations.*;
 
 /* TODO
- * - pay command
+ * - code-cleanup
  * - configuration for COOLDOWN
  * - configuration for experience-name
  * - icon
