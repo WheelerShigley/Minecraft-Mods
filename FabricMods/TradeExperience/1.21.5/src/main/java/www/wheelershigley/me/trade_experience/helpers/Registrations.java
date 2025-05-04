@@ -54,7 +54,7 @@ public class Registrations {
                     if(Trade.COOLDOWN <= delta_time) {
                         sendTradeTimeOutTellRaw(
                             server.getPlayerManager().getPlayer( activeTrade.getValue().getSender() ),
-                            server.getPlayerManager().getPlayer( activeTrade.getValue().getReciever() ).getName().getString()
+                            server.getPlayerManager().getPlayer( activeTrade.getValue().getReciever() )
                         );
 
                         activeTrades.remove( activeTrade.getKey() );

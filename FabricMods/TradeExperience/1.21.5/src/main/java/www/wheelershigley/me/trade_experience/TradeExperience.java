@@ -14,7 +14,6 @@ import static www.wheelershigley.me.trade_experience.helpers.Registrations.regis
  * - pay command
  * - bal command
  * - revise failure messages (Trade.execute return & interpretation)
- * - add receive message
  * - configuration for COOLDOWN
  * - icon
  */

@@ -66,7 +66,8 @@ public class SendMessageCheckMixin {
             return ActionResult.FAIL;
         }
 
-        sendSentFundsTellRaw(sender, receiver.getName().getString(), messageContent);
+        sendSentFundsTellRaw(sender, receiver, messageContent);
+        sendReceivalTellRaw( receiver, sender, messageContent);
         activeTrades.remove( sender.getUuid() );
 
         return ActionResult.SUCCESS_SERVER;

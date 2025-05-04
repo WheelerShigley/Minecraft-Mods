@@ -18,29 +18,53 @@ public class MessageHelper {
         );
     }
 
-    public static void sendSentFundsTellRaw(ServerPlayerEntity sender, @Nullable String receiverName, String amount) {
+    public static void sendSentFundsTellRaw(ServerPlayerEntity sender, @Nullable ServerPlayerEntity receiver, String amount) {
         if(sender == null) {
             return;
         }
-        TradeExperience.LOGGER.info(amount+"$");
 
-        if( receiverName == null || receiverName.isBlank() ) {
-            sendTellRaw(sender,"trade_experience.text.sent", amount);
+        if(receiver == null) {
+            sendTellRaw(sender, "trade_experience.text.sent", amount);
         } else {
-            TradeExperience.LOGGER.info("test");
-            sendTellRaw(sender,"trade_experience.text.sent_to_player", receiverName, amount);
+            sendTellRaw(
+                sender,
+                "trade_experience.text.sent_to_player",
+                receiver.getName().getString(),
+                amount
+            );
         }
     }
 
-    public static void sendTradeTimeOutTellRaw(ServerPlayerEntity sender, @Nullable String receiverName) {
+    public static void sendTradeTimeOutTellRaw(ServerPlayerEntity sender, @Nullable ServerPlayerEntity receiver) {
         if(sender == null) {
             return;
         }
 
-        if( receiverName == null || receiverName.isBlank() ) {
+        if(receiver == null) {
             sendTellRaw(sender, "trade_experience.text.trade_timeout");
         } else {
-            sendTellRaw(sender, "trade_experience.text.trade_timeout_to_player", receiverName);
+            sendTellRaw(
+                sender,
+                "trade_experience.text.trade_timeout_to_player",
+                receiver.getName().getString()
+            );
+        }
+    }
+
+    public static void sendReceivalTellRaw(ServerPlayerEntity receiver, @Nullable ServerPlayerEntity sender, String amount) {
+        if(receiver == null) {
+            return;
+        }
+
+        if(sender == null) {
+            sendTellRaw(receiver, "trade_experience.text.receive", amount);
+        } else {
+            sendTellRaw(
+                receiver,
+                "trade_experience.text.received_from_player",
+                amount,
+                sender.getName().getString()
+            );
         }
     }
 }
