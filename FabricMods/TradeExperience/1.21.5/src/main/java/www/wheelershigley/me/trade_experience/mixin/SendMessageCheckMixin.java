@@ -58,10 +58,10 @@ public class SendMessageCheckMixin {
             return ActionResult.PASS;
         }
 
-        ServerPlayerEntity receiver = sender.server.getPlayerManager().getPlayer( activeTrades.get(senderID).getReciever() );
+        ServerPlayerEntity receiver = server.getPlayerManager().getPlayer( activeTrades.get(senderID).getReciever() );
 
         int amount = Integer.parseInt(messageContent);
-        ActionResult tradeResult = activeTrades.get(senderID).execute(sender.server, amount);
+        ActionResult tradeResult = activeTrades.get(senderID).execute(server, amount);
         if(tradeResult == null) {
             sendMessage(sender, "trade_experience.text.send_failure", false);
             return ActionResult.FAIL;
@@ -76,7 +76,7 @@ public class SendMessageCheckMixin {
                     levelToPoints(sender.experienceLevel) + getExperiencePoints(sender)
                 )
             );
-            return ActionResult.PASS;
+            return ActionResult.SUCCESS_SERVER;
         }
 
         sendSentFundsChatMessage(sender, receiver, messageContent);

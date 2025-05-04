@@ -11,8 +11,8 @@ import static www.wheelershigley.me.trade_experience.helpers.Registrations.*;
 
 /* TODO
  * - pay command
- * - bal command
  * - configuration for COOLDOWN
+ * - configuration for experience-name
  * - icon
  */
 
@@ -24,6 +24,7 @@ public class TradeExperience implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        registerCommands();
         registerPlayerClickListener();
         registerCheckTimeoutsEachTick();
     }

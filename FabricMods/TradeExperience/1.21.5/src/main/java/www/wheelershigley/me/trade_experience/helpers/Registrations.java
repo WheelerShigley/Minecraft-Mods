@@ -1,15 +1,24 @@
 package www.wheelershigley.me.trade_experience.helpers;
 
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import www.wheelershigley.me.trade_experience.Trade;
+import www.wheelershigley.me.trade_experience.commands.*;
 
 import java.util.Map;
 import java.util.UUID;
 
 import static www.wheelershigley.me.trade_experience.TradeExperience.activeTrades;
+import static www.wheelershigley.me.trade_experience.helpers.ExperienceHelper.*;
 import static www.wheelershigley.me.trade_experience.helpers.MessageHelper.*;
 
 public class Registrations {
@@ -44,7 +53,7 @@ public class Registrations {
                 } else {
                     activeTrades.put(traderID, trade);
 //                    isNewTrade = true;
-                }
+//                }
 //                if(isNewTrade) {
                     sendInitiationTellRaw(
                         (ServerPlayerEntity)target,
@@ -56,7 +65,7 @@ public class Registrations {
                         false,
                         target.getName().getString()
                     );
-//                }
+                }
 
                 return null;
             }
@@ -80,5 +89,39 @@ public class Registrations {
                 }
             }
         );
+    }
+
+    public static void registerCommands() {
+        //balance command
+        Command balanceCommand = (context) -> {
+            ServerPlayerEntity player = ( (ServerCommandSource)context.getSource() ).getPlayer();
+            if(player == null) {
+                return 1;
+            }
+
+            sendMessage(
+                    player,
+                    "trade_experience.text.balance",
+                    false,
+                    Integer.toString(
+                            levelToPoints(player.experienceLevel) + getExperiencePoints(player)
+                    )
+            );
+
+            return 0;
+        };
+
+        CommandRegistrationCallback.EVENT.register(
+            (dispatcher, registryAccess, environment) -> {
+                dispatcher.register(
+                    CommandManager.literal("balance").executes(balanceCommand)
+                );
+                dispatcher.register(
+                    CommandManager.literal("bal").executes(balanceCommand)
+                );
+            }
+        );
+
+        //TODO: payment command
     }
 }
