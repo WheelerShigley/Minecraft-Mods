@@ -31,6 +31,10 @@ public class Registrations {
                     return null;
                 }
 
+                if( target.isSneaking() ) {
+                    return null;
+                }
+
                 UUID traderID = player.getUuid();
                 Trade trade = new Trade(
                     player.getUuid(),
@@ -38,25 +42,17 @@ public class Registrations {
                     world,
                     world.getTime()
                 );
-//                boolean isNewTrade = false;
+                boolean isNewTrade = true;
                 if( activeTrades.containsKey(traderID) ) {
-//                    if( activeTrades.get(traderID).getReciever() == target.getUuid() ) {
-//                        sendRepetitionTellRaw(
-//                            (ServerPlayerEntity)player,
-//                            (ServerPlayerEntity)target
-//                        );
-//                    } else {
-//                        activeTrades.replace(traderID, trade);
-//                        isNewTrade = true;
-//                    }
                     if( activeTrades.get(traderID).getReciever() != target.getUuid() ) {
                         activeTrades.replace(traderID, trade);
+                    } else {
+                        isNewTrade = false;
                     }
                 } else {
                     activeTrades.put(traderID, trade);
-//                    isNewTrade = true;
-//                }
-//                if(isNewTrade) {
+                }
+                if(isNewTrade) {
                     sendInitiationTellRaw(
                         (ServerPlayerEntity)target,
                         (ServerPlayerEntity)player
@@ -74,17 +70,13 @@ public class Registrations {
         );
     }
 
-    private static long cooldown = 0;
-    public static void reload() {
-        cooldown = 20L * (long)configurations.getConfiguration("trade_timeout_time").getValue();
-    }
     private static long delta_time = 0;
     public static void registerCheckTimeoutsEachTick() {
         ServerTickEvents.END_SERVER_TICK.register(
             (server) -> {
                 for( Map.Entry<UUID, Trade> activeTrade: activeTrades.entrySet() ) {
                     delta_time = activeTrade.getValue().getWorld().getTime() - activeTrade.getValue().getTime();
-                    if(cooldown <= delta_time) {
+                    if(TradeExperience.cooldown <= delta_time) {
                         sendTradeTimeOutChatMessage(
                             server.getPlayerManager().getPlayer( activeTrade.getValue().getSender() ),
                             server.getPlayerManager().getPlayer( activeTrade.getValue().getReciever() )

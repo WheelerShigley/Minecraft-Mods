@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import www.wheelershigley.me.trade_experience.Trade;
+import www.wheelershigley.me.trade_experience.TradeExperience;
 
 import java.util.UUID;
 
@@ -44,7 +45,7 @@ public class SendMessageCheckMixin {
 
         //remove old trades
         long delta_time = sender.getWorld().getTime() - activeTrades.get(senderID).getTime();
-        if(Trade.COOLDOWN < delta_time) {
+        if(TradeExperience.cooldown < delta_time) {
             activeTrades.remove(senderID);
             return ActionResult.PASS;
         }

@@ -1,7 +1,7 @@
 {
   "trade_experience.text.mod_name": "§aTrade Experience§r",
 
-  "trade_experience.text.trade": "§aTrading with \"§e%1$s§a\".",
+  "trade_experience.text.trade": "§aTrading with \"§e%1$s§a\"§7; send amount in chat.",
 
   "trade_experience.text.initiation": "§7A trade has been initiated to you.",
   "trade_experience.text.initiated_by_player": "§7\"§e%1$s§7\" has initiated a trade to you.",
