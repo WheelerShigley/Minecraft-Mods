@@ -14,11 +14,18 @@ public class ConfigurationHelper {
         final File configurationsFile = FabricLoader.getInstance().getConfigDir().resolve(configurationsFileName).toFile();
         final Configurations configurations = new Configurations(configurationsFile, configurationsFileName);
 
+        configurations.addConfiguration(
+            new Configuration<>(
+                "trade_timeout_time",
+                30L,
+                "How many seconds before a trade times out."
+            )
+        );
 //        configurations.addConfiguration(
 //            new Configuration<>(
-//                "test",
-//                true,
-//                "test"
+//                "experience_name",
+//                "experience",
+//                "Monetary-like experience name."
 //            )
 //        );
 

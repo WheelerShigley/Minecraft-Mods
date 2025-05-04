@@ -1,20 +1,18 @@
 package www.wheelershigley.me.trade_experience;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import www.wheelershigley.me.trade_experience.config.*;
 import www.wheelershigley.me.trade_experience.helpers.ConfigurationHelper;
+import www.wheelershigley.me.trade_experience.helpers.Registrations;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.UUID;
 
 import static www.wheelershigley.me.trade_experience.helpers.Registrations.*;
 
 /* TODO
- * - configuration for COOLDOWN
  * - configuration for experience-name
  * - Shift-click does not initiate trade
  * - icon
@@ -30,8 +28,11 @@ public class TradeExperience implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        registerCommands();
         registerPlayerClickListener();
         registerCheckTimeoutsEachTick();
+
+        registerCommands();
+        configurations.reload();
+        Registrations.reload();
     }
 }

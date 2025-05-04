@@ -73,13 +73,17 @@ public class Registrations {
         );
     }
 
+    private static long cooldown = 0;
+    public static void reload() {
+        cooldown = 20L * (long)configurations.getConfiguration("trade_timeout_time").getValue();
+    }
     private static long delta_time = 0;
     public static void registerCheckTimeoutsEachTick() {
         ServerTickEvents.END_SERVER_TICK.register(
             (server) -> {
                 for( Map.Entry<UUID, Trade> activeTrade: activeTrades.entrySet() ) {
                     delta_time = activeTrade.getValue().getWorld().getTime() - activeTrade.getValue().getTime();
-                    if(Trade.COOLDOWN <= delta_time) {
+                    if(cooldown <= delta_time) {
                         sendTradeTimeOutChatMessage(
                             server.getPlayerManager().getPlayer( activeTrade.getValue().getSender() ),
                             server.getPlayerManager().getPlayer( activeTrade.getValue().getReciever() )
@@ -215,6 +219,7 @@ public class Registrations {
 
             if( sublet.equals("reload") ) {
                 configurations.reload();
+                Registrations.reload();
 
                 if(player != null) {
                     player.sendMessage(

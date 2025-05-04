@@ -12,6 +12,7 @@ import static www.wheelershigley.me.trade_experience.helpers.ExperienceHelper.*;
 import static www.wheelershigley.me.trade_experience.helpers.MessageHelper.*;
 
 public class Trade {
+    @Deprecated
     public static final int COOLDOWN = 30 * 20; //30 seconds
 
     private final UUID sender;
