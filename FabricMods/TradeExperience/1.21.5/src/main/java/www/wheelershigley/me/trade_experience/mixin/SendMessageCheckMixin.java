@@ -14,10 +14,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import www.wheelershigley.me.trade_experience.Trade;
+import www.wheelershigley.me.trade_experience.helpers.ExperienceHelper;
 
 import java.util.UUID;
 
 import static www.wheelershigley.me.trade_experience.TradeExperience.activeTrades;
+import static www.wheelershigley.me.trade_experience.helpers.ExperienceHelper.getExperiencePoints;
+import static www.wheelershigley.me.trade_experience.helpers.ExperienceHelper.levelToPoints;
 import static www.wheelershigley.me.trade_experience.helpers.MessageHelper.*;
 
 @Mixin(PlayerManager.class)
@@ -61,9 +64,20 @@ public class SendMessageCheckMixin {
 
         int amount = Integer.parseInt(messageContent);
         ActionResult tradeResult = activeTrades.get(senderID).execute(sender.server, amount);
-        if(tradeResult == null || tradeResult != ActionResult.SUCCESS_SERVER) {
+        if(tradeResult == null) {
             sendTellRaw(sender, "trade_experience.text.send_failure");
             return ActionResult.FAIL;
+        }
+        if(tradeResult != ActionResult.SUCCESS_SERVER) {
+            sendTellRaw(
+                sender,
+                "trade_experience.text.insufficient_funds",
+                messageContent,
+                Integer.toString(
+                    levelToPoints(sender.experienceLevel) + getExperiencePoints(sender)
+                )
+            );
+            return ActionResult.PASS;
         }
 
         sendSentFundsTellRaw(sender, receiver, messageContent);
