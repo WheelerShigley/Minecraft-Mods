@@ -7,14 +7,11 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static www.wheelershigley.me.trade_experience.helpers.Registrations.registerCheckTimeoutsEachTick;
-import static www.wheelershigley.me.trade_experience.helpers.Registrations.registerPlayerClickListener;
+import static www.wheelershigley.me.trade_experience.helpers.Registrations.*;
 
 /* TODO
  * - pay command
  * - bal command
- * - revise failure messages (Trade.execute return & interpretation)
- * - receive message?
  * - configuration for COOLDOWN
  * - icon
  */

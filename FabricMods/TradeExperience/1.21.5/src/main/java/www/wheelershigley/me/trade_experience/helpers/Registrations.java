@@ -10,8 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static www.wheelershigley.me.trade_experience.TradeExperience.activeTrades;
-import static www.wheelershigley.me.trade_experience.helpers.MessageHelper.sendTellRaw;
-import static www.wheelershigley.me.trade_experience.helpers.MessageHelper.sendTradeTimeOutTellRaw;
+import static www.wheelershigley.me.trade_experience.helpers.MessageHelper.*;
 
 public class Registrations {
     public static void registerPlayerClickListener() {
@@ -28,17 +27,36 @@ public class Registrations {
                     world,
                     world.getTime()
                 );
+//                boolean isNewTrade = false;
                 if( activeTrades.containsKey(traderID) ) {
-                    activeTrades.replace(traderID, trade);
+//                    if( activeTrades.get(traderID).getReciever() == target.getUuid() ) {
+//                        sendRepetitionTellRaw(
+//                            (ServerPlayerEntity)player,
+//                            (ServerPlayerEntity)target
+//                        );
+//                    } else {
+//                        activeTrades.replace(traderID, trade);
+//                        isNewTrade = true;
+//                    }
+                    if( activeTrades.get(traderID).getReciever() != target.getUuid() ) {
+                        activeTrades.replace(traderID, trade);
+                    }
                 } else {
                     activeTrades.put(traderID, trade);
+//                    isNewTrade = true;
                 }
-
-                sendTellRaw(
-                    (ServerPlayerEntity)player,
-                    "trade_experience.text.trade",
-                    target.getName().getString()
-                );
+//                if(isNewTrade) {
+                    sendInitiationTellRaw(
+                        (ServerPlayerEntity)target,
+                        (ServerPlayerEntity)player
+                    );
+                    sendMessage(
+                        (ServerPlayerEntity)player,
+                        "trade_experience.text.trade",
+                        false,
+                        target.getName().getString()
+                    );
+//                }
 
                 return null;
             }
@@ -52,7 +70,7 @@ public class Registrations {
                 for( Map.Entry<UUID, Trade> activeTrade: activeTrades.entrySet() ) {
                     delta_time = activeTrade.getValue().getWorld().getTime() - activeTrade.getValue().getTime();
                     if(Trade.COOLDOWN <= delta_time) {
-                        sendTradeTimeOutTellRaw(
+                        sendTradeTimeOutChatMessage(
                             server.getPlayerManager().getPlayer( activeTrade.getValue().getSender() ),
                             server.getPlayerManager().getPlayer( activeTrade.getValue().getReciever() )
                         );
