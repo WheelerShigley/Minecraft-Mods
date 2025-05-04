@@ -13,7 +13,6 @@ import java.util.UUID;
 import static www.wheelershigley.me.trade_experience.helpers.Registrations.*;
 
 /* TODO
- * - configuration for experience-name
  * - Shift-click does not initiate trade
  * - icon
  */
@@ -23,6 +22,7 @@ public class TradeExperience implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static final Configurations configurations = ConfigurationHelper.createTradeExperienceConfigurations();
+    public static String experienceName = (String)configurations.getConfiguration("experience_name").getDefaultConfiguration();
 
     public static final HashMap<UUID, Trade> activeTrades = new HashMap<>();
 
@@ -32,7 +32,13 @@ public class TradeExperience implements ModInitializer {
         registerCheckTimeoutsEachTick();
 
         registerCommands();
+        reload();
+    }
+
+    public static void reload() {
         configurations.reload();
         Registrations.reload();
+
+        TradeExperience.experienceName = (String)configurations.getConfiguration("experience_name").getValue();
     }
 }

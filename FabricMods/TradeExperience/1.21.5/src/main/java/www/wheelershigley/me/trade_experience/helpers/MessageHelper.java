@@ -3,6 +3,7 @@ package www.wheelershigley.me.trade_experience.helpers;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
+import www.wheelershigley.me.trade_experience.TradeExperience;
 
 public class MessageHelper {
     public static void sendMessage(ServerPlayerEntity player, String translationText, boolean tell_raw, Object... arguments) {
@@ -23,14 +24,21 @@ public class MessageHelper {
         }
 
         if(receiver == null) {
-            sendMessage(sender, "trade_experience.text.sent", false, amount);
+            sendMessage(
+                sender,
+                "trade_experience.text.sent",
+                false,
+                amount,
+                TradeExperience.experienceName
+            );
         } else {
             sendMessage(
                 sender,
                 "trade_experience.text.sent_to_player",
                 false,
                 receiver.getName().getString(),
-                amount
+                amount,
+                TradeExperience.experienceName
             );
         }
     }
@@ -41,7 +49,12 @@ public class MessageHelper {
         }
 
         if(receiver == null) {
-            sendMessage(sender, "trade_experience.text.trade_timeout", false);
+            sendMessage(
+                sender,
+                "trade_experience.text.trade_timeout",
+                false,
+                TradeExperience.experienceName
+            );
         } else {
             sendMessage(
                 sender,
@@ -58,13 +71,20 @@ public class MessageHelper {
         }
 
         if(sender == null) {
-            sendMessage(receiver, "trade_experience.text.receive", false, amount);
+            sendMessage(
+                receiver,
+                "trade_experience.text.receive",
+                false,
+                amount,
+                TradeExperience.experienceName
+            );
         } else {
             sendMessage(
                 receiver,
                 "trade_experience.text.received_from_player",
                 false,
                 amount,
+                TradeExperience.experienceName,
                 sender.getName().getString()
             );
         }

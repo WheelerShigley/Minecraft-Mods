@@ -21,13 +21,13 @@ public class ConfigurationHelper {
                 "How many seconds before a trade times out."
             )
         );
-//        configurations.addConfiguration(
-//            new Configuration<>(
-//                "experience_name",
-//                "experience",
-//                "Monetary-like experience name."
-//            )
-//        );
+        configurations.addConfiguration(
+            new Configuration<>(
+                "experience_name",
+                "experience",
+                "Monetary-like experience name."
+            )
+        );
 
         return configurations;
     }

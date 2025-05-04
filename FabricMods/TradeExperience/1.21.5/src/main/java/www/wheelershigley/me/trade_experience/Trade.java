@@ -70,7 +70,8 @@ public class Trade {
             sendMessage(
                 giver,
                 "trade_experience.text.receiver_offline",
-                false
+                false,
+                TradeExperience.experienceName
             );
             return;
         }
@@ -81,6 +82,7 @@ public class Trade {
                 giver,
                 "trade_experience.text.insufficient_funds",
                 false,
+                TradeExperience.experienceName,
                 Integer.toString(maximum_experience),
                 Integer.toString(amount)
             );
@@ -88,7 +90,12 @@ public class Trade {
         }
 
         if( !ExperienceHelper.takeExperience(giver, amount) ) {
-            sendMessage(giver, "trade_experience.text.send_failure", false);
+            sendMessage(
+                giver,
+                "trade_experience.text.send_failure",
+                false,
+                TradeExperience.experienceName
+            );
             return;
         }
         ExperienceHelper.giveExperience(taker, amount);

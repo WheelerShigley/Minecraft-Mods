@@ -12,6 +12,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import www.wheelershigley.me.trade_experience.Trade;
+import www.wheelershigley.me.trade_experience.TradeExperience;
 import www.wheelershigley.me.trade_experience.commands.*;
 
 import java.util.Map;
@@ -124,7 +125,8 @@ public class Registrations {
                 false,
                 Integer.toString(
                     levelToPoints(player.experienceLevel) + getExperiencePoints(player)
-                )
+                ),
+                TradeExperience.experienceName
             );
 
             return 0;
@@ -218,8 +220,7 @@ public class Registrations {
             }
 
             if( sublet.equals("reload") ) {
-                configurations.reload();
-                Registrations.reload();
+                TradeExperience.reload();
 
                 if(player != null) {
                     player.sendMessage(

@@ -6,20 +6,20 @@
   "trade_experience.text.initiation": "§7A trade has been initiated to you.",
   "trade_experience.text.initiated_by_player": "§7\"§e%1$s§7\" has initiated a trade to you.",
 
-  "trade_experience.text.sent": "§7Sent §f%1$s§7 §aexperience§7.",
-  "trade_experience.text.sent_to_player": "§7Sent \"§e%1$s§7\" §f%2$s§7 §aexperience§7.",
-  "trade_experience.text.send_failure": "§cFailed to send experience.",
+  "trade_experience.text.sent": "§7Sent §f%1$s§7 §%2$s§7.",
+  "trade_experience.text.sent_to_player": "§7Sent \"§e%1$s§7\" §f%2$s§7 §a%3$s§7.",
+  "trade_experience.text.send_failure": "§cFailed to send §a%1$s§c.",
   "trade_experience.text.receiver_offline": "§cReceiver is offline.",
 
-  "trade_experience.text.receive": "§7Received §f%1$s§7 §aexperience§7.",
-  "trade_experience.text.received_from_player": "§7Received §f%1$s§7 §aexperience§7 from \"§e%2$s§7\".",
+  "trade_experience.text.receive": "§7Received §f%1$s§7 §a%2$s§7.",
+  "trade_experience.text.received_from_player": "§7Received §f%1$s§7 §a%2$s§7 from \"§e%3$s§7\".",
 
-  "trade_experience.text.insufficient_funds": "§cInsufficient Funds§7: §a%1$s§7/§a%2$s§7.",
+  "trade_experience.text.insufficient_funds": "§cInsufficient %1$s§7: §a%2$s§7/§a%3$s§7.",
 
   "trade_experience.text.trade_timeout": "§cTrade timed out.",
   "trade_experience.text.trade_timeout_to_player": "§cTrade with \"§e%1$s§c\" timed out.",
 
-  "trade_experience.text.balance": "§7Balance: §f%1$s§7 §aexperience§7.",
+  "trade_experience.text.balance": "§7Balance: §f%1$s§7 §a%2$s§7.",
 
   "trade_experience.command.text.unknown_amount": "§7Unspecified amount to send.",
   "trade_experience.command.text.reloaded": "§aReloaded§7.",
