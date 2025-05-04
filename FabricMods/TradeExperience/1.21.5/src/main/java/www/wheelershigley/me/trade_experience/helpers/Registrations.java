@@ -12,7 +12,6 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import www.wheelershigley.me.trade_experience.Trade;
-import www.wheelershigley.me.trade_experience.TradeExperience;
 import www.wheelershigley.me.trade_experience.commands.*;
 
 import java.util.Map;
@@ -133,9 +132,6 @@ public class Registrations {
             ServerPlayerEntity targetPlayer = sourcePlayer.server.getPlayerManager().getPlayer(
                 StringArgumentType.getString(context, "target")
             );
-            if(targetPlayer == null) {
-                return 2;
-            }
 
             int amount = IntegerArgumentType.getInteger(context, "amount");
 

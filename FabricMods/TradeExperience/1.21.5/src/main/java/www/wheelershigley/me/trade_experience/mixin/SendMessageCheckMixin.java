@@ -18,8 +18,6 @@ import www.wheelershigley.me.trade_experience.Trade;
 import java.util.UUID;
 
 import static www.wheelershigley.me.trade_experience.TradeExperience.activeTrades;
-import static www.wheelershigley.me.trade_experience.helpers.ExperienceHelper.*;
-import static www.wheelershigley.me.trade_experience.helpers.MessageHelper.*;
 
 @Mixin(PlayerManager.class)
 public class SendMessageCheckMixin {
@@ -61,28 +59,9 @@ public class SendMessageCheckMixin {
         ServerPlayerEntity receiver = server.getPlayerManager().getPlayer( activeTrades.get(senderID).getReciever() );
 
         int amount = Integer.parseInt(messageContent);
-        ActionResult tradeResult = activeTrades.get(senderID).execute(server, amount);
-        if(tradeResult == null) {
-            sendMessage(sender, "trade_experience.text.send_failure", false);
-            return ActionResult.FAIL;
-        }
-        if(tradeResult != ActionResult.SUCCESS_SERVER) {
-            sendMessage(
-                sender,
-                "trade_experience.text.insufficient_funds",
-                false,
-                messageContent,
-                Integer.toString(
-                    levelToPoints(sender.experienceLevel) + getExperiencePoints(sender)
-                )
-            );
-            return ActionResult.SUCCESS_SERVER;
-        }
 
-        sendSentFundsChatMessage(sender, receiver, messageContent);
-        sendReceivalChatMessage( receiver, sender, messageContent);
+        Trade.performTrade(sender, receiver, amount);
         activeTrades.remove( sender.getUuid() );
-
         return ActionResult.SUCCESS_SERVER;
     }
 }

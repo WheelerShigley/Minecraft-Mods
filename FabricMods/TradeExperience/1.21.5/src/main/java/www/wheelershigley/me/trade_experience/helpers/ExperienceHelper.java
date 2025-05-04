@@ -2,8 +2,6 @@ package www.wheelershigley.me.trade_experience.helpers;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.ActionResult;
-import www.wheelershigley.me.trade_experience.TradeExperience;
 
 public class ExperienceHelper {
     public static int pointsToNextLevel(int level) {

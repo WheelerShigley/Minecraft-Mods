@@ -14,10 +14,10 @@ import static www.wheelershigley.me.trade_experience.helpers.MessageHelper.*;
 public class Trade {
     public static final int COOLDOWN = 30 * 20; //30 seconds
 
-    private UUID sender;
-    private UUID receiver;
-    private World world;
-    private long time;
+    private final UUID sender;
+    private final UUID receiver;
+    private final World world;
+    private final long time;
 
     public Trade(UUID sender, UUID receiver, World world, long time) {
         this.sender = sender;
@@ -39,6 +39,7 @@ public class Trade {
         return time;
     }
 
+    @Deprecated
     public ActionResult execute(MinecraftServer server, int amount) {
         ServerPlayerEntity serverSender = server.getPlayerManager().getPlayer(sender);
         ServerPlayerEntity serverReceiver = server.getPlayerManager().getPlayer(receiver);
@@ -61,7 +62,15 @@ public class Trade {
     }
 
     public static void performTrade(ServerPlayerEntity giver, ServerPlayerEntity taker, int amount) {
-        if(giver == null || taker == null) {
+        if(giver == null) {
+            return;
+        }
+        if(taker == null) {
+            sendMessage(
+                giver,
+                "trade_experience.text.receiver_offline",
+                false
+            );
             return;
         }
 
