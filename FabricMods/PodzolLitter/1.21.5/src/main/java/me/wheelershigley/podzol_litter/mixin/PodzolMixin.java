@@ -42,7 +42,7 @@ public class PodzolMixin {
             );
 
             ItemStack droppedLeaves = new ItemStack(droppedItem);
-            droppedLeaves.setCount( random.nextInt(max_count) );
+            droppedLeaves.setCount( 1+random.nextInt(max_count) );
             Block.dropStack(
                 context.getWorld(),
                 context.getBlockPos(),
