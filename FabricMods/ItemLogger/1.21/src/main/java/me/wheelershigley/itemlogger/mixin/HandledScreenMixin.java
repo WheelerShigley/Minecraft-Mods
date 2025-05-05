@@ -1,4 +1,4 @@
-package me.wheelershigley.itemlogger.mixins;
+package me.wheelershigley.itemlogger.mixin;
 
 import me.wheelershigley.itemlogger.client.ItemLoggerClient;
 import me.wheelershigley.itemlogger.client.Mode;
