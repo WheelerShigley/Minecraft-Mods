@@ -4,8 +4,8 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import me.wheelershigley.itemlogger.ItemLogger;
 import me.wheelershigley.itemlogger.client.ItemLoggerClient;
-import me.wheelershigley.itemlogger.client.Mode;
-import me.wheelershigley.itemlogger.client.Modes;
+import me.wheelershigley.itemlogger.modes.Mode;
+import me.wheelershigley.itemlogger.modes.Modes;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -26,6 +26,7 @@ public class CommandsRegistrar {
         ;
         PREFIX = prefixBuilder.toString();
     }
+    private static final String commandName = ItemLogger.MOD_ID.replace("_","").toLowerCase();
 
     private static void sendPlayerTranslatableMessage(ClientPlayerEntity player, String translationText, Object... arguments) {
         player.sendMessage(
@@ -43,7 +44,8 @@ public class CommandsRegistrar {
         Command<FabricClientCommandSource> missingArguments = (context) -> {
             sendPlayerTranslatableMessage(
                 context.getSource().getPlayer(),
-                "item_logger.command.text.itemlogger_no_arguments"
+                "item_logger.command.text.itemlogger_no_arguments",
+                commandName
             );
             return 1;
         };
@@ -61,7 +63,8 @@ public class CommandsRegistrar {
         Command<FabricClientCommandSource> missingMode = (context) -> {
             sendPlayerTranslatableMessage(
                 context.getSource().getPlayer(),
-                "item_logger.command.text.mode_no_arguments"
+                "item_logger.command.text.mode_no_arguments",
+                commandName
             );
             return 2;
         };

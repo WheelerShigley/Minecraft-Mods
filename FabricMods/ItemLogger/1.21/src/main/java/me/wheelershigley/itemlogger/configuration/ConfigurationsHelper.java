@@ -6,7 +6,7 @@ import java.io.File;
 
 import static me.wheelershigley.itemlogger.ItemLogger.MOD_ID;
 
-public class ConfigurationHelper {
+public class ConfigurationsHelper {
     public static Configurations getConfigurations() {
         final String configurationsFileName = (MOD_ID + ".properties").toLowerCase();
         final File configurationsFile = FabricLoader.getInstance().getConfigDir().resolve(configurationsFileName).toFile();

@@ -5,8 +5,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import me.wheelershigley.itemlogger.client.Mode;
-import me.wheelershigley.itemlogger.client.Modes;
+import me.wheelershigley.itemlogger.modes.Mode;
+import me.wheelershigley.itemlogger.modes.Modes;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import java.util.concurrent.CompletableFuture;
