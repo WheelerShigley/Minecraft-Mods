@@ -33,12 +33,14 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
         boolean is_player_inventory = screen instanceof InventoryScreen || screen instanceof CreativeInventoryScreen;
         if(!is_player_inventory) {
             if( ItemLoggerClient.mode.equals(Mode.LOG) ) {
-                ItemLogger.LOGGER.info(
-                    Text.literal(
-                        Text.translatable("item_logger.text.opened_container").getString()
-                    ).getString(),
-                    screen.getClass().getName()
-                );
+//                ItemLogger.LOGGER.info(
+//                    Text.literal(
+//                        Text.translatable(
+//                            "item_logger.text.opened_container",
+//                            screen.getClass().getCanonicalName()
+//                        ).getString()
+//                    ).getString()
+//                );
 
                 ItemLogger.LOGGER.info( Modes.Logging.containerContentsToMarkdown(screen) );
             }

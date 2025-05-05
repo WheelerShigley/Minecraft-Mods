@@ -1,5 +1,6 @@
 package me.wheelershigley.itemlogger.client;
 
+import me.wheelershigley.itemlogger.ItemLogger;
 import me.wheelershigley.itemlogger.configuration.Configurations;
 import me.wheelershigley.itemlogger.configuration.ConfigurationsHelper;
 import me.wheelershigley.itemlogger.commands.CommandsRegistrar;
@@ -30,6 +31,8 @@ public class ItemLoggerClient implements ClientModInitializer {
             mode = Modes.toMode(
                 configurations.getConfiguration("mode").getDefaultConfiguration()
             );
+        } else {
+            mode = attemptedMode;
         }
     }
 }

@@ -20,7 +20,7 @@ public class CommandsRegistrar {
             .append(
                 Text.literal(
                     Text.translatable("item_logger.text.name").getString()
-                )
+                ).getString()
             )
             .append("> ")
         ;

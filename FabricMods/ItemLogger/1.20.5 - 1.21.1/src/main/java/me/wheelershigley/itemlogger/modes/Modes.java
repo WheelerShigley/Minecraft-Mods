@@ -1,5 +1,6 @@
 package me.wheelershigley.itemlogger.modes;
 
+import me.wheelershigley.itemlogger.ItemLogger;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.component.ComponentType;
 import net.minecraft.item.ItemStack;
@@ -61,19 +62,19 @@ public class Modes {
 
                 final String itemSlot = Text.literal(
                     Text.translatable("item_logger.text.item_slot").getString()
-                ).toString();
+                ).getString();
                 final String itemName = Text.literal(
                     Text.translatable("item_logger.text.item_name").getString()
-                ).toString();
+                ).getString();
                 final String itemCount = Text.literal(
                     Text.translatable("item_logger.text.item_count").getString()
-                ).toString();
+                ).getString();
                 final String itemComponents = Text.literal(
                     Text.translatable("item_logger.text.item_components").getString()
-                ).toString();
+                ).getString();
                 final String emptyContainer = Text.literal(
                     Text.translatable("item_logger.text.empty_container").getString()
-                ).toString();
+                ).getString();
 
                 //Contents
                 boolean isContainerEmpty = true;
