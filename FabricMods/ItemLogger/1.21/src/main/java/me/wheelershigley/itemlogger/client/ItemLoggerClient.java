@@ -1,24 +1,33 @@
 package me.wheelershigley.itemlogger.client;
 
 import me.wheelershigley.itemlogger.configuration.Configurations;
-import me.wheelershigley.itemlogger.helper.ConfigurationHelper;
-import me.wheelershigley.itemlogger.registrations.CommandsRegistrar;
+import me.wheelershigley.itemlogger.configuration.ConfigurationHelper;
+import me.wheelershigley.itemlogger.commands.CommandsRegistrar;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 
 public class ItemLoggerClient implements ClientModInitializer {
     public static Configurations configurations = ConfigurationHelper.getConfigurations();
-    public static Mode mode;
-
-    /* TODO
-     * add new configurations
-     * correct command log/off modes
-     * lang file
-     * update to 1.21.5
-     */
+    public static Mode mode = Modes.toMode(
+        configurations.getConfiguration("mode").getDefaultConfiguration()
+    );
 
     @Override
     public void onInitializeClient() {
         CommandsRegistrar.register();
+
+        reload();
+    }
+
+    public static void reload() {
+        ItemLoggerClient.configurations.reload();
+
+        Mode attemptedMode = Modes.toMode(
+            (String)configurations.getConfiguration("mode").getValue()
+        );
+        if(attemptedMode == null) {
+            mode = Modes.toMode(
+                configurations.getConfiguration("mode").getDefaultConfiguration()
+            );
+        }
     }
 }

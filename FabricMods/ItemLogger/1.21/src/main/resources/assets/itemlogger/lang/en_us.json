@@ -1,0 +1,11 @@
+{
+  "item_logger.text.name": "Item Logger",
+
+  "item_logger.command.text.itemlogger_no_arguments": "Called \"/itemlogger\" with no arguments.",
+  "item_logger.command.text.mode_no_arguments": "Called \"/itemlogger mode\" with no arguments.",
+
+  "item_logger.command.text.reloaded": "Reloaded.",
+
+  "item_logger.command.text.set_mode": "Set mode to \"%1$s\".",
+  "item_logger.command.text.could_not_set_mode": "Could not set mode \"%1$s\"."
+}

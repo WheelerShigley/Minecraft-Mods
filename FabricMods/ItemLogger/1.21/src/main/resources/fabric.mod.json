@@ -1,13 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "itemlogger",
-  "version": "${version}",
-  "name": "ItemLogger",
-  "description": "",
-  "authors": [],
-  "contact": {
-    "repo": "https://github.com/solac/ItemLogger"
-  },
+  "id": "item_logger",
+  "version": "1.5.0",
+  "name": "Item Logger",
+  "description": "Log all viewed containers' items in \"latest.log\".",
+  "authors": ["Wheeler-Shigley"],
   "license": "All-Rights-Reserved",
   "icon": "/assets/itemlogger/icon.png",
   "environment": "client",
@@ -23,8 +20,8 @@
     "itemlogger.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=${loader_version}",
+    "fabricloader": ">=0.16.14",
     "fabric": "*",
-    "minecraft": "${minecraft_version}"
+    "minecraft": "*"
   }
 }

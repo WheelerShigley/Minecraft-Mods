@@ -1,4 +1,4 @@
-package me.wheelershigley.itemlogger.registrations;
+package me.wheelershigley.itemlogger.commands;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -6,35 +6,62 @@ import me.wheelershigley.itemlogger.ItemLogger;
 import me.wheelershigley.itemlogger.client.ItemLoggerClient;
 import me.wheelershigley.itemlogger.client.Mode;
 import me.wheelershigley.itemlogger.client.Modes;
-import me.wheelershigley.itemlogger.commands.ModesSuggestionProvider;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;
 
 public class CommandsRegistrar {
-    private static final String PREFIX = "<"+ ItemLogger.MOD_ID+"> ";
-    private static Text getMessage(String message) {
-        return Text.literal(PREFIX + message);
+    private static final String PREFIX; static {
+        StringBuilder prefixBuilder = new StringBuilder();
+        prefixBuilder
+            .append('<')
+            .append(
+                Text.literal(
+                    Text.translatable("item_logger.text.name").getString()
+                )
+            )
+            .append("> ")
+        ;
+        PREFIX = prefixBuilder.toString();
+    }
+
+    private static void sendPlayerTranslatableMessage(ClientPlayerEntity player, String translationText, Object... arguments) {
+        player.sendMessage(
+            Text.literal(
+                PREFIX + Text.translatable(
+                    translationText,
+                    arguments
+                ).getString()
+            ),
+            false
+        );
     }
 
     public static void register() {
         Command<FabricClientCommandSource> missingArguments = (context) -> {
-            context.getSource().getPlayer().sendMessage(
-                getMessage("Called \"/itemlogger\" with no arguments.")
+            sendPlayerTranslatableMessage(
+                context.getSource().getPlayer(),
+                "item_logger.command.text.itemlogger_no_arguments"
             );
             return 1;
         };
 
         Command<FabricClientCommandSource> reloadCommand = (context) -> {
-            ItemLoggerClient.configurations.reload();
-            //TODO send message of reload
+            ItemLoggerClient.reload();
+
+            sendPlayerTranslatableMessage(
+                context.getSource().getPlayer(),
+                "item_logger.command.text.reloaded"
+            );
             return 0;
         };
 
         Command<FabricClientCommandSource> missingMode = (context) -> {
-            context.getSource().getPlayer().sendMessage(
-                    getMessage("Called \"/itemlogger mode\" with no arguments.")
+            sendPlayerTranslatableMessage(
+                context.getSource().getPlayer(),
+                "item_logger.command.text.mode_no_arguments"
             );
             return 2;
         };
@@ -43,11 +70,19 @@ public class CommandsRegistrar {
             String attemptedMode = StringArgumentType.getString(context, "mode");
             Mode mode = Modes.toMode(attemptedMode);
             if(mode == null) {
-                //TODO error message
+                sendPlayerTranslatableMessage(
+                    context.getSource().getPlayer(),
+                    "item_logger.command.text.could_not_set_mode",
+                    attemptedMode
+                );
                 return 3;
             }
 
-            //TODO change message
+            sendPlayerTranslatableMessage(
+                context.getSource().getPlayer(),
+                "item_logger.command.text.set_mode",
+                attemptedMode
+            );
             ItemLoggerClient.mode = mode;
             return 0;
         };
@@ -56,7 +91,7 @@ public class CommandsRegistrar {
             (dispatcher, registryAccess) -> {
                 dispatcher.register(
                     ClientCommandManager
-                        .literal("itemlogger")
+                        .literal( ItemLogger.MOD_ID.replace("_","").toLowerCase() )
                         .executes(missingArguments)
                         .then(
                             ClientCommandManager

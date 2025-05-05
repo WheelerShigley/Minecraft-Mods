@@ -1,7 +1,5 @@
-package me.wheelershigley.itemlogger.helper;
+package me.wheelershigley.itemlogger.configuration;
 
-import me.wheelershigley.itemlogger.configuration.Configuration;
-import me.wheelershigley.itemlogger.configuration.Configurations;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;
