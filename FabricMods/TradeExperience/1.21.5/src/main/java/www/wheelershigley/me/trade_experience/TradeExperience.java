@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import www.wheelershigley.me.trade_experience.config.*;
 import www.wheelershigley.me.trade_experience.helpers.ConfigurationHelper;
-import www.wheelershigley.me.trade_experience.helpers.Registrations;
 
 import java.util.HashMap;
 import java.util.UUID;
