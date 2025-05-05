@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "item_logger",
+  "version": "1.5.3",
+  "name": "Item Logger",
+  "description": "Log all viewed containers' items in \"latest.log\".",
+  "authors": ["Wheeler-Shigley"],
+  "license": "All-Rights-Reserved",
+  "icon": "/assets/itemlogger/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "me.wheelershigley.itemlogger.client.ItemLoggerClient"
+    ],
+    "main": [
+      "me.wheelershigley.itemlogger.ItemLogger"
+    ]
+  },
+  "mixins": [
+    "itemlogger.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "fabric": "*",
+    "minecraft": ">=1.21.2 <=1.21.4"
+  }
+}
