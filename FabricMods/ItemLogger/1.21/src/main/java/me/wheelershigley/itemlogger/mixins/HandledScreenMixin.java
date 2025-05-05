@@ -1,6 +1,7 @@
 package me.wheelershigley.itemlogger.mixins;
 
 import me.wheelershigley.itemlogger.client.ItemLoggerClient;
+import me.wheelershigley.itemlogger.client.Mode;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -101,7 +102,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
     @Inject(method = "close", at = @At("HEAD"))
     @SuppressWarnings("unchecked")
     private void close(CallbackInfo info) {
-        if(ItemLoggerClient.mode != ItemLoggerClient.Mode.LOG) { return; }
+        if(ItemLoggerClient.mode != Mode.LOG) { return; }
 
         HandledScreen<T> screen = (HandledScreen<T>)(Object)this;
         LOGGER.info( "Opened a \"" + screen.getClass() + "\".");

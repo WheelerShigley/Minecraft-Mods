@@ -3,38 +3,39 @@ package me.wheelershigley.itemlogger.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import me.wheelershigley.itemlogger.ItemLogger;
 import me.wheelershigley.itemlogger.client.ItemLoggerClient;
-import me.wheelershigley.itemlogger.config.ConfigHelpers;
+import me.wheelershigley.itemlogger.client.Mode;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.text.Text;
 
 public class ItemLoggerCommand {
-    private static final String PREFIX = "{"+ItemLogger.MOD_ID+"} ";
+    private static final String PREFIX = "<"+ItemLogger.MOD_ID+"> ";
     private static Text getMessage(String message) {
         return Text.literal(PREFIX + message);
     }
+
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess access) {
         dispatcher.register(
-            ClientCommandManager.literal("itemlogger").executes(
-                context -> {
-                    context.getSource().getPlayer().sendMessage(
-                        getMessage("Called \"/itemlogger\" with no arguments.")
-                    );
-                    return -1;
-                }
-            )
-            .then(
-                ClientCommandManager.literal("reload").executes(
-                    context -> {
-                        ItemLoggerClient.configs.reloadConfigurations();
-                        /*Reset Currently-Saved Configurations*/ {
-                            ItemLoggerClient.mode = ConfigHelpers.getDefaultMode();
-                        }
-                        return 0;
+            ClientCommandManager.literal("itemlogger")
+                .executes(
+                    (context) -> {
+                        context.getSource().getPlayer().sendMessage(
+                            getMessage("Called \"/itemlogger\" with no arguments.")
+                        );
+                        return -1;
                     }
                 )
-            )
+                .then(
+                    ClientCommandManager.literal("reload")
+                        .executes(
+                            (context) -> {
+                                ItemLoggerClient.configurations.reload();
+                                //TODO send message of reload
+                                return 0;
+                            }
+                        )
+                )
             .then(
                 ClientCommandManager.literal("mode").executes(
                     context -> {
@@ -48,7 +49,7 @@ public class ItemLoggerCommand {
                 .then(
                     ClientCommandManager.literal("off").executes(
                         context -> {
-                            ItemLoggerClient.mode = ItemLoggerClient.Mode.OFF;
+                            ItemLoggerClient.mode = Mode.OFF;
                             context.getSource().getPlayer().sendMessage(
                                  getMessage("Disabled item-logging.")
                             );
@@ -60,7 +61,7 @@ public class ItemLoggerCommand {
                 .then(
                     ClientCommandManager.literal("log").executes(
                         context -> {
-                            ItemLoggerClient.mode = ItemLoggerClient.Mode.LOG;
+                            ItemLoggerClient.mode = Mode.LOG;
                             context.getSource().getPlayer().sendMessage(
                                 getMessage("Item-logging to \"latest.log\".")
                             );
@@ -68,18 +69,6 @@ public class ItemLoggerCommand {
                         }
                     )
                 )
-                /* "/itemlogger mode database" */ //FUTURE FEATURE
-                /*.then(
-                    ClientCommandManager.literal("database").executes(
-                        context -> {
-                            ItemLoggerClient.mode = ItemLoggerClient.Mode.DATABASE;
-                            context.getSource().getPlayer().sendMessage(
-                                getMessage("Item-logging to database.")
-                            );
-                            return 0;
-                        }
-                    )
-                )*/
             )
         );
     }
