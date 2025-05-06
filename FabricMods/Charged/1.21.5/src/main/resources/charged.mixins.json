@@ -8,6 +8,9 @@
     "HeadWashingMixin",
     "PlayerMixin"
   ],
+  "client": [
+    "HeadCauldronUsageMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
