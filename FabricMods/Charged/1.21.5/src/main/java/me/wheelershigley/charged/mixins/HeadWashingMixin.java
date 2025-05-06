@@ -1,5 +1,6 @@
 package me.wheelershigley.charged.mixins;
 
+import me.wheelershigley.charged.Charged;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.block.cauldron.CauldronBehavior;
 import net.minecraft.component.DataComponentTypes;
@@ -36,6 +37,10 @@ public interface HeadWashingMixin {
         map.put(
                 Items.PLAYER_HEAD,
                 (state, world, pos, player, hand, stack) -> {
+//                    if(Charged.PlayerHeadTextureWashing) {
+//                        return ActionResult.SUCCESS_SERVER;
+//                    }
+
                     if(state.get(LeveledCauldronBlock.LEVEL) <= 0) {
                         return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
                     } else {
@@ -56,7 +61,7 @@ public interface HeadWashingMixin {
                                 1.0F
                             );
 
-                            return ActionResult.SUCCESS;
+                            return ActionResult.SUCCESS_SERVER;
                         }
                     }
                     return ActionResult.PASS;

@@ -14,6 +14,7 @@ public class Charged implements ModInitializer {
     public static final Configurations configurations = ConfigurationsHelper.getConfiguations();
     public static boolean enablePlayerHeadDrops         =   (boolean)configurations.getConfiguration("enablePlayerHeadDrops"        ).getDefaultValue();
     public static boolean PlayerHeadsUseSkins           =   (boolean)configurations.getConfiguration("PlayerHeadsUseSkins"          ).getDefaultValue();
+//    public static boolean PlayerHeadTextureWashing      =   (boolean)configurations.getConfiguration("PlayerHeadTextureWashing"     ).getDefaultValue();
     public static long    MaximumDropsPerChargedCreeper =   (long)   configurations.getConfiguration("MaximumDropsPerChargedCreeper").getDefaultValue();
 
     @Override
@@ -26,6 +27,7 @@ public class Charged implements ModInitializer {
 
         enablePlayerHeadDrops         =   (boolean)configurations.getConfiguration("enablePlayerHeadDrops"        ).getValue();
         PlayerHeadsUseSkins           =   (boolean)configurations.getConfiguration("PlayerHeadsUseSkins"          ).getValue();
+//        PlayerHeadTextureWashing      =   (boolean)configurations.getConfiguration("PlayerHeadTextureWashing"     ).getValue();
         MaximumDropsPerChargedCreeper =   (long)   configurations.getConfiguration("MaximumDropsPerChargedCreeper").getValue();
     }
 }
