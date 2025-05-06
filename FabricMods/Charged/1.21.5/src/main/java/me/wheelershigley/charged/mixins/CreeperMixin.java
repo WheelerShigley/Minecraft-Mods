@@ -16,7 +16,7 @@ public class CreeperMixin {
      */
     @Overwrite
     public boolean shouldDropHead() {
-        int maximum_head_drops_count = (int)( (long)Charged.configurations.getConfiguration("MaximumDropsPerChargedCreeper").getValue() );
+        int maximum_head_drops_count = (int)(Charged.MaximumDropsPerChargedCreeper);
         if(maximum_head_drops_count < 0) {
             maximum_head_drops_count = Integer.MAX_VALUE;
         }

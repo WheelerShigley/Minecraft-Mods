@@ -1,6 +1,5 @@
 package me.wheelershigley.charged.mixins;
 
-import me.wheelershigley.charged.Charged;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.block.cauldron.CauldronBehavior;
 import net.minecraft.component.DataComponentTypes;
@@ -42,19 +41,19 @@ public interface HeadWashingMixin {
                     } else {
                         if( stack.contains(DataComponentTypes.PROFILE) && !world.isClient ) {
                             player.setStackInHand(
-                                    hand,
-                                    ItemUsage.exchangeStack( stack, player, new ItemStack(Items.PLAYER_HEAD) )
+                                hand,
+                                ItemUsage.exchangeStack( stack, player, new ItemStack(Items.PLAYER_HEAD) )
                             );
                             player.incrementStat(Stats.USE_CAULDRON);
                             player.incrementStat(  Stats.USED.getOrCreateStat( stack.getItem() )  );
                             LeveledCauldronBlock.decrementFluidLevel(state, world, pos);
                             world.playSound(
-                                    (Entity)null,
-                                    pos,
-                                    SoundEvents.BLOCK_WATER_AMBIENT,
-                                    SoundCategory.BLOCKS,
-                                    1.0F,
-                                    1.0F
+                                (Entity)null,
+                                pos,
+                                SoundEvents.BLOCK_WATER_AMBIENT,
+                                SoundCategory.BLOCKS,
+                                1.0F,
+                                1.0F
                             );
 
                             return ActionResult.SUCCESS;

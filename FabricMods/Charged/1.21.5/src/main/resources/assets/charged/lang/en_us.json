@@ -1,0 +1,6 @@
+{
+  "charged.text.name": "§aCharged§r",
+
+  "charged.command.text.reloaded": "§7Reloaded§r.",
+  "charged.command.text.insufficient_permission": "§cInsufficient Permission§r."
+}

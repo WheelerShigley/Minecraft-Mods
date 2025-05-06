@@ -35,7 +35,7 @@ public abstract class PlayerMixin extends PlayerEntity {
         at = @At("HEAD")
     )
     public void onDeath(DamageSource damageSource, CallbackInfo ci) {
-        if( !(boolean)Charged.configurations.getConfiguration("enablePlayerHeadDrops").getValue() ) {
+        if(!Charged.enablePlayerHeadDrops) {
             return;
         }
 
@@ -46,7 +46,7 @@ public abstract class PlayerMixin extends PlayerEntity {
         ) {
             ItemStack head = Items.PLAYER_HEAD.getDefaultStack();
 
-            if( (boolean)Charged.configurations.getConfiguration("PlayerHeadsUseSkins").getValue() ) {
+            if(Charged.PlayerHeadsUseSkins) {
                 head.set(
                     DataComponentTypes.PROFILE,
                     new ProfileComponent( this.getGameProfile() )

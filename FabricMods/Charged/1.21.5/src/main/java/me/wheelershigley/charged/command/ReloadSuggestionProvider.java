@@ -9,7 +9,7 @@ import net.minecraft.server.command.ServerCommandSource;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ChargedSuggestionProvider implements SuggestionProvider<ServerCommandSource> {
+public class ReloadSuggestionProvider implements SuggestionProvider<ServerCommandSource> {
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> commandContext, SuggestionsBuilder suggestionsBuilder) throws CommandSyntaxException {
         suggestionsBuilder.suggest("reload");
