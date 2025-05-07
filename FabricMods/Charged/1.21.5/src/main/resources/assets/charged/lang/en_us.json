@@ -4,8 +4,8 @@
   "charged.command.text.reloaded": "§7Reloaded§r.",
   "charged.command.text.insufficient_permission": "§cInsufficient Permission§r.",
 
-  "gamerule.PlayerHeadDrop": "Players killed by Charged-Creepers may drop a head.",
-  "gamerule.PlayerHeadDropTextures": "When player drop heads, they will use their players' texture.",
-  "gamerule.PlayerHeadTextureWashing": "Textured player heads may be untextured with a Cauldron of water.",
+  "gamerule.playerHeadDrop": "Players killed by Charged-Creepers may drop a head.",
+  "gamerule.playerHeadDropTextures": "When player drop heads, they will use their players' texture.",
+  "gamerule.playerHeadTextureWashing": "Textured player heads may be untextured with a Cauldron of water.",
   "gamerule.maxHeadDropCount": "Maximum heads drop from a single Charged-Creepers' kills; when negative, limits are disabled."
 }
