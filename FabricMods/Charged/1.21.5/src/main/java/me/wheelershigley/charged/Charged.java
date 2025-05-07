@@ -1,33 +1,17 @@
 package me.wheelershigley.charged;
 
-import me.wheelershigley.charged.command.CommandRegistrar;
-import me.wheelershigley.charged.config.Configurations;
-import me.wheelershigley.charged.helper.ConfigurationsHelper;
 import net.fabricmc.api.ModInitializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+
+import static me.wheelershigley.charged.gamerules.GameRuleRegistrar.registerGameRules;
 
 public class Charged implements ModInitializer {
-    public static final String MOD_ID = "Charged";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
-    public static final Configurations configurations = ConfigurationsHelper.getConfiguations();
-    public static boolean enablePlayerHeadDrops         =   (boolean)configurations.getConfiguration("enablePlayerHeadDrops"        ).getDefaultValue();
-    public static boolean PlayerHeadsUseSkins           =   (boolean)configurations.getConfiguration("PlayerHeadsUseSkins"          ).getDefaultValue();
-//    public static boolean PlayerHeadTextureWashing      =   (boolean)configurations.getConfiguration("PlayerHeadTextureWashing"     ).getDefaultValue();
-    public static long    MaximumDropsPerChargedCreeper =   (long)   configurations.getConfiguration("MaximumDropsPerChargedCreeper").getDefaultValue();
+    public static final String MOD_ID = "charged";
+//    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     @Override
     public void onInitialize() {
-        CommandRegistrar.registerCommands();
-    }
-
-    public static void reload() {
-        configurations.reload();
-
-        enablePlayerHeadDrops         =   (boolean)configurations.getConfiguration("enablePlayerHeadDrops"        ).getValue();
-        PlayerHeadsUseSkins           =   (boolean)configurations.getConfiguration("PlayerHeadsUseSkins"          ).getValue();
-//        PlayerHeadTextureWashing      =   (boolean)configurations.getConfiguration("PlayerHeadTextureWashing"     ).getValue();
-        MaximumDropsPerChargedCreeper =   (long)   configurations.getConfiguration("MaximumDropsPerChargedCreeper").getValue();
+        registerGameRules();
     }
 }

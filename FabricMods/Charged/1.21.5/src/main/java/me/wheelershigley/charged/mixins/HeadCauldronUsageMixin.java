@@ -33,7 +33,11 @@ public class HeadCauldronUsageMixin extends BlockItem {
         ItemPlacementContext context,
         CallbackInfoReturnable<BlockState> cir
     ) {
-        if( isTargetBlockWaterCauldron(context) ) {
+        if(
+//            context.getWorld().getServer() != null
+//            && context.getWorld().getServer().getGameRules().get(GameRuleRegistrar.ENABLE_PLAYER_HEAD_TEXTURE_WASHING).get()
+            isTargetBlockWaterCauldron(context)
+        ) {
             cir.setReturnValue(null);
         }
     }
