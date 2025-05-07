@@ -1,7 +1,9 @@
 package me.wheelershigley.charged.gamerules;
 
+import me.wheelershigley.charged.Charged;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.world.GameRules;
 
 public class GameRuleRegistrar {
@@ -29,6 +31,13 @@ public class GameRuleRegistrar {
             "maxHeadDropCount",
             GameRules.Category.MOBS,
             GameRuleFactory.createIntRule(-1)
+        );
+    }
+
+    public static void registerGameRuleNetworking() {
+        PayloadTypeRegistry.playS2C().register(
+            WashingGameRulePayload.identifier,
+            WashingGameRulePayload.CODEC
         );
     }
 }

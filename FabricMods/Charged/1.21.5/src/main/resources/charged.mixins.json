@@ -6,6 +6,7 @@
   "mixins": [
     "CreeperMixin",
     "HeadWashingMixin",
+    "PlayerJoinMixin",
     "PlayerMixin"
   ],
   "client": [

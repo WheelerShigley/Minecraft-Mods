@@ -1,5 +1,6 @@
 package me.wheelershigley.charged.mixins;
 
+import me.wheelershigley.charged.client.ChargedClient;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -33,11 +34,7 @@ public class HeadCauldronUsageMixin extends BlockItem {
         ItemPlacementContext context,
         CallbackInfoReturnable<BlockState> cir
     ) {
-        if(
-//            context.getWorld().getServer() != null
-//            && context.getWorld().getServer().getGameRules().get(GameRuleRegistrar.ENABLE_PLAYER_HEAD_TEXTURE_WASHING).get()
-            isTargetBlockWaterCauldron(context)
-        ) {
+        if( ChargedClient.isWashingEnabled && isTargetBlockWaterCauldron(context) ) {
             cir.setReturnValue(null);
         }
     }
