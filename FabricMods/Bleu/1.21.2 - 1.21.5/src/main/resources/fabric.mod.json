@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "id": "bleu",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "Bleu",
-  "description": "Blue Axolotl Variant would be only from chance; very rare!",
+  "description": "Blue Axolotl Variant would be only from chance; configurable.",
   "authors": ["Wheeler-Shigley"],
   "contact": {},
   "license": "All-Rights-Reserved",
@@ -19,7 +19,7 @@
   ],
   "accessWidener" : "bleu.accesswidener",
   "depends": {
-    "fabricloader": ">=0.16.10",
+    "fabricloader": ">=0.16.14",
     "fabric": "*",
     "minecraft": ">=1.21.2 <=1.21.5"
   }

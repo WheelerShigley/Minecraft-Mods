@@ -1,5 +1,6 @@
-package me.wheelershigley.bleu.mixin;
+package me.wheelershigley.bleu.mixins;
 
+import me.wheelershigley.bleu.Bleu;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -9,6 +10,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.*;
 
 @Mixin(AxolotlEntity.class)
@@ -17,17 +19,15 @@ public abstract class AxolotlMixin extends AnimalEntity  {
         super(entityType, world);
     }
 
-    @Shadow
-    private static boolean shouldBabyBeDifferent(Random random) {
-        return false; //random.nextInt(1200) == 0;
+    @Unique
+    private boolean shouldBabyBeDifferent(Random random) {
+        return random.nextInt(Bleu.BLUE_VARIANT_RARITY) == 0;
     }
 
     @Shadow
     public AxolotlEntity.Variant getVariant() {
         return null;
     }
-
-//    @Shadow @Final private static TrackedData<Integer> VARIANT;
 
     /**
      * @author Wheeler-Shigley
