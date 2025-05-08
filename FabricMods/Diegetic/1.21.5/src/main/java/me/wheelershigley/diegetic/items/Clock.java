@@ -8,7 +8,7 @@ import java.util.Calendar;
 
 public class Clock {
     public static void use(ServerPlayerEntity player) {
-        if( !(boolean)Diegetic.configurations.getConfiguration("clock").getValue() ) {
+        if(!Diegetic.diegeticClockDisplaysTime) {
             return;
         }
 
@@ -20,7 +20,7 @@ public class Clock {
             time = player.getWorld().random.nextBetween(0, 24000);
         }
 
-        if( (boolean)Diegetic.configurations.getConfiguration("clock_real").getValue() ) {
+        if(Diegetic.diegeticClockUsesServerTime) {
             MessageHelper.sendMessage(
                 player,
                 "diegetic.text.clock.natural_time",

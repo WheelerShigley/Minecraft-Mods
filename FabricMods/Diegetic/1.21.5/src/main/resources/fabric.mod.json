@@ -1,11 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "diegetic",
-  "version": "0.6.5",
+  "version": "0.8.0",
   "name": "Diegetic",
   "description": "Adds some additional functionality for items in-game to learn about the world.",
   "authors": ["Wheeler-Shigley"],
-  "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/diegetic/icon.png",
   "environment": "server",
@@ -18,7 +17,7 @@
     "diegetic.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.10",
+    "fabricloader": ">=0.16.14",
     "fabric": "*",
     "minecraft": "1.21.5"
   }

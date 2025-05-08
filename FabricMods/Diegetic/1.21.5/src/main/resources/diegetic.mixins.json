@@ -4,6 +4,7 @@
   "package": "me.wheelershigley.diegetic.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "GameRuleInitializationOnStartMixin",
     "ItemsMixin"
   ],
   "injectors": {

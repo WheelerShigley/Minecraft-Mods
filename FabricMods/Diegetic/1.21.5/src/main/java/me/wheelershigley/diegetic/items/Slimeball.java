@@ -9,7 +9,7 @@ import net.minecraft.world.chunk.Chunk;
 
 public class Slimeball {
     public static void use(ServerPlayerEntity player) {
-        if( !(boolean) Diegetic.configurations.getConfiguration("slime").getValue() ) {
+        if(!Diegetic.diegeticSlimeChunkChecking) {
             return;
         }
 

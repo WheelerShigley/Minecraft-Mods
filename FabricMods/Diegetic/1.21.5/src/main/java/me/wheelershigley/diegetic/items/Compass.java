@@ -9,7 +9,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class Compass {
     public static void use(ServerPlayerEntity player, ItemStack compass) {
-        if( !(boolean) Diegetic.configurations.getConfiguration("compass").getValue() ) {
+        if(!Diegetic.diegeticCompassCoordinates) {
             return;
         }
 
@@ -27,7 +27,9 @@ public class Compass {
                 position = compass.get(DataComponentTypes.LODESTONE_TRACKER).target().get().pos().toCenterPos();
                 position = position.subtract( player.getPos() );
             }
-            relative = true;
+            if(Diegetic.diegeticLodestoneCompassRelativeCoordinates) {
+                relative = true;
+            }
         } else {
             position = player.getPos();
         }

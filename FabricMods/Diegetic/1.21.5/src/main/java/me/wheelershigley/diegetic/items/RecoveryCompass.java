@@ -7,7 +7,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class RecoveryCompass {
     public static void use(ServerPlayerEntity player) {
-        if( !(boolean) Diegetic.configurations.getConfiguration("recovery_compass").getValue() ) {
+        if(!Diegetic.diegeticRecoveryCompassRelativeCoordinates) {
             return;
         }
 
