@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "bleu",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "name": "Bleu",
   "description": "Blue Axolotl Variant would be only from chance; configurable.",
   "authors": ["Wheeler-Shigley"],
