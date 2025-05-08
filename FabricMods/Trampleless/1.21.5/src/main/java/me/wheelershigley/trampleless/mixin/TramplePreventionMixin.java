@@ -1,5 +1,6 @@
 package me.wheelershigley.trampleless.mixin;
 
+import me.wheelershigley.trampleless.Trampleless;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FarmlandBlock;
@@ -105,8 +106,11 @@ public abstract class TramplePreventionMixin extends Block {
             boolean isPlayer = entity instanceof PlayerEntity;
             boolean isNotPlayer = (entity instanceof LivingEntity) && !isPlayer;
             if(
-                randomlyBreaks
-                && !hasFeatherFallingBoots
+                Trampleless.farmlandTrampling
+                && randomlyBreaks
+                && (
+                    !hasFeatherFallingBoots || Trampleless.featherFallingTrampling
+                )
                 && (
                     isPlayer
                     || (isNotPlayer && doMobGriefing && sufficientlyVoluminous)

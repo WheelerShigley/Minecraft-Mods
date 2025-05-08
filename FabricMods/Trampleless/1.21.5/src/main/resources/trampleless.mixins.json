@@ -4,6 +4,7 @@
   "package": "me.wheelershigley.trampleless.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "rememberGameRulesOnStartUpMixin",
     "TramplePreventionMixin"
   ],
   "injectors": {
