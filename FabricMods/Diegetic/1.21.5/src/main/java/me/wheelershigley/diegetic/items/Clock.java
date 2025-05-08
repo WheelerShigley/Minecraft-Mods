@@ -12,29 +12,30 @@ public class Clock {
             return;
         }
 
-        boolean worldIsNatural = player.getWorld().getDimension().natural();
+        boolean isNatural = player.getWorld().getDimension().natural();
         int time;
-        if(worldIsNatural) {
+        if(isNatural) {
             time = (int)player.getWorld().getTimeOfDay();
         } else {
             time = player.getWorld().random.nextBetween(0, 24000);
         }
 
-        StringBuilder timeBuilder = new StringBuilder();
         if( (boolean)Diegetic.configurations.getConfiguration("clock_real").getValue() ) {
-            timeBuilder.append("§e");
-            timeBuilder.append( Calendar.getInstance().getTime().toString() );
+            MessageHelper.sendMessage(
+                player,
+                "diegetic.text.clock.natural_time",
+                Calendar.getInstance().getTime().toString()
+            );
         } else {
-            timeBuilder.append( worldIsNatural ? "§e" : "§0" );
-            timeBuilder.append(
+            MessageHelper.sendMessage(
+                player,
+                "diegetic.text.clock." + (isNatural ? "natural_time" : "unnatural_time"),
                 convertToTime(
                     time,
                     player.getWorld().getTickManager().getTickRate()
                 )
             );
         }
-
-        MessageHelper.sendMessage(player, timeBuilder.toString() );
     }
 
     private static String convertToTime(int sum_time, float tps) {
@@ -65,7 +66,7 @@ public class Clock {
     }
 
     private static String forceLeadingZero(String number) {
-        if( number.isBlank() || number.isEmpty() ) {
+        if( number.isBlank() ) {
             return "00";
         }
         if(number.length() < 2) {

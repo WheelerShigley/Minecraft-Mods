@@ -13,11 +13,10 @@ public class Slimeball {
             return;
         }
 
-        String chunkValidity;
         if(  !player.getWorld().getDimension().natural() ) {
-            chunkValidity = "§l§0☒§r";
+            MessageHelper.sendMessage(player, "diegetic.text.slime.unnatural");
         } else {
-            Chunk chunk = player.getWorld().getChunk(player.getBlockPos());
+            Chunk chunk = player.getWorld().getChunk( player.getBlockPos() );
             boolean isSlimeChunk = ChunkRandom.getSlimeRandom(
                 chunk.getPos().x,
                 chunk.getPos().z,
@@ -25,9 +24,10 @@ public class Slimeball {
                 0x3ad8025fL
             ).nextInt(10) == 0;
 
-            chunkValidity = isSlimeChunk ? "§a☑§r" : "§c☒§r";
+            MessageHelper.sendMessage(
+                player,
+                "diegetic.text.slime." + (isSlimeChunk ? "valid" : "invalid")
+            );
         }
-
-        MessageHelper.sendMessage(player, chunkValidity);
     }
 }

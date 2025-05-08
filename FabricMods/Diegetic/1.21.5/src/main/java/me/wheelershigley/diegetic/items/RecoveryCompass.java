@@ -11,25 +11,24 @@ public class RecoveryCompass {
             return;
         }
 
-        StringBuilder locationBuilder = new StringBuilder();
-        locationBuilder.append("§7");
-
         if(
             !player.getLastDeathPos().isPresent()
             || !player.getWorld().getDimension().effects().equals(
                 player.getLastDeathPos().get().dimension().getValue()
             )
         ) {
-            locationBuilder.append("Last death location is in another dimension or does not exist.");
+            MessageHelper.sendMessage(player, "diegetic.text.recovery_compass.unknown_death_location");
         } else {
             Vec3d relativePosition = player.getLastDeathPos().get().pos().toCenterPos();
             relativePosition = relativePosition.subtract( player.getPos() );
 
-            locationBuilder.append('~').append( (int)relativePosition.x ).append(' ');
-            locationBuilder.append('~').append( (int)relativePosition.y-1 ).append(' ');
-            locationBuilder.append('~').append( (int)relativePosition.z );
+            MessageHelper.sendMessage(
+                player,
+                "diegetic.text.recovery_compass.relative",
+                (int)relativePosition.x,
+                (int)relativePosition.y-1,
+                (int)relativePosition.z
+            );
         }
-
-        MessageHelper.sendMessage( player, locationBuilder.toString() );
     }
 }

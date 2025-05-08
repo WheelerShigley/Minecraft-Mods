@@ -32,21 +32,16 @@ public class Compass {
             position = player.getPos();
         }
 
-        StringBuilder coordinateBuilder = new StringBuilder();
-        coordinateBuilder.append("§f");
         if(position == null) {
-            coordinateBuilder.append("Lodestone is in another dimension or was destroyed.");
+            MessageHelper.sendMessage(player, "diegetic.text.compass.missing_lodestone");
         } else {
-            if(relative) { coordinateBuilder.append('~'); }
-            coordinateBuilder.append( (int)position.x ).append(' ');
-
-            if(relative) { coordinateBuilder.append('~'); }
-            coordinateBuilder.append( (int)position.y+1 ).append(' ');
-
-            if(relative) { coordinateBuilder.append('~'); }
-            coordinateBuilder.append( (int)position.z );
+            MessageHelper.sendMessage(
+                player,
+                "diegetic.text.compass." + (relative ? "relative" : "absolute"),
+                (int)position.x,
+                (int)position.y,
+                (int)position.z
+            );
         }
-
-        MessageHelper.sendMessage( player, coordinateBuilder.toString() );
     }
 }
