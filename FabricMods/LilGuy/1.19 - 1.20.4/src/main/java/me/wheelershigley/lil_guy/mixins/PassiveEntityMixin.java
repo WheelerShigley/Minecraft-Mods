@@ -27,34 +27,17 @@ public class PassiveEntityMixin extends PathAwareEntity {
     public void tickMovement() {
         super.tickMovement();
 
-        if(this.getWorld().isClient) {
-            if(0 < this.happyTicksRemaining) {
-                if(this.happyTicksRemaining % 4 == 0) {
-                    this.getWorld().addParticle(
-                        ParticleTypes.HAPPY_VILLAGER,
-                        this.getParticleX(1.0),
-                        this.getRandomBodyY() + 0.5,
-                        this.getParticleZ(1.0),
-                        0.0,
-                        0.0,
-                        0.0
-                    );
-                }
-                --this.happyTicksRemaining;
+        if( this.isAlive() ) {
+            int breeding_age = this.getBreedingAge();
+            //Babies
+            if(breeding_age < 0 && !this.hasCustomName() ) {
+                ++breeding_age;
+                this.setBreedingAge(breeding_age);
             }
-        } else {
-            if( this.isAlive() ) {
-                int breeding_age = this.getBreedingAge();
-                //Babies
-                if(breeding_age < 0 && !this.hasCustomName() ) {
-                    ++breeding_age;
-                    this.setBreedingAge(breeding_age);
-                }
-                //Adults
-                if(0 < breeding_age) {
-                    --breeding_age;
-                    this.setBreedingAge(breeding_age);
-                }
+            //Adults
+            if(0 < breeding_age) {
+                --breeding_age;
+                this.setBreedingAge(breeding_age);
             }
         }
     }
