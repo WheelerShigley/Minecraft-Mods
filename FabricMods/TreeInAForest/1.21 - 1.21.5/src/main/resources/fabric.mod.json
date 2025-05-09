@@ -1,11 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "tree_in_a_forest",
-  "version": "0.1.1-b",
-  "name": "TreeInAForest",
+  "version": "0.2.0",
+  "name": "Tree In A Forest",
   "description": "Time only progresses if players are online.",
   "authors": ["Wheeler-Shigley"],
-  "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/tree_in_a_forest/icon.png",
   "environment": "server",
@@ -18,7 +17,7 @@
     "tree_in_a_forest.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.10",
+    "fabricloader": ">=0.16.14",
     "fabric": "*",
     "minecraft": ">=1.21 <=1.21.5"
   }

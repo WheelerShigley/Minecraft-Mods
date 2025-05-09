@@ -4,6 +4,7 @@
   "package": "me.wheelershigley.tree_in_a_forest.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "PauseServerOnStartMixin",
     "PlayerConnectionMixin"
   ],
   "injectors": {

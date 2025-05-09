@@ -13,15 +13,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerManager.class)
 public class PlayerConnectionMixin {
 
-    @Inject( method = "onPlayerConnect", at = @At("HEAD") )
+    @Inject(
+        method = "onPlayerConnect",
+        at = @At("TAIL")
+    )
     public void onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData, CallbackInfo ci) {
-        TreeInAForest.players.add( player.getUuid() );
         TreeInAForest.updateServerTicking();
     }
 
-    @Inject( method = "remove", at = @At("HEAD") )
+    @Inject(
+        method = "remove",
+        at = @At("TAIL")
+    )
     public void remove(ServerPlayerEntity player, CallbackInfo ci) {
-        TreeInAForest.players.remove( player.getUuid() );
         TreeInAForest.updateServerTicking();
     }
 }
