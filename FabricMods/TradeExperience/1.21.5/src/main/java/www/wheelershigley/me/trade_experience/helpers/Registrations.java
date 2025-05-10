@@ -11,6 +11,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import www.wheelershigley.me.trade_experience.Trade;
 import www.wheelershigley.me.trade_experience.TradeExperience;
 import www.wheelershigley.me.trade_experience.commands.*;
@@ -28,11 +29,11 @@ public class Registrations {
         UseEntityCallback.EVENT.register(
             (player, world, hand, target, hitResult) -> {
                 if( !(target instanceof ServerPlayerEntity) ) {
-                    return null;
+                    return ActionResult.PASS;
                 }
 
                 if( target.isSneaking() ) {
-                    return null;
+                    return ActionResult.PASS;
                 }
 
                 UUID traderID = player.getUuid();
@@ -65,7 +66,7 @@ public class Registrations {
                     );
                 }
 
-                return null;
+                return ActionResult.SUCCESS_SERVER;
             }
         );
     }
