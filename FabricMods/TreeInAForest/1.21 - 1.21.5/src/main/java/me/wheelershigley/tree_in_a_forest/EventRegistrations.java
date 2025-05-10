@@ -2,7 +2,7 @@ package me.wheelershigley.tree_in_a_forest;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 
-public class Registrations {
+public class EventRegistrations {
     public static void registerPostServerStartUp() {
         ServerWorldEvents.LOAD.register(
             (server, world) -> {
