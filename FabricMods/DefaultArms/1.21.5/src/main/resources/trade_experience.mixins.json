@@ -1,11 +1,10 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "me.wheelershigley.default_arms.mixins",
+  "package": "www.wheelershigley.me.trade_experience.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ArmorStandArmsMixin",
-    "placeArmorStandMixin"
+    "SendMessageCheckMixin"
   ],
   "injectors": {
     "defaultRequire": 1
