@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "default_arms:item/armor_stand_with_arms"
+  }
+}
