@@ -1,1 +1,0 @@
-Icon is reused from [DefaultArms (mod)](https://github.com/WheelerShigley/Minecraft-Mods/tree/main/FabricMods/DefaultArms/images/icon).
