@@ -1,23 +1,26 @@
 package www.wheelershigley.me.trade_experience.helpers;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.minecraft.command.argument.GameProfileArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import org.apache.logging.log4j.core.jmx.Server;
 import www.wheelershigley.me.trade_experience.Trade;
 import www.wheelershigley.me.trade_experience.TradeExperience;
 import www.wheelershigley.me.trade_experience.commands.*;
 
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static www.wheelershigley.me.trade_experience.TradeExperience.*;
@@ -75,6 +78,7 @@ public class Registrations {
     public static void registerCheckTimeoutsEachTick() {
         ServerTickEvents.END_SERVER_TICK.register(
             (server) -> {
+                ArrayList<UUID> tradesToBeRemoved = new ArrayList<>();
                 for( Map.Entry<UUID, Trade> activeTrade: activeTrades.entrySet() ) {
                     delta_time = activeTrade.getValue().getWorld().getTime() - activeTrade.getValue().getTime();
                     if(TradeExperience.cooldown <= delta_time) {
@@ -83,8 +87,11 @@ public class Registrations {
                             server.getPlayerManager().getPlayer( activeTrade.getValue().getReciever() )
                         );
 
-                        activeTrades.remove( activeTrade.getKey() );
+                        tradesToBeRemoved.add( activeTrade.getKey() );
                     }
+                }
+                for(UUID uuidToRemove : tradesToBeRemoved) {
+                    activeTrades.remove(uuidToRemove);
                 }
             }
         );
@@ -106,7 +113,7 @@ public class Registrations {
 
     public static void registerCommands() {
         //balance command
-        Command<ServerCommandSource> balanceCommand = (context) -> {
+        Command<ServerCommandSource> personalBalanceCommand = (context) -> {
             ServerPlayerEntity player = ( (ServerCommandSource)context.getSource() ).getPlayer();
             if(player == null) {
                 return 1;
@@ -114,7 +121,7 @@ public class Registrations {
 
             sendMessage(
                 player,
-                "trade_experience.text.balance",
+                "trade_experience.command.text.balance",
                 false,
                 Integer.toString(
                     levelToPoints(player.experienceLevel) + getExperiencePoints(player)
@@ -125,13 +132,85 @@ public class Registrations {
             return 0;
         };
 
+        Command<ServerCommandSource> externalBalanceCommand = (context) -> {
+            ServerPlayerEntity sourcePlayer = context.getSource().getPlayer();
+            if(sourcePlayer == null) {
+                return 1;
+            }
+
+            Collection<GameProfile> requestedPlayers = GameProfileArgumentType.getProfileArgument(context, "target");
+
+            ServerPlayerEntity targetPlayer;
+            for(Iterator<GameProfile> profileIterator = requestedPlayers.iterator(); profileIterator.hasNext(); ) {
+                GameProfile currentRequestedPlayer = profileIterator.next();
+                targetPlayer = sourcePlayer.server.getPlayerManager().getPlayer( currentRequestedPlayer.getId() );
+                if(targetPlayer == null) {
+                    MessageHelper.sendMessage(
+                        sourcePlayer,
+                        "trade_experience.command.text.unknown_player",
+                        false,
+                        requestedPlayers
+                    );
+                    continue;
+                }
+
+                if(sourcePlayer.getGameProfile().getId() == targetPlayer.getGameProfile().getId() ) {
+                    sendMessage(
+                        sourcePlayer,
+                        "trade_experience.command.text.balance",
+                        false,
+                        Integer.toString(
+                            levelToPoints(sourcePlayer.experienceLevel) + getExperiencePoints(sourcePlayer)
+                        ),
+                        TradeExperience.experienceName
+                    );
+                } else {
+                    sendMessage(
+                        sourcePlayer,
+                        "trade_experience.command.text.external_balance",
+                        false,
+                        targetPlayer.getName().getString(),
+                        Integer.toString(
+                            levelToPoints(targetPlayer.experienceLevel) + getExperiencePoints(targetPlayer)
+                        ),
+                        TradeExperience.experienceName
+                    );
+                }
+
+            }
+
+            return 0;
+        };
+
         CommandRegistrationCallback.EVENT.register(
             (dispatcher, registryAccess, environment) -> {
                 dispatcher.register(
-                    CommandManager.literal("balance").executes(balanceCommand)
+                    CommandManager
+                        .literal("balance")
+                        .executes(personalBalanceCommand)
+                        .then(
+                            CommandManager.argument(
+                                "target",
+                                GameProfileArgumentType.gameProfile()
+                            )
+                            .requires(isServerOrOperator)
+                            .suggests(new PlayersSuggestionProvider() )
+                            .executes(externalBalanceCommand)
+                        )
                 );
                 dispatcher.register(
-                    CommandManager.literal("bal").executes(balanceCommand)
+                    CommandManager
+                    .literal("bal")
+                    .executes(personalBalanceCommand)
+                    .then(
+                        CommandManager.argument(
+                            "target",
+                            GameProfileArgumentType.gameProfile()
+                        )
+                        .requires(isServerOrOperator)
+                        .suggests(new PlayersSuggestionProvider() )
+                        .executes(externalBalanceCommand)
+                    )
                 );
             }
         );
