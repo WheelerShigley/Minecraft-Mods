@@ -111,6 +111,18 @@ public class Registrations {
         );
     };
 
+    private static final Predicate<ServerCommandSource> hasBalancePermission = (source) -> {
+        if( !source.isExecutedByPlayer() ) {
+            return true;
+        }
+        ServerPlayerEntity sourcePlayer = source.getPlayer();
+        if(sourcePlayer == null) {
+            return false;
+        }
+
+        return external_balance_permission_requirement <= sourcePlayer.getPermissionLevel();
+    };
+
     public static void registerCommands() {
         //balance command
         Command<ServerCommandSource> personalBalanceCommand = (context) -> {
@@ -193,7 +205,7 @@ public class Registrations {
                                 "target",
                                 GameProfileArgumentType.gameProfile()
                             )
-                            .requires(isServerOrOperator)
+                            .requires(hasBalancePermission)
                             .suggests(new PlayersSuggestionProvider() )
                             .executes(externalBalanceCommand)
                         )
@@ -207,7 +219,7 @@ public class Registrations {
                             "target",
                             GameProfileArgumentType.gameProfile()
                         )
-                        .requires(isServerOrOperator)
+                        .requires(hasBalancePermission)
                         .suggests(new PlayersSuggestionProvider() )
                         .executes(externalBalanceCommand)
                     )

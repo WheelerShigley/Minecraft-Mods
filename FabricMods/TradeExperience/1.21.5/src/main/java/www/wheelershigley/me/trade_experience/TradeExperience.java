@@ -18,6 +18,7 @@ public class TradeExperience implements ModInitializer {
     public static final Configurations configurations = ConfigurationHelper.createTradeExperienceConfigurations();
     public static String experienceName = (String)configurations.getConfiguration("experience_name").getDefaultConfiguration();
     public static long cooldown = (long)configurations.getConfiguration("trade_timeout_time").getDefaultValue();
+    public static long external_balance_permission_requirement = (long)configurations.getConfiguration("external_balance_permission_requirement").getDefaultValue();
 
     public static final HashMap<UUID, Trade> activeTrades = new HashMap<>();
 
@@ -35,5 +36,6 @@ public class TradeExperience implements ModInitializer {
 
         TradeExperience.experienceName = (String)configurations.getConfiguration("experience_name").getValue();
         cooldown = 20L * (long)configurations.getConfiguration("trade_timeout_time").getValue();
+        external_balance_permission_requirement = (long)configurations.getConfiguration("external_balance_permission_requirement").getValue();
     }
 }

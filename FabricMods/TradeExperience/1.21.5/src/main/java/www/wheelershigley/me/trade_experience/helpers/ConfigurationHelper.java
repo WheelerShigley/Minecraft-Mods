@@ -28,6 +28,16 @@ public class ConfigurationHelper {
                 "Monetary-like experience name."
             )
         );
+        configurations.addConfiguration(
+            new Configuration<>(
+                "external_balance_permission_requirement",
+                4L,
+                new String[]{
+                    "Permission level to check other's balances",
+                    "Default permission-levels are 0 for no-requirement and 4 for operator-requirement"
+                }
+            )
+        );
 
         return configurations;
     }

@@ -1,4 +1,4 @@
-# [Trade Experience](https://modrinth.com/mod/trade-experience/version/1.0.0)
+# [Trade Experience](https://modrinth.com/mod/trade-experience/version/1.0.4_1.21.5)
 ![Trade](https://cdn.modrinth.com/data/3nZC9EUc/images/e155faf899935d332a8c3110b10d1192e64a2784.png)
 
 ## Paying
@@ -22,6 +22,8 @@ If you lack sufficient experience to complete an attempted trade/gift, you will 
 
 The name of the "currency" (experience) is configuration (default of "experience").
 
+If one has permissions, they may check other player's balances with "/bal <Player Name>" or "/balance <Player Name"; by default, this is set for permission-level four (default for operators).
+
 ---
 
 ## Congurations
@@ -32,4 +34,8 @@ trade_timeout_time: 30
 
 # Monetary-like experience name.
 experience_name: experience
+
+# Permission level to check other's balances
+# Default permissions are 0 for no-requirement and 4 for operation-requirement
+external_balance_permission_requirement: 4
 ```
