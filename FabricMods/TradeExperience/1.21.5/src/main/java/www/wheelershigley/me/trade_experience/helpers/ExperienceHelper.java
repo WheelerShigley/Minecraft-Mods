@@ -2,6 +2,7 @@ package www.wheelershigley.me.trade_experience.helpers;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import www.wheelershigley.me.trade_experience.TradeExperience;
 
 public class ExperienceHelper {
     public static int pointsToNextLevel(int level) {
@@ -49,6 +50,10 @@ public class ExperienceHelper {
     }
 
     public static boolean takeExperience(ServerPlayerEntity player, int amount) {
+        if( player.isCreative() ) {
+            return true;
+        }
+
         int points = getExperiencePoints(player);
         int newPoints = levelToPoints(player.experienceLevel) + points - amount;
         int newLevel = pointsToLevel(newPoints);
@@ -69,6 +74,10 @@ public class ExperienceHelper {
     }
 
     public static void giveExperience(ServerPlayerEntity player, int amount) {
+        if( player.isCreative() ) {
+            return;
+        }
+
         int initial_points = getExperiencePoints(player);
         int points = levelToPoints(player.experienceLevel) + initial_points;
         points += amount;
@@ -83,7 +92,11 @@ public class ExperienceHelper {
         player.addExperience(       pointDifference );
     }
 
+    private static final int MAX_BALANCE = ~(0b11 << 30);
     public static int getExperiencePoints(PlayerEntity player) {
+        if( player.isCreative() ) {
+            return MAX_BALANCE;
+        }
         return (int)(  player.experienceProgress * ( (float)player.getNextLevelExperience() )  );
     }
 }
