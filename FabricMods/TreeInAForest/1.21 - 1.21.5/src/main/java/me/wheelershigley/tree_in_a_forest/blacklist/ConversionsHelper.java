@@ -1,46 +1,48 @@
 package me.wheelershigley.tree_in_a_forest.blacklist;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.yggdrasil.ProfileResult;
 import me.wheelershigley.tree_in_a_forest.TreeInAForest;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.UserCache;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import java.net.URI;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-import static me.wheelershigley.tree_in_a_forest.TreeInAForest.server;
+import static me.wheelershigley.tree_in_a_forest.TreeInAForest.*;
 
 public class ConversionsHelper {
     public static GameProfile getProfileFromPlayerName(@Nullable String name) {
-        TreeInAForest.LOGGER.info("getProfileFromPlayerName("+name+")");
         if(
             name == null
             || !name.matches("^[a-zA-Z0-9_]{2,16}$")
         ) {
-            TreeInAForest.LOGGER.info("A1");
             return null;
         }
 
         UserCache userCache = server.getUserCache();
         if(userCache == null) {
-            TreeInAForest.LOGGER.info("B1");
             return null;
         }
 
         Optional<GameProfile> potentialGameProfile = userCache.findByName(name);
-        if( !potentialGameProfile.isPresent() ) {
-            TreeInAForest.LOGGER.info("C1");
-            return null;
-        }
+        return potentialGameProfile.orElse(null);
 
-        TreeInAForest.LOGGER.info("a => "+ potentialGameProfile.get().getName() );
-        return potentialGameProfile.get();
     }
 
-    private static StringBuilder uuidBuilder = new StringBuilder();
+    private static final StringBuilder uuidBuilder = new StringBuilder();
     public static UUID getUuidFromTrimmedUuidString(@Nullable String pseudoUUID) {
-        TreeInAForest.LOGGER.info("getUuidFromTrimmedUuidString("+pseudoUUID+")");
         if(
             pseudoUUID == null
             || !pseudoUUID.matches("^[0-9a-f]{32}$") ) {
@@ -49,48 +51,50 @@ public class ConversionsHelper {
 
         uuidBuilder.setLength(0);
         uuidBuilder
-            .append(pseudoUUID, 0, 7)
+            .append(pseudoUUID, 0, 8)
             .append('-')
-            .append(pseudoUUID, 8, 11)
+            .append(pseudoUUID, 8, 12)
             .append('-')
-            .append(pseudoUUID, 12, 15)
+            .append(pseudoUUID, 12, 16)
             .append('-')
-            .append(pseudoUUID, 16, 19)
+            .append(pseudoUUID, 16, 20)
             .append('-')
             .append(pseudoUUID, 20, 32)
         ;
 
-        UUID uuid = UUID.fromString( uuidBuilder.toString() );
-
-        TreeInAForest.LOGGER.info("b => "+ uuid.toString());
         return UUID.fromString( uuidBuilder.toString() );
     }
 
-    public static GameProfile getGameProfileFromUUID(@Nullable UUID uuid) {
-        TreeInAForest.LOGGER.info("getGameProfileFromUUID("+uuid.toString()+")");
-        if(uuid == null) {
-            TreeInAForest.LOGGER.info("A3");
-            return null;
+    private static final String LOOKUP_PROFILE_BASE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
+    public static GameProfile getGameProfileFromUUID(@NotNull UUID uuid, boolean isOnlineMode) {
+        if( gameProfileCache.containsKey(uuid) ) {
+            return gameProfileCache.get(uuid);
         }
 
-        ProfileResult temp = server.getSessionService().fetchProfile(uuid, true);
-        TreeInAForest.LOGGER.info(
-            (temp == null ? "null" : temp.profile().getName() )
-        );
+        if(isOnlineMode) {
+            try {
+                URL url = URI.create(
+                    LOOKUP_PROFILE_BASE_URL + uuid.toString()
+                ).toURL();
+                BufferedReader br = new BufferedReader(
+                    new InputStreamReader(
+                        url.openStream(),
+                        StandardCharsets.UTF_8
+                    )
+                );
+                String streamContents = br.lines().collect( Collectors.joining("\r\n") );
+                JsonObject jsonContents = JsonParser.parseString(streamContents).getAsJsonObject();
+                String name = jsonContents.get("name").getAsString();
+                LOGGER.info(name);
+                if(name == null || name.isBlank() ) {
+                    return null;
+                }
 
-        UserCache userCache = server.getUserCache();
-        if(userCache == null) {
-            TreeInAForest.LOGGER.info("B3");
-            return null;
+                return new GameProfile(uuid, name);
+            } catch(IOException ioException) {
+                TreeInAForest.LOGGER.error("An error occurred looking up a player!", ioException);
+            }
         }
-
-        Optional<GameProfile> potentialGameProfile = userCache.getByUuid(uuid);
-        if( !potentialGameProfile.isPresent() ) {
-            TreeInAForest.LOGGER.info("C3");
-            return null;
-        }
-
-        TreeInAForest.LOGGER.info("c => "+ potentialGameProfile.get().getName() );
-        return potentialGameProfile.get();
+        return null;
     }
 }

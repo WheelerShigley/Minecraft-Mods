@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "tree_in_a_forest",
-  "version": "0.3.0-incomplete",
+  "version": "0.3.0",
   "name": "Tree In A Forest",
   "description": "Time only progresses if players are online.",
   "authors": ["Wheeler-Shigley"],

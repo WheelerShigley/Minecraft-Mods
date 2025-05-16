@@ -10,6 +10,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static me.wheelershigley.tree_in_a_forest.TreeInAForest.gameProfileCache;
+
 @Mixin(PlayerManager.class)
 public class PlayerConnectionMixin {
 
@@ -18,6 +20,12 @@ public class PlayerConnectionMixin {
         at = @At("TAIL")
     )
     public void onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData, CallbackInfo ci) {
+        if(  !gameProfileCache.containsKey( player.getUuid() )  ) {
+            gameProfileCache.put(
+                player.getUuid(),
+                player.getGameProfile()
+            );
+        }
         TreeInAForest.updateServerTicking();
     }
 

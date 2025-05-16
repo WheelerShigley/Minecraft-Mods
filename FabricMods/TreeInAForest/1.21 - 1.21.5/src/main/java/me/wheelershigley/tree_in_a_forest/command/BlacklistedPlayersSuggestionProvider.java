@@ -6,7 +6,6 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import me.wheelershigley.tree_in_a_forest.blacklist.Blacklist;
-import me.wheelershigley.tree_in_a_forest.TreeInAForest;
 import net.minecraft.server.command.ServerCommandSource;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,10 +17,8 @@ public class BlacklistedPlayersSuggestionProvider implements SuggestionProvider<
         SuggestionsBuilder builder
     ) {
         String currentName;
-        for(GameProfile profile : Blacklist.getBlackListedUsers() ) {
-            TreeInAForest.LOGGER.info( profile.toString() );
+        for(GameProfile profile : Blacklist.profileBlacklist) {
             currentName = profile.getName();
-            TreeInAForest.LOGGER.info( "a: "+ (currentName == null ? "null" : currentName));
             if(currentName == null) {
                 continue;
             }

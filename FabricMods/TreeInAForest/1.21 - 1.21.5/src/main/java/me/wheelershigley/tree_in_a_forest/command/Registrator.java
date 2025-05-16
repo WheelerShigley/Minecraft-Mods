@@ -10,6 +10,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 
+import java.util.UUID;
 import java.util.function.Predicate;
 
 import static me.wheelershigley.tree_in_a_forest.blacklist.ConversionsHelper.*;
@@ -33,14 +34,12 @@ public class Registrator {
         Command<ServerCommandSource> addBlacklistCommand = (context) -> {
             GameProfile playerProfile = null; {
                 String playerName = StringArgumentType.getString(context, "player");
-                TreeInAForest.LOGGER.info(playerName);
                 playerProfile = getProfileFromPlayerName(playerName);
             }
             if(playerProfile == null) {
                 //TODO message player
                 return 2;
             }
-            TreeInAForest.LOGGER.info("added: "+playerProfile);
 
             Blacklist.blacklistUser(playerProfile);
             return 0;
@@ -55,7 +54,6 @@ public class Registrator {
                 //TODO message player
                 return 2;
             }
-            TreeInAForest.LOGGER.info("removed: "+playerProfile);
 
             Blacklist.unblacklistUser(playerProfile);
             return 0;

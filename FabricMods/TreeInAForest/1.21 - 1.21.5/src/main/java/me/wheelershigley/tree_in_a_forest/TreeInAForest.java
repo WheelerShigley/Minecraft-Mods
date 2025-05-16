@@ -1,5 +1,6 @@
 package me.wheelershigley.tree_in_a_forest;
 
+import com.mojang.authlib.GameProfile;
 import me.wheelershigley.tree_in_a_forest.blacklist.Blacklist;
 import me.wheelershigley.tree_in_a_forest.command.Registrator;
 import net.fabricmc.api.ModInitializer;
@@ -10,12 +11,15 @@ import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class TreeInAForest implements ModInitializer {
     public static final String MOD_ID = "tree_in_a_forest";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+    public static final HashMap<UUID, GameProfile> gameProfileCache = new HashMap<>();
     public static MinecraftServer server = null;
 
     @Override
