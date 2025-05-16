@@ -10,6 +10,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static me.wheelershigley.tree_in_a_forest.helpers.MessagesHelper.sendConsoleInfoTranslatableMessage;
+
 @Mixin(MinecraftServer.class)
 public abstract class StartingActionsMixin {
     @Shadow
@@ -24,6 +26,44 @@ public abstract class StartingActionsMixin {
         CallbackInfo ci
     ) {
         TreeInAForest.updateServerTicking();
-        Blacklist.profileBlacklist = Blacklist.getBlackListedUsers(onlineMode);
+        Blacklist.initializeBlackList(onlineMode);
+        sendBlacklistedUsersMessage();
+    }
+
+    private static void sendBlacklistedUsersMessage() {
+        int blacklistSize = 0;
+        String blacklistedNames = ""; {
+            StringBuilder blacklistedNamesBuilder = new StringBuilder();
+            String[] names = Blacklist.getBlacklistedNames();
+            blacklistSize = names.length;
+            for(int index = 0; index < blacklistSize; index++) {
+                blacklistedNamesBuilder.append( names[index] );
+                if(index < blacklistSize-1) {
+                    blacklistedNamesBuilder.append(", ");
+                }
+            }
+            blacklistedNames = blacklistedNamesBuilder.toString();
+        }
+
+        switch(blacklistSize) {
+            case 0: {
+                sendConsoleInfoTranslatableMessage("tree_in_a_forest.text.empty_blacklist");
+                break;
+            }
+            case 1: {
+                sendConsoleInfoTranslatableMessage(
+                    "tree_in_a_forest.text.single_blacklist",
+                    blacklistedNames
+                );
+                break;
+            }
+            default: {
+                sendConsoleInfoTranslatableMessage(
+                        "tree_in_a_forest.text.blacklist",
+                        blacklistedNames
+                );
+                break;
+            }
+        }
     }
 }

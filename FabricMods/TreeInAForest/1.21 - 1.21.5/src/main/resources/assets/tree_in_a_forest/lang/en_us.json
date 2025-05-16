@@ -2,5 +2,7 @@
   "tree_in_a_forest.text.stopping_time": "Stopping time.",
   "tree_in_a_forest.text.starting_time": "Starting time.",
 
-  "tree_in_a_forest.text.invalid_uuid": "Invalid UUID \"%1$s\"."
+  "tree_in_a_forest.text.empty_blacklist": "No users are blacklisted.",
+  "tree_in_a_forest.text.single_blacklist": "%1$s is blacklisted.",
+  "tree_in_a_forest.text.blacklist": "[%1$s] are blacklisted."
 }

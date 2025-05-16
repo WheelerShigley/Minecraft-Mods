@@ -14,12 +14,13 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static me.wheelershigley.tree_in_a_forest.TreeInAForest.LOGGER;
 import static me.wheelershigley.tree_in_a_forest.TreeInAForest.MOD_ID;
 import static me.wheelershigley.tree_in_a_forest.blacklist.ConversionsHelper.*;
 
 public class Blacklist {
     public static ArrayList<GameProfile> profileBlacklist = new ArrayList<>();
-    //public static ArrayList<String> nameBlacklist = new ArrayList<>();
+    public static ArrayList<String> nameBlacklist = new ArrayList<>();
 
     private static final String fileName = (MOD_ID + ".blacklist").toLowerCase();
     private static final File file = FabricLoader.getInstance().getConfigDir().resolve(fileName).toFile();
@@ -36,7 +37,8 @@ public class Blacklist {
 
             writeFile();
         } catch(IOException ioException) {
-            //TODO
+            LOGGER.error("Error making directory.", ioException);
+            return false;
         }
 
         return true;
@@ -46,7 +48,10 @@ public class Blacklist {
         try {
             //put currently-blacklisted player-ids in file
             StringBuilder playerListBuilder = new StringBuilder();
-            for (GameProfile user : profileBlacklist) {
+            for(String name : nameBlacklist) {
+                playerListBuilder.append(name).append("\r\n");
+            }
+            for(GameProfile user : profileBlacklist) {
                 playerListBuilder
                     .append( user.getId().toString().replace("-", "") )
                     .append("\r\n")
@@ -56,13 +61,13 @@ public class Blacklist {
             writer.write( playerListBuilder.toString() );
             writer.close();
         } catch(IOException ioException) {
-            //TODO
+            LOGGER.error("Error writing to blacklist.", ioException);
             return false;
         }
         return true;
     }
 
-    public static ArrayList<GameProfile> getBlackListedUsers(boolean isOnlineMode) {
+    public static void initializeBlackList(boolean isOnlineMode) {
         createFileIfMissing();
 
         Scanner reader;
@@ -70,37 +75,47 @@ public class Blacklist {
             reader = new Scanner(file);
         } catch(FileNotFoundException fileNotFoundException) {
             //TODO: logging
-            return new ArrayList<GameProfile>();
+            return;
         }
 
-        String currentTrimmedUuid;
+        String currentLine;
         GameProfile currentProfile;
-        ArrayList<GameProfile> blacklistedUUIDs = new ArrayList<>();
         while( reader.hasNext() ) {
-            currentTrimmedUuid = reader.next();
+            currentLine = reader.next();
             currentProfile = ConversionsHelper.getGameProfileFromUUID(
-                getUuidFromTrimmedUuidString(currentTrimmedUuid),
+                getUuidFromTrimmedUuidString(currentLine),
                 isOnlineMode
             );
 
             if(
-                currentTrimmedUuid.matches("[0-9a-f]{32}")
-                && currentProfile != null
+                currentLine.matches("[0-9a-f]{32}")
             ) {
-                blacklistedUUIDs.add(currentProfile);
+                if(currentProfile != null) {
+                    Blacklist.profileBlacklist.add(currentProfile);
+                } else {
+                    //TODO: logging
+                }
             } else {
-                TreeInAForest.LOGGER.warn(
-                    Text.literal(
-                        Text.translatable(
-                            "tree_in_a_forest.text.invalid_uuid",
-                            currentTrimmedUuid
-                        ).getString()
-                    ).getString()
-                );
+                Blacklist.nameBlacklist.add(currentLine);
             }
         }
+    }
 
-        return blacklistedUUIDs;
+    public static String[] getBlacklistedNames() {
+        ArrayList<String> blacklistedNames = new ArrayList<>();
+        for(String name : Blacklist.nameBlacklist) {
+            blacklistedNames.add(name);
+        }
+
+        String currentName;
+        for(GameProfile profile : Blacklist.profileBlacklist) {
+            currentName = profile.getName();
+            if(currentName == null) {
+                continue;
+            }
+            blacklistedNames.add(currentName);
+        }
+        return blacklistedNames.toArray(new String[0]);
     }
 
     public static boolean blacklistUser(GameProfile profile) {
@@ -114,6 +129,24 @@ public class Blacklist {
 
     public static boolean unblacklistUser(GameProfile profile) {
         profileBlacklist.remove(profile);
+
+        if( createFileIfMissing() ) {
+            return true;
+        }
+        return writeFile();
+    }
+
+    public static boolean blacklistUser(String playerName) {
+        nameBlacklist.add(playerName);
+
+        if( createFileIfMissing() ) {
+            return true;
+        }
+        return writeFile();
+    }
+
+    public static boolean unblacklistUser(String playerName) {
+        nameBlacklist.remove(playerName);
 
         if( createFileIfMissing() ) {
             return true;

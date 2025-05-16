@@ -32,31 +32,38 @@ public class Registrator {
 
     public static void registerCommand() {
         Command<ServerCommandSource> addBlacklistCommand = (context) -> {
-            GameProfile playerProfile = null; {
-                String playerName = StringArgumentType.getString(context, "player");
-                playerProfile = getProfileFromPlayerName(playerName);
+            String playerName = StringArgumentType.getString(context, "player");
+            GameProfile playerProfile = getProfileFromPlayerName(playerName);
+
+            if(playerProfile != null) {
+                Blacklist.blacklistUser(playerProfile);
+                //TODO: message player
+                return 0;
             }
-            if(playerProfile == null) {
-                //TODO message player
-                return 2;
+            if( playerName != null && !playerName.isEmpty() ) {
+                Blacklist.blacklistUser(playerName);
+                //TODO: message player
+                return 0;
             }
 
-            Blacklist.blacklistUser(playerProfile);
-            return 0;
+            //TODO: message player
+            return 1;
         };
 
         Command<ServerCommandSource> removeBlacklistCommand = (context) -> {
-            GameProfile playerProfile = null; {
-                String player = StringArgumentType.getString(context, "player");
-                playerProfile = getProfileFromPlayerName(player);
+            String playerName = StringArgumentType.getString(context, "player");
+            GameProfile playerProfile = getProfileFromPlayerName(playerName);
+
+            if(playerProfile != null) {
+                Blacklist.unblacklistUser(playerProfile);
+                return 0;
             }
-            if(playerProfile == null) {
-                //TODO message player
-                return 2;
+            if( playerName != null && !playerName.isBlank() ) {
+                Blacklist.unblacklistUser(playerName);
+                return 0;
             }
 
-            Blacklist.unblacklistUser(playerProfile);
-            return 0;
+            return 1;
         };
 
         CommandRegistrationCallback.EVENT.register(

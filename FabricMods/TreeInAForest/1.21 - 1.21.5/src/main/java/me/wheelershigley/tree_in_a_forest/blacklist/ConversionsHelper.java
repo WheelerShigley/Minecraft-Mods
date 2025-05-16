@@ -4,9 +4,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import me.wheelershigley.tree_in_a_forest.TreeInAForest;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.UserCache;
-import org.jetbrains.annotations.NotNull;
+import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -15,7 +14,6 @@ import java.io.BufferedReader;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,6 +25,7 @@ public class ConversionsHelper {
         if(
             name == null
             || !name.matches("^[a-zA-Z0-9_]{2,16}$")
+            || Blacklist.nameBlacklist.contains(name)
         ) {
             return null;
         }
@@ -66,7 +65,10 @@ public class ConversionsHelper {
     }
 
     private static final String LOOKUP_PROFILE_BASE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
-    public static GameProfile getGameProfileFromUUID(@NotNull UUID uuid, boolean isOnlineMode) {
+    public static GameProfile getGameProfileFromUUID(UUID uuid, boolean isOnlineMode) {
+        if(uuid == null) {
+            return null;
+        }
         if( gameProfileCache.containsKey(uuid) ) {
             return gameProfileCache.get(uuid);
         }
@@ -85,7 +87,6 @@ public class ConversionsHelper {
                 String streamContents = br.lines().collect( Collectors.joining("\r\n") );
                 JsonObject jsonContents = JsonParser.parseString(streamContents).getAsJsonObject();
                 String name = jsonContents.get("name").getAsString();
-                LOGGER.info(name);
                 if(name == null || name.isBlank() ) {
                     return null;
                 }
