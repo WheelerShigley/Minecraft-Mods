@@ -1,6 +1,7 @@
 package me.wheelershigley.silktouchplus.mixins;
 
 import com.mojang.serialization.MapCodec;
+import me.wheelershigley.silktouchplus.SilkTouchPlus;
 import me.wheelershigley.silktouchplus.helpers.EnchantmentsHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -55,7 +56,7 @@ public abstract class SpawnerMixin extends BlockWithEntity  {
 
         /* Vanilla Implementation */ {
             super.onStacksDropped(state, world, pos, tool, dropExperience);
-            if(dropExperience) {
+            if(SilkTouchPlus.spawner && dropExperience) {
                 int i = 15 + world.random.nextInt(15) + world.random.nextInt(15);
                 this.dropExperience(world, pos, i);
             }

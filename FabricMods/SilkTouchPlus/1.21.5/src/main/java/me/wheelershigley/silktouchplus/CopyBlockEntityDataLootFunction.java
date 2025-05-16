@@ -38,7 +38,7 @@ public class CopyBlockEntityDataLootFunction extends ConditionalLootFunction  {
                                 return function.source;
                             }
                         ),
-                        CopyBlockEntityDataLootFunction.Operation.CODEC.listOf().fieldOf("ops").forGetter(
+                        Operation.CODEC.listOf().fieldOf("ops").forGetter(
                             (function) -> {
                                 return function.operations;
                             }
@@ -50,9 +50,9 @@ public class CopyBlockEntityDataLootFunction extends ConditionalLootFunction  {
         }
     );
     private final LootNbtProvider source;
-    private final List<CopyBlockEntityDataLootFunction.Operation> operations;
+    private final List<Operation> operations;
 
-    protected CopyBlockEntityDataLootFunction(List<LootCondition> conditions, LootNbtProvider source, List<CopyBlockEntityDataLootFunction.Operation> operations) {
+    protected CopyBlockEntityDataLootFunction(List<LootCondition> conditions, LootNbtProvider source, List<Operation> operations) {
         super(conditions);
         this.source = source;
         this.operations = List.copyOf(operations);
@@ -108,18 +108,18 @@ public class CopyBlockEntityDataLootFunction extends ConditionalLootFunction  {
         return stack;
     }
 
-    public static class Builder extends ConditionalLootFunction.Builder<CopyBlockEntityDataLootFunction.Builder> {
+    public static class Builder extends ConditionalLootFunction.Builder<Builder> {
         private final LootNbtProvider source;
-        private final List<CopyBlockEntityDataLootFunction.Operation> operations = Lists.newArrayList();
+        private final List<Operation> operations = Lists.newArrayList();
 
         public Builder(LootNbtProvider source) {
             this.source = source;
         }
 
-        public CopyBlockEntityDataLootFunction.Builder withOperation(String source, String target, CopyBlockEntityDataLootFunction.Operator operator) {
+        public Builder withOperation(String source, String target, Operator operator) {
             try {
                 this.operations.add(
-                    new CopyBlockEntityDataLootFunction.Operation(
+                    new Operation(
                         NbtPathArgumentType.NbtPath.parse(source),
                         NbtPathArgumentType.NbtPath.parse(target),
                         operator
@@ -131,11 +131,11 @@ public class CopyBlockEntityDataLootFunction extends ConditionalLootFunction  {
             }
         }
 
-        public CopyBlockEntityDataLootFunction.Builder withOperation(String source, String target) {
-            return this.withOperation(source, target, CopyBlockEntityDataLootFunction.Operator.REPLACE);
+        public Builder withOperation(String source, String target) {
+            return this.withOperation(source, target, Operator.REPLACE);
         }
 
-        protected CopyBlockEntityDataLootFunction.Builder getThisBuilder() {
+        protected Builder getThisBuilder() {
             return this;
         }
 
@@ -147,23 +147,23 @@ public class CopyBlockEntityDataLootFunction extends ConditionalLootFunction  {
     public static record Operation(
         NbtPathArgumentType.NbtPath parsedSourcePath,
         NbtPathArgumentType.NbtPath parsedTargetPath,
-        CopyBlockEntityDataLootFunction.Operator operator
+        Operator operator
     ) {
-        public static final Codec<CopyBlockEntityDataLootFunction.Operation> CODEC = RecordCodecBuilder.create(
+        public static final Codec<Operation> CODEC = RecordCodecBuilder.create(
             (instance) -> {
                 return instance.group(
-                    NbtPathArgumentType.NbtPath.CODEC.fieldOf("source").forGetter(CopyBlockEntityDataLootFunction.Operation::parsedSourcePath),
-                    NbtPathArgumentType.NbtPath.CODEC.fieldOf("target").forGetter(CopyBlockEntityDataLootFunction.Operation::parsedTargetPath),
-                    CopyBlockEntityDataLootFunction.Operator.CODEC.fieldOf("op").forGetter(CopyBlockEntityDataLootFunction.Operation::operator)
+                    NbtPathArgumentType.NbtPath.CODEC.fieldOf("source").forGetter(Operation::parsedSourcePath),
+                    NbtPathArgumentType.NbtPath.CODEC.fieldOf("target").forGetter(Operation::parsedTargetPath),
+                    Operator.CODEC.fieldOf("op").forGetter(Operation::operator)
                 )
-                .apply(instance, CopyBlockEntityDataLootFunction.Operation::new);
+                .apply(instance, Operation::new);
             }
         );
 
         public Operation(
             NbtPathArgumentType.NbtPath parsedSourcePath,
             NbtPathArgumentType.NbtPath parsedTargetPath,
-            CopyBlockEntityDataLootFunction.Operator operator
+            Operator operator
         ) {
             this.parsedSourcePath = parsedSourcePath;
             this.parsedTargetPath = parsedTargetPath;
@@ -194,7 +194,7 @@ public class CopyBlockEntityDataLootFunction extends ConditionalLootFunction  {
             return this.parsedTargetPath;
         }
 
-        public CopyBlockEntityDataLootFunction.Operator operator() {
+        public Operator operator() {
             return this.operator;
         }
     }
@@ -243,7 +243,7 @@ public class CopyBlockEntityDataLootFunction extends ConditionalLootFunction  {
             }
         };
 
-        public static final Codec<CopyBlockEntityDataLootFunction.Operator> CODEC = StringIdentifiable.createCodec(CopyBlockEntityDataLootFunction.Operator::values);
+        public static final Codec<Operator> CODEC = StringIdentifiable.createCodec(Operator::values);
         private final String name;
 
         public abstract void merge(NbtElement itemNbt, NbtPathArgumentType.NbtPath targetPath, List<NbtElement> sourceNbts) throws CommandSyntaxException;

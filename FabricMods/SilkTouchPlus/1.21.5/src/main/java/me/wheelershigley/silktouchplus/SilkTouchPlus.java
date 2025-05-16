@@ -1,102 +1,56 @@
 package me.wheelershigley.silktouchplus;
 
-import external.kaupenjoe.ModConfigs;
-import me.wheelershigley.silktouchplus.helpers.LootPoolHelpers;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.GameRules;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import static me.wheelershigley.silktouchplus.registrations.GameRuleRegistrator.*;
+import static me.wheelershigley.silktouchplus.registrations.LootTableRegistrator.*;
 
 public class SilkTouchPlus implements ModInitializer {
     public static final String MOD_ID = "silktouchplus";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+    public static boolean
+        budding_amethyst = true,
+        reinforced_deepslate = true,
+        spawner = true,
+        suspicious_sand = true,
+        suspicious_gravel = true,
+        trial_spawner = true,
+        vault = true
+    ;
+
+    /* TODO
+     * Add message which says that a restart is required for gamerule changes
+     * Farmland
+     * (vanilla-like) Shreikers
+     * Dirt-path
+     * Cakes
+     * Dragon Egg?
+     * infestedStones drops?
+     *
+     * Shears+ mod? (Tall grass)
+     */
+
     @Override
     public void onInitialize() {
-        ModConfigs.registerConfigs();
+        registerGameRules();
+        registerLootTables();
+    }
 
-        /*silk-touch ability loot table modifications*/ {
-            HashMap<Block, Identifier> Identifiers; {
-                Identifiers = new HashMap<>();
+    public static void reload(MinecraftServer server) {
+        GameRules gameRules = server.getGameRules();
+        budding_amethyst        = gameRules.getBoolean(SILKTOUCH_BUDDING_AMETHYST);
+        reinforced_deepslate    = gameRules.getBoolean(SILKTOUCH_REINFORCED_DEEPSLATE);
+        spawner                 = gameRules.getBoolean(SILKTOUCH_SPAWNER);
+        suspicious_sand         = gameRules.getBoolean(SILKTOUCH_SUSPICIOUS_SAND);
+        suspicious_gravel       = gameRules.getBoolean(SILKTOUCH_SUSPICIOUS_GRAVEL);
+        trial_spawner           = gameRules.getBoolean(SILKTOUCH_TRIAL_SPAWNER);
+        vault                   = gameRules.getBoolean(SILKTOUCH_VAULT);
 
-                Identifiers.put(
-                    Blocks.BUDDING_AMETHYST,
-                    Identifier.of("minecraft", "blocks/budding_amethyst")
-                );
-                Identifiers.put(
-                    Blocks.REINFORCED_DEEPSLATE,
-                    Identifier.of("minecraft", "blocks/reinforced_deepslate")
-                );
-                Identifiers.put(
-                    Blocks.SPAWNER,
-                    Identifier.of("minecraft", "blocks/spawner")
-                );
-                Identifiers.put(
-                    Blocks.SUSPICIOUS_GRAVEL,
-                    Identifier.of("minecraft", "blocks/suspicious_gravel")
-                );
-                Identifiers.put(
-                    Blocks.SUSPICIOUS_SAND,
-                    Identifier.of("minecraft", "blocks/suspicious_sand")
-                );
-                Identifiers.put(
-                    Blocks.TRIAL_SPAWNER,
-                    Identifier.of("minecraft", "blocks/trial_spawner")
-                );
-                Identifiers.put(
-                    Blocks.VAULT,
-                    Identifier.of("minecraft", "blocks/vault")
-                );
-            }
-
-            LootTableEvents.MODIFY.register(
-                (key, tableBuilder, source, registries) -> {
-                    Identifier identifier = key.getValue();
-
-                    if(ModConfigs.BUDDING_AMETHYST && Identifiers.get(Blocks.BUDDING_AMETHYST).equals(identifier) ) {
-                        LootPoolHelpers.dropsWithSilkTouchPickaxe(tableBuilder, Blocks.BUDDING_AMETHYST, registries);
-                    }
-                    if(ModConfigs.REINFORCED_DEEPSLATE && Identifiers.get(Blocks.REINFORCED_DEEPSLATE).equals(identifier) ) {
-                        LootPoolHelpers.dropsWithSilkTouchPickaxe(tableBuilder, Blocks.REINFORCED_DEEPSLATE, registries);
-                    }
-                    if(ModConfigs.SPAWNER && Identifiers.get(Blocks.SPAWNER).equals(identifier) ) {
-                        LootPoolHelpers.dropsSpawnerNBTWithSilkTouchPickaxe(tableBuilder, Blocks.SPAWNER, registries);
-                    }
-                    if(ModConfigs.SUSPICIOUS_GRAVEL && Identifiers.get(Blocks.SUSPICIOUS_GRAVEL).equals(identifier) ) {
-                        LootPoolHelpers.dropsWithSilkTouchShovel(tableBuilder, Blocks.SUSPICIOUS_GRAVEL, registries);
-                    }
-                    if(ModConfigs.SUSPICIOUS_SAND && Identifiers.get(Blocks.SUSPICIOUS_SAND).equals(identifier) ) {
-                        LootPoolHelpers.dropsWithSilkTouchShovel(tableBuilder, Blocks.SUSPICIOUS_SAND, registries);
-                    }
-                    if(ModConfigs.TRIAL_SPAWNER && Identifiers.get(Blocks.TRIAL_SPAWNER).equals(identifier) ) {
-                        LootPoolHelpers.dropsTrialSpawnerNBTWithSilkTouchPickaxe(tableBuilder, Blocks.TRIAL_SPAWNER, registries);
-                    }
-                    if(ModConfigs.VAULT && Identifiers.get(Blocks.VAULT).equals(identifier) ) {
-                        LootPoolHelpers.dropVaultNBTWithSilkTouchPickaxe(tableBuilder, Blocks.VAULT, registries);
-                    }
-                }
-            );
-        }
-
-        //display configurations
-        List<String> configsList; {
-            configsList = new ArrayList<>();
-
-            if(ModConfigs.BUDDING_AMETHYST)     { configsList.add("Budding-Amethyst");     }
-            if(ModConfigs.REINFORCED_DEEPSLATE) { configsList.add("Reinforced-Deepslate"); }
-            if(ModConfigs.SPAWNER)              { configsList.add("Spawner");              }
-            if(ModConfigs.SUSPICIOUS_GRAVEL)    { configsList.add("Suspicious-Gravel");    }
-            if(ModConfigs.SUSPICIOUS_SAND)      { configsList.add("Suspicious-Sand");      }
-            if(ModConfigs.TRIAL_SPAWNER)        { configsList.add("Trial-Spawner");        }
-            if(ModConfigs.VAULT)                { configsList.add("Vault");                }
-        }
-        LOGGER.info(configsList + " are SilkTouch-able!");
+        registerLootTables();
     }
 }
