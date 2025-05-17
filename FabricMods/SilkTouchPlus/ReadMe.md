@@ -1,20 +1,21 @@
 # SilkTouch+
-Server-side only Fabric Mod (*requires Fabric-API*).
-Makes several blocks configurably silk-touch-able.
+Many blocks are silk-touch-able, configurable with [gamerules](https://minecraft.wiki/w/Game_rule).
 
-![Budding-Amethyst](readme-images\budding_amethyst.png)
-![Reinforced-Deepslate](readme-images\reinforced_deepslate_side.png)
-![Spawner](readme-images\spawner.png)
-![Suspicious-Gravel](readme-images\suspicious_gravel_0.png)
-![Suspicious-Sand](readme-images\suspicious_sand_0.png)
-![Trial-Spawner](readme-images\trial_spawner_side_active.png)
+![Silktouch Spawner](https://cdn.modrinth.com/data/Gsu8eWIK/images/324c0b13911fdade5f3186933967c3d7ef0b5458.png)
 
-## config/silktouchplus.properties
-```
-silktouch.budding_amethyst=true
-silktouch.reinforced_deepslate=true
-silktouch.spawner=true
-silktouch.suspicious_gravel=true
-silktouch.suspicious_sand=true
-#silktouch.trial_spawner=true #Coming in 1.21
-```
+## Settings
+All features of this mod can be enabled/disabled with gamerules; below are their default settings.
+
+| Name | Default Value |
+| ---- | ------------- |
+| silktouchBuddingAmethyst     | true |
+| silktouchReinforcedDeepslate | true |
+| silktouchSpawner             | true |
+| silktouchSuspiciousSand      | true |
+| silktouchSuspiciousGravel    | true |
+| silktouchTrialSpawner        | true |
+| silktouchVault               | true |
+
+These can be modified with the gamerule command, ex:
+``/gamerule silktouchSpawner true``
+.
