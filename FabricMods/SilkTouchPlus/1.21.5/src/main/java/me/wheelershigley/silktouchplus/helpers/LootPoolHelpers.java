@@ -18,6 +18,7 @@ import net.minecraft.loot.provider.nbt.ContextLootNbtProvider;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.predicate.NumberRange;
 import net.minecraft.predicate.component.ComponentPredicateTypes;
+import net.minecraft.predicate.component.ComponentsPredicate;
 import net.minecraft.predicate.item.*;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
@@ -38,7 +39,7 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
     public static LootCondition.Builder silkTouchCondition(RegistryWrapper.WrapperLookup registries) {
         return MatchToolLootCondition.builder(
             ItemPredicate.Builder.create().components(
-                net.minecraft.predicate.component.ComponentsPredicate.Builder.create().partial(
+                ComponentsPredicate.Builder.create().partial(
                     ComponentPredicateTypes.ENCHANTMENTS,
                     EnchantmentsPredicate.enchantments(
                         List.of(
@@ -206,6 +207,41 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
                 ItemEntry.builder(drop)
                     .conditionally( shovelsCondition(registries) )
                     .conditionally(silkTouchCondition)
+            )
+        ;
+        tableBuilder.pool( builder.build() );
+    }
+    public static void dropsWithSilkTouchShovel(
+            LootTable.Builder tableBuilder,
+            Block drop,
+            Block defaultDrop,
+            RegistryWrapper.WrapperLookup registries,
+            GameRules.Key<GameRules.BooleanRule> gamerule
+    ) {
+
+        LootCondition.Builder silkTouchCondition = silkTouchCondition(registries);
+        LootPool.Builder builder = LootPool.builder()
+            .apply(new GameRuleLootFunction(gamerule) )
+            .rolls( ConstantLootNumberProvider.create(1.0F) )
+            .with(
+                ItemEntry.builder(drop)
+                    .conditionally( shovelsCondition(registries) )
+                    .conditionally(silkTouchCondition)
+            )
+            .with(
+                ItemEntry.builder(defaultDrop)
+                    .conditionally( shovelsCondition(registries) )
+                    .conditionally( silkTouchCondition.invert() )
+            )
+        ;
+        tableBuilder.pool( builder.build() );
+
+        builder = LootPool.builder()
+            .apply(new GameRuleLootFunction(gamerule, true) )
+            .rolls( ConstantLootNumberProvider.create(1.0F) )
+            .with(
+                ItemEntry.builder(defaultDrop)
+                    .conditionally( shovelsCondition(registries) )
             )
         ;
         tableBuilder.pool( builder.build() );

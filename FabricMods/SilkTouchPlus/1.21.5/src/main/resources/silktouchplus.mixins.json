@@ -6,7 +6,7 @@
   "mixins": [
     "CustomDataComponentLootFunctionMixin",
     "SpawnerBlockPlacementPermissionsMixin",
-    "SpawnerMixin"
+    "SpawnerDropsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

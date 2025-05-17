@@ -1,7 +1,6 @@
 package me.wheelershigley.silktouchplus.mixins;
 
 import com.mojang.serialization.MapCodec;
-import me.wheelershigley.silktouchplus.SilkTouchPlus;
 import me.wheelershigley.silktouchplus.helpers.EnchantmentsHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -15,7 +14,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,8 +24,8 @@ import java.util.Set;
 import static me.wheelershigley.silktouchplus.registrations.GameRuleRegistrator.SILKTOUCH_SPAWNER;
 
 @Mixin(SpawnerBlock.class)
-public abstract class SpawnerMixin extends BlockWithEntity  {
-    protected SpawnerMixin(Settings settings) {
+public abstract class SpawnerDropsMixin extends BlockWithEntity  {
+    protected SpawnerDropsMixin(Settings settings) {
         super(settings);
     }
 

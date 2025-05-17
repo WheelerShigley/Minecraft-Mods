@@ -12,8 +12,8 @@ public class GameRuleRegistrator {
         SILKTOUCH_SUSPICIOUS_SAND,
         SILKTOUCH_SUSPICIOUS_GRAVEL,
         SILKTOUCH_TRIAL_SPAWNER,
-        SILKTOUCH_VAULT
-//        SILKTOUCH_FARMLAND
+        SILKTOUCH_VAULT,
+        SILKTOUCH_FARMLAND
     ;
 
     private static < T extends GameRules.Rule<T> > GameRules.Key<GameRules.BooleanRule> register(String name, boolean default_value) {
@@ -31,6 +31,6 @@ public class GameRuleRegistrator {
         SILKTOUCH_SUSPICIOUS_GRAVEL     = register("silktouchSuspiciousGravel",     true);
         SILKTOUCH_TRIAL_SPAWNER         = register("silktouchTrialSpawner",         true);
         SILKTOUCH_VAULT                 = register("silktouchVault",                true);
-//        SILKTOUCH_FARMLAND              = register("silktouchFarmland",             false);
+        SILKTOUCH_FARMLAND              = register("silktouchFarmland",             false);
     }
 }

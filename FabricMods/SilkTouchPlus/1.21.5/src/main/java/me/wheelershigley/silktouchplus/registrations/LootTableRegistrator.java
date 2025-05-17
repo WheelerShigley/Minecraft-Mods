@@ -1,8 +1,10 @@
 package me.wheelershigley.silktouchplus.registrations;
 
+import me.wheelershigley.silktouchplus.SilkTouchPlus;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.loot.LootTable;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -109,14 +111,24 @@ public class LootTableRegistrator {
                         SILKTOUCH_VAULT
                     );
                 }
-//                if( Identifiers.get(Blocks.FARMLAND).equals(identifier) ) {
-//                    dropsWithSilkTouchShovel(
-//                        tableBuilder,
-//                        Blocks.FARMLAND,
-//                        registries,
-//                        SILKTOUCH_FARMLAND
-//                    );
-//                }
+            }
+        );
+
+        LootTableEvents.REPLACE.register(
+            (key, original, source, registries) -> {
+                Identifier identifier = key.getValue();
+                LootTable.Builder tableBuilder = new LootTable.Builder();
+
+                if( Identifiers.get(Blocks.FARMLAND).equals(identifier) ) {
+                    dropsWithSilkTouchShovel(
+                        tableBuilder,
+                        Blocks.FARMLAND,
+                        Blocks.DIRT,
+                        registries,
+                        SILKTOUCH_FARMLAND
+                    );
+                }
+                return tableBuilder.build();
             }
         );
     }
