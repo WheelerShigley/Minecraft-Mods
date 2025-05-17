@@ -1,6 +1,7 @@
 package me.wheelershigley.silktouchplus.helpers;
 
-import me.wheelershigley.silktouchplus.CopyBlockEntityDataLootFunction;
+import me.wheelershigley.silktouchplus.registrations.CopyBlockEntityDataLootFunction;
+import me.wheelershigley.silktouchplus.registrations.GameRuleLootFunction;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
@@ -21,6 +22,7 @@ import net.minecraft.predicate.item.*;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.world.GameRules;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -33,7 +35,7 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
     @Override public void generate() {}
 
     //BlockLootTableGenerator.createSilkTouchCondition()
-    public static LootCondition.Builder createSilkTouchCondition(RegistryWrapper.WrapperLookup registries) {
+    public static LootCondition.Builder silkTouchCondition(RegistryWrapper.WrapperLookup registries) {
         return MatchToolLootCondition.builder(
             ItemPredicate.Builder.create().components(
                 net.minecraft.predicate.component.ComponentsPredicate.Builder.create().partial(
@@ -60,9 +62,15 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
         );
     }
 
-    public static void dropsWithSilkTouchPickaxe(LootTable.Builder tableBuilder, Block drop, RegistryWrapper.WrapperLookup registries) {
-        LootCondition.Builder silkTouchCondition = createSilkTouchCondition(registries);
+    public static void dropsWithSilkTouchPickaxe(
+        LootTable.Builder tableBuilder,
+        Block drop,
+        RegistryWrapper.WrapperLookup registries,
+        GameRules.Key<GameRules.BooleanRule> gamerule
+    ) {
+        LootCondition.Builder silkTouchCondition = silkTouchCondition(registries);
         LootPool.Builder builder = LootPool.builder()
+            .apply(new GameRuleLootFunction(gamerule) )
             .rolls( ConstantLootNumberProvider.create(1.0F) )
             .with(
                 ItemEntry.builder(drop)
@@ -72,9 +80,15 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
         ;
         tableBuilder.pool( builder.build() );
     }
-    public static void dropsSpawnerNBTWithSilkTouchPickaxe(LootTable.Builder tableBuilder, Block drop, RegistryWrapper.WrapperLookup registries) {
-        LootCondition.Builder silkTouchCondition = createSilkTouchCondition(registries);
+    public static void dropsSpawnerNBTWithSilkTouchPickaxe(
+        LootTable.Builder tableBuilder,
+        Block drop,
+        RegistryWrapper.WrapperLookup registries,
+        GameRules.Key<GameRules.BooleanRule> gamerule
+    ) {
+        LootCondition.Builder silkTouchCondition = silkTouchCondition(registries);
         LootPool.Builder builder = LootPool.builder()
+                .apply( new GameRuleLootFunction(gamerule) )
             .rolls( ConstantLootNumberProvider.create(1.0F) )
             .with(
                 ItemEntry.builder(drop)
@@ -107,9 +121,15 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
         tableBuilder.pool( builder.build() );
     }
 
-    public static void dropsTrialSpawnerNBTWithSilkTouchPickaxe(LootTable.Builder tableBuilder, Block drop, RegistryWrapper.WrapperLookup registries) {
-        LootCondition.Builder silkTouchCondition = createSilkTouchCondition(registries);
+    public static void dropsTrialSpawnerNBTWithSilkTouchPickaxe(
+        LootTable.Builder tableBuilder,
+        Block drop,
+        RegistryWrapper.WrapperLookup registries,
+        GameRules.Key<GameRules.BooleanRule> gamerule
+    ) {
+        LootCondition.Builder silkTouchCondition = silkTouchCondition(registries);
         LootPool.Builder builder = LootPool.builder()
+            .apply(new GameRuleLootFunction(gamerule) )
             .rolls( ConstantLootNumberProvider.create(1.0F) )
             .with(
                 ItemEntry.builder(drop)
@@ -135,9 +155,15 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
         tableBuilder.pool( builder.build() );
     }
 
-    public static void dropVaultNBTWithSilkTouchPickaxe(LootTable.Builder tableBuilder, Block drop, RegistryWrapper.WrapperLookup registries) {
-        LootCondition.Builder silkTouchCondition = createSilkTouchCondition(registries);
+    public static void dropVaultNBTWithSilkTouchPickaxe(
+        LootTable.Builder tableBuilder,
+        Block drop,
+        RegistryWrapper.WrapperLookup registries,
+        GameRules.Key<GameRules.BooleanRule> gamerule
+    ) {
+        LootCondition.Builder silkTouchCondition = silkTouchCondition(registries);
         LootPool.Builder builder = LootPool.builder()
+            .apply(new GameRuleLootFunction(gamerule) )
             .rolls( ConstantLootNumberProvider.create(1.0F) )
             .with(
                 ItemEntry.builder(drop)
@@ -166,9 +192,33 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
             )
         );
     }
-    public static void dropsWithSilkTouchShovel(LootTable.Builder tableBuilder, Block drop, RegistryWrapper.WrapperLookup registries) {
-        LootCondition.Builder silkTouchCondition = createSilkTouchCondition(registries);
+    public static void dropsWithSilkTouchShovel(
+        LootTable.Builder tableBuilder,
+        Block drop,
+        RegistryWrapper.WrapperLookup registries,
+        GameRules.Key<GameRules.BooleanRule> gamerule
+    ) {
+        LootCondition.Builder silkTouchCondition = silkTouchCondition(registries);
         LootPool.Builder builder = LootPool.builder()
+            .apply(new GameRuleLootFunction(gamerule) )
+            .rolls( ConstantLootNumberProvider.create(1.0F) )
+            .with(
+                ItemEntry.builder(drop)
+                    .conditionally( shovelsCondition(registries) )
+                    .conditionally(silkTouchCondition)
+            )
+        ;
+        tableBuilder.pool( builder.build() );
+    }
+    public static void dropsSuspiciousWithSilkTouchShovel(
+        LootTable.Builder tableBuilder,
+        Block drop,
+        RegistryWrapper.WrapperLookup registries,
+        GameRules.Key<GameRules.BooleanRule> gamerule
+    ) {
+        LootCondition.Builder silkTouchCondition = silkTouchCondition(registries);
+        LootPool.Builder builder = LootPool.builder()
+            .apply(new GameRuleLootFunction(gamerule) )
             .rolls( ConstantLootNumberProvider.create(1.0F) )
             .with(
                 ItemEntry.builder(drop)

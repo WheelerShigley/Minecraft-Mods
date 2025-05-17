@@ -2,10 +2,7 @@ package me.wheelershigley.silktouchplus.registrations;
 
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.GameRules;
-
-import java.util.function.BiConsumer;
 
 public class GameRuleRegistrator {
     public static GameRules.Key<GameRules.BooleanRule>
@@ -16,14 +13,14 @@ public class GameRuleRegistrator {
         SILKTOUCH_SUSPICIOUS_GRAVEL,
         SILKTOUCH_TRIAL_SPAWNER,
         SILKTOUCH_VAULT
+//        SILKTOUCH_FARMLAND
     ;
-    public static GameRules.Key<GameRules.BooleanRule>[] SILKTOUCH_GAMERULES;
 
-    private static < T extends GameRules.Rule<T> > GameRules.Key<GameRules.BooleanRule> register(String name, boolean default_value/*, BiConsumer<MinecraftServer, GameRules.BooleanRule> updateCall*/) {
+    private static < T extends GameRules.Rule<T> > GameRules.Key<GameRules.BooleanRule> register(String name, boolean default_value) {
         return GameRuleRegistry.register(
             name,
             GameRules.Category.PLAYER,
-            GameRuleFactory.createBooleanRule(default_value/*, updateCall*/)
+            GameRuleFactory.createBooleanRule(default_value)
         );
     }
     public static void registerGameRules() {
@@ -34,15 +31,6 @@ public class GameRuleRegistrator {
         SILKTOUCH_SUSPICIOUS_GRAVEL     = register("silktouchSuspiciousGravel",     true);
         SILKTOUCH_TRIAL_SPAWNER         = register("silktouchTrialSpawner",         true);
         SILKTOUCH_VAULT                 = register("silktouchVault",                true);
-
-        SILKTOUCH_GAMERULES = new GameRules.Key[]{
-                SILKTOUCH_BUDDING_AMETHYST,
-                SILKTOUCH_REINFORCED_DEEPSLATE,
-                SILKTOUCH_SPAWNER,
-                SILKTOUCH_SUSPICIOUS_SAND,
-                SILKTOUCH_SUSPICIOUS_GRAVEL,
-                SILKTOUCH_TRIAL_SPAWNER,
-                SILKTOUCH_VAULT
-        };
+//        SILKTOUCH_FARMLAND              = register("silktouchFarmland",             false);
     }
 }

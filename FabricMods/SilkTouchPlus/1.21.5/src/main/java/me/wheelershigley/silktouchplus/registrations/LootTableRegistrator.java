@@ -1,7 +1,5 @@
 package me.wheelershigley.silktouchplus.registrations;
 
-import me.wheelershigley.silktouchplus.SilkTouchPlus;
-import me.wheelershigley.silktouchplus.helpers.LootPoolHelpers;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -9,7 +7,8 @@ import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 
-import static me.wheelershigley.silktouchplus.SilkTouchPlus.*;
+import static me.wheelershigley.silktouchplus.helpers.LootPoolHelpers.*;
+import static me.wheelershigley.silktouchplus.registrations.GameRuleRegistrator.*;
 
 public class LootTableRegistrator {
     private static final HashMap<Block, Identifier> Identifiers; static {
@@ -43,6 +42,10 @@ public class LootTableRegistrator {
             Blocks.VAULT,
             Identifier.of("minecraft", "blocks/vault")
         );
+        Identifiers.put(
+            Blocks.FARMLAND,
+            Identifier.of("minecraft", "blocks/farmland")
+        );
     }
 
     public static void registerLootTables() {
@@ -50,28 +53,70 @@ public class LootTableRegistrator {
             (key, tableBuilder, source, registries) -> {
                 Identifier identifier = key.getValue();
 
-                //TODO elses & abstraction
-                if(budding_amethyst && Identifiers.get(Blocks.BUDDING_AMETHYST).equals(identifier) ) {
-                    LootPoolHelpers.dropsWithSilkTouchPickaxe(tableBuilder, Blocks.BUDDING_AMETHYST, registries);
+                if( Identifiers.get(Blocks.BUDDING_AMETHYST).equals(identifier) ) {
+                    dropsWithSilkTouchPickaxe(
+                        tableBuilder,
+                        Blocks.BUDDING_AMETHYST,
+                        registries,
+                        SILKTOUCH_BUDDING_AMETHYST
+                    );
                 }
-                if(reinforced_deepslate && Identifiers.get(Blocks.REINFORCED_DEEPSLATE).equals(identifier) ) {
-                    LootPoolHelpers.dropsWithSilkTouchPickaxe(tableBuilder, Blocks.REINFORCED_DEEPSLATE, registries);
+                if( Identifiers.get(Blocks.REINFORCED_DEEPSLATE).equals(identifier) ) {
+                    dropsWithSilkTouchPickaxe(
+                        tableBuilder,
+                        Blocks.REINFORCED_DEEPSLATE,
+                        registries,
+                        SILKTOUCH_REINFORCED_DEEPSLATE
+                    );
                 }
-                if(spawner && Identifiers.get(Blocks.SPAWNER).equals(identifier) ) {
-                    LootPoolHelpers.dropsSpawnerNBTWithSilkTouchPickaxe(tableBuilder, Blocks.SPAWNER, registries);
+                if( Identifiers.get(Blocks.SPAWNER).equals(identifier) ) {
+                    dropsSpawnerNBTWithSilkTouchPickaxe(
+                        tableBuilder,
+                        Blocks.SPAWNER,
+                        registries,
+                        SILKTOUCH_SPAWNER
+                    );
                 }
-                if(suspicious_gravel && Identifiers.get(Blocks.SUSPICIOUS_GRAVEL).equals(identifier) ) {
-                    LootPoolHelpers.dropsWithSilkTouchShovel(tableBuilder, Blocks.SUSPICIOUS_GRAVEL, registries);
+                if( Identifiers.get(Blocks.SUSPICIOUS_GRAVEL).equals(identifier) ) {
+                    dropsSuspiciousWithSilkTouchShovel(
+                        tableBuilder,
+                        Blocks.SUSPICIOUS_GRAVEL,
+                        registries,
+                        SILKTOUCH_SUSPICIOUS_GRAVEL
+                    );
                 }
-                if(suspicious_sand && Identifiers.get(Blocks.SUSPICIOUS_SAND).equals(identifier) ) {
-                    LootPoolHelpers.dropsWithSilkTouchShovel(tableBuilder, Blocks.SUSPICIOUS_SAND, registries);
+                if( Identifiers.get(Blocks.SUSPICIOUS_SAND).equals(identifier) ) {
+                    dropsSuspiciousWithSilkTouchShovel(
+                        tableBuilder,
+                        Blocks.SUSPICIOUS_SAND,
+                        registries,
+                        SILKTOUCH_SUSPICIOUS_SAND
+                    );
                 }
-                if(trial_spawner && Identifiers.get(Blocks.TRIAL_SPAWNER).equals(identifier) ) {
-                    LootPoolHelpers.dropsTrialSpawnerNBTWithSilkTouchPickaxe(tableBuilder, Blocks.TRIAL_SPAWNER, registries);
+                if( Identifiers.get(Blocks.TRIAL_SPAWNER).equals(identifier) ) {
+                    dropsTrialSpawnerNBTWithSilkTouchPickaxe(
+                        tableBuilder,
+                        Blocks.TRIAL_SPAWNER,
+                        registries,
+                        SILKTOUCH_TRIAL_SPAWNER
+                    );
                 }
-                if(vault && Identifiers.get(Blocks.VAULT).equals(identifier) ) {
-                    LootPoolHelpers.dropVaultNBTWithSilkTouchPickaxe(tableBuilder, Blocks.VAULT, registries);
+                if( Identifiers.get(Blocks.VAULT).equals(identifier) ) {
+                    dropVaultNBTWithSilkTouchPickaxe(
+                        tableBuilder,
+                        Blocks.VAULT,
+                        registries,
+                        SILKTOUCH_VAULT
+                    );
                 }
+//                if( Identifiers.get(Blocks.FARMLAND).equals(identifier) ) {
+//                    dropsWithSilkTouchShovel(
+//                        tableBuilder,
+//                        Blocks.FARMLAND,
+//                        registries,
+//                        SILKTOUCH_FARMLAND
+//                    );
+//                }
             }
         );
     }

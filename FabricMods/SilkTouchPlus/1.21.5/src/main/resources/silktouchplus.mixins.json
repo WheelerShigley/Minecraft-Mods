@@ -5,10 +5,8 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "CustomDataComponentLootFunctionMixin",
-    "RestartMessageMixin",
     "SpawnerBlockPlacementPermissionsMixin",
-    "SpawnerMixin",
-    "StartUpMixin"
+    "SpawnerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

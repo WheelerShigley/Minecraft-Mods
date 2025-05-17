@@ -1,5 +1,6 @@
 package me.wheelershigley.silktouchplus;
 
+import me.wheelershigley.silktouchplus.registrations.GameRuleLootFunction;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.GameRules;
@@ -13,18 +14,7 @@ public class SilkTouchPlus implements ModInitializer {
     public static final String MOD_ID = "silktouchplus";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public static boolean
-        budding_amethyst = true,
-        reinforced_deepslate = true,
-        spawner = true,
-        suspicious_sand = true,
-        suspicious_gravel = true,
-        trial_spawner = true,
-        vault = true
-    ;
-
     /* TODO
-     * Add message which says that a restart is required for gamerule changes
      * Farmland
      * (vanilla-like) Shreikers
      * Dirt-path
@@ -37,20 +27,8 @@ public class SilkTouchPlus implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        GameRuleLootFunction.register();
         registerGameRules();
-        registerLootTables();
-    }
-
-    public static void reload(MinecraftServer server) {
-        GameRules gameRules = server.getGameRules();
-        budding_amethyst        = gameRules.getBoolean(SILKTOUCH_BUDDING_AMETHYST);
-        reinforced_deepslate    = gameRules.getBoolean(SILKTOUCH_REINFORCED_DEEPSLATE);
-        spawner                 = gameRules.getBoolean(SILKTOUCH_SPAWNER);
-        suspicious_sand         = gameRules.getBoolean(SILKTOUCH_SUSPICIOUS_SAND);
-        suspicious_gravel       = gameRules.getBoolean(SILKTOUCH_SUSPICIOUS_GRAVEL);
-        trial_spawner           = gameRules.getBoolean(SILKTOUCH_TRIAL_SPAWNER);
-        vault                   = gameRules.getBoolean(SILKTOUCH_VAULT);
-
         registerLootTables();
     }
 }

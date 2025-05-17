@@ -23,6 +23,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Set;
 
+import static me.wheelershigley.silktouchplus.registrations.GameRuleRegistrator.SILKTOUCH_SPAWNER;
+
 @Mixin(SpawnerBlock.class)
 public abstract class SpawnerMixin extends BlockWithEntity  {
     protected SpawnerMixin(Settings settings) {
@@ -49,14 +51,17 @@ public abstract class SpawnerMixin extends BlockWithEntity  {
     protected void onStacksDropped(BlockState state, ServerWorld world, BlockPos pos, ItemStack tool, boolean dropExperience, CallbackInfo ci) {
         /* Exp. should not drop if the spawner is silk-touched. */ {
             Set< RegistryEntry<Enchantment> > enchants = EnchantmentHelper.getEnchantments(tool).getEnchantments();
-            if( EnchantmentsHelper.includesEnchantment(enchants, Enchantments.SILK_TOUCH) ) {
+            if(
+                world.getGameRules().getBoolean(SILKTOUCH_SPAWNER)
+                && EnchantmentsHelper.includesEnchantment(enchants, Enchantments.SILK_TOUCH)
+            ) {
                 dropExperience = false;
             }
         }
 
         /* Vanilla Implementation */ {
             super.onStacksDropped(state, world, pos, tool, dropExperience);
-            if(SilkTouchPlus.spawner && dropExperience) {
+            if(dropExperience) {
                 int i = 15 + world.random.nextInt(15) + world.random.nextInt(15);
                 this.dropExperience(world, pos, i);
             }

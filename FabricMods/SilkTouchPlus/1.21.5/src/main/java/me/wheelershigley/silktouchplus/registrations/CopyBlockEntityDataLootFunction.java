@@ -1,4 +1,4 @@
-package me.wheelershigley.silktouchplus;
+package me.wheelershigley.silktouchplus.registrations;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -6,6 +6,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import me.wheelershigley.silktouchplus.SilkTouchPlus;
 import net.minecraft.command.argument.NbtPathArgumentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
@@ -18,9 +19,6 @@ import net.minecraft.loot.provider.nbt.LootNbtProviderTypes;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
 import org.apache.commons.lang3.mutable.MutableObject;
 
