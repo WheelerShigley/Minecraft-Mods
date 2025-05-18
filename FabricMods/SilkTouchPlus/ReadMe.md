@@ -6,15 +6,19 @@ Many blocks are silk-touch-able, configurable with [gamerules](https://minecraft
 ## Settings
 All features of this mod can be enabled/disabled with gamerules; below are their default settings.
 
-| Name | Default Value |
-| ---- | ------------- |
-| silktouchBuddingAmethyst     | true |
-| silktouchReinforcedDeepslate | true |
-| silktouchSpawner             | true |
-| silktouchSuspiciousSand      | true |
-| silktouchSuspiciousGravel    | true |
-| silktouchTrialSpawner        | true |
-| silktouchVault               | true |
+| Name | Default Value | Tool |
+| ---- | ------------- | ---- |
+| silktouchBuddingAmethyst     | true  | Pickaxe |
+| silktouchReinforcedDeepslate | true  | Pickaxe |
+| silktouchSpawner             | true  | Pickaxe |
+| silktouchSuspiciousSand      | true  | Pickaxe |
+| silktouchSuspiciousGravel    | true  | Pickaxe |
+| silktouchTrialSpawner        | true  | Pickaxe |
+| silktouchVault               | true  | Pickaxe |
+| silktouchInfestedBlocks      | true  | Pickaxe |
+| silktouchFarmland            | false | Any     |
+| silktouchDirtPath            | false | Any     |
+| silktouchCake                | ture  | Any     |
 
 These can be modified with the gamerule command, ex:
 ``/gamerule silktouchSpawner true``

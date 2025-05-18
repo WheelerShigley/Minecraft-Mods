@@ -13,14 +13,6 @@ public class SilkTouchPlus implements ModInitializer {
     public static final String MOD_ID = "silktouchplus";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    /* TODO
-     * (vanilla-like) Shreikers
-     * Dragon Egg?
-     * infestedStones drops?
-     *
-     * Shears+ mod? (Tall grass)
-     */
-
     @Override
     public void onInitialize() {
         GameRuleLootFunction.register();

@@ -34,9 +34,9 @@ public class GameRuleRegistrator {
         SILKTOUCH_SUSPICIOUS_GRAVEL     = register("silktouchSuspiciousGravel",     true);
         SILKTOUCH_TRIAL_SPAWNER         = register("silktouchTrialSpawner",         true);
         SILKTOUCH_VAULT                 = register("silktouchVault",                true);
-        SILKTOUCH_INFESTED_BLOCKS       = register("silktouchInfestedBlocks",       false);
+        SILKTOUCH_INFESTED_BLOCKS       = register("silktouchInfestedBlocks",       true);
         SILKTOUCH_FARMLAND              = register("silktouchFarmland",             false);
         SILKTOUCH_DIRT_PATH             = register("silktouchDirtPath",             false);
-        SILKTOUCH_CAKE                  = register("silktouchCake",                 false);
+        SILKTOUCH_CAKE                  = register("silktouchCake",                 true);
     }
 }

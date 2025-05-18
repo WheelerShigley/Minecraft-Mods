@@ -1,6 +1,5 @@
 package me.wheelershigley.silktouchplus.registrations;
 
-import me.wheelershigley.silktouchplus.SilkTouchPlus;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;

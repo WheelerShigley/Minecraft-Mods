@@ -6,6 +6,8 @@
   "gamerule.silktouchSuspiciousGravel":     "Suspicious-gravel may be silk-touch-ed.",
   "gamerule.silktouchTrialSpawner":         "Trial-spawners may be silk-touch-ed.",
   "gamerule.silktouchVault":                "Vaults may be silk-touch-ed.",
-
-  "silktouchplus.text.restart_required": "§7Restart required to apply change."
+  "gamerule.silktouchInfestedBlocks":       "Infested Blocks can drop when silk-touch-ed.",
+  "gamerule.silktouchFarmland":             "Farmland can be silk-touch-ed.",
+  "gamerule.silktouchDirtPath":             "Dirt-paths can be silk-touch-ed.",
+  "gamerule.silktouchCake":                 "Uneaten cakes can be silk-touch-ed."
 }
