@@ -10,6 +10,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.EnchantmentTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
@@ -48,6 +49,7 @@ public class InfestedBlocksMixin extends Block {
         if(
             world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS)
             && !EnchantmentHelper.hasAnyEnchantmentsIn(tool, EnchantmentTags.PREVENTS_INFESTED_SPAWNS)
+            && !tool.streamTags().toList().contains(ItemTags.PICKAXES)
             && !(
                 world.getGameRules().getBoolean(SILKTOUCH_INFESTED_BLOCKS)
                 && enchantmentsComponent != null && !enchantmentsComponent.isEmpty()

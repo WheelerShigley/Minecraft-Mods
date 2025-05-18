@@ -176,7 +176,7 @@ public class LootTableRegistrator {
                 }
                 for(Pair<InfestableBlockPair, Identifier> infestedBlock : infestedBlocks) {
                     if( infestedBlock.getRight().equals(identifier) ) {
-                        return dropsWithSilkTouchPickaxe(
+                        return dropsWithOnlySilkTouch(
                             tableBuilder,
                             infestedBlock.getLeft().getInfestedBlock(),
                             infestedBlock.getLeft().getUninfestedBlock(),
