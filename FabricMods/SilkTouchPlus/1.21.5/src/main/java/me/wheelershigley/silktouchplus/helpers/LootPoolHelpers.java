@@ -54,7 +54,7 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
         );
     }
 
-    public static void dropsWithSilkTouch(
+    public static LootTable dropsWithSilkTouch(
             LootTable.Builder tableBuilder,
             Block drop,
             Block defaultDrop,
@@ -72,7 +72,7 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
                 ItemEntry.builder(defaultDrop).conditionally( silkTouchCondition.invert() )
             )
         ;
-        tableBuilder.pool( builder.build() );
+        return tableBuilder.pool( builder.build() ).build();
     }
 
     private static LootCondition.Builder pickaxesCondition(RegistryWrapper.WrapperLookup registries) {
@@ -84,9 +84,10 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
         );
     }
 
-    public static void dropsWithSilkTouchPickaxe(
+    public static LootTable dropsWithSilkTouchPickaxe(
         LootTable.Builder tableBuilder,
         Block drop,
+        Block defaultDrop,
         RegistryWrapper.WrapperLookup registries,
         GameRules.Key<GameRules.BooleanRule> gamerule
     ) {
@@ -101,6 +102,20 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
             )
         ;
         tableBuilder.pool( builder.build() );
+
+        if(defaultDrop != null) {
+            builder = LootPool.builder()
+                .apply( new GameRuleLootFunction(gamerule, true) )
+                .rolls( ConstantLootNumberProvider.create(1.0F) )
+                .with(
+                    ItemEntry.builder(defaultDrop)
+                        .conditionally( pickaxesCondition(registries) )
+                        .conditionally(silkTouchCondition)
+                )
+            ;
+        }
+
+        return tableBuilder.pool( builder.build() ).build();
     }
     public static void dropsSpawnerNBTWithSilkTouchPickaxe(
         LootTable.Builder tableBuilder,
@@ -110,7 +125,7 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
     ) {
         LootCondition.Builder silkTouchCondition = silkTouchCondition(registries);
         LootPool.Builder builder = LootPool.builder()
-                .apply( new GameRuleLootFunction(gamerule) )
+            .apply( new GameRuleLootFunction(gamerule) )
             .rolls( ConstantLootNumberProvider.create(1.0F) )
             .with(
                 ItemEntry.builder(drop)

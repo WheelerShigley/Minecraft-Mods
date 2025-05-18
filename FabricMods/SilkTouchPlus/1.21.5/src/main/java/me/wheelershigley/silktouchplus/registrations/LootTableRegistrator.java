@@ -1,5 +1,6 @@
 package me.wheelershigley.silktouchplus.registrations;
 
+import me.wheelershigley.silktouchplus.data.InfestableBlockPair;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -40,14 +41,49 @@ public class LootTableRegistrator {
             INFESTED_CHISELED_STONE_BRICKS_IDENTIFIER   = getVanillaBlockIdentifier(Blocks.INFESTED_CHISELED_STONE_BRICKS),
             INFESTED_DEEPSLATE_IDENTIFIER               = getVanillaBlockIdentifier(Blocks.INFESTED_DEEPSLATE)
         ;
-        ArrayList< Pair<Block, Identifier> > infestedBlocks = new ArrayList<>(); {
-            infestedBlocks.add( new Pair<>(Blocks.INFESTED_STONE, INFESTED_STONE_IDENTIFIER) );
-            infestedBlocks.add( new Pair<>(Blocks.INFESTED_COBBLESTONE, INFESTED_COBBLESTONE_IDENTIFIER) );
-            infestedBlocks.add( new Pair<>(Blocks.INFESTED_STONE_BRICKS, INFESTED_STONE_BRICKS_IDENTIFIER) );
-            infestedBlocks.add( new Pair<>(Blocks.INFESTED_MOSSY_STONE_BRICKS, INFESTED_MOSSY_STONE_BRICKS_IDENTIFIER) );
-            infestedBlocks.add( new Pair<>(Blocks.INFESTED_CRACKED_STONE_BRICKS, INFESTED_CRACKED_STONE_BRICKS_IDENTIFIER) );
-            infestedBlocks.add( new Pair<>(Blocks.INFESTED_CHISELED_STONE_BRICKS, INFESTED_CHISELED_STONE_BRICKS_IDENTIFIER) );
-            infestedBlocks.add( new Pair<>(Blocks.INFESTED_DEEPSLATE, INFESTED_DEEPSLATE_IDENTIFIER) );
+        ArrayList< Pair<InfestableBlockPair, Identifier> > infestedBlocks = new ArrayList<>(); {
+            infestedBlocks.add(
+                new Pair<>(
+                    new InfestableBlockPair(Blocks.STONE, Blocks.INFESTED_STONE),
+                    INFESTED_STONE_IDENTIFIER
+                )
+            );
+            infestedBlocks.add(
+                new Pair<>(
+                    new InfestableBlockPair(Blocks.COBBLESTONE, Blocks.INFESTED_COBBLESTONE),
+                    INFESTED_COBBLESTONE_IDENTIFIER
+                )
+            );
+            infestedBlocks.add(
+                new Pair<>(
+                        new InfestableBlockPair(Blocks.STONE_BRICKS, Blocks.INFESTED_STONE_BRICKS),
+                    INFESTED_STONE_BRICKS_IDENTIFIER
+                )
+            );
+            infestedBlocks.add(
+                new Pair<>(
+                    new InfestableBlockPair(Blocks.MOSSY_STONE_BRICKS, Blocks.INFESTED_MOSSY_STONE_BRICKS),
+                    INFESTED_MOSSY_STONE_BRICKS_IDENTIFIER
+                )
+            );
+            infestedBlocks.add(
+                new Pair<>(
+                    new InfestableBlockPair(Blocks.CRACKED_STONE_BRICKS, Blocks.INFESTED_CRACKED_STONE_BRICKS),
+                    INFESTED_CRACKED_STONE_BRICKS_IDENTIFIER
+                )
+            );
+            infestedBlocks.add(
+                new Pair<>(
+                    new InfestableBlockPair(Blocks.CHISELED_STONE_BRICKS, Blocks.INFESTED_CHISELED_STONE_BRICKS),
+                    INFESTED_CHISELED_STONE_BRICKS_IDENTIFIER
+                )
+            );
+            infestedBlocks.add(
+                new Pair<>(
+                    new InfestableBlockPair(Blocks.DEEPSLATE, Blocks.INFESTED_DEEPSLATE),
+                    INFESTED_DEEPSLATE_IDENTIFIER
+                )
+            );
         }
 
         LootTableEvents.MODIFY.register(
@@ -58,6 +94,7 @@ public class LootTableRegistrator {
                     dropsWithSilkTouchPickaxe(
                         tableBuilder,
                         Blocks.BUDDING_AMETHYST,
+                        null,
                         registries,
                         SILKTOUCH_BUDDING_AMETHYST
                     );
@@ -66,6 +103,7 @@ public class LootTableRegistrator {
                     dropsWithSilkTouchPickaxe(
                         tableBuilder,
                         Blocks.REINFORCED_DEEPSLATE,
+                        null,
                         registries,
                         SILKTOUCH_REINFORCED_DEEPSLATE
                     );
@@ -110,17 +148,6 @@ public class LootTableRegistrator {
                         SILKTOUCH_VAULT
                     );
                 }
-
-                for(Pair<Block, Identifier> infestedBlock : infestedBlocks) {
-                    if( infestedBlock.getRight().equals(identifier) ) {
-                        dropsWithSilkTouchPickaxe(
-                            tableBuilder,
-                            infestedBlock.getLeft(),
-                            registries,
-                            SILKTOUCH_INFESTED_BLOCKS
-                        );
-                    }
-                }
             }
         );
 
@@ -130,7 +157,7 @@ public class LootTableRegistrator {
                 LootTable.Builder tableBuilder = new LootTable.Builder();
 
                 if( FARMLAND_IDENTIFIER.equals(identifier) ) {
-                    dropsWithSilkTouch(
+                    return dropsWithSilkTouch(
                         tableBuilder,
                         Blocks.FARMLAND,
                         Blocks.DIRT,
@@ -139,7 +166,7 @@ public class LootTableRegistrator {
                     );
                 }
                 if( DIRT_PATH_IDENTIFIER.equals(identifier) ) {
-                    dropsWithSilkTouch(
+                    return dropsWithSilkTouch(
                         tableBuilder,
                         Blocks.DIRT_PATH,
                         Blocks.DIRT,
@@ -147,8 +174,19 @@ public class LootTableRegistrator {
                         SILKTOUCH_DIRT_PATH
                     );
                 }
+                for(Pair<InfestableBlockPair, Identifier> infestedBlock : infestedBlocks) {
+                    if( infestedBlock.getRight().equals(identifier) ) {
+                        return dropsWithSilkTouchPickaxe(
+                            tableBuilder,
+                            infestedBlock.getLeft().getInfestedBlock(),
+                            infestedBlock.getLeft().getUninfestedBlock(),
+                            registries,
+                            SILKTOUCH_INFESTED_BLOCKS
+                        );
+                    }
+                }
 
-                return tableBuilder.build();
+                return null;
             }
         );
     }
