@@ -7,6 +7,7 @@ import net.minecraft.world.GameRules;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static me.wheelershigley.silktouchplus.registrations.CakeDrops.registerCakeDrop;
 import static me.wheelershigley.silktouchplus.registrations.GameRuleRegistrator.*;
 import static me.wheelershigley.silktouchplus.registrations.LootTableRegistrator.*;
 
@@ -15,10 +16,7 @@ public class SilkTouchPlus implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     /* TODO
-     * Farmland
      * (vanilla-like) Shreikers
-     * Dirt-path
-     * Cakes
      * Dragon Egg?
      * infestedStones drops?
      *
@@ -30,5 +28,7 @@ public class SilkTouchPlus implements ModInitializer {
         GameRuleLootFunction.register();
         registerGameRules();
         registerLootTables();
+
+        registerCakeDrop();
     }
 }

@@ -1,5 +1,6 @@
 package me.wheelershigley.silktouchplus.registrations;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import me.wheelershigley.silktouchplus.SilkTouchPlus;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.block.Block;
@@ -47,6 +48,10 @@ public class LootTableRegistrator {
         Identifiers.put(
             Blocks.FARMLAND,
             Identifier.of("minecraft", "blocks/farmland")
+        );
+        Identifiers.put(
+            Blocks.DIRT_PATH,
+            Identifier.ofVanilla("blocks/dirt_path")
         );
     }
 
@@ -128,6 +133,16 @@ public class LootTableRegistrator {
                         SILKTOUCH_FARMLAND
                     );
                 }
+                if( Identifiers.get(Blocks.DIRT_PATH).equals(identifier) ) {
+                    dropsWithSilkTouchShovel(
+                        tableBuilder,
+                        Blocks.DIRT_PATH,
+                        Blocks.DIRT,
+                        registries,
+                        SILKTOUCH_DIRT_PATH
+                    );
+                }
+
                 return tableBuilder.build();
             }
         );
