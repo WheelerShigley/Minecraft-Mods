@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "CustomDataComponentLootFunctionMixin",
+    "InfestedBlocksMixin",
     "SpawnerBlockPlacementPermissionsMixin",
     "SpawnerDropsMixin"
   ],

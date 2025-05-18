@@ -1,7 +1,7 @@
 package me.wheelershigley.silktouchplus.helpers;
 
-import me.wheelershigley.silktouchplus.registrations.CopyBlockEntityDataLootFunction;
-import me.wheelershigley.silktouchplus.registrations.GameRuleLootFunction;
+import me.wheelershigley.silktouchplus.data.CopyBlockEntityDataLootFunction;
+import me.wheelershigley.silktouchplus.data.GameRuleLootFunction;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
@@ -52,6 +52,27 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
                 ).build()
             )
         );
+    }
+
+    public static void dropsWithSilkTouch(
+            LootTable.Builder tableBuilder,
+            Block drop,
+            Block defaultDrop,
+            RegistryWrapper.WrapperLookup registries,
+            GameRules.Key<GameRules.BooleanRule> gamerule
+    ) {
+        LootCondition.Builder silkTouchCondition = silkTouchCondition(registries);
+        LootPool.Builder builder = LootPool.builder()
+            .apply(new GameRuleLootFunction(gamerule) )
+            .rolls( ConstantLootNumberProvider.create(1.0F) )
+            .with(
+                ItemEntry.builder(drop).conditionally(silkTouchCondition)
+            )
+            .with(
+                ItemEntry.builder(defaultDrop).conditionally( silkTouchCondition.invert() )
+            )
+        ;
+        tableBuilder.pool( builder.build() );
     }
 
     private static LootCondition.Builder pickaxesCondition(RegistryWrapper.WrapperLookup registries) {
@@ -218,7 +239,6 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
             RegistryWrapper.WrapperLookup registries,
             GameRules.Key<GameRules.BooleanRule> gamerule
     ) {
-
         LootCondition.Builder silkTouchCondition = silkTouchCondition(registries);
         LootPool.Builder builder = LootPool.builder()
             .apply(new GameRuleLootFunction(gamerule) )
@@ -232,16 +252,6 @@ public class LootPoolHelpers extends FabricBlockLootTableProvider {
                 ItemEntry.builder(defaultDrop)
                     .conditionally( shovelsCondition(registries) )
                     .conditionally( silkTouchCondition.invert() )
-            )
-        ;
-        tableBuilder.pool( builder.build() );
-
-        builder = LootPool.builder()
-            .apply(new GameRuleLootFunction(gamerule, true) )
-            .rolls( ConstantLootNumberProvider.create(1.0F) )
-            .with(
-                ItemEntry.builder(defaultDrop)
-                    .conditionally( shovelsCondition(registries) )
             )
         ;
         tableBuilder.pool( builder.build() );

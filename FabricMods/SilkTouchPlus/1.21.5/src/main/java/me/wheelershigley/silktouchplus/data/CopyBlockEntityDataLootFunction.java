@@ -1,4 +1,4 @@
-package me.wheelershigley.silktouchplus.registrations;
+package me.wheelershigley.silktouchplus.data;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;

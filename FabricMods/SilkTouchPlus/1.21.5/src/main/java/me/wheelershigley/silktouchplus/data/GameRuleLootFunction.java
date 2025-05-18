@@ -1,4 +1,4 @@
-package me.wheelershigley.silktouchplus.registrations;
+package me.wheelershigley.silktouchplus.data;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.item.ItemStack;

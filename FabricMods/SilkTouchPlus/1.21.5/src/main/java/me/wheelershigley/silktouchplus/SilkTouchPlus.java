@@ -1,9 +1,7 @@
 package me.wheelershigley.silktouchplus;
 
-import me.wheelershigley.silktouchplus.registrations.GameRuleLootFunction;
+import me.wheelershigley.silktouchplus.data.GameRuleLootFunction;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.GameRules;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
