@@ -1,9 +1,11 @@
 # [Tree In A Forest](https://modrinth.com/mod/tree-in-a-forest/version/0.4.2_1.21.5)
-![AFK](https://cdn.modrinth.com/data/QhqvfRRd/images/b78a2f1a048e83d30070040ce237c9ccef132a7f.png)
 If a tree falls in a forest and noone is around to hear it, does it make a sound? **No.**
+
+![AFK](https://cdn.modrinth.com/data/QhqvfRRd/images/b78a2f1a048e83d30070040ce237c9ccef132a7f.png)
 
 
 This mod makes it so that time stops when noone is online.
+
 After 1.21.1, the server-property "pause-when-empty-seconds" can provide this functionality.
 
 ---
