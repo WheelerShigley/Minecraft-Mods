@@ -1,19 +1,21 @@
-# Tree In A Forest
-### If a tree falls in a forest and noone is around to hear it, does it make a sound? **No.**
+# [Tree In A Forest](https://modrinth.com/mod/tree-in-a-forest/version/0.4.2_1.21.5)
+![AFK](https://cdn.modrinth.com/data/QhqvfRRd/images/b78a2f1a048e83d30070040ce237c9ccef132a7f.png)
+If a tree falls in a forest and noone is around to hear it, does it make a sound? **No.**
 
 
-This mod makes it so that time stops (for all Worlds) when noone is online.
+This mod makes it so that time stops when noone is online.
+After 1.21.1, the server-property "pause-when-empty-seconds" can provide this functionality.
 
 ---
 
-Example Output:
+## Blacklisting
 
-```txt
-[11:42:41] [User Authenticator #1/INFO] (Minecraft) UUID of player <PLAYER> is <UUID>
-[11:42:42] [Server thread/INFO] (tree_in_a_forest) Starting time.
-[11:42:42] [Server thread/INFO] (Minecraft) <PLAYER>[/127.0.0.1:56083] logged in with entity id 87 at (92.99503511601426, 97.98752470333716, 475.98631121512824)
-[11:42:42] [Server thread/INFO] (Minecraft) <PLAYER> joined the game
-[11:42:46] [Server thread/INFO] (Minecraft) <PLAYER> lost connection: Disconnected
-[11:42:46] [Server thread/INFO] (Minecraft) <PLAYER> left the game
-[11:42:46] [Server thread/INFO] (tree_in_a_forest) Stopping time.
-```
+With "blacklisting", one can ensure that the day doesn't progress from specific players being online; this is particularly useful if you want the day-counter to be accurate: not accounting for afk/bot accounts.
+
+Using the following commands, the blacklist can be managed.
+
++ ``/treeinaforest blacklist list``: Lists all blacklisted players
++ ``/treeinaforest blacklist add <player-name>``: Adds a player to the blacklist
++ ``/treeinaforest blacklist remove <player-name>``: Removes a player from the blacklist
+
++ Blacklisting is done by UUID when possible (immune to name changes) and will use a name when there is not an account associated with the name (or the server is offline).
