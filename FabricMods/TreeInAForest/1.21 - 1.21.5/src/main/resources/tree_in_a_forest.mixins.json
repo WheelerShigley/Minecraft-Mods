@@ -4,8 +4,9 @@
   "package": "me.wheelershigley.tree_in_a_forest.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "StartingActionsMixin",
-    "PlayerConnectionMixin"
+    "ConditionalWorldTickingMixin",
+    "PlayerConnectionMixin",
+    "StartingActionsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

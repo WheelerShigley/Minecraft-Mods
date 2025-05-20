@@ -3,6 +3,7 @@ package me.wheelershigley.tree_in_a_forest.command;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.sun.source.tree.Tree;
 import me.wheelershigley.tree_in_a_forest.TreeInAForest;
 import me.wheelershigley.tree_in_a_forest.blacklist.Blacklist;
 import me.wheelershigley.tree_in_a_forest.helpers.MessagesHelper;
@@ -83,6 +84,7 @@ public class Registrator {
                     "tree_in_a_forest.text.blacklist_player_failure",
                     "tree_in_a_forest.text.player_blacklisted_player"
                 );
+                TreeInAForest.updateServerTicking();
                 return 0;
             }
             if( playerName != null && !playerName.isEmpty() ) {
@@ -97,6 +99,7 @@ public class Registrator {
                     "tree_in_a_forest.text.blacklist_player_failure",
                     "tree_in_a_forest.text.player_blacklisted_player"
                 );
+                TreeInAForest.updateServerTicking();
                 return 0;
             }
 
@@ -121,6 +124,7 @@ public class Registrator {
                     "tree_in_a_forest.text.unblacklist_player_failure",
                     "tree_in_a_forest.text.player_unblacklisted_player"
                 );
+                TreeInAForest.updateServerTicking();
                 return 0;
             }
             if( playerName != null && !playerName.isBlank() ) {
@@ -135,6 +139,7 @@ public class Registrator {
                     "tree_in_a_forest.text.unblacklist_player_failure",
                     "tree_in_a_forest.text.player_unblacklisted_player"
                 );
+                TreeInAForest.updateServerTicking();
                 return 0;
             }
 

@@ -1,6 +1,7 @@
 package me.wheelershigley.tree_in_a_forest;
 
 import com.mojang.authlib.GameProfile;
+import me.wheelershigley.tree_in_a_forest.blacklist.Blacklist;
 import me.wheelershigley.tree_in_a_forest.command.Registrator;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.server.MinecraftServer;
@@ -20,12 +21,7 @@ public class TreeInAForest implements ModInitializer {
 
     public static final HashMap<UUID, GameProfile> gameProfileCache = new HashMap<>();
     public static MinecraftServer server = null;
-
-    /* TODO
-     * Prevent blacklisted users from ticking time
-     * - have a boolean (@here) which updates when players join&leave
-     * - Mixin into some world-class and prevent time from being incremented if above boolean is false
-     */
+    public static boolean serverHasOnlyBlacklistedPlayers = false;
 
     @Override
     public void onInitialize() {
@@ -33,27 +29,50 @@ public class TreeInAForest implements ModInitializer {
         EventRegistrations.registerPostServerStartUp();
     }
 
-    private static float rate = 20.0f;
+    private static float tick_rate = 20.0f;
     public static void updateServerTicking() {
         if(server == null) {
             return;
         }
 
+        boolean wasTimeStoppedBefore = TreeInAForest.serverHasOnlyBlacklistedPlayers;
         List<ServerPlayerEntity> players = server.getPlayerManager().getPlayerList();
-        //TODO remember each world's tickrate
-//        Iterable<ServerWorld> worlds = server.getWorlds();
+        TreeInAForest.serverHasOnlyBlacklistedPlayers =
+            players.isEmpty() || !doesServerHasNonBotOnline(players)
+        ;
+        LOGGER.info( Boolean.toString(serverHasOnlyBlacklistedPlayers) );
 
-        if(players.size() <= 0) {
-            sendConsoleInfoTranslatableMessage(
-                "tree_in_a_forest.text.stopping_time"
-            );
-            rate = server.getTickManager().getTickRate();
+        if( players.isEmpty() ) {
+            tick_rate = server.getTickManager().getTickRate();
             server.getTickManager().setTickRate(0.0f);
         } else {
-            sendConsoleInfoTranslatableMessage(
-                "tree_in_a_forest.text.starting_time"
-            );
-            server.getTickManager().setTickRate(rate);
+            server.getTickManager().setTickRate(tick_rate);
         }
+
+        if( TreeInAForest.serverHasOnlyBlacklistedPlayers) {
+            if(!wasTimeStoppedBefore) {
+                sendConsoleInfoTranslatableMessage(
+                    "tree_in_a_forest.text.stopping_time"
+                );
+            }
+        } else {
+            if(wasTimeStoppedBefore) {
+                sendConsoleInfoTranslatableMessage(
+                    "tree_in_a_forest.text.starting_time"
+                );
+            }
+        }
+    }
+    private static boolean doesServerHasNonBotOnline(List<ServerPlayerEntity> players) {
+        for(ServerPlayerEntity player : players) {
+            if(
+                Blacklist.profileBlacklist.contains( player.getGameProfile() )
+                || Blacklist.nameBlacklist.contains( player.getName().getString() )
+            ) {
+                continue;
+            }
+            return true;
+        }
+        return false;
     }
 }
