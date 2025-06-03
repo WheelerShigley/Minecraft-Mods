@@ -11,3 +11,5 @@ Shearing will clip their arms; they can be replaced with two sticks.
 ---
 
 For respective textures, check out the companion resource-pack, [Default-Arms Textures](https://modrinth.com/resourcepack/default-arms-textures).
+
+![Resource Pack](https://cdn.modrinth.com/data/58cLdkju/images/a4ab16ce6e43d70940da3975f5a62b7fd1b1eb24.png)
