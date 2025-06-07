@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/1.18 - 1.18.2/1.18 - 1.18.2.iml" filepath="$PROJECT_DIR$/1.18 - 1.18.2/1.18 - 1.18.2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/1.19 - 1.20.4/1.19 - 1.20.4.iml" filepath="$PROJECT_DIR$/1.19 - 1.20.4/1.19 - 1.20.4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/1.20.5 - 1.21.5/1.20.5 - 1.21.5.iml" filepath="$PROJECT_DIR$/1.20.5 - 1.21.5/1.20.5 - 1.21.5.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/LilGuy.iml" filepath="$PROJECT_DIR$/.idea/LilGuy.iml" />
+    </modules>
+  </component>
+</project>
