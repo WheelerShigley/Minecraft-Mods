@@ -1,13 +1,16 @@
 package me.wheelershigley.lil_guy.mixins;
 
+import me.wheelershigley.lil_guy.LilGuy;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PassiveEntity.class)
 public class PassiveEntityMixin extends PathAwareEntity {
@@ -23,11 +26,30 @@ public class PassiveEntityMixin extends PathAwareEntity {
      * @author Wheeler-Shigley
      * @reason Named baby animals will not have their age changed.
      */
-    @Overwrite
-    public void tickMovement() {
+    @Inject(
+        method = "tickMovement",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    public void tickMovement(CallbackInfo ci) {
         super.tickMovement();
+        if(this.getWorld().isClient) {
+            if(0 < this.happyTicksRemaining) {
+                if(this.happyTicksRemaining%4 == 0) {
+                    this.world.addParticle(
+                        ParticleTypes.HAPPY_VILLAGER,
+                        this.getParticleX( (double)1.0F ),
+                        this.getRandomBodyY() + (double)0.5F,
+                        this.getParticleZ( (double)1.0F ),
+                        (double)0.0F,
+                        (double)0.0F,
+                        (double)0.0F
+                    );
+                }
 
-        if( this.isAlive() ) {
+                --this.happyTicksRemaining;
+            }
+        } else if( this.isAlive() ) {
             int breeding_age = this.getBreedingAge();
             //Babies
             if(breeding_age < 0 && !this.hasCustomName() ) {
@@ -40,5 +62,6 @@ public class PassiveEntityMixin extends PathAwareEntity {
                 this.setBreedingAge(breeding_age);
             }
         }
+        ci.cancel();
     }
 }

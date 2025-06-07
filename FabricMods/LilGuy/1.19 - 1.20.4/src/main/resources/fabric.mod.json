@@ -1,24 +1,26 @@
 {
   "schemaVersion": 1,
   "id": "lil_guy",
-  "version": "1.2.3",
+  "version": "1.2.4_1.19-1.20.4",
   "name": "Lil Guy",
   "description": "Named, baby animals will never age!",
   "authors": ["Wheeler-Shigley"],
-  "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/lil_guy/icon.png",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
     "main": [
       "me.wheelershigley.lil_guy.LilGuy"
+    ],
+    "client": [
+      "me.wheelershigley.lil_guy.client.LilGuyClient"
     ]
   },
   "mixins": [
     "lil_guy.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.10",
+    "fabricloader": ">=0.16.14",
     "fabric": "*",
     "minecraft": ">=1.19 <=1.20.4"
   }
