@@ -1,8 +1,6 @@
 package me.wheelershigley.live_catch.mixins;
 
-import me.wheelershigley.live_catch.EntityLink;
-import me.wheelershigley.live_catch.FishMap;
-import me.wheelershigley.live_catch.LiveCatch;
+import me.wheelershigley.live_catch.helpers.FishMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ExperienceOrbEntity;
@@ -25,7 +23,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Iterator;
@@ -43,13 +40,16 @@ public abstract class FishingBobberEntityMixin extends ProjectileEntity {
 
     @Shadow @Nullable public PlayerEntity getPlayerOwner() { return null; }
     @Shadow private boolean removeIfInvalid(PlayerEntity player) { return false;}
-    //@Shadow protected void pullHookedEntity(Entity entity) {}
 
     /**
      * @author Wheeler-Shigley
-     * @reason a
+     * @reason Custom Fishing Implementation
      */
-    @Inject(method = "use", at = @At("HEAD"))
+    @Inject(
+        method = "use",
+        at = @At("HEAD"),
+        cancellable = true
+    )
     public void use(ItemStack usedItem, CallbackInfoReturnable<Integer> cir) {
         PlayerEntity playerEntity = this.getPlayerOwner();
         if(
@@ -59,13 +59,13 @@ public abstract class FishingBobberEntityMixin extends ProjectileEntity {
             && 0 < this.hookCountdown
         ) {
             //get loot Iterator
-            Iterator loot; {
+            Iterator<ItemStack> loot; {
                 LootWorldContext lootWorldContext = (new LootWorldContext.Builder((ServerWorld) this.getWorld()))
-                        .add(LootContextParameters.ORIGIN, this.getPos())
-                        .add(LootContextParameters.TOOL, usedItem)
-                        .add(LootContextParameters.THIS_ENTITY, this)
-                        .luck((float) this.luckBonus + playerEntity.getLuck())
-                        .build(LootContextTypes.FISHING);
+                    .add(LootContextParameters.ORIGIN, this.getPos())
+                    .add(LootContextParameters.TOOL, usedItem)
+                    .add(LootContextParameters.THIS_ENTITY, this)
+                    .luck((float) this.luckBonus + playerEntity.getLuck())
+                    .build(LootContextTypes.FISHING);
                 LootTable lootTable = this.getWorld().getServer().getReloadableRegistries().getLootTable(LootTables.FISHING_GAMEPLAY);
                 List<ItemStack> list = lootTable.generateLoot(lootWorldContext);
                 //Criteria.FISHING_ROD_HOOKED.trigger((ServerPlayerEntity)playerEntity, usedItem, this, list);
@@ -73,7 +73,7 @@ public abstract class FishingBobberEntityMixin extends ProjectileEntity {
             }
 
             while( loot.hasNext() ) {
-                ItemStack result = (ItemStack) loot.next();
+                ItemStack result = loot.next();
 
                 //get Velocity
                 double dx = playerEntity.getX() - this.getX();
@@ -84,41 +84,31 @@ public abstract class FishingBobberEntityMixin extends ProjectileEntity {
                 EntityType CatchType = FishMap.getFishTypeFromItem( result.getItem() );
                 boolean isFish = !CatchType.equals(EntityType.ITEM);
                 Entity Catch = null; {
-                    if(isFish) {
-                        Catch = FishMap.getFishFromType(
-                            CatchType,
-                            this.getWorld()
-                        );
-                        Catch.setPos(
-                            this.getX(),
-                            Math.ceil( this.getY() )+0.5 + Catch.getHeight(),
-                            this.getZ()
-                        );
-                        /*
-                         * The player entity is the parent of the link because
-                         * once the fishing rod pulls a fish/item, it is immediately deallocated;
-                         * any bobber you see after having pulled a fish/item is merely visual.
-                         */
-                        new EntityLink(
-                            this.getPlayerOwner(),
-                            Catch
-                        );
-                    } else {
+                    Catch = FishMap.getFishFromType(
+                        CatchType,
+                        this.getWorld()
+                    );
+                    if(Catch == null) {
                         Catch = new ItemEntity(
                             this.getWorld(),
-                            this.getX(), this.getY(), this.getZ(),
-                            result
+                            this.getX(),
+                            this.getY(),
+                            this.getZ(),
+                            new ItemStack( result.getItem() )
                         );
-                        Catch.setVelocity(
-                                0.1*dx,
-                                0.1*dy + 0.08*Math.sqrt( Math.sqrt(dx*dx + dy*dy + dz*dz) ),
-                                0.1*dz
-                        );
+                    } else {
+                        Catch.setPos( this.getX(), this.getY(), this.getZ() );
                     }
                 }
 
+                Catch.setVelocity(
+                        0.12*dx,
+                        0.12*dy + 0.18*Math.pow(dx*dx + dy*dy + dz*dz, 0.25),
+                        0.12*dz
+                );
                 this.getWorld().spawnEntity(Catch);
                 this.hookedEntity = Catch;
+
                 playerEntity.getWorld().spawnEntity(
                     new ExperienceOrbEntity(
                         playerEntity.getWorld(),
@@ -128,10 +118,12 @@ public abstract class FishingBobberEntityMixin extends ProjectileEntity {
                         this.random.nextInt(6) + 1
                     )
                 );
+
                 if( !CatchType.equals(EntityType.ITEM) ) {
                     playerEntity.increaseStat(Stats.FISH_CAUGHT, 1);
                 }
             }
         }
+        cir.cancel();
     }
 }

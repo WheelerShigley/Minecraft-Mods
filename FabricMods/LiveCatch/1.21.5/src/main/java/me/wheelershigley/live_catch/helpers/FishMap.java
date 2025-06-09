@@ -1,4 +1,4 @@
-package me.wheelershigley.live_catch;
+package me.wheelershigley.live_catch.helpers;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
