@@ -4,8 +4,7 @@
   "package": "me.wheelershigley.live_catch.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "FishingBobberEntityMixin",
-    "WorldTickMixin"
+    "FishingBobberEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
