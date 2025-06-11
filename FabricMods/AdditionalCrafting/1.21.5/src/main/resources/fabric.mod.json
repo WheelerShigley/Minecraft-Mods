@@ -1,24 +1,24 @@
 {
   "schemaVersion": 1,
   "id": "additional_crafting",
-  "version": "0.1.0",
+  "version": "0.1.0_1.21.5",
   "name": "Additional Crafting",
   "description": "Vanilla+ Crafting Recipes",
   "authors": ["Wheeler-Shigley"],
   "license": "All-Rights-Reserved",
   "icon": "assets/additional_crafting/icon.png",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
+    "fabric-datagen": [
+      "www.wheelershigley.me.additional_crafting.client.AdditionalCraftingDataGenerator"
+    ],
     "main": [
       "www.wheelershigley.me.additional_crafting.AdditionalCrafting"
-    ],
-    "fabric-datagen": [
-      "www.wheelershigley.me.additional_crafting.categorized_recipes.AdditionalCraftingDataGeneratorEntrypoint"
     ]
   },
   "depends": {
     "fabricloader": ">=0.16.14",
     "fabric": "*",
-    "minecraft": "*"
+    "minecraft": "1.21.5"
   }
 }

@@ -1,9 +1,9 @@
-package www.wheelershigley.me.additional_crafting.categorized_recipes;
+package www.wheelershigley.me.additional_crafting.client;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
-public class AdditionalCraftingDataGeneratorEntrypoint implements DataGeneratorEntrypoint {
+public class AdditionalCraftingDataGenerator implements DataGeneratorEntrypoint {
 
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
