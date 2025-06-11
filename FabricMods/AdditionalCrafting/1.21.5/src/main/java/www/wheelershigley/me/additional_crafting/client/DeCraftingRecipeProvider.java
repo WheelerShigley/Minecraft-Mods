@@ -10,8 +10,8 @@ import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
-public class AdditionalCraftingRecipeProvider extends FabricRecipeProvider {
-    public AdditionalCraftingRecipeProvider(
+public class DeCraftingRecipeProvider extends FabricRecipeProvider {
+    public DeCraftingRecipeProvider(
         FabricDataOutput output,
         CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture
     ) {
@@ -26,8 +26,6 @@ public class AdditionalCraftingRecipeProvider extends FabricRecipeProvider {
         return new RecipeGenerator(wrapperLookup, recipeExporter) {
             @Override
             public void generate() {
-//                RegistryWrapper.Impl<Item> itemLookup = registries.getOrThrow(RegistryKeys.ITEM);
-
                 createShapeless(RecipeCategory.MISC, Items.AMETHYST_SHARD, 4)
                     .input(Items.AMETHYST_BLOCK)
                     .criterion(
@@ -36,12 +34,29 @@ public class AdditionalCraftingRecipeProvider extends FabricRecipeProvider {
                     )
                     .offerTo(exporter)
                 ;
+
+                createShapeless(RecipeCategory.MISC, Items.NETHER_WART, 9)
+                    .input(Items.NETHER_WART_BLOCK)
+                    .criterion(
+                        hasItem(Items.NETHER_WART_BLOCK),
+                        conditionsFromItem(Items.NETHER_WART_BLOCK)
+                    )
+                    .offerTo(exporter, "nether_wart_nether_wart")
+                ;
+                createShapeless(RecipeCategory.MISC, Items.NETHER_WART, 9)
+                    .input(Items.WARPED_WART_BLOCK)
+                    .criterion(
+                        hasItem(Items.WARPED_WART_BLOCK),
+                        conditionsFromItem(Items.WARPED_WART_BLOCK)
+                    )
+                    .offerTo(exporter, "warped_nether_wart")
+                ;
             }
         };
     }
 
     @Override
     public String getName() {
-        return "AdditionalCraftingRecipeProvider";
+        return "DeCraftingRecipeProvider";
     }
 }

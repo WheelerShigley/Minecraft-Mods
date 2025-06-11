@@ -8,6 +8,7 @@ public class AdditionalCraftingDataGenerator implements DataGeneratorEntrypoint 
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
-        pack.addProvider(AdditionalCraftingRecipeProvider::new);
+        pack.addProvider(DeCraftingRecipeProvider::new);
+        pack.addProvider(MissingCraftingRecipeProvider::new);
     }
 }
