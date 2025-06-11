@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.data.recipe.RecipeExporter;
 import net.minecraft.data.recipe.RecipeGenerator;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
@@ -26,15 +27,10 @@ public class DeCraftingRecipeProvider extends FabricRecipeProvider {
         return new RecipeGenerator(wrapperLookup, recipeExporter) {
             @Override
             public void generate() {
-                createShapeless(RecipeCategory.MISC, Items.AMETHYST_SHARD, 4)
-                    .input(Items.AMETHYST_BLOCK)
-                    .criterion(
-                        hasItem(Items.AMETHYST_BLOCK),
-                        conditionsFromItem(Items.AMETHYST_BLOCK)
-                    )
-                    .offerTo(exporter)
-                ;
+                //Amethyst Shard
+                offerStonecuttingRecipe(RecipeCategory.MISC, Items.AMETHYST_SHARD, Items.AMETHYST_BLOCK, 4);
 
+                //Nether Warts
                 createShapeless(RecipeCategory.MISC, Items.NETHER_WART, 9)
                     .input(Items.NETHER_WART_BLOCK)
                     .criterion(
@@ -51,6 +47,11 @@ public class DeCraftingRecipeProvider extends FabricRecipeProvider {
                     )
                     .offerTo(exporter, "warped_nether_wart")
                 ;
+
+                //Prismarines
+                offerStonecuttingRecipe(RecipeCategory.MISC, Items.PRISMARINE_SHARD, Items.PRISMARINE, 4);
+                offerStonecuttingRecipe(RecipeCategory.MISC, Items.PRISMARINE_SHARD, Items.PRISMARINE_BRICKS, 9);
+                offerStonecuttingRecipe(RecipeCategory.MISC, Items.PRISMARINE_SHARD, Items.DARK_PRISMARINE, 8);
             }
         };
     }
