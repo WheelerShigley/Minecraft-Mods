@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:smooth_red_sandstone"
+  ],
+  "result": {
+    "count": 4,
+    "id": "minecraft:red_sand"
+  }
+}
