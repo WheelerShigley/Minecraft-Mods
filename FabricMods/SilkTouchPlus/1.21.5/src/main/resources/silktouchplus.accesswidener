@@ -1,3 +1,0 @@
-accessWidener v2 named
-accessible class net/minecraft/loot/function/CopyNbtLootFunction$Operation
-accessible method net/minecraft/loot/function/CopyNbtLootFunction$Operation execute (Ljava/util/function/Supplier;Lnet/minecraft/nbt/NbtElement;)V

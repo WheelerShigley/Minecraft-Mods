@@ -49,7 +49,6 @@ public class InfestedBlocksMixin extends Block {
         if(
             world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS)
             && !EnchantmentHelper.hasAnyEnchantmentsIn(tool, EnchantmentTags.PREVENTS_INFESTED_SPAWNS)
-            && !tool.streamTags().toList().contains(ItemTags.PICKAXES)
             && !(
                 world.getGameRules().getBoolean(SILKTOUCH_INFESTED_BLOCKS)
                 && enchantmentsComponent != null && !enchantmentsComponent.isEmpty()

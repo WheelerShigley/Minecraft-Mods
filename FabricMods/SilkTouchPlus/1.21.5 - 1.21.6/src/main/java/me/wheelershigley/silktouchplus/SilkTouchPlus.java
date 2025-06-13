@@ -10,7 +10,7 @@ import static me.wheelershigley.silktouchplus.registrations.GameRuleRegistrator.
 import static me.wheelershigley.silktouchplus.registrations.LootTableRegistrator.*;
 
 public class SilkTouchPlus implements ModInitializer {
-    public static final String MOD_ID = "silktouchplus";
+    public static final String MOD_ID = "silktouch_plus";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     @Override

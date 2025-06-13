@@ -3,6 +3,10 @@ plugins {
     id 'maven-publish'
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/silktouchplus.accesswidener")
+}
+
 version = project.mod_version
 group = project.maven_group
 
@@ -10,17 +14,6 @@ base {
     archivesName = project.archives_base_name
 }
 
-loom {
-    splitEnvironmentSourceSets()
-    accessWidenerPath = file("src/main/resources/silktouchplus.accesswidener")
-
-    mods {
-        "silktouchplus" {
-            sourceSet sourceSets.main
-            sourceSet sourceSets.client
-        }
-    }
-}
 
 repositories {
     // Add repositories to retrieve artifacts from in here.
