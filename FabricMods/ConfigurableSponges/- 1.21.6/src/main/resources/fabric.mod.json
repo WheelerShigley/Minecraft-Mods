@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "configurable_sponges",
+  "version": "0.1.0",
+  "name": "Configurable Sponges",
+  "description": "Change how Sponges work!",
+  "authors": ["Wheeler-Shigley"],
+  "license": "All-Rights-Reserved",
+  "icon": "assets/configurable_sponges/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "www.wheelershigley.me.configurable_sponges.client.ConfigurableSpongesClient"
+    ],
+    "main": [
+      "www.wheelershigley.me.configurable_sponges.ConfigurableSponges"
+    ]
+  },
+  "mixins": [
+    "configurable_sponges.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "fabric": "*",
+    "minecraft": "*"
+  }
+}
