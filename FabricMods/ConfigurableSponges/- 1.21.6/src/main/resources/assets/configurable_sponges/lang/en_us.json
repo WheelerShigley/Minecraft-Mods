@@ -1,3 +1,11 @@
 {
-  "gamerule.spongeRange": "distance Sponges absorb"
+  "gamerule.spongeRange": "distance Sponges absorb",
+
+  "gamerule.spongeWater":         "Sponge absorbs water",
+  "gamerule.spongeLava":          "Sponge absorbs lava",
+  "gamerule.spongePowderedSnow":  "Sponge absorbs powdered_snow",
+
+  "gamerule.wetSpongeWater":         "WetSponge absorbs water",
+  "gamerule.wetSpongeLava":          "WetSponge absorbs lava",
+  "gamerule.wetSpongePowderedSnow":  "WetSponge absorbs powdered_snow"
 }

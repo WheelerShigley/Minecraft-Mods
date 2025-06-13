@@ -21,7 +21,7 @@ import static www.wheelershigley.me.configurable_sponges.gamerules.GameRuleRegis
 
 @Mixin(SpongeBlock.class)
 public class SpongeMixin {
-    @Shadow @Final private static final Direction[] DIRECTIONS = Direction.values();
+    @Shadow private static final Direction[] DIRECTIONS = Direction.values();
 
     /**
      * @author Wheeler-Shigley
