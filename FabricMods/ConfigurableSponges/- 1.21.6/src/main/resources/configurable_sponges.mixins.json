@@ -4,7 +4,8 @@
   "package": "www.wheelershigley.me.configurable_sponges.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "SpongeMixin"
+    "SpongeMixin",
+    "WetSpongeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -6,39 +6,70 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraft.world.block.WireOrientation;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.minecraft.block.Block.dropStacks;
 import static www.wheelershigley.me.configurable_sponges.utils.MathFunctions.CenteredOctahedralNumber;
 import static www.wheelershigley.me.configurable_sponges.gamerules.GameRuleRegistrator.*;
 
-@Mixin(SpongeBlock.class)
-public class SpongeMixin {
-    @Shadow @Final private static final Direction[] DIRECTIONS = Direction.values();
+@Mixin(WetSpongeBlock.class)
+public abstract class WetSpongeMixin extends Block {
+    public WetSpongeMixin(Settings settings) {
+        super(settings);
+    }
 
-    /**
-     * @author Wheeler-Shigley
-     * @reason Allow Sponges to absorb all liquids
-     */
-    @Overwrite
-    private boolean absorbWater(World world, BlockPos pos) {
+    private static final Direction[] DIRECTIONS = Direction.values();
+
+    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, @Nullable WireOrientation wireOrientation, boolean notify) {
+        this.update(world, pos);
+        super.neighborUpdate(state, world, pos, sourceBlock, wireOrientation, notify);
+    }
+
+    @Inject(
+        method = "onBlockAdded",
+        at = @At("TAIL")
+    )
+    private void onBlockAdded(
+        BlockState state,
+        World world,
+        BlockPos pos,
+        BlockState oldState,
+        boolean notify,
+        CallbackInfo ci
+    ) {
+        if(  !oldState.isOf( state.getBlock() )  ) {
+            this.update(world, pos);
+        }
+    }
+
+    protected void update(World world, BlockPos pos) {
+        if( this.absorbLiquid(world, pos) ) {
+            world.setBlockState(pos, Blocks.SPONGE.getDefaultState(), Block.NOTIFY_LISTENERS);
+            world.playSound(null, pos, SoundEvents.BLOCK_SPONGE_ABSORB, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        }
+    }
+
+    private boolean absorbLiquid(World world, BlockPos pos) {
         MinecraftServer server = world.getServer();
         if(server == null) {
             return false;
         }
 
         GameRules gameRules = server.getGameRules();
-        final int       DEPTH           = gameRules.getInt(       SPONGE_DEPTH          );
-        final boolean   WATER           = gameRules.getBoolean(   SPONGE_WATER          );
-        final boolean   LAVA            = gameRules.getBoolean(   SPONGE_LAVA           );
-        final boolean   POWDERED_SNOW   = gameRules.getBoolean(   SPONGE_POWDERED_SNOW  );
+        final int       DEPTH           = gameRules.getInt(       SPONGE_DEPTH              );
+        final boolean   WATER           = gameRules.getBoolean(   WET_SPONGE_WATER          );
+        final boolean   LAVA            = gameRules.getBoolean(   WET_SPONGE_LAVA           );
+        final boolean   POWDERED_SNOW   = gameRules.getBoolean(   WET_SPONGE_POWDERED_SNOW  );
 
         return 1 < BlockPos.iterateRecursively(
             pos,
@@ -57,12 +88,12 @@ public class SpongeMixin {
                     FluidState fluidState = world.getFluidState(currentPos);
                     Block blockAtPosition = blockState.getBlock();
                     boolean drainable =
-                        ( WATER          && blockAtPosition.equals(Blocks.WATER)         )
+                           ( WATER          && blockAtPosition.equals(Blocks.WATER)         )
                         || ( LAVA           && blockAtPosition.equals(Blocks.LAVA)          )
                         || ( POWDERED_SNOW  && blockAtPosition.equals(Blocks.POWDER_SNOW)   )
                     ;
                     if(
-                        !fluidState.isIn(FluidTags.WATER)
+                           !fluidState.isIn(FluidTags.WATER)
                         && !blockAtPosition.equals(Blocks.LAVA)
                         && !blockAtPosition.equals(Blocks.POWDER_SNOW)
                     ) {
