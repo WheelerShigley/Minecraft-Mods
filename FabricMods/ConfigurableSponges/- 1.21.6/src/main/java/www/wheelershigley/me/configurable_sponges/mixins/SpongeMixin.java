@@ -8,6 +8,7 @@ import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +16,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import static net.minecraft.block.Block.dropStacks;
-import static www.wheelershigley.me.configurable_sponges.gamerules.GameRuleRegistrator.SPONGE_DEPTH;
+import static www.wheelershigley.me.configurable_sponges.gamerules.GameRuleRegistrator.*;
 
 @Mixin(SpongeBlock.class)
 public class SpongeMixin {
@@ -47,7 +48,11 @@ public class SpongeMixin {
             return false;
         }
 
-        final int DEPTH = world.getServer().getGameRules().getInt(SPONGE_DEPTH);
+        GameRules gameRules = server.getGameRules();
+        final int       DEPTH           = gameRules.getInt(       SPONGE_DEPTH          );
+        final boolean   WATER           = gameRules.getBoolean(   SPONGE_WATER          );
+        final boolean   LAVA            = gameRules.getBoolean(   SPONGE_LAVA           );
+        final boolean   POWDERED_SNOW   = gameRules.getBoolean(   SPONGE_POWDERED_SNOW  );
 
         return 1 < BlockPos.iterateRecursively(
             pos,
@@ -64,11 +69,21 @@ public class SpongeMixin {
                 } else {
                     BlockState blockState = world.getBlockState(currentPos);
                     FluidState fluidState = world.getFluidState(currentPos);
-                    if( !fluidState.isIn(FluidTags.WATER) ) {
+                    Block blockAtPosition = blockState.getBlock();
+                    boolean drainable =
+                        ( WATER          && blockAtPosition.equals(Blocks.WATER)         )
+                        || ( LAVA           && blockAtPosition.equals(Blocks.LAVA)          )
+                        || ( POWDERED_SNOW  && blockAtPosition.equals(Blocks.POWDER_SNOW)   )
+                    ;
+                    if(
+                        !fluidState.isIn(FluidTags.WATER)
+                        && !blockAtPosition.equals(Blocks.LAVA)
+                        && !blockAtPosition.equals(Blocks.POWDER_SNOW)
+                    ) {
                         return BlockPos.IterationState.SKIP;
                     } else {
                         Block block = blockState.getBlock();
-                        if(block instanceof FluidDrainable) {
+                        if(drainable) {
                             FluidDrainable fluidDrainable = (FluidDrainable)block;
                             if(
                                 !fluidDrainable.tryDrainFluid(
@@ -82,7 +97,7 @@ public class SpongeMixin {
                             }
                         }
 
-                        if(blockState.getBlock() instanceof FluidBlock) {
+                        if(drainable) {
                             world.setBlockState(
                                 currentPos,
                                 Blocks.AIR.getDefaultState(),
@@ -90,17 +105,20 @@ public class SpongeMixin {
                             );
                         } else {
                             if(
-                                !blockState.isOf(Blocks.KELP)
+                                   !blockState.isOf(Blocks.KELP)
                                 && !blockState.isOf(Blocks.KELP_PLANT)
                                 && !blockState.isOf(Blocks.SEAGRASS)
                                 && !blockState.isOf(Blocks.TALL_SEAGRASS)
                             ) {
                                 return BlockPos.IterationState.SKIP;
                             }
-
-                            BlockEntity blockEntity = blockState.hasBlockEntity() ? world.getBlockEntity(currentPos) : null;
-                            dropStacks(blockState, world, currentPos, blockEntity);
-                            world.setBlockState(currentPos, Blocks.AIR.getDefaultState(), 3);
+                            if(WATER) {
+                                BlockEntity blockEntity = blockState.hasBlockEntity() ? world.getBlockEntity(currentPos) : null;
+                                dropStacks(blockState, world, currentPos, blockEntity);
+                                world.setBlockState(currentPos, Blocks.AIR.getDefaultState(), 3);
+                            } else {
+                                return BlockPos.IterationState.SKIP;
+                            }
                         }
 
                         return BlockPos.IterationState.ACCEPT;
