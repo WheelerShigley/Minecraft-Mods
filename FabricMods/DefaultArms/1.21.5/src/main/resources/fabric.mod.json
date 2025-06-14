@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "id": "trade_experience",
-  "version": "1.0.2",
-  "name": "Trade Experience",
-  "description": "Right-click on a player to trade experience with them.",
+  "id": "default_arms",
+  "version": "0.2.0",
+  "name": "DefaultArms",
+  "description": "ArmorStands spawn with Arms; they may be sheared off.",
   "authors": ["Wheeler-Shigley"],
   "license": "All-Rights-Reserved",
-  "icon": "assets/trade_experience/icon.png",
+  "icon": "assets/default_arms/ArmorStandArms.png",
   "environment": "server",
   "entrypoints": {
     "main": [
-      "www.wheelershigley.me.trade_experience.TradeExperience"
+      "me.wheelershigley.default_arms.DefaultArms"
     ]
   },
   "mixins": [
-    "trade_experience.mixins.json"
+    "default_arms.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.14",
