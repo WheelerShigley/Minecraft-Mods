@@ -13,22 +13,12 @@ public class TramplelessGameRules {
         FARMLAND_TRAMPLING = GameRuleRegistry.register(
             "farmlandTrampling",
             GameRules.Category.PLAYER,
-            GameRuleFactory.createBooleanRule(
-                true,
-                (server, rule) -> {
-                    Trampleless.farmlandTrampling = rule.get();
-                }
-            )
+            GameRuleFactory.createBooleanRule(true)
         );
         FEATHER_FALLING_TRAMPLING = GameRuleRegistry.register(
             "featherFallingTrampling",
             GameRules.Category.PLAYER,
-            GameRuleFactory.createBooleanRule(
-                false,
-                (server, rule) -> {
-                    Trampleless.featherFallingTrampling = rule.get();
-                }
-            )
+            GameRuleFactory.createBooleanRule(false)
         );
     }
 }

@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
@@ -28,6 +29,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static me.wheelershigley.trampleless.TramplelessGameRules.*;
 
 @Mixin(FarmlandBlock.class)
 public abstract class TramplePreventionMixin extends Block {
@@ -95,25 +98,36 @@ public abstract class TramplePreventionMixin extends Block {
      */
     @Overwrite
     public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
+        MinecraftServer server = world.getServer();
+        if(server == null) {
+            return;
+        }
+
+        GameRules gameRules = server.getGameRules();
+        boolean farmlandTrampling = gameRules.getBoolean(FARMLAND_TRAMPLING);
+        boolean featherFallingTrampling = gameRules.getBoolean(FEATHER_FALLING_TRAMPLING);
+        boolean doMobGriefing = gameRules.getBoolean(GameRules.DO_MOB_GRIEFING);
+
+        if(!farmlandTrampling) {
+            return;
+        }
+
         if(world instanceof ServerWorld serverWorld) {
             boolean randomlyBreaks = world.random.nextFloat() < fallDistance - 0.5F;
+            if(!randomlyBreaks) {
+                return;
+            }
+
             boolean hasFeatherFallingBoots = entityHasFeatherFallingBoots(entity);
-            boolean doMobGriefing = serverWorld.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING);
 
             //check that prevents small entities, like Items, from breaking Farmland
             boolean sufficientlyVoluminous = (entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F);
 
             boolean isPlayer = entity instanceof PlayerEntity;
-            boolean isNotPlayer = (entity instanceof LivingEntity) && !isPlayer;
             if(
-                Trampleless.farmlandTrampling
-                && randomlyBreaks
+                ( featherFallingTrampling || !hasFeatherFallingBoots)
                 && (
-                    !hasFeatherFallingBoots || Trampleless.featherFallingTrampling
-                )
-                && (
-                    isPlayer
-                    || (isNotPlayer && doMobGriefing && sufficientlyVoluminous)
+                    isPlayer || (doMobGriefing && sufficientlyVoluminous)
                 )
             ) {
                 setToDirt(entity, state, world, pos);
