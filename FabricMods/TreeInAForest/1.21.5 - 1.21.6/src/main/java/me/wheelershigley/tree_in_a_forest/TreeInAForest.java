@@ -40,7 +40,6 @@ public class TreeInAForest implements ModInitializer {
         TreeInAForest.serverHasOnlyBlacklistedPlayers =
             players.isEmpty() || !doesServerHasNonBotOnline(players)
         ;
-        LOGGER.info( Boolean.toString(serverHasOnlyBlacklistedPlayers) );
 
         if( players.isEmpty() ) {
             tick_rate = server.getTickManager().getTickRate();

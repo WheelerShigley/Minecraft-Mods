@@ -9,6 +9,7 @@ import me.wheelershigley.tree_in_a_forest.blacklist.Blacklist;
 import me.wheelershigley.tree_in_a_forest.helpers.MessagesHelper;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.CommandSource;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -30,7 +31,11 @@ public class Registrator {
             return false;
         }
 
-        return sourcePlayer.server.getPlayerManager().isOperator(
+        MinecraftServer server = sourcePlayer.getServer();
+        if(server == null) {
+            return false;
+        }
+        return server.getPlayerManager().isOperator(
             sourcePlayer.getGameProfile()
         );
     };
