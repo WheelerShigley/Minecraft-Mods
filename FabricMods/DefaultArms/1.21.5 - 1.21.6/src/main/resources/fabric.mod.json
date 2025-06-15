@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "default_arms",
-  "version": "0.2.0",
-  "name": "DefaultArms",
-  "description": "ArmorStands spawn with Arms; they may be sheared off.",
+  "version": "0.2.0_1.21.5-1.21.6",
+  "name": "Default Arms",
+  "description": "Armor-Stands spawn with Arms; they may be sheared off.",
   "authors": ["Wheeler-Shigley"],
   "license": "All-Rights-Reserved",
   "icon": "assets/default_arms/ArmorStandArms.png",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
     "main": [
       "me.wheelershigley.default_arms.DefaultArms"
@@ -19,6 +19,6 @@
   "depends": {
     "fabricloader": ">=0.16.14",
     "fabric": "*",
-    "minecraft": "1.21.5"
+    "minecraft": ">=1.21.5 <=1.21.6"
   }
 }
