@@ -1,14 +1,8 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "me.wheelershigley.charged.mixins",
+  "package": "www.wheelershigley.me.charged.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "CreeperMixin",
-    "HeadWashingMixin",
-    "PlayerJoinMixin",
-    "PlayerMixin"
-  ],
   "client": [
     "HeadCauldronUsageMixin"
   ],

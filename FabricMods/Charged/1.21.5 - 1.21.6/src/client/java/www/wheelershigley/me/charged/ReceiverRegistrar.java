@@ -1,4 +1,4 @@
-package me.wheelershigley.charged.client;
+package www.wheelershigley.me.charged;
 
 import me.wheelershigley.charged.Charged;
 import me.wheelershigley.charged.gamerules.WashingGameRulePayload;
@@ -11,7 +11,7 @@ public class ReceiverRegistrar {
             (payload, context) -> {
                 context.client().execute(
                     () -> {
-                        Charged.LOGGER.info("b = "+ payload.value() +";");
+                        Charged.LOGGER.info(String.valueOf(payload.value()));
                         ChargedClient.isWashingEnabled = payload.value();
                     }
                 );

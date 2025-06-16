@@ -1,6 +1,6 @@
-package me.wheelershigley.charged.mixins;
+package www.wheelershigley.me.charged.mixin;
 
-import me.wheelershigley.charged.client.ChargedClient;
+import me.wheelershigley.charged.Charged;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -13,11 +13,13 @@ import net.minecraft.item.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import www.wheelershigley.me.charged.ChargedClient;
 
 @Mixin(VerticallyAttachableBlockItem.class)
 public class HeadCauldronUsageMixin extends BlockItem {
@@ -58,7 +60,7 @@ public class HeadCauldronUsageMixin extends BlockItem {
                 return false;
             }
             HitResult blockHit = camera.raycast(20.0D, 0.0F, false);
-            if (blockHit.getType() == HitResult.Type.BLOCK) {
+            if(blockHit.getType() == HitResult.Type.BLOCK) {
                 BlockPos blockPos = ( (BlockHitResult)blockHit ).getBlockPos();
                 targetedBlock = context.getWorld().getBlockState(blockPos);
             }

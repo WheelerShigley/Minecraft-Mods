@@ -1,8 +1,8 @@
-package me.wheelershigley.charged.client;
+package www.wheelershigley.me.charged;
 
 import net.fabricmc.api.ClientModInitializer;
 
-import static me.wheelershigley.charged.client.ReceiverRegistrar.registerReceiver;
+import static www.wheelershigley.me.charged.ReceiverRegistrar.registerReceiver;
 
 public class ChargedClient implements ClientModInitializer {
     public static boolean isWashingEnabled = true;

@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ConnectedClientData;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -30,8 +31,13 @@ public class PlayerJoinMixin {
         ConnectedClientData clientData,
         CallbackInfo ci
     ) {
+        MinecraftServer server = player.getServer();
+        if(server == null) {
+            return;
+        }
+
         WashingGameRulePayload payload = new WashingGameRulePayload(
-            player.server.getGameRules().getBoolean(ENABLE_PLAYER_HEAD_TEXTURE_WASHING)
+            server.getGameRules().getBoolean(ENABLE_PLAYER_HEAD_TEXTURE_WASHING)
         );
         ServerPlayNetworking.send(player, payload);
     }

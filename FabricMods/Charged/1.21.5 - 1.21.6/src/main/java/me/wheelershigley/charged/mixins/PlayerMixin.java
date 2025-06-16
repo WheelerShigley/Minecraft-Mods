@@ -25,8 +25,8 @@ import static me.wheelershigley.charged.gamerules.GameRuleRegistrar.ENABLE_PLAYE
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class PlayerMixin extends PlayerEntity {
-    public PlayerMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
-        super(world, pos, yaw, gameProfile);
+    public PlayerMixin(World world, GameProfile profile) {
+        super(world, profile);
     }
 
     @Shadow public abstract ItemEntity dropItem(ItemStack stack, boolean throwRandomly, boolean retainOwnership);
