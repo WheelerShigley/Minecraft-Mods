@@ -1,4 +1,4 @@
-package me.wheelershigley.itemlogger;
+package www.wheelershigley.me.item_logger;
 
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;

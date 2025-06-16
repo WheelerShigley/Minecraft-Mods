@@ -1,12 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "me.wheelershigley.itemlogger.mixin",
+  "package": "www.wheelershigley.me.item_logger.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "HandledScreenMixin"
   ],
   "client": [
+    "HandledScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

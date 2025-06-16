@@ -1,7 +1,7 @@
-package me.wheelershigley.itemlogger.configuration;
+package www.wheelershigley.me.item_logger.configuration;
 
-import me.wheelershigley.itemlogger.ItemLogger;
-import me.wheelershigley.itemlogger.client.ItemLoggerClient;
+import www.wheelershigley.me.item_logger.ItemLogger;
+import www.wheelershigley.me.item_logger.client.ItemLoggerClient;
 import net.minecraft.util.Pair;
 
 import java.io.File;

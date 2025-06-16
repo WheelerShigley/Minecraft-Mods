@@ -1,9 +1,9 @@
-package me.wheelershigley.itemlogger.mixin;
+package www.wheelershigley.me.item_logger.mixin;
 
-import me.wheelershigley.itemlogger.ItemLogger;
-import me.wheelershigley.itemlogger.client.ItemLoggerClient;
-import me.wheelershigley.itemlogger.modes.Mode;
-import me.wheelershigley.itemlogger.modes.Modes;
+import www.wheelershigley.me.item_logger.ItemLogger;
+import www.wheelershigley.me.item_logger.client.ItemLoggerClient;
+import www.wheelershigley.me.item_logger.modes.Mode;
+import www.wheelershigley.me.item_logger.modes.Modes;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;

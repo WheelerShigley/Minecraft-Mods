@@ -1,11 +1,11 @@
-package me.wheelershigley.itemlogger.commands;
+package www.wheelershigley.me.item_logger.commands;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import me.wheelershigley.itemlogger.ItemLogger;
-import me.wheelershigley.itemlogger.client.ItemLoggerClient;
-import me.wheelershigley.itemlogger.modes.Mode;
-import me.wheelershigley.itemlogger.modes.Modes;
+import www.wheelershigley.me.item_logger.ItemLogger;
+import www.wheelershigley.me.item_logger.client.ItemLoggerClient;
+import www.wheelershigley.me.item_logger.modes.Mode;
+import www.wheelershigley.me.item_logger.modes.Modes;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;

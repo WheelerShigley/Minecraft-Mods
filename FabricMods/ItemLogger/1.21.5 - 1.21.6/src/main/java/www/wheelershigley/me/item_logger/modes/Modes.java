@@ -1,6 +1,5 @@
-package me.wheelershigley.itemlogger.modes;
+package www.wheelershigley.me.item_logger.modes;
 
-import me.wheelershigley.itemlogger.ItemLogger;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.component.ComponentType;
 import net.minecraft.item.ItemStack;

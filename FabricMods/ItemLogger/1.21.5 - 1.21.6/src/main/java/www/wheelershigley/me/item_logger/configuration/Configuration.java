@@ -1,4 +1,4 @@
-package me.wheelershigley.itemlogger.configuration;
+package www.wheelershigley.me.item_logger.configuration;
 
 public class Configuration<T> {
     private final String name;

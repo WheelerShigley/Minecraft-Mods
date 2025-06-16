@@ -1,10 +1,10 @@
-package me.wheelershigley.itemlogger.configuration;
+package www.wheelershigley.me.item_logger.configuration;
 
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;
 
-import static me.wheelershigley.itemlogger.ItemLogger.MOD_ID;
+import static www.wheelershigley.me.item_logger.ItemLogger.MOD_ID;
 
 public class ConfigurationsHelper {
     public static Configurations getConfigurations() {
