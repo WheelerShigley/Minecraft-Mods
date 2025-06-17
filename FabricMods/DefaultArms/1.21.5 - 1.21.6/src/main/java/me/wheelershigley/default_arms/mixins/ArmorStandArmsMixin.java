@@ -30,6 +30,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static me.wheelershigley.default_arms.gamerule.registerGameRule.ARMLESS_ARMOR_STAND_DROPS_WITH_LORE;
+
 @Mixin(ArmorStandEntity.class)
 public abstract class ArmorStandArmsMixin extends LivingEntity {
     @Unique
@@ -172,16 +174,16 @@ public abstract class ArmorStandArmsMixin extends LivingEntity {
         if( !this.shouldShowArms() ) {
             NbtCompound nbt = new NbtCompound();
             nbt.putBoolean("showsArms", false);
-            itemStack.set(DataComponentTypes.ENTITY_DATA, NbtComponent.of(nbt) );
+            itemStack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt) );
 
-            LoreComponent lore = new LoreComponent(
-                ImmutableList.of(
-                    Text.literal(
-                        "§r"+Text.translatable("default_arms.text.armless_lore").getString()
+            if( world.getGameRules().getBoolean(ARMLESS_ARMOR_STAND_DROPS_WITH_LORE) ) {
+                LoreComponent lore = new LoreComponent(
+                    ImmutableList.of(
+                        Text.literal("§r" + Text.translatable("default_arms.text.armless_lore").getString() )
                     )
-                )
-            );
-            itemStack.set(DataComponentTypes.LORE, lore);
+                );
+                itemStack.set(DataComponentTypes.LORE, lore);
+            }
         }
 
         Block.dropStack(this.getWorld(), this.getBlockPos(), itemStack);

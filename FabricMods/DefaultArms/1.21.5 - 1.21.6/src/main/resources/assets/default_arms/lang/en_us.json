@@ -1,3 +1,5 @@
 {
-  "default_arms.text.armless_lore": "§7Armless"
+  "default_arms.text.armless_lore": "§7Armless",
+
+  "gamerule.armlessArmorStandDropsWithLore": "ArmorStands without Arms drop with lore that show they're armless"
 }

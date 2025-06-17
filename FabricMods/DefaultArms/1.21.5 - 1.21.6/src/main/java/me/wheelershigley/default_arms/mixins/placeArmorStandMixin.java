@@ -1,7 +1,9 @@
 package me.wheelershigley.default_arms.mixins;
 
 import me.wheelershigley.default_arms.DefaultArms;
+import net.minecraft.component.ComponentHolder;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -73,17 +75,21 @@ public class placeArmorStandMixin {
     }
 
     private static Boolean getShowsArmsData(ItemStack armorStandItem) {
-        if(
-            !armorStandItem.contains(DataComponentTypes.ENTITY_DATA)
-            || armorStandItem.get(DataComponentTypes.ENTITY_DATA) == null
-        ) {
+        NbtComponent customDataComponent;
+        if( !armorStandItem.contains(DataComponentTypes.CUSTOM_DATA) ) {
             return null;
         }
-        NbtCompound nbt = armorStandItem.get(DataComponentTypes.ENTITY_DATA).copyNbt();
-        NbtElement showsArms = nbt.get("showsArms");
+
+        customDataComponent = armorStandItem.get(DataComponentTypes.CUSTOM_DATA);
+        if(customDataComponent == null) {
+            return null;
+        }
+
+        NbtElement showsArms = customDataComponent.copyNbt().get("showsArms");
         if(showsArms == null) {
             return null;
         }
+
         Optional<Boolean> result = showsArms.asBoolean();
         return result.orElse(null);
     }
