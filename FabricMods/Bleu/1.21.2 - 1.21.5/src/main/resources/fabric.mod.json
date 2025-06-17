@@ -1,14 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "bleu",
-  "version": "1.1.1",
+  "version": "1.1.1_1.21.2-1.21.6",
   "name": "Bleu",
-  "description": "Blue Axolotl Variant would be only from chance; configurable.",
+  "description": "Blue-Axolotl-Variant would be only from chance; configurable.",
   "authors": ["Wheeler-Shigley"],
-  "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/bleu/icon.png",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
     "main": [
       "me.wheelershigley.bleu.Bleu"
@@ -21,6 +20,6 @@
   "depends": {
     "fabricloader": ">=0.16.14",
     "fabric": "*",
-    "minecraft": ">=1.21.2 <=1.21.5"
+    "minecraft": ">=1.21.2 <=1.21.6"
   }
 }
