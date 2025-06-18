@@ -119,16 +119,16 @@ public abstract class TramplePreventionMixin extends Block {
             }
 
             boolean hasFeatherFallingBoots = entityHasFeatherFallingBoots(entity);
+            if(!featherFallingTrampling && hasFeatherFallingBoots) {
+                return;
+            }
 
             //check that prevents small entities, like Items, from breaking Farmland
             boolean sufficientlyVoluminous = (entity.getWidth() * entity.getWidth() * entity.getHeight() > 0.512F);
 
             boolean isPlayer = entity instanceof PlayerEntity;
             if(
-                ( featherFallingTrampling || !hasFeatherFallingBoots)
-                && (
-                    isPlayer || (doMobGriefing && sufficientlyVoluminous)
-                )
+                isPlayer || (doMobGriefing && sufficientlyVoluminous)
             ) {
                 setToDirt(entity, state, world, pos);
             }
