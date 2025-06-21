@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.data.recipe.RecipeExporter;
 import net.minecraft.data.recipe.RecipeGenerator;
-import net.minecraft.item.ItemStack;
+
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
@@ -28,7 +28,14 @@ public class DeCraftingRecipeProvider extends FabricRecipeProvider {
             @Override
             public void generate() {
                 //Amethyst Shard
-                offerStonecuttingRecipe(RecipeCategory.MISC, Items.AMETHYST_SHARD, Items.AMETHYST_BLOCK, 4);
+                createShapeless(RecipeCategory.MISC, Items.AMETHYST_SHARD, 4)
+                    .input(Items.AMETHYST_BLOCK)
+                    .criterion(
+                        hasItem(Items.AMETHYST_BLOCK),
+                        conditionsFromItem(Items.AMETHYST_BLOCK)
+                    )
+                    .offerTo(exporter)
+                ;
 
                 //Nether Warts
                 createShapeless(RecipeCategory.MISC, Items.NETHER_WART, 9)
@@ -173,6 +180,16 @@ public class DeCraftingRecipeProvider extends FabricRecipeProvider {
                         conditionsFromItem(Items.RED_NETHER_BRICKS)
                     )
                     .offerTo(exporter, "red_nether_bricks_nether_brick")
+                ;
+
+                //Mud, Alternate
+                createShapeless(RecipeCategory.BUILDING_BLOCKS, Items.MUD)
+                    .input(Items.PACKED_MUD)
+                    .criterion(
+                            hasItem(Items.PACKED_MUD),
+                            conditionsFromItem(Items.PACKED_MUD)
+                    )
+                    .offerTo(exporter)
                 ;
 
             }
