@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "tree_in_a_forest",
-  "version": "0.4.2_1.21.5-1.21.6",
+  "version": "0.4.2_1.21.5-1.21.7",
   "name": "Tree In A Forest",
   "description": "Time only progresses if players are online.",
   "authors": ["Wheeler-Shigley"],
@@ -19,6 +19,6 @@
   "depends": {
     "fabricloader": ">=0.16.14",
     "fabric": "*",
-    "minecraft": ">=1.21.5 <=1.21.6"
+    "minecraft": ">=1.21.5 <=1.21.7"
   }
 }
