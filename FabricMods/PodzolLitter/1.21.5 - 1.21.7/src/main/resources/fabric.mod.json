@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "podzol_litter",
-  "version": "1.0.1_1.21.5-1.21.6",
+  "version": "1.0.1_1.21.5-1.21.7",
   "name": "Podzol Litter",
   "description": "Till Podzol for Leaf Litter.",
   "authors": ["Wheeler-Shigley"],
@@ -19,6 +19,6 @@
   "depends": {
     "fabricloader": ">=0.16.14",
     "fabric": "*",
-    "minecraft": ">=1.21.5 <=1.21.6"
+    "minecraft": ">=1.21.5 <=1.21.7"
   }
 }
