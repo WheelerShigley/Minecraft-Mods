@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "default_arms",
-  "version": "0.3.0_1.21.5-1.21.6",
+  "version": "0.3.0_1.21.5-1.21.7",
   "name": "Default Arms",
   "description": "Armor-Stands spawn with Arms; they may be sheared off.",
   "authors": ["Wheeler-Shigley"],
@@ -19,6 +19,6 @@
   "depends": {
     "fabricloader": ">=0.16.14",
     "fabric": "*",
-    "minecraft": ">=1.21.5 <=1.21.6"
+    "minecraft": ">=1.21.5 <=1.21.7"
   }
 }
