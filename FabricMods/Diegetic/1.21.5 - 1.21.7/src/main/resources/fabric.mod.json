@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "diegetic",
-  "version": "0.8.1_1.21.5-1.21.6",
+  "version": "0.8.1_1.21.5-1.21.7",
   "name": "Diegetic",
   "description": "Adds some additional functionality for items in-game to learn about the world.",
   "authors": ["Wheeler-Shigley"],
@@ -19,6 +19,6 @@
   "depends": {
     "fabricloader": ">=0.16.14",
     "fabric": "*",
-    "minecraft": ">=1.21.5 <=1.21.6"
+    "minecraft": ">=1.21.5 <=1.21.7"
   }
 }
