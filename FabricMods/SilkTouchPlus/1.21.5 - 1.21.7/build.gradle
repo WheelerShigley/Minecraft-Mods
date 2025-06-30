@@ -1,10 +1,6 @@
 plugins {
-    id 'fabric-loom' version '1.10.5'
+    id 'fabric-loom' version '1.11.1'
     id 'maven-publish'
-}
-
-loom {
-    accessWidenerPath = file("src/main/resources/silktouchplus.accesswidener")
 }
 
 version = project.mod_version
@@ -12,6 +8,18 @@ group = project.maven_group
 
 base {
     archivesName = project.archives_base_name
+}
+
+loom {
+    splitEnvironmentSourceSets()
+    accessWidenerPath = file("src/main/resources/silktouchplus.accesswidener")
+
+    mods {
+        "silktouch_plus" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
 }
 
 
