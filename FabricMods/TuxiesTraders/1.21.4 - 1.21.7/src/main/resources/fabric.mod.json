@@ -1,11 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "tuxies_trades",
-  "version": "0.1.3-a",
+  "version": "0.1.5_1.21.4-1.21.7",
   "name": "TuxiesTrades",
   "description": "Custom Wander Trader Trades.",
   "authors": ["Wheeler-Shigley"],
-  "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/tuxies_trades/icon.png",
   "environment": "server",
@@ -18,8 +17,8 @@
     "tuxies_trades.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.10",
+    "fabricloader": ">=0.16.14",
     "fabric": "*",
-    "minecraft": ">=1.21.4 <=1.21.5"
+    "minecraft": ">=1.21.4 <=1.21.7"
   }
 }

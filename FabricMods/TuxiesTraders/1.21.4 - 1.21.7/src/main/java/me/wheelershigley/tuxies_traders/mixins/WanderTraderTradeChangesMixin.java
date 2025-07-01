@@ -507,7 +507,7 @@ public abstract class WanderTraderTradeChangesMixin extends MerchantEntity  {
      * @reason Added Trades
      */
     @Overwrite
-    private void fillRebalancedRecipes() {
+    public void fillRecipes() {
         for(Pair<TradeOffers.Factory[], Integer> pair : CUSTOM_TRADER_TRADES) {
             this.fillRecipesFromPool(
                 this.getOffers(),
