@@ -1,15 +1,16 @@
 {
-  "model": {
-    "type": "minecraft:condition",
-    "property": "minecraft:custom_model_data",
-    "index": 0,
-    "on_true": {
-      "type": "minecraft:model",
-      "model": "minecraft:item/armor_stand"
-    },
-    "on_false": {
-      "type": "minecraft:model",
-      "model": "default_arms:item/armor_stand_with_arms"
-    }
-  }
+	"model": {
+		"type": "minecraft:condition",
+		"property": "minecraft:component",
+		"predicate": "minecraft:custom_data",
+		"value": "{showsArms:0b}",
+		"on_true": {
+			"type": "minecraft:model",
+			"model": "minecraft:item/armor_stand"
+		},
+		"on_false": {
+			"type": "minecraft:model",
+			"model": "default_arms:item/armor_stand_with_arms"
+		}
+	}
 }
