@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "minecraft:stripped_jungle_log",
-  "result": {
-    "count": 1,
-    "id": "minecraft:stripped_jungle_wood"
-  }
-}
