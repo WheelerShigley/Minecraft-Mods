@@ -1,4 +1,4 @@
-package me.wheelershigley.lil_guy.mixins;
+package me.wheelershigley.www.lil_guy.mixins;
 
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;

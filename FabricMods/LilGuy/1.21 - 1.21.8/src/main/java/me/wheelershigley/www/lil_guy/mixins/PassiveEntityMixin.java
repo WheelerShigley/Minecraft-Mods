@@ -1,6 +1,5 @@
-package me.wheelershigley.lil_guy.mixins;
+package me.wheelershigley.www.lil_guy.mixins;
 
-import me.wheelershigley.lil_guy.LilGuy;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.mob.PathAwareEntity;
