@@ -1,12 +1,15 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "me.wheelershigley.trampleless.mixin",
+  "package": "me.wheelershigley.www.trampleless.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "TramplePreventionMixin"
   ],
   "injectors": {
     "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
   }
 }

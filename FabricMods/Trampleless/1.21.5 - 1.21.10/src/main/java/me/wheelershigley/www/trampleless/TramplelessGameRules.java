@@ -1,4 +1,4 @@
-package me.wheelershigley.trampleless;
+package me.wheelershigley.www.trampleless;
 
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;

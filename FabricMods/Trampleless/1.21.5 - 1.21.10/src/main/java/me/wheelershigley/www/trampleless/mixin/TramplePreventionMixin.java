@@ -1,6 +1,5 @@
-package me.wheelershigley.trampleless.mixin;
+package me.wheelershigley.www.trampleless.mixin;
 
-import me.wheelershigley.trampleless.Trampleless;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FarmlandBlock;
@@ -30,7 +29,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static me.wheelershigley.trampleless.TramplelessGameRules.*;
+import static me.wheelershigley.www.trampleless.TramplelessGameRules.*;
 
 @Mixin(FarmlandBlock.class)
 public abstract class TramplePreventionMixin extends Block {
