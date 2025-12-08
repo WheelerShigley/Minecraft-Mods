@@ -1,7 +1,7 @@
-package me.wheelershigley.bleu.mixins;
+package me.wheelershigley.www.bleu.mixins;
 
-import me.wheelershigley.bleu.Bleu;
-import me.wheelershigley.bleu.RarityGameRule;
+import me.wheelershigley.www.bleu.Bleu;
+import me.wheelershigley.www.bleu.RarityGameRule;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.world.GameRules;

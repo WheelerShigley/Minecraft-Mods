@@ -1,4 +1,4 @@
-package me.wheelershigley.bleu;
+package me.wheelershigley.www.bleu;
 
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
