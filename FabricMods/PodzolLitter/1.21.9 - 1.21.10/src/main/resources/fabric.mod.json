@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "podzol_litter",
+  "version": "1.0.2_1.21.9-1.21.10",
+  "name": "Podzol Litter",
+  "description": "Till Podzol for Leaf Litter.",
+  "authors": ["Wheeler-Shigley"],
+  "license": "All-Rights-Reserved",
+  "icon": "assets/podzol_litter/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.www.podzol_litter.PodzolLitter"
+    ],
+    "client": [
+      "me.wheelershigley.www.podzol_litter.client.PodzolLitterClient"
+    ]
+  },
+  "mixins": [
+    "podzol_litter.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "fabric": "*",
+    "minecraft": ">=1.21.9 <=1.21.10"
+  }
+}
