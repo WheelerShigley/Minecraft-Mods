@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.wheelershigley.www.diegetic.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "GameRuleInitializationOnStartMixin",
+    "ItemsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "diegetic",
+  "version": "0.8.2_1.21.9-1.21.10",
+  "name": "Diegetic",
+  "description": "Adds some additional functionality for items in-game to learn about the world.",
+  "authors": ["Wheeler-Shigley"],
+  "license": "All-Rights-Reserved",
+  "icon": "assets/diegetic/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.www.diegetic.Diegetic"
+    ]
+  },
+  "mixins": [
+    "diegetic.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "fabric": "*",
+    "minecraft": ">=1.21.9 <=1.21.10"
+  }
+}
