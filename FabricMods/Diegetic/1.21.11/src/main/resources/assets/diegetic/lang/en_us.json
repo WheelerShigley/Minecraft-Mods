@@ -1,0 +1,21 @@
+{
+  "diegetic.text.clock.natural_time": "§e%1$s",
+  "diegetic.text.clock.unnatural_time": "§0%1$s",
+
+  "diegetic.text.compass.missing_lodestone": "§fLodestone is in another dimension or was destroyed.",
+  "diegetic.text.compass.absolute": "§f%1$s %2$s %3$s",
+  "diegetic.text.compass.relative": "§f~%1$s ~%2$s ~%3$s",
+
+  "diegetic.text.recovery_compass.unknown_death_location": "§7Last death location is in another dimension or does not exist.",
+  "diegetic.text.recovery_compass.relative": "§7~%1$s ~%2$s ~%3$s",
+
+  "diegetic.text.slime.valid": "§a☑§r",
+  "diegetic.text.slime.invalid": "§c☒§r",
+
+  "gamerule.diegetic.clock_displays_time": "Clocks can display the time.",
+  "gamerule.diegetic.clockUses_server_time": "If clocks are enabled, clocks will display the server's (IRL) time.",
+  "gamerule.diegetic.compass_coordinates": "Compasses can provide absolute coordinates.",
+  "gamerule.diegetic.lodestone_compass_relative_coordinates": "Compasses associated with lodestones will provide relative coordinates to their lodestone.",
+  "gamerule.diegetic.recovery_compass_relative_coordinates": "Recovery-compasses will provide relate coordinates to last known death location.",
+  "gamerule.diegetic.slime_chunk_checking": "Slimeballs inform if current chunk is a slime-chunk."
+}
