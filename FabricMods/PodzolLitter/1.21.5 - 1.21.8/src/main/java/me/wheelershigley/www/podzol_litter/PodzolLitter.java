@@ -1,7 +1,8 @@
-package me.wheelershigley.podzol_litter;
+package me.wheelershigley.www.podzol_litter;
 
 import net.fabricmc.api.ModInitializer;
 
 public class PodzolLitter implements ModInitializer {
-    @Override public void onInitialize() {}
+    @Override
+    public void onInitialize() {}
 }

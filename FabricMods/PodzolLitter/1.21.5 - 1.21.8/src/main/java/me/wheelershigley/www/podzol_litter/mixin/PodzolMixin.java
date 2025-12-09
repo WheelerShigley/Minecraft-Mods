@@ -1,4 +1,4 @@
-package me.wheelershigley.podzol_litter.mixin;
+package me.wheelershigley.www.podzol_litter.mixin;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -40,14 +40,14 @@ public class PodzolMixin {
                 context.getBlockPos(),
                 GameEvent.Emitter.of(context.getPlayer(), result)
             );
-
-            ItemStack droppedLeaves = new ItemStack(droppedItem);
-            droppedLeaves.setCount( 1+random.nextInt(max_count) );
             Block.dropStack(
                 context.getWorld(),
                 context.getBlockPos(),
                 context.getSide(),
-                droppedLeaves
+                new ItemStack(
+                    droppedItem,
+                    1+random.nextInt(max_count)
+                )
             );
         };
     }
@@ -62,33 +62,29 @@ public class PodzolMixin {
         BlockPos blockPos = context.getBlockPos();
         Block block = world.getBlockState(blockPos).getBlock();
         if( block.equals(Blocks.PODZOL) ) {
+            createTillAndDropActionUpToCount(
+                RESULT,
+                Items.LEAF_LITTER,
+                world.random,
+                4
+            ).accept(context);
+
             PlayerEntity playerEntity = context.getPlayer();
+            if (playerEntity != null) {
+                context.getStack().damage(
+                    1,
+                    playerEntity,
+                    LivingEntity.getSlotForHand( context.getHand() )
+                );
 
-            if(!world.isClient) {
-
-                createTillAndDropActionUpToCount(
-                    RESULT,
-                    Items.LEAF_LITTER,
-                    world.random,
-                    4
-                ).accept(context);
-
-                if (playerEntity != null) {
-                    context.getStack().damage(
-                        1,
-                        playerEntity,
-                        LivingEntity.getSlotForHand( context.getHand() )
-                    );
-
-                    world.playSound(
-                        playerEntity,
-                        blockPos,
-                        SoundEvents.ITEM_HOE_TILL,
-                        SoundCategory.BLOCKS,
-                        1.0F,
-                        1.0F
-                    );
-                }
+                world.playSound(
+                    playerEntity,
+                    blockPos,
+                    SoundEvents.ITEM_HOE_TILL,
+                    SoundCategory.BLOCKS,
+                    1.0F,
+                    1.0F
+                );
             }
 
             cir.setReturnValue(ActionResult.SUCCESS);
