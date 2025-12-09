@@ -1,7 +1,8 @@
-package me.wheelershigley.diegetic.items;
+package me.wheelershigley.www.diegetic.items;
 
-import me.wheelershigley.diegetic.Diegetic;
-import me.wheelershigley.diegetic.helper.MessageHelper;
+import me.wheelershigley.www.diegetic.Diegetic;
+import me.wheelershigley.www.diegetic.helper.MessageHelper;
+import me.wheelershigley.www.diegetic.helper.PlayerHelper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
@@ -12,7 +13,7 @@ public class RecoveryCompass {
         }
 
         if(
-            !player.getLastDeathPos().isPresent()
+            player.getLastDeathPos().isEmpty()
             || !player.getWorld().getDimension().effects().equals(
                 player.getLastDeathPos().get().dimension().getValue()
             )

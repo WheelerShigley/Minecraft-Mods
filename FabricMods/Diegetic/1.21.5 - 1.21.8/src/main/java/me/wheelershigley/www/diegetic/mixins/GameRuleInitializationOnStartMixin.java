@@ -1,7 +1,6 @@
-package me.wheelershigley.diegetic.mixins;
+package me.wheelershigley.www.diegetic.mixins;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.world.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -9,8 +8,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static me.wheelershigley.diegetic.Diegetic.*;
-import static me.wheelershigley.diegetic.gamerules.DiegeticGameRules.*;
+import static me.wheelershigley.www.diegetic.Diegetic.*;
+import static me.wheelershigley.www.diegetic.gamerules.DiegeticGameRules.*;
 
 @Mixin(MinecraftServer.class)
 public abstract class GameRuleInitializationOnStartMixin {
@@ -20,7 +19,7 @@ public abstract class GameRuleInitializationOnStartMixin {
         method = "createWorlds",
         at = @At("TAIL")
     )
-    void createWorlds(WorldGenerationProgressListener worldGenerationProgressListener, CallbackInfo ci) {
+    void createWorlds(CallbackInfo ci) {
         GameRules gamerules = this.getGameRules();
 
         diegeticClockDisplaysTime = gamerules.getBoolean(CLOCK_DISPLAYS_TIME);

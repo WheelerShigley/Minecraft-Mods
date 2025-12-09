@@ -1,8 +1,9 @@
-package me.wheelershigley.diegetic.items;
+package me.wheelershigley.www.diegetic.items;
 
-import me.wheelershigley.diegetic.Diegetic;
-import me.wheelershigley.diegetic.helper.MessageHelper;
+import me.wheelershigley.www.diegetic.Diegetic;
+import me.wheelershigley.www.diegetic.helper.MessageHelper;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.World;
 
 import java.util.Calendar;
 
@@ -12,12 +13,13 @@ public class Clock {
             return;
         }
 
-        boolean isNatural = player.getWorld().getDimension().natural();
+        World playerWorld = player.getWorld();
+        boolean isNatural = playerWorld.getDimension().natural();
         int time;
         if(isNatural) {
-            time = (int)player.getWorld().getTimeOfDay();
+            time = (int)playerWorld.getTimeOfDay();
         } else {
-            time = player.getWorld().random.nextBetween(0, 24000);
+            time = playerWorld.random.nextBetween(0, 24000);
         }
 
         if(Diegetic.diegeticClockUsesServerTime) {
@@ -32,7 +34,7 @@ public class Clock {
                 "diegetic.text.clock." + (isNatural ? "natural_time" : "unnatural_time"),
                 convertToTime(
                     time,
-                    player.getWorld().getTickManager().getTickRate()
+                    playerWorld.getTickManager().getTickRate()
                 )
             );
         }

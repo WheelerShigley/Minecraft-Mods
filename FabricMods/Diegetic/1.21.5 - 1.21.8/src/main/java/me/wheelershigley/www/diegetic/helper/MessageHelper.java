@@ -1,4 +1,4 @@
-package me.wheelershigley.diegetic.helper;
+package me.wheelershigley.www.diegetic.helper;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;

@@ -1,11 +1,11 @@
-package me.wheelershigley.diegetic;
+package me.wheelershigley.www.diegetic;
 
-import me.wheelershigley.diegetic.gamerules.DiegeticGameRules;
 import net.fabricmc.api.ModInitializer;
+
+import static me.wheelershigley.www.diegetic.gamerules.DiegeticGameRules.registerGameRules;
+
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
-
-import static me.wheelershigley.diegetic.gamerules.DiegeticGameRules.registerGameRules;
 
 public class Diegetic implements ModInitializer {
 //    public static final String MOD_ID = "diegetic";
@@ -17,7 +17,6 @@ public class Diegetic implements ModInitializer {
     public static boolean diegeticLodestoneCompassRelativeCoordinates = true;
     public static boolean diegeticRecoveryCompassRelativeCoordinates = true;
     public static boolean diegeticSlimeChunkChecking = true;
-
 
     @Override
     public void onInitialize() {

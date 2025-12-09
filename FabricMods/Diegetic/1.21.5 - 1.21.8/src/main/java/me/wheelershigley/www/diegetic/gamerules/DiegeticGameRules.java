@@ -1,6 +1,6 @@
-package me.wheelershigley.diegetic.gamerules;
+package me.wheelershigley.www.diegetic.gamerules;
 
-import me.wheelershigley.diegetic.Diegetic;
+import me.wheelershigley.www.diegetic.Diegetic;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
 import net.minecraft.server.MinecraftServer;
