@@ -1,4 +1,4 @@
-# [Diegetic](https://modrinth.com/mod/diegetic/version/0.8.0_1.21.5)
+# [Diegetic](https://modrinth.com/mod/diegetic/version/YdsiXhQd)
 
 ![Clocktime Example](https://cdn.modrinth.com/data/6V343pDj/images/c8d5564eb088d15a4289dd9aa844cae5b2caacf2.png)
 
@@ -9,9 +9,7 @@ Diegetic adds several in-game means of measuring information that is otherwise o
    - [Recovery Compass](https://minecraft.wiki/w/Recovery_Compass): shows relative coordinates
    - [Slimeball](https://minecraft.wiki/w/Slimeball): shows if you're in a [slime-chunk](https://minecraft.wiki/w/Slime#Slime_chunks)
 
-The tools used to measure information may be subject to change.
-
-To reload your configurations, run "/diegetic reload" (requires op).
+The items used to measure information may be subject to change.
 
 ---
 

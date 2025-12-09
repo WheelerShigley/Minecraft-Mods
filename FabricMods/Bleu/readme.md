@@ -1,4 +1,4 @@
-# [Forever Rare](https://modrinth.com/mod/bleu/version/1.1.1_1.21.2-1.21.5)
+# [Bleu](https://modrinth.com/mod/bleu/version/1.1.1_1.21.9-1.21.10)
 ![Blue Parents](https://cdn.modrinth.com/data/pCJ7Lggk/images/9c3bb00460d56a69ad464c45a58f72f289262979.png)
 
 ---

@@ -1,4 +1,4 @@
-# [Podzol Litter](https://modrinth.com/mod/podzol-litter/version/1.0.0)
+# [Podzol Litter](https://modrinth.com/mod/podzol-litter/version/1.0.2_1.21.9-1.21.10)
 
 ![Leaf Eviction](https://cdn.modrinth.com/data/8pdD5Kwg/images/a49107d0e1e2feb0abbc5ffe717ccf5e389d66ca.png)
 Tilling [Podzol](https://minecraft.wiki/w/Podzol) evicts the leaves from the block, leaving dirt and 1-4 [Leaf Litter](https://minecraft.wiki/w/Leaf_Litter).

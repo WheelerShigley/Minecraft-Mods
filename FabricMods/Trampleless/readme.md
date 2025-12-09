@@ -1,4 +1,4 @@
-# [Trampleless](https://modrinth.com/mod/trampleless/version/1.1.0_1.21.5)
+# [Trampleless](https://modrinth.com/mod/trampleless/version/1.2.1_1.21.5-1.21.10)
 ![Example Usage](https://cdn.modrinth.com/data/shxtVuPU/images/c843cdaa126a2429e0ed552ffd0b2e6fe843edfc.png)
 Trampling [Farmland](https://minecraft.wiki/w/Farmland) can be (configurably) disabled!
 
