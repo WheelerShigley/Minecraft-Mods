@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "lil_guy",
-  "version": "1.2.4_1.21.9-1.21.10",
+  "version": "1.2.4_1.21.9-1.21.11",
   "name": "Lil Guy",
   "description": "Named, baby animals will never age!",
   "authors": ["Wheeler-Shigley"],
@@ -19,6 +19,6 @@
   "depends": {
     "fabricloader": ">=0.18.1",
     "fabric": "*",
-    "minecraft": ">=1.21.9 <=1.21.10"
+    "minecraft": ">=1.21.9 <=1.21.11"
   }
 }
