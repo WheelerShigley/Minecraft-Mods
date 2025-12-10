@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "www.wheelershigley.me.charged.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "HeadCauldronUsageMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
