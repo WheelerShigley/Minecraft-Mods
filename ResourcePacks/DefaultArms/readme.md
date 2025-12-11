@@ -1,4 +1,4 @@
-# [Default-Arms Textures](https://modrinth.com/resourcepack/default-arms-textures/version/0.3.1_55)
+# [Default-Arms Textures](https://modrinth.com/resourcepack/default-arms-textures/version/0.3.2_69)
 
 ![Crafting](https://cdn.modrinth.com/data/58cLdkju/images/4e41958b924fc6029bcce967988ec6d825ce0c01.png)
 ![Usage](https://cdn.modrinth.com/data/58cLdkju/images/a4ab16ce6e43d70940da3975f5a62b7fd1b1eb24.png)
@@ -13,4 +13,4 @@ With arms:
 ``/give @p armor_stand``
 
 Without arms:
-``/give @p armor_stand[custom_model_data={flags:[true]}]``
+``/give @p armor_stand[minecraft:custom_data={showsArms:0b}]``
