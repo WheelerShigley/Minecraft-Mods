@@ -1,4 +1,4 @@
-# [Default Arms](https://modrinth.com/mod/default-arms/version/0.2.0_1.21.5)
+# [Default Arms](https://modrinth.com/mod/default-arms/version/0.3.0_1.21.11)
 ![Shearing](https://cdn.modrinth.com/data/feJWuS6h/images/8737fbbdf1144a04399857d41f2830929c267de5.png)
 
 ---
@@ -16,10 +16,10 @@ For respective textures, check out the companion resource-pack, [Default-Arms Te
 
 ---
 
-### Gamerule
+## [Gamerule](https://minecraft.wiki/w/Game_rule)
 
-| Name | Default Value |
-| ---- | ------------- |
-| Armless Armor-Stands Drop With Lore | true |
+| Name (1.21+) | Name (-1.21) | Default Value |
+| ------------ | ------------ | ------------- |
+| armless_armor_stands_drop_with_lore | armlessArmorStandsDropWithLore | true |
 
-Example: ``/gamerule armlessArmorStandsDropWithLore false``.
+Example: ``/gamerule default_arms:armless_armor_stands_drop_with_lore false``.
