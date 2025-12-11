@@ -5,10 +5,16 @@ import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
 import net.minecraft.world.GameRules;
 
 public class GameRuleRegistrator {
-    public static GameRules.Key<GameRules.IntRule> SPONGE_DEPTH;
+    public static GameRules.Key<GameRules.IntRule>
+        SPONGE_DEPTH
+    ;
     public static GameRules.Key<GameRules.BooleanRule>
-        SPONGE_WATER, SPONGE_LAVA, SPONGE_POWDERED_SNOW,
-        WET_SPONGE_WATER, WET_SPONGE_LAVA, WET_SPONGE_POWDERED_SNOW
+        SPONGE_WATER,
+        SPONGE_LAVA,
+        SPONGE_POWDERED_SNOW,
+        WET_SPONGE_WATER,
+        WET_SPONGE_LAVA,
+        WET_SPONGE_POWDERED_SNOW
     ;
 
     private static < T extends GameRules.Rule<T> > GameRules.Key<GameRules.BooleanRule> register(String name, boolean default_value) {
