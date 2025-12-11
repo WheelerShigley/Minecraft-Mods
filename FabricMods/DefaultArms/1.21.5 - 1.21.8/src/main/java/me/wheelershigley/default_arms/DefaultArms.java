@@ -7,7 +7,10 @@ import org.slf4j.LoggerFactory;
 import static me.wheelershigley.default_arms.gamerule.registerGameRule.registerGameRule;
 
 /* TODO
+ * Add Client-side texture of armless armor_stand (include resource pack in mod)
  * Add crafting recipe for armless armor_stand
+ * When armless armor-stands are placed, there is a single tick where they have arms;
+ *     this may just be visual and could require a client-server sync (Issue #9)
  */
 
 public class DefaultArms implements ModInitializer {
