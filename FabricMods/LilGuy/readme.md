@@ -1,4 +1,4 @@
-# [Lil Guy](https://modrinth.com/mod/lil-guy/version/1.2.4_1.21.9-1.21.10)
+# [Lil Guy](https://modrinth.com/mod/lil-guy/version/1.2.4_1.21.9-1.21.11)
 
 ![Chicken Little](https://cdn.modrinth.com/data/9srQd7ap/images/7cc7849cb3a0f5a26345ec9c2d86d589b1ee26b7.png)
 

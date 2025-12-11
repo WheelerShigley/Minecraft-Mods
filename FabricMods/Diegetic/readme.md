@@ -1,4 +1,4 @@
-# [Diegetic](https://modrinth.com/mod/diegetic/version/YdsiXhQd)
+# [Diegetic](https://modrinth.com/mod/diegetic/version/0.8.3_1.21.11)
 
 ![Clocktime Example](https://cdn.modrinth.com/data/6V343pDj/images/c8d5564eb088d15a4289dd9aa844cae5b2caacf2.png)
 
@@ -13,17 +13,21 @@ The items used to measure information may be subject to change.
 
 ---
 
- This mod has configurations, through gamerules, for all added features!
- ## GameRules
- ```md
-"diegeticClockDisplaysTime": Clocks can display the [world] time.
-"diegeticClockUsesServerTime": If clocks are enabled, clocks will display the server's (IRL) time.
-"diegeticCompassCoordinates": Compasses can provide absolute coordinates.
-"diegeticLodestoneCompassRelativeCoordinates": Compasses associated with lodestones will provide relative coordinates to their lodestone.
-"diegeticRecoveryCompassRelativeCoordinates": Recovery-compasses will provide relate coordinates to last known death location.
-"diegeticSlimeChunkChecking": Slimeballs can inform if one's current chunk is a slime chunk.
-```
-Operators can update these with "/gamerule <name> <true/false>".
+## [Game Rules](https://minecraft.wiki/w/Game_rule)
+
+| Name (1.21+) | Name (-1.21) | Description |
+| ------------ | ------------ | ----------- |
+| clock_displays_time | diegeticClockDisplaysTime | Clocks can display the [world] time. |
+| clock_uses_server_time | diegeticClockUsesServerTime | If clocks are enabled, clocks will display the server's (IRL) time. |
+| compass_coordinates | diegetic- CompassCoordinates | Compasses can provide absolute coordinates. |
+| lodestone_compass_relative_coordinates | diegeticLodestone- CompassRelativeCoordinates | Compasses associated with lodestones will provide relative coordinates to their lodestone. |
+| recovery_compass_relative_coordinates | diegeticRecovery- CompassRelativeCoordinates | Recovery-compasses will provide relate coordinates to last known death location. |
+| slime_chunk_checking | diegeticSlimeChunkChecking | Slimeballs can inform if one's current chunk is a slime chunk. |
+
+By default, all of features are enabled (their gamerules are true).
+These can be modified with the gamerule command, ex:
+``/gamerule diegetic:slime_chunk_checking false``
+.
 
 ---
 

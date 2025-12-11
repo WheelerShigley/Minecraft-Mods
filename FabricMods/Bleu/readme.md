@@ -1,9 +1,9 @@
-# [Bleu](https://modrinth.com/mod/bleu/version/1.1.1_1.21.9-1.21.10)
+# [Bleu](https://modrinth.com/mod/bleu/version/1.1.1_1.21.11)
 ![Blue Parents](https://cdn.modrinth.com/data/pCJ7Lggk/images/9c3bb00460d56a69ad464c45a58f72f289262979.png)
 
 ---
 
-[Axolotl](https://minecraft.wiki/w/Axolotl)'s Blue Variant cannot be inherited! In vanilla, there's a 1-in-1200 (configurable) chance that an axolotl will be blue, this is now the only way they will be blue!
+[Axolotl](https://minecraft.wiki/w/Axolotl)'s Blue Variant cannot be inherited! In vanilla, there's a 1-in-1200 (configurable) chance that an axolotl will be blue, with this mod, this random occurance will be the only way to obtain them (a blue parent will not make it more likely in this mod).
 
 When both parents are blue, the baby may be a random non-blue color.
 When either parent is non-blue, their variant may take priority.
@@ -16,7 +16,8 @@ It will likely take many attempts to get blue axolotls now.
 
 ## Gamerule
 ```md
-"blueAxolotlVariantRarity"
+pre-1.21:  "blueAxolotlVariantRarity"
+post-1.21: "bleu:blue_variant_rarity"
   - Inverse probability of a baby axolotl being blue.
   - minimum of 1    => 100% blue
   - default of 1200 => ~0.083% blue
