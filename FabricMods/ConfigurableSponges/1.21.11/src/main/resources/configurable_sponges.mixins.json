@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "www.wheelershigley.me.configurable_sponges.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "SpongeMixin",
+    "WetSpongeMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

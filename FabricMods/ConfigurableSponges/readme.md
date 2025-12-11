@@ -1,10 +1,8 @@
-# [Configurable Sponges](https://modrinth.com/mod/configurable-sponges/version/1.0.0_1.21.5-1.21.6)
+# [Configurable Sponges](https://modrinth.com/mod/configurable-sponges/version/1.0.0_1.21.11)
 
 Customize [Sponge's](https://minecraft.wiki/w/Sponge)/[Wet-Sponge's](https://minecraft.wiki/w/Sponge#Wet_Sponge) range!
 ![Ocean Clearing](https://cdn.modrinth.com/data/n6uiUUfG/images/b3405dac928af3a6cf29af2f1d2ceea1a92c5616.png)
-``/gamerule spongeRange 30``
-
-Warning: setting ``spongeRange`` beyond ~100 will likely take a (very?) long time to process.
+``/gamerule configurable_sponges:sponges_range 30``
 
 Allow any liquid ([Water](https://minecraft.wiki/w/Water), [Lava](https://minecraft.wiki/w/Lava), [Powder-Snow](https://minecraft.wiki/w/Powder_Snow)) to be cleared via Sponges/Wet-Sponges.
 ![Underground Clearing](https://cdn.modrinth.com/data/n6uiUUfG/images/3b26bfe83985be4b33bfb5179c2ee125d48c11f4.png)
@@ -19,14 +17,17 @@ Allow any liquid ([Water](https://minecraft.wiki/w/Water), [Lava](https://minecr
 
 ## [Gamerules](https://minecraft.wiki/w/Game_rule)
 
-| Name | Default Value |
-| ---- | ------------- |
-| spongeRange | 6 |
-| spongeWater | true |
-| spongeLava | false |
-| spongePowderedSnow | false |
-| wetSpongeWater | false |
-| wetSpongeLava | false |
-| wetSpongePowderedSnow | false |
+| Name (1.21+) | Name (-1.21) | Default Value |
+| ------------ | ------------ | ------------- |
+| sponges_range | spongeRange | 6 |
+| sponge_absorbs_water | spongeWater | true |
+| sponge_absorbs_lava | spongeLava | false |
+| sponge_absorbs_powdered_snow | spongePowderedSnow | false |
+| wet_sponge_absorbs_water | wetSpongeWater | false |
+| wet_sponge_absorbs_lava | wetSpongeLava | false |
+| wet_sponge_absorbs_powdered_snow | wetSpongePowderedSnow | false |
 
-example usage: ``/gamerule wetSpongeLava true``
+example usage: ``/gamerule configurable_sponges:sponges_range 16 true``
+
+Warning:
+setting ``sponges_range`` beyond ~100 will likely take a (very?) long time to process and may time-out (crash) the server.
