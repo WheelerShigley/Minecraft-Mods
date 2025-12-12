@@ -90,6 +90,7 @@ public class LootTableRegistrator {
             (key, tableBuilder, source, registries) -> {
                 Identifier identifier = key.getValue();
 
+                assert BUDDING_AMETHYST_IDENTIFIER != null;
                 if( BUDDING_AMETHYST_IDENTIFIER.equals(identifier) ) {
                     dropsWithSilkTouchPickaxe(
                         tableBuilder,
@@ -99,6 +100,8 @@ public class LootTableRegistrator {
                         SILKTOUCH_BUDDING_AMETHYST
                     );
                 }
+
+                assert REINFORCED_DEEPSLATE_IDENTIFIER != null;
                 if( REINFORCED_DEEPSLATE_IDENTIFIER.equals(identifier) ) {
                     dropsWithSilkTouchPickaxe(
                         tableBuilder,
@@ -108,6 +111,8 @@ public class LootTableRegistrator {
                         SILKTOUCH_REINFORCED_DEEPSLATE
                     );
                 }
+
+                assert SPAWNER_IDENTIFIER != null;
                 if( SPAWNER_IDENTIFIER.equals(identifier) ) {
                     dropsSpawnerNBTWithSilkTouchPickaxe(
                         tableBuilder,
@@ -116,6 +121,8 @@ public class LootTableRegistrator {
                         SILKTOUCH_SPAWNER
                     );
                 }
+
+                assert SUSPICIOUS_GRAVEL_IDENTIFIER != null;
                 if( SUSPICIOUS_GRAVEL_IDENTIFIER.equals(identifier) ) {
                     dropsSuspiciousWithSilkTouchShovel(
                         tableBuilder,
@@ -124,6 +131,8 @@ public class LootTableRegistrator {
                         SILKTOUCH_SUSPICIOUS_GRAVEL
                     );
                 }
+
+                assert SUSPICIOUS_SAND_IDENTIFIER != null;
                 if( SUSPICIOUS_SAND_IDENTIFIER.equals(identifier) ) {
                     dropsSuspiciousWithSilkTouchShovel(
                         tableBuilder,
@@ -132,6 +141,8 @@ public class LootTableRegistrator {
                         SILKTOUCH_SUSPICIOUS_SAND
                     );
                 }
+
+                assert TRIAL_SPAWNER_IDENTIFIER != null;
                 if( TRIAL_SPAWNER_IDENTIFIER.equals(identifier) ) {
                     dropsTrialSpawnerNBTWithSilkTouchPickaxe(
                         tableBuilder,
@@ -140,6 +151,8 @@ public class LootTableRegistrator {
                         SILKTOUCH_TRIAL_SPAWNER
                     );
                 }
+
+                assert VAULT_IDENTIFIER != null;
                 if( VAULT_IDENTIFIER.equals(identifier) ) {
                     dropVaultNBTWithSilkTouchPickaxe(
                         tableBuilder,
@@ -156,6 +169,7 @@ public class LootTableRegistrator {
                 Identifier identifier = key.getValue();
                 LootTable.Builder tableBuilder = new LootTable.Builder();
 
+                assert FARMLAND_IDENTIFIER != null;
                 if( FARMLAND_IDENTIFIER.equals(identifier) ) {
                     return dropsWithSilkTouch(
                         tableBuilder,
@@ -165,6 +179,8 @@ public class LootTableRegistrator {
                         SILKTOUCH_FARMLAND
                     );
                 }
+
+                assert DIRT_PATH_IDENTIFIER != null;
                 if( DIRT_PATH_IDENTIFIER.equals(identifier) ) {
                     return dropsWithSilkTouch(
                         tableBuilder,
@@ -174,6 +190,7 @@ public class LootTableRegistrator {
                         SILKTOUCH_DIRT_PATH
                     );
                 }
+
                 for(Pair<InfestableBlockPair, Identifier> infestedBlock : infestedBlocks) {
                     if( infestedBlock.getRight().equals(identifier) ) {
                         return dropsWithOnlySilkTouch(

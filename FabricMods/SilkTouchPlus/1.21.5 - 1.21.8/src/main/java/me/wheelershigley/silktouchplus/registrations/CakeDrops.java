@@ -1,6 +1,5 @@
 package me.wheelershigley.silktouchplus.registrations;
 
-import me.wheelershigley.silktouchplus.SilkTouchPlus;
 import me.wheelershigley.silktouchplus.helpers.EnchantmentsHelper;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.block.Blocks;

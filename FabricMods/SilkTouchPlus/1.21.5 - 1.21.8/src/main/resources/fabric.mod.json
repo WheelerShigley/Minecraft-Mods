@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "silktouch_plus",
-  "version": "1.0.5_1.21.5-1.21.7",
+  "version": "1.0.5_1.21.5-1.21.8",
   "name": "SilkTouch+",
   "description": "Makes many unobtainables configurably silk-touch-able!",
   "authors": ["Wheeler-Shigley"],
@@ -18,8 +18,8 @@
     "silktouchplus.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.14",
+    "fabricloader": ">=0.18.2",
     "fabric": "*",
-    "minecraft": ">=1.21.5 <=1.21.7"
+    "minecraft": ">=1.21.5 <=1.21.8"
   }
 }

@@ -18,8 +18,6 @@ import org.spongepowered.asm.mixin.*;
 import java.util.List;
 import java.util.function.Supplier;
 
-import net.minecraft.loot.function.CopyNbtLootFunction.Operation;
-
 @Mixin(CopyNbtLootFunction.class)
 public abstract class CustomDataComponentLootFunctionMixin extends ConditionalLootFunction {
     protected CustomDataComponentLootFunctionMixin(List<LootCondition> conditions) {
@@ -27,7 +25,7 @@ public abstract class CustomDataComponentLootFunctionMixin extends ConditionalLo
     }
 
     @Shadow @Final private LootNbtProvider source;
-    @Shadow @Final private List<Operation> operations;
+    @Shadow @Final private List<CopyNbtLootFunction.Operation> operations;
 
     /**
      * @author Wheeler-Shigley
@@ -57,9 +55,11 @@ public abstract class CustomDataComponentLootFunctionMixin extends ConditionalLo
 
                 return (NbtElement)mutableObject.getValue();
             };
-            this.operations.forEach((operation) -> {
-                operation.execute(supplier, nbtElement);
-            });
+            this.operations.forEach(
+                (operation) -> {
+                    operation.execute(supplier, nbtElement);
+                }
+            );
             NbtCompound nbtCompound = (NbtCompound)mutableObject.getValue();
             if (nbtCompound != null) {
                 NbtComponent.set(type, stack, nbtCompound);
