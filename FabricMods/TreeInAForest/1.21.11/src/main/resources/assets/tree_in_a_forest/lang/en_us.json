@@ -1,0 +1,20 @@
+{
+  "tree_in_a_forest.text.stopping_time": "Stopping time.",
+  "tree_in_a_forest.text.starting_time": "Starting time.",
+
+  "tree_in_a_forest.text.empty_blacklist": "No users are blacklisted.",
+  "tree_in_a_forest.text.single_blacklist": "%1$s is blacklisted.",
+  "tree_in_a_forest.text.blacklist": "%1$s are blacklisted.",
+
+  "tree_in_a_forest.text.blacklist_player": "\"%1$s\" is now blacklisted.",
+  "tree_in_a_forest.text.blacklist_player_failure": "\"%1$s\" was unable to be blacklisted.",
+  "tree_in_a_forest.text.blacklist_player_existing": "\"%1$s\" was already blacklisted.",
+
+  "tree_in_a_forest.text.unblacklist_player": "\"%1$s\" is now unblacklisted.",
+  "tree_in_a_forest.text.unblacklist_player_failure": "\"%1$s\" was unable to be unblacklisted.",
+  "tree_in_a_forest.text.unblacklist_player_existing": "\"%1$s\" was not blacklisted.",
+
+  "tree_in_a_forest.text.player_blacklisted_player": "%1$s blacklisted \"%1$s\".",
+  "tree_in_a_forest.text.player_unblacklisted_player": "%1$s unblacklisted \"%1$s\"."
+
+}
