@@ -1,4 +1,4 @@
-# [Trade Experience](https://modrinth.com/mod/trade-experience/version/1.0.4_1.21.5)
+# [Trade Experience](https://modrinth.com/mod/trade-experience/version/1.0.8_1.21.11)
 ![Trade](https://cdn.modrinth.com/data/3nZC9EUc/images/e155faf899935d332a8c3110b10d1192e64a2784.png)
 
 ## Paying
@@ -34,8 +34,4 @@ trade_timeout_time: 30
 
 # Monetary-like experience name.
 experience_name: experience
-
-# Permission level to check other's balances
-# Default permissions are 0 for no-requirement and 4 for operation-requirement
-external_balance_permission_requirement: 4
 ```
