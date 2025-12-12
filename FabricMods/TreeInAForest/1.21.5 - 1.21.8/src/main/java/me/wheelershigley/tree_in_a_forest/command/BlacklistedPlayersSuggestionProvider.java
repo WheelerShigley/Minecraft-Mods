@@ -1,11 +1,9 @@
 package me.wheelershigley.tree_in_a_forest.command;
 
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import me.wheelershigley.tree_in_a_forest.TreeInAForest;
 import me.wheelershigley.tree_in_a_forest.blacklist.Blacklist;
 import net.minecraft.server.command.ServerCommandSource;
 

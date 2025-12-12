@@ -15,6 +15,11 @@ import java.util.UUID;
 
 import static me.wheelershigley.tree_in_a_forest.helpers.MessagesHelper.sendConsoleInfoTranslatableMessage;
 
+/* TODO
+ * Client-Server Sync (when installed on the client-side);
+ *     as of now, the skybox goes back-and-forth when everyone on is blacklisted.
+ */
+
 public class TreeInAForest implements ModInitializer {
     public static final String MOD_ID = "tree_in_a_forest";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
