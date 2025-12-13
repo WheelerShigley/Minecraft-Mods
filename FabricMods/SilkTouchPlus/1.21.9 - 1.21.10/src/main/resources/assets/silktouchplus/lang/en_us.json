@@ -1,0 +1,13 @@
+{
+  "gamerule.silktouchBuddingAmethyst":      "Budding-amethyst may be silk-touch-ed.",
+  "gamerule.silktouchReinforcedDeepslate":  "Reinforced-deepslate may be silk-touch-ed.",
+  "gamerule.silktouchSpawner":              "Monster-spawners may be silk-touch-ed.",
+  "gamerule.silktouchSuspiciousSand":       "Suspicious-sand may be silk-touch-ed.",
+  "gamerule.silktouchSuspiciousGravel":     "Suspicious-gravel may be silk-touch-ed.",
+  "gamerule.silktouchTrialSpawner":         "Trial-spawners may be silk-touch-ed.",
+  "gamerule.silktouchVault":                "Vaults may be silk-touch-ed.",
+  "gamerule.silktouchInfestedBlocks":       "Infested Blocks can drop when silk-touch-ed.",
+  "gamerule.silktouchFarmland":             "Farmland can be silk-touch-ed.",
+  "gamerule.silktouchDirtPath":             "Dirt-paths can be silk-touch-ed.",
+  "gamerule.silktouchCake":                 "Uneaten cakes can be silk-touch-ed."
+}
