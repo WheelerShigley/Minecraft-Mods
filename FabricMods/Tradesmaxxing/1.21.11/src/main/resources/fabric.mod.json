@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "tradesmaxxing",
+  "version": "0.2.2_1.21.11",
+  "name": "Tradesmaxxing",
+  "description": "All merchants (including Villagers) have infinite trades!",
+  "authors": ["Wheeler-Shigley"],
+  "license": "All-Rights-Reserved",
+  "icon": "assets/tradesmaxxing/Emeralds.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.tradesmaxxing.Tradesmaxxing"
+    ]
+  },
+  "mixins": [
+    "tradesmaxxing.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.2",
+    "fabric": "*",
+    "minecraft": "1.21.11"
+  }
+}
