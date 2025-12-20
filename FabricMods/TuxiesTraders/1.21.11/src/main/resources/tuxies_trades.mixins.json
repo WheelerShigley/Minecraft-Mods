@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.wheelershigley.tuxies_traders.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "NetheriteTradesMixin",
+    "WanderTraderTradeChangesMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
