@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "tuxies_trades",
-  "version": "0.1.6_1.21.11",
+  "version": "0.1.7_1.21.11",
   "name": "TuxiesTrades",
   "description": "Custom Wander Trader Trades.",
   "authors": ["Wheeler-Shigley"],
@@ -17,7 +17,7 @@
     "tuxies_trades.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.18.2",
+    "fabricloader": ">=0.18.3",
     "fabric": "*",
     "minecraft": "1.21.11"
   }

@@ -27,8 +27,8 @@ public class ItemGroups {
 
     public static final HashMap<Item, ItemStack> eggToDrops = new HashMap<>(); static {
         //Hostile
-        eggToDrops.put(Items.BLAZE_SPAWN_EGG,           new ItemStack(Items.BLAZE_ROD)            );
-        eggToDrops.put(Items.BOGGED_SPAWN_EGG,          createTippedArrowStack(Potions.POISON)    );
+        eggToDrops.put(Items.BLAZE_SPAWN_EGG,           new ItemStack(Items.BLAZE_ROD)             );
+        eggToDrops.put(Items.BOGGED_SPAWN_EGG,          createTippedArrowStack(Potions.POISON)     );
         eggToDrops.put(Items.BREEZE_SPAWN_EGG,          new ItemStack(Items.BREEZE_ROD)            );
         eggToDrops.put(Items.CREAKING_SPAWN_EGG,        new ItemStack(Items.RESIN_CLUMP)           );
         eggToDrops.put(Items.CREEPER_SPAWN_EGG,         new ItemStack(Items.GUNPOWDER)             );
@@ -41,6 +41,7 @@ public class ItemGroups {
         eggToDrops.put(Items.HOGLIN_SPAWN_EGG,          new ItemStack(Items.PORKCHOP)              );
         eggToDrops.put(Items.HUSK_SPAWN_EGG,            new ItemStack(Items.SAND)                  );
         eggToDrops.put(Items.MAGMA_CUBE_SPAWN_EGG,      new ItemStack(Items.MAGMA_BLOCK)           );
+        eggToDrops.put(Items.PARCHED_SPAWN_EGG,         createTippedArrowStack(Potions.POISON)     );
         eggToDrops.put(Items.PHANTOM_SPAWN_EGG,         new ItemStack(Items.PHANTOM_MEMBRANE)      );
         eggToDrops.put(Items.PIGLIN_BRUTE_SPAWN_EGG,    new ItemStack(Items.GOLD_INGOT)            );
         eggToDrops.put(Items.PILLAGER_SPAWN_EGG,        new ItemStack(Items.EMERALD)               );
@@ -49,8 +50,8 @@ public class ItemGroups {
         eggToDrops.put(Items.SILVERFISH_SPAWN_EGG,      new ItemStack(Items.STONE_BRICKS)          );
         eggToDrops.put(Items.SKELETON_SPAWN_EGG,        new ItemStack(Items.BONE)                  );
         eggToDrops.put(Items.SLIME_SPAWN_EGG,           new ItemStack(Items.SLIME_BLOCK)           );
-        eggToDrops.put(Items.STRAY_SPAWN_EGG,           createTippedArrowStack(Potions.SLOWNESS)  );
-        eggToDrops.put(Items.VEX_SPAWN_EGG,             createPotionStack(Potions.POISON)         );
+        eggToDrops.put(Items.STRAY_SPAWN_EGG,           createTippedArrowStack(Potions.SLOWNESS)   );
+        eggToDrops.put(Items.VEX_SPAWN_EGG,             createPotionStack(Potions.POISON)          );
         eggToDrops.put(Items.VINDICATOR_SPAWN_EGG,      new ItemStack(Items.EMERALD)               );
         eggToDrops.put(Items.WARDEN_SPAWN_EGG,          new ItemStack(Items.SCULK_CATALYST)        );
         eggToDrops.put(Items.WITCH_SPAWN_EGG,           new ItemStack(Items.REDSTONE)              );
@@ -62,6 +63,7 @@ public class ItemGroups {
 
         //Neutral
         eggToDrops.put(Items.BEE_SPAWN_EGG,                 new ItemStack(Items.HONEY_BLOCK)       );
+        eggToDrops.put(Items.CAMEL_HUSK_SPAWN_EGG,          new ItemStack(Items.CACTUS)            );
         eggToDrops.put(Items.CAVE_SPIDER_SPAWN_EGG,         new ItemStack(Items.COBWEB)            );
         eggToDrops.put(Items.DOLPHIN_SPAWN_EGG,             new ItemStack(Items.DRIED_KELP_BLOCK)  );
         eggToDrops.put(Items.DROWNED_SPAWN_EGG,             new ItemStack(Items.TRIDENT)           );
@@ -76,42 +78,46 @@ public class ItemGroups {
         eggToDrops.put(Items.SPIDER_SPAWN_EGG,              new ItemStack(Items.STRING)            );
         eggToDrops.put(Items.TRADER_LLAMA_SPAWN_EGG,        new ItemStack(Items.LEAD)              );
         eggToDrops.put(Items.WOLF_SPAWN_EGG,                new ItemStack(Items.BONE)              );
+        eggToDrops.put(Items.ZOMBIE_NAUTILUS_SPAWN_EGG,     new ItemStack(Items.NAUTILUS_SHELL)    );
         eggToDrops.put(Items.ZOMBIFIED_PIGLIN_SPAWN_EGG,    new ItemStack(Items.ROTTEN_FLESH)      );
 
         //Passive
-        eggToDrops.put(Items.ALLAY_SPAWN_EGG,               createPotionStack(Potions.REGENERATION) );
-        eggToDrops.put(Items.ARMADILLO_SPAWN_EGG,           new ItemStack(Items.ARMADILLO_SCUTE)       );
-        eggToDrops.put(Items.AXOLOTL_SPAWN_EGG,             new ItemStack(Items.GLOW_BERRIES)          );
-        eggToDrops.put(Items.BAT_SPAWN_EGG,                 new ItemStack(Items.STONE)                 );
-        eggToDrops.put(Items.CAMEL_SPAWN_EGG,               new ItemStack(Items.CACTUS)                );
-        eggToDrops.put(Items.CAT_SPAWN_EGG,                 new ItemStack(Items.STRING)                );
-        eggToDrops.put(Items.CHICKEN_SPAWN_EGG,             new ItemStack(Items.FEATHER)               );
-        eggToDrops.put(Items.COD_SPAWN_EGG,                 new ItemStack(Items.COD)                   );
-        eggToDrops.put(Items.COW_SPAWN_EGG,                 new ItemStack(Items.LEATHER)               );
-        eggToDrops.put(Items.DONKEY_SPAWN_EGG,              new ItemStack(Items.LEATHER)               );
-        eggToDrops.put(Items.FROG_SPAWN_EGG,                new ItemStack(Items.PEARLESCENT_FROGLIGHT) );
-        eggToDrops.put(Items.GLOW_SQUID_SPAWN_EGG,          new ItemStack(Items.GLOW_INK_SAC)          );
-        eggToDrops.put(Items.HORSE_SPAWN_EGG,               new ItemStack(Items.LEATHER)               );
-        eggToDrops.put(Items.MOOSHROOM_SPAWN_EGG,           new ItemStack(Items.RED_MUSHROOM)          );
-        eggToDrops.put(Items.MULE_SPAWN_EGG,                new ItemStack(Items.LEATHER)               );
-        eggToDrops.put(Items.OCELOT_SPAWN_EGG,              new ItemStack(Items.COCOA_BEANS)           );
-        eggToDrops.put(Items.PARROT_SPAWN_EGG,              new ItemStack(Items.VINE)                  );
-        eggToDrops.put(Items.PIG_SPAWN_EGG,                 new ItemStack(Items.PORKCHOP)              );
-        eggToDrops.put(Items.PUFFERFISH_SPAWN_EGG,          new ItemStack(Items.PUFFERFISH)            );
-        eggToDrops.put(Items.RABBIT_SPAWN_EGG,              new ItemStack(Items.RABBIT_FOOT)           );
-        eggToDrops.put(Items.SALMON_SPAWN_EGG,              new ItemStack(Items.SALMON)                );
-        eggToDrops.put(Items.SHEEP_SPAWN_EGG,               new ItemStack(Items.WHITE_WOOL)            );
-        eggToDrops.put(Items.SKELETON_HORSE_SPAWN_EGG,      new ItemStack(Items.BONE)                  );
-        eggToDrops.put(Items.SNIFFER_SPAWN_EGG,             new ItemStack(Items.TORCHFLOWER_SEEDS)     );
-        eggToDrops.put(Items.SNOW_GOLEM_SPAWN_EGG,          new ItemStack(Items.SNOW_BLOCK)            );
-        eggToDrops.put(Items.SQUID_SPAWN_EGG,               new ItemStack(Items.INK_SAC)               );
-        eggToDrops.put(Items.STRIDER_SPAWN_EGG,             new ItemStack(Items.STRING)                );
-        eggToDrops.put(Items.TADPOLE_SPAWN_EGG,             new ItemStack(Items.MUD)                   );
-        eggToDrops.put(Items.TROPICAL_FISH_SPAWN_EGG,       new ItemStack(Items.TROPICAL_FISH)         );
-        eggToDrops.put(Items.TURTLE_SPAWN_EGG,              new ItemStack(Items.TURTLE_EGG)            );
-        eggToDrops.put(Items.VILLAGER_SPAWN_EGG,            new ItemStack(Items.EMERALD_BLOCK)         );
-//      eggToDrops.put(Items.WANDERING_TRADER_SPAWN_EGG,    new ItemStack(Items.NETHERITE_BLOCK)       );
-        eggToDrops.put(Items.ZOMBIE_HORSE_SPAWN_EGG,        new ItemStack(Items.ROTTEN_FLESH)          );
+        eggToDrops.put(Items.ALLAY_SPAWN_EGG,               createPotionStack(Potions.REGENERATION)     );
+        eggToDrops.put(Items.ARMADILLO_SPAWN_EGG,           new ItemStack(Items.ARMADILLO_SCUTE)        );
+        eggToDrops.put(Items.AXOLOTL_SPAWN_EGG,             new ItemStack(Items.GLOW_BERRIES)           );
+        eggToDrops.put(Items.BAT_SPAWN_EGG,                 new ItemStack(Items.STONE)                  );
+        eggToDrops.put(Items.CAMEL_SPAWN_EGG,               new ItemStack(Items.CACTUS)                 );
+        eggToDrops.put(Items.CAT_SPAWN_EGG,                 new ItemStack(Items.STRING)                 );
+        eggToDrops.put(Items.CHICKEN_SPAWN_EGG,             new ItemStack(Items.FEATHER)                );
+        eggToDrops.put(Items.COD_SPAWN_EGG,                 new ItemStack(Items.COD)                    );
+        eggToDrops.put(Items.COPPER_GOLEM_SPAWN_EGG,        new ItemStack(Items.COPPER_BLOCK)           );
+        eggToDrops.put(Items.COW_SPAWN_EGG,                 new ItemStack(Items.LEATHER)                );
+        eggToDrops.put(Items.DONKEY_SPAWN_EGG,              new ItemStack(Items.LEATHER)                );
+        eggToDrops.put(Items.FROG_SPAWN_EGG,                new ItemStack(Items.PEARLESCENT_FROGLIGHT)  );
+        eggToDrops.put(Items.GLOW_SQUID_SPAWN_EGG,          new ItemStack(Items.GLOW_INK_SAC)           );
+        eggToDrops.put(Items.HAPPY_GHAST_SPAWN_EGG,         new ItemStack(Items.GHAST_TEAR)             );
+        eggToDrops.put(Items.HORSE_SPAWN_EGG,               new ItemStack(Items.LEATHER)                );
+        eggToDrops.put(Items.MOOSHROOM_SPAWN_EGG,           new ItemStack(Items.RED_MUSHROOM)           );
+        eggToDrops.put(Items.MULE_SPAWN_EGG,                new ItemStack(Items.LEATHER)                );
+        eggToDrops.put(Items.NAUTILUS_SPAWN_EGG,            new ItemStack(Items.NAUTILUS_SHELL)         );
+        eggToDrops.put(Items.OCELOT_SPAWN_EGG,              new ItemStack(Items.COCOA_BEANS)            );
+        eggToDrops.put(Items.PARROT_SPAWN_EGG,              new ItemStack(Items.VINE)                   );
+        eggToDrops.put(Items.PIG_SPAWN_EGG,                 new ItemStack(Items.PORKCHOP)               );
+        eggToDrops.put(Items.PUFFERFISH_SPAWN_EGG,          new ItemStack(Items.PUFFERFISH)             );
+        eggToDrops.put(Items.RABBIT_SPAWN_EGG,              new ItemStack(Items.RABBIT_FOOT)            );
+        eggToDrops.put(Items.SALMON_SPAWN_EGG,              new ItemStack(Items.SALMON)                 );
+        eggToDrops.put(Items.SHEEP_SPAWN_EGG,               new ItemStack(Items.WHITE_WOOL)             );
+        eggToDrops.put(Items.SKELETON_HORSE_SPAWN_EGG,      new ItemStack(Items.BONE)                   );
+        eggToDrops.put(Items.SNIFFER_SPAWN_EGG,             new ItemStack(Items.TORCHFLOWER_SEEDS)      );
+        eggToDrops.put(Items.SNOW_GOLEM_SPAWN_EGG,          new ItemStack(Items.SNOW_BLOCK)             );
+        eggToDrops.put(Items.SQUID_SPAWN_EGG,               new ItemStack(Items.INK_SAC)                );
+        eggToDrops.put(Items.STRIDER_SPAWN_EGG,             new ItemStack(Items.STRING)                 );
+        eggToDrops.put(Items.TADPOLE_SPAWN_EGG,             new ItemStack(Items.MUD)                    );
+        eggToDrops.put(Items.TROPICAL_FISH_SPAWN_EGG,       new ItemStack(Items.TROPICAL_FISH)          );
+        eggToDrops.put(Items.TURTLE_SPAWN_EGG,              new ItemStack(Items.TURTLE_EGG)             );
+        eggToDrops.put(Items.VILLAGER_SPAWN_EGG,            new ItemStack(Items.EMERALD_BLOCK)          );
+//      eggToDrops.put(Items.WANDERING_TRADER_SPAWN_EGG,    new ItemStack(Items.NETHERITE_BLOCK)        );
+        eggToDrops.put(Items.ZOMBIE_HORSE_SPAWN_EGG,        new ItemStack(Items.ROTTEN_FLESH)           );
 
     }
 
@@ -130,6 +136,7 @@ public class ItemGroups {
             Items.HOGLIN_SPAWN_EGG,
             Items.HUSK_SPAWN_EGG,
             Items.MAGMA_CUBE_SPAWN_EGG,
+            Items.PARCHED_SPAWN_EGG,
             Items.PHANTOM_SPAWN_EGG,
             Items.PIGLIN_BRUTE_SPAWN_EGG,
             Items.PILLAGER_SPAWN_EGG,
@@ -152,6 +159,7 @@ public class ItemGroups {
 
     public static final Item[] neutralMobSpawnEggs = new Item[]{
             Items.BEE_SPAWN_EGG,
+            Items.CAMEL_HUSK_SPAWN_EGG,
             Items.CAVE_SPIDER_SPAWN_EGG,
             Items.DOLPHIN_SPAWN_EGG,
             Items.DROWNED_SPAWN_EGG,
@@ -166,7 +174,8 @@ public class ItemGroups {
             Items.SPIDER_SPAWN_EGG,
             Items.TRADER_LLAMA_SPAWN_EGG,
             Items.WOLF_SPAWN_EGG,
-            Items.ZOMBIFIED_PIGLIN_SPAWN_EGG
+            Items.ZOMBIFIED_PIGLIN_SPAWN_EGG,
+            Items.ZOMBIE_NAUTILUS_SPAWN_EGG
     };
 
     public static final Item[] passiveMobSpawnEggs = new Item[]{
@@ -182,9 +191,11 @@ public class ItemGroups {
             Items.DONKEY_SPAWN_EGG,
             Items.FROG_SPAWN_EGG,
             Items.GLOW_SQUID_SPAWN_EGG,
+            Items.HAPPY_GHAST_SPAWN_EGG,
             Items.HORSE_SPAWN_EGG,
             Items.MOOSHROOM_SPAWN_EGG,
             Items.MULE_SPAWN_EGG,
+            Items.NAUTILUS_SPAWN_EGG,
             Items.OCELOT_SPAWN_EGG,
             Items.PARROT_SPAWN_EGG,
             Items.PIG_SPAWN_EGG,
