@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.wheelershigley.unlimited_anvil.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AnvilMixin",
+    "EnchantmentMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
