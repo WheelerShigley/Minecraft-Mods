@@ -3,19 +3,24 @@ package me.wheelershigley.unlimited_anvil.helpers;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class ExperienceHelper {
-//    public static int pointsToNextLevel(int level) {
-//        if(level < 0) {
-//            level = Math.abs(level);
-//        }
-//
-//        if(0 <= level && level <= 15) {
-//            return 2*level+7;
-//        }
-//        if(15 < level && level <= 30) {
-//            return 5*level-38;
-//        }
-//        return 9*level-158;
-//    }
+    @Deprecated
+    public static int pointsToNextLevel(int level) {
+        if(level < 0) {
+            level = Math.abs(level);
+        }
+
+        if(0 <= level && level <= 15) {
+            return 2*level+7;
+        }
+        if(15 < level && level <= 30) {
+            return 5*level-38;
+        }
+        return 9*level-158;
+    }
+
+    public static int getTotalExperiencePoints(PlayerEntity player) {
+        return levelToPoints(player.experienceLevel) + getExperiencePoints(player);
+    }
 
     public static int levelToPoints(int level) {
         if(level < 0) {
@@ -48,40 +53,27 @@ public class ExperienceHelper {
     }
 
     public static boolean takeExperience(PlayerEntity player, int level_cost) {
-        int total_points = levelToPoints(player.experienceLevel) + getExperiencePoints(player);
+        int player_experience = getExperiencePoints(player);
+
+        int total_points = getTotalExperiencePoints(player);
         int newPoints = total_points - levelToPoints(level_cost);
         int newLevel = pointsToLevel(newPoints);
         newPoints -= levelToPoints(newLevel);
 
         //check if valid
-        int levelDifference = newLevel - player.experienceLevel;
-        int pointDifference = newPoints - total_points;
+        int levelDifference = newLevel  - player.experienceLevel;
+        int pointDifference = newPoints - player_experience;
         if(
             player.experienceLevel < -levelDifference
-            || total_points < -pointDifference
+            || player_experience   < -pointDifference
         ) {
             return false;
         }
 
-        player.experienceLevel = newLevel;
-        player.experienceProgress = ( (float)newPoints )/( (float)player.getNextLevelExperience() );
+        player.addExperienceLevels(levelDifference);
+        player.addExperience(pointDifference);
         return true;
     }
-
-//    public static void giveExperience(ServerPlayerEntity player, int amount) {
-//        int initial_points = getExperiencePoints(player);
-//        int points = levelToPoints(player.experienceLevel) + initial_points;
-//        points += amount;
-//
-//        int final_level = pointsToLevel(points);
-//        points -= levelToPoints(final_level);
-//
-//        int levelDifference = final_level - player.experienceLevel;
-//        int pointDifference = points - initial_points;
-//
-//        player.addExperienceLevels( levelDifference );
-//        player.addExperience(       pointDifference );
-//    }
 
     public static int getExperiencePoints(PlayerEntity player) {
         return (int)(  player.experienceProgress * ( (float)player.getNextLevelExperience() )  );

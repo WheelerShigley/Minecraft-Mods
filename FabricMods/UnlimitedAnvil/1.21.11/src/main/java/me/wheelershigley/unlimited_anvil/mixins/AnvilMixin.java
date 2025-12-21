@@ -79,13 +79,13 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
         ItemStack output = this.output.getStack(0);
 
         modifiedVanillaUpdateResult();
-        if( output.getItem().equals(Items.AIR) ) {
-            this.sendContentUpdates();
-            ci.cancel();
-            return;
-        }
+//        if( output.getItem().equals(Items.AIR) ) {
+//            this.sendContentUpdates();
+//            ci.cancel();
+//            return;
+//        }
 
-        //double level-cost
+        //set cost as double level-cost (arbitrary "difficulty" multiplier)
         int final_level_cost = 2*getEnchantingCost(output);
         boolean has_new_custom_name = (
             /*Has some custom name*/
@@ -100,6 +100,7 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
         this.levelCost.set(final_level_cost);
 
         //remove compounding cost
+        output = this.output.getStack(0);
         output.remove(DataComponentTypes.REPAIR_COST);
         this.output.setStack(0, output);
 
@@ -303,7 +304,7 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
         CallbackInfoReturnable<Boolean> cir
     ) {
         int cost_points = levelToPoints( this.levelCost.get() );
-        int player_experience_points = getExperiencePoints(player);
+        int player_experience_points = getTotalExperiencePoints(player);
         boolean canTakeOutput =
             player.isInCreativeMode()
             || cost_points <= player_experience_points
@@ -357,9 +358,10 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
             ( (ServerPlayerEntity)player ).getTextStream().filterText(this.newItemName);
         }
 
-        //remove inputs
+        //remove content
         this.input.setStack(0, ItemStack.EMPTY);
         this.input.setStack(1, ItemStack.EMPTY);
+//        this.output.setStack(0, ItemStack.EMPTY);
 
         //damage anvil
         this.context.run(
