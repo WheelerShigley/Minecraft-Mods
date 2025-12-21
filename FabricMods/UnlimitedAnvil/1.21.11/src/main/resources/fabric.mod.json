@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "unlimited_anvil",
+  "version": "1.2.3_1.21.11",
+  "name": "Unlimited Anvil",
+  "description": "Enchanted Books may be combined to their maximum effective level! This is expensive.",
+  "authors": ["Wheeler-Shigley"],
+  "license": "All-Rights-Reserved",
+  "icon": "assets/unlimited_anvil/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.unlimited_anvil.UnlimitedAnvil"
+    ]
+  },
+  "mixins": [
+    "unlimited_anvil.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.2",
+    "fabric": "*",
+    "minecraft": "1.21.11"
+  }
+}
