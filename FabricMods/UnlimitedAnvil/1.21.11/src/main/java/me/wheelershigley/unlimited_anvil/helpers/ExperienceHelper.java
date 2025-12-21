@@ -47,23 +47,24 @@ public class ExperienceHelper {
         return (int)(   325.0/18.0   +   Math.sqrt(  2.0/9.0  *  (_points - 54215.0/72.0)  )   );
     }
 
-    public static boolean takeExperience(PlayerEntity player, int amount) {
-        int points = getExperiencePoints(player);
-        int newPoints = levelToPoints(player.experienceLevel) + points - amount;
+    public static boolean takeExperience(PlayerEntity player, int level_cost) {
+        int total_points = levelToPoints(player.experienceLevel) + getExperiencePoints(player);
+        int newPoints = total_points - levelToPoints(level_cost);
         int newLevel = pointsToLevel(newPoints);
         newPoints -= levelToPoints(newLevel);
 
+        //check if valid
         int levelDifference = newLevel - player.experienceLevel;
-        int pointDifference = newPoints - points;
+        int pointDifference = newPoints - total_points;
         if(
             player.experienceLevel < -levelDifference
-            || points < -pointDifference
+            || total_points < -pointDifference
         ) {
             return false;
         }
 
-        player.addExperienceLevels( levelDifference );
-        player.addExperience(       pointDifference );
+        player.experienceLevel = newLevel;
+        player.experienceProgress = ( (float)newPoints )/( (float)player.getNextLevelExperience() );
         return true;
     }
 

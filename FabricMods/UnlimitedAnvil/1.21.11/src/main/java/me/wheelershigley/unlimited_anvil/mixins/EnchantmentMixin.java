@@ -10,7 +10,10 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.ArrayList;
 
-@Mixin(Enchantment.class)
+@Mixin(
+    value = Enchantment.class,
+    priority = 800
+)
 public abstract class EnchantmentMixin {
     @Unique
     private static final ArrayList< ArrayList<Identifier> > ForciblyCompatibleEnchants; static {

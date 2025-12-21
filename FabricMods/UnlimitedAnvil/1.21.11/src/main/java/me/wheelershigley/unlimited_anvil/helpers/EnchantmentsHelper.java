@@ -1,5 +1,7 @@
 package me.wheelershigley.unlimited_anvil.helpers;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -67,10 +69,31 @@ public class EnchantmentsHelper {
 
     public static int getEnchantingCost(ItemStack enchantedItem) {
         int accumulator = 0;
-        Set<RegistryEntry<Enchantment>> Enchantments = net.minecraft.enchantment.EnchantmentHelper.getEnchantments(enchantedItem).getEnchantments();
+
+        Set<RegistryEntry<Enchantment>> Enchantments = EnchantmentHelper.getEnchantments(enchantedItem).getEnchantments();
         for(RegistryEntry<Enchantment> enchant : Enchantments) {
-            accumulator += enchant.value().getAnvilCost() * EnchantmentHelper.getLevel(enchant, enchantedItem);
+
+            int enchantment_cost = enchant.value().getAnvilCost();
+            int enchantment_level = getEnchantmentLevel(enchantedItem, enchant);
+            accumulator += enchantment_cost * enchantment_level;
         }
-        return 2*accumulator;
+        return accumulator;
+    }
+
+    private static int getEnchantmentLevel(ItemStack enchantedItem, RegistryEntry<Enchantment> enchantment) {
+        ItemEnchantmentsComponent itemEnchantmentsComponent = ItemEnchantmentsComponent.DEFAULT;
+
+        boolean usesStoredEnchantments = enchantedItem.contains(DataComponentTypes.STORED_ENCHANTMENTS);
+        if(usesStoredEnchantments) {
+            itemEnchantmentsComponent = enchantedItem.getOrDefault(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
+        }
+        if(
+            !usesStoredEnchantments
+            || itemEnchantmentsComponent == ItemEnchantmentsComponent.DEFAULT
+        ) {
+            itemEnchantmentsComponent = enchantedItem.getOrDefault(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
+        }
+
+        return itemEnchantmentsComponent.getLevel(enchantment);
     }
 }
