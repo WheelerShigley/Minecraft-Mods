@@ -24,8 +24,8 @@ import java.util.Set;
 import static me.wheelershigley.silktouchplus.registrations.GameRuleRegistrator.SILKTOUCH_SPAWNER;
 
 @Mixin(SpawnerBlock.class)
-public abstract class SpawnerDropsMixin extends BlockWithEntity  {
-    protected SpawnerDropsMixin(Settings settings) {
+public abstract class SpawnerExperienceDropMixin extends BlockWithEntity  {
+    protected SpawnerExperienceDropMixin(Settings settings) {
         super(settings);
     }
 
