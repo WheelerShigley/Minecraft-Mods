@@ -6,8 +6,6 @@
   "mixins": [
     "MagneticSneakMixin"
   ],
-  "client": [
-  ],
   "injectors": {
     "defaultRequire": 1
   },

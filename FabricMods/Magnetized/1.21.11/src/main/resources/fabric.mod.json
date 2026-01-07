@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "id": "magnetized",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "name": "Magnetized",
   "description": "Enchantment for Item-Magnetism.",
   "authors": ["Wheeler-Shigley"],
   "license": "All-Rights-Reserved",
-  "icon": "assets/magnetic/icon.png",
+  "icon": "assets/magnetized/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
