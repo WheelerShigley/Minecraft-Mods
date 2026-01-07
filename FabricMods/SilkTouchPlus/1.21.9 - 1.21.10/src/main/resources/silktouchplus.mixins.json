@@ -5,9 +5,10 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "CustomDataComponentLootFunctionMixin",
+    "BlockEntitiesDataDropsMixin",
     "InfestedBlocksMixin",
     "SpawnerBlockPlacementPermissionsMixin",
-    "SpawnerDropsMixin"
+    "SpawnerExperienceDropMixin"
   ],
   "injectors": {
     "defaultRequire": 1

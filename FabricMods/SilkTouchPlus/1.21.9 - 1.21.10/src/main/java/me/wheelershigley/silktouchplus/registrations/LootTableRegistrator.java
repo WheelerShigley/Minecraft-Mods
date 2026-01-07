@@ -113,54 +113,54 @@ public class LootTableRegistrator {
                 }
 
                 assert SPAWNER_IDENTIFIER != null;
-                if( SPAWNER_IDENTIFIER.equals(identifier) ) {
+                /*if( SPAWNER_IDENTIFIER.equals(identifier) ) {
                     dropsSpawnerNBTWithSilkTouchPickaxe(
                         tableBuilder,
                         Blocks.SPAWNER,
                         registries,
                         SILKTOUCH_SPAWNER
                     );
-                }
+                }*/
 
                 assert SUSPICIOUS_GRAVEL_IDENTIFIER != null;
-                if( SUSPICIOUS_GRAVEL_IDENTIFIER.equals(identifier) ) {
+                /*if( SUSPICIOUS_GRAVEL_IDENTIFIER.equals(identifier) ) {
                     dropsSuspiciousWithSilkTouchShovel(
                         tableBuilder,
                         Blocks.SUSPICIOUS_GRAVEL,
                         registries,
                         SILKTOUCH_SUSPICIOUS_GRAVEL
                     );
-                }
+                }*/
 
                 assert SUSPICIOUS_SAND_IDENTIFIER != null;
-                if( SUSPICIOUS_SAND_IDENTIFIER.equals(identifier) ) {
+                /*if( SUSPICIOUS_SAND_IDENTIFIER.equals(identifier) ) {
                     dropsSuspiciousWithSilkTouchShovel(
                         tableBuilder,
                         Blocks.SUSPICIOUS_SAND,
                         registries,
                         SILKTOUCH_SUSPICIOUS_SAND
                     );
-                }
+                }*/
 
                 assert TRIAL_SPAWNER_IDENTIFIER != null;
-                if( TRIAL_SPAWNER_IDENTIFIER.equals(identifier) ) {
+                /*if( TRIAL_SPAWNER_IDENTIFIER.equals(identifier) ) {
                     dropsTrialSpawnerNBTWithSilkTouchPickaxe(
                         tableBuilder,
                         Blocks.TRIAL_SPAWNER,
                         registries,
                         SILKTOUCH_TRIAL_SPAWNER
                     );
-                }
+                }*/
 
                 assert VAULT_IDENTIFIER != null;
-                if( VAULT_IDENTIFIER.equals(identifier) ) {
+                /*if( VAULT_IDENTIFIER.equals(identifier) ) {
                     dropVaultNBTWithSilkTouchPickaxe(
                         tableBuilder,
                         Blocks.VAULT,
                         registries,
                         SILKTOUCH_VAULT
                     );
-                }
+                }*/
             }
         );
 
