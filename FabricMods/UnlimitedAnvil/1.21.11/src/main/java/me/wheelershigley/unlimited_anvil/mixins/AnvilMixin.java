@@ -207,7 +207,10 @@ public abstract class AnvilMixin extends ForgingScreenHandler {
                             //Set maximum level
                             int effective_maximum_level;
                             if( registryEntry.getKey().isPresent() ) {
-                                effective_maximum_level = EnchantmentsHelper.getMaximumEffectiveLevel( registryEntry.getKey().get() );
+                                effective_maximum_level = EnchantmentsHelper.getMaximumEffectiveLevel(
+                                    this.player.getEntityWorld(),
+                                    registryEntry.getKey().get()
+                                );
                             } else {
                                 effective_maximum_level = enchantment.getMaxLevel();
                             }

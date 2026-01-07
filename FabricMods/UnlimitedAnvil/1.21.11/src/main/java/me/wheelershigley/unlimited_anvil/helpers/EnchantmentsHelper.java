@@ -6,10 +6,16 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.BuiltinRegistries;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Set;
 
 public class EnchantmentsHelper {
@@ -60,11 +66,24 @@ public class EnchantmentsHelper {
         MaximumEffectiveEnchantLevels.put(Enchantments.WIND_BURST,          255                );
     }
 
-    public static int getMaximumEffectiveLevel(RegistryKey<Enchantment> Enchantment) {
-        if( MaximumEffectiveEnchantLevels.containsKey(Enchantment) ) {
-            return MaximumEffectiveEnchantLevels.get(Enchantment);
+    public static int getMaximumEffectiveLevel(World world, RegistryKey<Enchantment> enchantmentKey) {
+        if( MaximumEffectiveEnchantLevels.containsKey(enchantmentKey) ) {
+            return MaximumEffectiveEnchantLevels.get(enchantmentKey);
         }
-        return Integer.MIN_VALUE;
+
+        Optional< Registry<Enchantment> > potentialEnchantmentsRegistry = world.getRegistryManager().getOptional(RegistryKeys.ENCHANTMENT);
+        if(
+            potentialEnchantmentsRegistry.isEmpty()
+            || potentialEnchantmentsRegistry.get().get(enchantmentKey) == null
+        ) {
+            return Integer.MIN_VALUE;
+        }
+
+        Enchantment registeredEnchantment = potentialEnchantmentsRegistry.get().get(enchantmentKey);
+        if(registeredEnchantment == null) {
+            return Integer.MIN_VALUE;
+        }
+        return registeredEnchantment.getMaxLevel();
     }
 
     public static int getEnchantingCost(ItemStack enchantedItem) {
