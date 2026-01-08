@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "magnetized",
-  "version": "0.9.1",
+  "version": "0.9.3",
   "name": "Magnetized",
   "description": "Enchantment for Item-Magnetism.",
   "authors": ["Wheeler-Shigley"],

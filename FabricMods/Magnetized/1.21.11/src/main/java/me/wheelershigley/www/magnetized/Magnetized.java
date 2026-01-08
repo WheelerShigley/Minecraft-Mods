@@ -5,8 +5,6 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 
 public class Magnetized implements ModInitializer {
     public static final String MOD_ID = "magnetized";

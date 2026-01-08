@@ -1,10 +1,11 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "me.wheelershigley.www.magnetized.mixin",
+  "package": "me.wheelershigley.www.magnetized.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "MagneticSneakMixin"
+    "MagneticSneakMixin",
+    "RegisterMagneticMixin"
   ],
   "injectors": {
     "defaultRequire": 1

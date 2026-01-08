@@ -1,4 +1,4 @@
-package me.wheelershigley.www.magnetized.mixin;
+package me.wheelershigley.www.magnetized.mixins;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import me.wheelershigley.www.magnetized.Magnetized;

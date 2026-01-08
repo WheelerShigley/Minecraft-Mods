@@ -98,7 +98,7 @@ public class Physics {
         return 1 - 1.0/(distance*distance);
     }
 
-    private static final double SPEED_MULTIPLIER_PER_LEVEL = 16_666_666; //50_000_000/MAX_LEVEL (50M/3)
+    private static final double SPEED_MULTIPLIER_PER_LEVEL = 25_000_000;
     private static int particle_frequency_counter = 0;
     public static void attractOneEntityToAnother(Entity datum, Entity dynamic, int level) {
         double speed; {
@@ -130,12 +130,11 @@ public class Physics {
             speed *= SPEED_MULTIPLIER_PER_LEVEL * level;
             speed *= fantasySlowDown(  datum.getEntityPos().distanceTo( dynamic.getEntityPos() )  );
 
-            //spawn particles
+            //spawn particles and play sound
             World world = dynamic.getEntityWorld();
-            particle_frequency_counter++;
             if(
                 world instanceof ServerWorld
-                && particle_frequency_counter % 4 == 0 //25% as often as always
+                && world.random.nextBetween(0, 15) == 0 //1 in 16
             ) {
                 ( (ServerWorld)world ).spawnParticles(
                     ParticleTypes.ELECTRIC_SPARK,
@@ -147,18 +146,16 @@ public class Physics {
                     0.05*direction.z * world.random.nextGaussian(),
                     0.02 * world.random.nextGaussian()
                 );
-                particle_frequency_counter = 1;
+                world.playSound(
+                        dynamic,
+                        dynamic.getX(), dynamic.getY(), dynamic.getZ(),
+                        SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE,
+                        SoundCategory.PLAYERS,
+                        0.25f, 1.5f,
+                        world.getRandom().nextLong()
+                );
             }
 
-            //play sound
-            world.playSound(
-                dynamic,
-                dynamic.getX(), dynamic.getY(), dynamic.getZ(),
-                SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE,
-                SoundCategory.PLAYERS,
-                0.25f, 1.5f,
-                world.getRandom().nextLong()
-            );
         }
 
         dynamic.velocityDirty = true;
