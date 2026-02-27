@@ -25,5 +25,9 @@
   "trade_experience.command.text.unknown_amount": "§7Unspecified amount to send.",
   "trade_experience.command.text.reloaded": "§aReloaded§7.",
   "trade_experience.command.text.insufficient_permission": "§cInsufficient permission§7.",
-  "trade_experience.command.text.unknown_player": "§cUnknown player, \"%1$s\"."
+  "trade_experience.command.text.unknown_player": "§cUnknown player, \"%1$s\".",
+
+  "gamerule.interact_trade_initiation": "Right-Click a Player to Initiate a Trade.",
+  "gamerule.experience_name": "Name of experience in messages.",
+  "gamerule.trade_timeout_time": "Time (in ticks) for a trade to timeout."
 }

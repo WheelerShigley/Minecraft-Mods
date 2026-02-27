@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import www.wheelershigley.me.trade_experience.config.*;
+import www.wheelershigley.me.trade_experience.gamerule.GameRules;
 import www.wheelershigley.me.trade_experience.helpers.ConfigurationHelper;
 
 import java.util.HashMap;
@@ -17,7 +18,6 @@ public class TradeExperience implements ModInitializer {
 
     public static final Configurations configurations = ConfigurationHelper.createTradeExperienceConfigurations();
     public static String experienceName = (String)configurations.getConfiguration("experience_name").getDefaultConfiguration();
-    public static long cooldown = (long)configurations.getConfiguration("trade_timeout_time").getDefaultValue();
 
     public static final HashMap<UUID, Trade> activeTrades = new HashMap<>();
 
@@ -26,6 +26,7 @@ public class TradeExperience implements ModInitializer {
         registerPlayerClickListener();
         registerCheckTimeoutsEachTick();
 
+        GameRules.registerGameRule();
         registerCommands();
         reload();
     }
@@ -34,6 +35,5 @@ public class TradeExperience implements ModInitializer {
         configurations.reload();
 
         TradeExperience.experienceName = (String)configurations.getConfiguration("experience_name").getValue();
-        cooldown = 20L * (long)configurations.getConfiguration("trade_timeout_time").getValue();
     }
 }

@@ -16,13 +16,6 @@ public class ConfigurationHelper {
 
         configurations.addConfiguration(
             new Configuration<>(
-                "trade_timeout_time",
-                30L,
-                "How many seconds before a trade times out."
-            )
-        );
-        configurations.addConfiguration(
-            new Configuration<>(
                 "experience_name",
                 "experience",
                 "Monetary-like experience name."

@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import www.wheelershigley.me.trade_experience.Trade;
 import www.wheelershigley.me.trade_experience.TradeExperience;
+import www.wheelershigley.me.trade_experience.gamerule.GameRules;
 
 import java.util.UUID;
 
@@ -45,7 +46,8 @@ public class SendMessageCheckMixin {
 
         //remove old trades
         long delta_time = sender.getEntityWorld().getTime() - activeTrades.get(senderID).getTime();
-        if(TradeExperience.cooldown < delta_time) {
+        int cooldown = sender.getEntityWorld().getGameRules().getValue(GameRules.TRADE_TIMEOUT_TIME);
+        if(cooldown < delta_time) {
             activeTrades.remove(senderID);
             return ActionResult.PASS;
         }
@@ -60,6 +62,10 @@ public class SendMessageCheckMixin {
         ServerPlayerEntity receiver = server.getPlayerManager().getPlayer( activeTrades.get(senderID).getReciever() );
 
         int amount = Integer.parseInt(messageContent);
+        //amount may not be negative; this would non-consentually withdraw from others
+        if(amount <= 0) {
+            return ActionResult.FAIL;
+        }
 
         Trade.performTrade(sender, receiver, amount);
         activeTrades.remove( sender.getUuid() );

@@ -14,11 +14,13 @@ import net.minecraft.server.PlayerConfigEntry;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import www.wheelershigley.me.trade_experience.Trade;
 import www.wheelershigley.me.trade_experience.TradeExperience;
 import www.wheelershigley.me.trade_experience.commands.*;
+import www.wheelershigley.me.trade_experience.gamerule.GameRules;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -31,6 +33,24 @@ public class Registrations {
     public static void registerPlayerClickListener() {
         UseEntityCallback.EVENT.register(
             (player, world, hand, target, hitResult) -> {
+                boolean isEnabled; {
+                    MinecraftServer server = player.getEntityWorld().getServer();
+                    if(server == null) {
+                        return ActionResult.FAIL;
+                    }
+                    ServerWorld serverWorld = server.getWorld(
+                        world.getRegistryKey()
+                    );
+                    if(serverWorld == null) {
+                        return ActionResult.FAIL;
+                    }
+
+                    isEnabled = serverWorld.getGameRules().getValue(GameRules.INTERACT_TRADE_INITIATION);
+                }
+                if(!isEnabled) {
+                    return ActionResult.PASS;
+                }
+
                 if( !(target instanceof ServerPlayerEntity) ) {
                     return ActionResult.PASS;
                 }
@@ -79,9 +99,24 @@ public class Registrations {
         ServerTickEvents.END_SERVER_TICK.register(
             (server) -> {
                 ArrayList<UUID> tradesToBeRemoved = new ArrayList<>();
-                for( Map.Entry<UUID, Trade> activeTrade: activeTrades.entrySet() ) {
+                for( Map.Entry<UUID, Trade> activeTrade : activeTrades.entrySet() ) {
+
+                    int cooldown; {
+                        MinecraftServer worldServer = activeTrade.getValue().getWorld().getServer();
+                        if(worldServer == null) {
+                            return;
+                        }
+                        ServerWorld world = worldServer.getWorld(
+                            activeTrade.getValue().getWorld().getRegistryKey()
+                        );
+                        if (world == null) {
+                            return;
+                        }
+                        cooldown = world.getGameRules().getValue(GameRules.TRADE_TIMEOUT_TIME);
+                    }
+
                     delta_time = activeTrade.getValue().getWorld().getTime() - activeTrade.getValue().getTime();
-                    if(TradeExperience.cooldown <= delta_time) {
+                    if(cooldown <= delta_time) {
                         sendTradeTimeOutChatMessage(
                             server.getPlayerManager().getPlayer( activeTrade.getValue().getSender() ),
                             server.getPlayerManager().getPlayer( activeTrade.getValue().getReciever() )
