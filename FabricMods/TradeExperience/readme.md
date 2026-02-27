@@ -1,4 +1,4 @@
-# [Trade Experience](https://modrinth.com/mod/trade-experience/version/1.0.8_1.21.11)
+# [Trade Experience](https://modrinth.com/mod/trade-experience/version/1.0.9_1.21.11)
 ![Trade](https://cdn.modrinth.com/data/3nZC9EUc/images/e155faf899935d332a8c3110b10d1192e64a2784.png)
 
 ## Paying
@@ -26,12 +26,21 @@ If one has permissions, they may check other player's balances with "/bal <Playe
 
 ---
 
-## Congurations
+## Gamerules and Conguration
+
+### Gamerules
+
+| Name | Identifier | default Value | Description |
+| ---- | ---------- | ------------- | ----------- |
+| Trade Timeout Time | trade_timeout_time | 600 (game-ticks) | Time (in ticks) for a trade to timeout. |
+| Interaction Trade Initiation | interaction_trade_initiation | true | Right-Click a Player to Initiate a Trade. |
+
+Gamerules may be changed with commands like ``/gamerule trade_experience:trade_timeout_time 1000``.
+
+### Configuration
+
 trade_experience.properties:
 ```md
-# How many seconds before a trade times out.
-trade_timeout_time: 30
-
 # Monetary-like experience name.
 experience_name: experience
 ```
