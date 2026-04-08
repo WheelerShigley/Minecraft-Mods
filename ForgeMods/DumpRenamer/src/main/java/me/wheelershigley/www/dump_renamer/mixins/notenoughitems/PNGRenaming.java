@@ -37,8 +37,8 @@ public class PNGRenaming extends GuiScreen  {
 
         String damagedIdentifier =
             Item.itemRegistry.getIDForObject(item)
-            +','+
-            Integer.toString( item.getDamage(stack) )
+            +","+
+            item.getDamage(stack)
         ;
         String readableName = EnumChatFormatting.getTextWithoutFormattingCodes(
             GuiContainerManager.itemDisplayNameShort(stack)
