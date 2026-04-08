@@ -1,0 +1,11 @@
+[
+    {
+      "modid": "dump_renamer",
+      "name": "Dump Renamer",
+      "description": "Renames image-files dumped from NEI.",
+      "version": "0.8.0",
+      "mcversion": "1.7.10",
+      "authorList": ["Wheeler-Shigley"],
+      "dependencies": ["NotEnoughItems-GTNH"]
+    }
+]
