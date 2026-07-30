@@ -3,7 +3,7 @@
 ![Chicken Little](https://cdn.modrinth.com/data/9srQd7ap/images/7cc7849cb3a0f5a26345ec9c2d86d589b1ee26b7.png)
 
 Named baby animals will never grow up!
-They will stay babies forever.
+Similar to [Golden Danelions](https://minecraft.wiki/w/Golden_Dandelion), they will stay babies forever.
 
 "Naming" a named entity with an Unnamed NameTag will Unname the entity; this can be used to allow a baby mob to grow (though, they're vulnerable to despawning).
 
