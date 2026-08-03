@@ -1,20 +1,21 @@
-package me.wheelershigley.silktouchplus.mixins;
+package me.wheelershigley.www.silktouchplus.mixins;
 
-import me.wheelershigley.silktouchplus.SilkTouchPlus;
-import me.wheelershigley.silktouchplus.helpers.ItemStacksHelper;
-import me.wheelershigley.silktouchplus.registrations.GameRuleRegistrator;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import me.wheelershigley.www.silktouchplus.helpers.ItemStacksHelper;
+import me.wheelershigley.www.silktouchplus.registrations.GameRuleRegistrator;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BrushableBlockEntity;
+import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
+import net.minecraft.world.level.block.entity.TrialSpawnerBlockEntity;
+import net.minecraft.world.level.block.entity.vault.VaultBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,23 +28,23 @@ import java.util.List;
 @Mixin(Block.class)
 public class BlockEntitiesDataDropsMixin {
     @Inject(
-        method = "Lnet/minecraft/block/Block;getDroppedStacks(Lnet/minecraft/block/BlockState;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/entity/Entity;Lnet/minecraft/item/ItemStack;)Ljava/util/List;",
+        method = "getDrops(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/entity/BlockEntity;)Ljava/util/List;",
         at = @At("HEAD"),
         cancellable = true
     )
     private static void getDroppedStacks(
-        BlockState state,
-        ServerWorld world,
-        BlockPos pos,
-        @Nullable BlockEntity blockEntity,
-        Entity entity,
-        ItemStack stack,
+        BlockState blockState,
+        ServerLevel serverLevel, BlockPos blockPos,
+        BlockEntity blockEntity,
         CallbackInfoReturnable< List<ItemStack> > cir
     ) {
         if(blockEntity != null) {
             Item itemWithBlockEntityData = getItemForModifiedBlockData(blockEntity);
             if(itemWithBlockEntityData != null) {
-                ItemStack itemStackWithBlockEntityData = ItemStacksHelper.copyBlockDataToStack( blockEntity, world, pos, new ItemStack(itemWithBlockEntityData) );
+                ItemStack itemStackWithBlockEntityData = ItemStacksHelper.copyBlockDataToStack(
+                    blockEntity, serverLevel, blockPos,
+                    new ItemStack(itemWithBlockEntityData)
+                );
                 cir.setReturnValue( List.of(itemStackWithBlockEntityData) );
             }
         }
@@ -57,12 +58,12 @@ public class BlockEntitiesDataDropsMixin {
         }
 
         GameRules gameRules = null; {
-            World world = blockEntity.getWorld();
-            if(world == null) {
+            ServerLevel level = (ServerLevel)blockEntity.getLevel();
+            if(level == null) {
                 return null;
             }
 
-            MinecraftServer server = blockEntity.getWorld().getServer();
+            MinecraftServer server = blockEntity.getLevel().getServer();
             if(server == null) {
                 return null;
             }
@@ -71,7 +72,7 @@ public class BlockEntitiesDataDropsMixin {
         }
         //modified blocks are: Spawner, Vault, Trial_Spawner, and Suspicious Blocks
         if(
-            blockEntity instanceof MobSpawnerBlockEntity
+            blockEntity instanceof SpawnerBlockEntity
             && gameRules.getBoolean(GameRuleRegistrator.SILKTOUCH_SPAWNER)
         ) {
             return Items.SPAWNER;

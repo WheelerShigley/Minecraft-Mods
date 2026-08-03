@@ -1,14 +1,15 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "me.wheelershigley.silktouchplus.mixins",
+  "package": "me.wheelershigley.www.silktouchplus.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "CustomDataComponentLootFunctionMixin",
     "BlockEntitiesDataDropsMixin",
+    "DataPlacePermissionMixin",
+    "DropBlockItemsMixin",
     "InfestedBlocksMixin",
-    "SpawnerBlockPlacementPermissionsMixin",
-    "SpawnerExperienceDropMixin"
+    "OminousVaultPlacementMixin",
+    "SpawnerBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

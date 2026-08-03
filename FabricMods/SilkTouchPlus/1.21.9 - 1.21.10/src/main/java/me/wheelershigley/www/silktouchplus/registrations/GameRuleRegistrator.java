@@ -1,11 +1,11 @@
-package me.wheelershigley.silktouchplus.registrations;
+package me.wheelershigley.www.silktouchplus.registrations;
 
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.level.GameRules;
 
 public class GameRuleRegistrator {
-    public static GameRules.Key<GameRules.BooleanRule>
+    public static GameRules.Key<GameRules.BooleanValue>
         SILKTOUCH_BUDDING_AMETHYST,
         SILKTOUCH_REINFORCED_DEEPSLATE,
         SILKTOUCH_SPAWNER,
@@ -19,7 +19,7 @@ public class GameRuleRegistrator {
         SILKTOUCH_CAKE
     ;
 
-    private static < T extends GameRules.Rule<T> > GameRules.Key<GameRules.BooleanRule> register(String name, boolean default_value) {
+    private static < T extends GameRules.Value<T> > GameRules.Key<GameRules.BooleanValue> register(String name, boolean default_value) {
         return GameRuleRegistry.register(
             name,
             GameRules.Category.PLAYER,

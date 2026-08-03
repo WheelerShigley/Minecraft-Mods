@@ -1,3 +1,2 @@
 accessWidener v2 named
-accessible class net/minecraft/loot/function/CopyNbtLootFunction$Operation
-accessible method net/minecraft/loot/function/CopyNbtLootFunction$Operation execute (Ljava/util/function/Supplier;Lnet/minecraft/nbt/NbtElement;)V
+accessible method net/minecraft/world/level/block/state/BlockBehaviour getCloneItemStack (Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)Lnet/minecraft/world/item/ItemStack;
