@@ -1,4 +1,4 @@
-# [Default Arms](https://modrinth.com/mod/default-arms/version/0.3.0_1.21.11)
+# [Default Arms](https://modrinth.com/mod/default-arms/version/0.4.0_26.2)
 ![Shearing](https://cdn.modrinth.com/data/feJWuS6h/images/8737fbbdf1144a04399857d41f2830929c267de5.png)
 
 ---

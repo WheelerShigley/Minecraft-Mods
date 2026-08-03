@@ -1,18 +1,22 @@
-# [Charged](https://modrinth.com/mod/charged/version/1.0.2_1.21.11)
+# [Trampleless](https://modrinth.com/mod/trampleless/version/1.2.2_26.1-26.2)
+![Example Usage](https://cdn.modrinth.com/data/shxtVuPU/images/c843cdaa126a2429e0ed552ffd0b2e6fe843edfc.png)
+Trampling [Farmland](https://minecraft.wiki/w/Farmland) can be (configurably) disabled!
+
+## Feather-Falling prevents trampling farmland (configurable)!
+
+Farmland can *only* be *trampled* by **[players](https://minecraft.wiki/w/Player)** *when* they
+- lack [boots](https://minecraft.wiki/w/Boots) with [Feather-Falling](https://minecraft.wiki/w/Feather_Falling)
+
+and by **[non-players](https://minecraft.wiki/w/Mob)** *when* they're
+- at least [medium-sized](# "larger than 0.512m^3")
+- [mobGriefing](https://minecraft.wiki/w/Commands/gamerule#Examples) is enabled
+- lack [boots](https://minecraft.wiki/w/Boots) with [Feather-Falling](https://minecraft.wiki/w/Feather_Falling)
+.
+
 ---
 
-![Player Trap](https://cdn.modrinth.com/data/5cQnQD5m/images/ff93df48541fea0bb49c24f2c74b789e39dfc557.png)
-![Player Heads](https://cdn.modrinth.com/data/5cQnQD5m/images/03caee9fe9d277c76f77e27e510cf2ac6f016228.png)
-Charged Creepers killing players will (configurably) make them drop their head, (configurably, again) with their skin's texture.
-
-![Wither Skeleton Drops](https://cdn.modrinth.com/data/5cQnQD5m/images/7a12eb15fbbfb8d1e5c0e504db9fee19b4b5c76f.png)
-Very many entities heads (configurably) can be dropped.
-
----
-
-![Washing](https://cdn.modrinth.com/data/5cQnQD5m/images/e2d46df05aa37a326dce11e993594767209c82a2.png)
-Player heads with skins can be washed into default skins.
-This feature has a client/server sync feature that will prevent temporary, client-side ghost-blocks [of placed heads] appearing at all.
+## Protect your fields!
+![One of my friend's wheat-flats, "Dad Farm".](https://cdn.modrinth.com/data/shxtVuPU/images/d9b8e43232cf17e35f1795eb603fec79d597316b.png)
 
 ---
 
@@ -20,15 +24,9 @@ This feature has a client/server sync feature that will prevent temporary, clien
 
 | Name (1.21+) | Name (-1.21) | Default Value | Description |
 | ------------ | ------------ | ------------- | ----------- |
-| player_head_drop | playerHeadDrop | true | Players killed by Charged-Creepers may drop a head. |
-| player_head_drop_textures | playerHeadDropTextures  | true | When player drop heads, they will use their players' texture. |
-| player_head_texture_washing | playerHeadDropTextures  | true | Textured player heads may be untextured with a Cauldron of water. |
-| maximum_head_drop_count | maxHeadDropCount  | -1 | Maximum heads drop from a single Charged-Creepers' kills; when negative, limits are disabled. |
+| farmland_trampling | farmlandTrampling | true | Farmland can be trampled. |
+| feather_falling_trampling | featherFallingTrampling  | false | Farmland can be trampled even with Feather-Falling boots equiped. |
 
 These can be modified with the gamerule command, ex:
-``/gamerule charged:maximum_head_drop_count 1``
+``/gamerule trampleless:farmland_trampling false``
 .
-
----
-
-![Icon](https://cdn.modrinth.com/data/5cQnQD5m/images/0f66ff3776943aada9c93668917d6e28c6c8dac6.png)

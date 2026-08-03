@@ -1,4 +1,4 @@
-# [Trade Experience](https://modrinth.com/mod/trade-experience/version/1.0.9_1.21.11)
+# [Trade Experience](https://modrinth.com/mod/trade-experience/version/1.0.9_26.1-26.2)
 ![Trade](https://cdn.modrinth.com/data/3nZC9EUc/images/e155faf899935d332a8c3110b10d1192e64a2784.png)
 
 ## Paying
