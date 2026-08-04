@@ -1,4 +1,4 @@
-# [Charged](https://modrinth.com/mod/charged/version/1.0.2_1.21.11)
+# [Charged](https://modrinth.com/mod/charged/version/1.0.4_26.1-26.2)
 ---
 
 ![Player Trap](https://cdn.modrinth.com/data/5cQnQD5m/images/ff93df48541fea0bb49c24f2c74b789e39dfc557.png)

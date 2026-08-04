@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.wheelershigley.www.charged.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "CreeperMixin",
+    "GameRuleUpdateMixin",
+    "HeadWashingMixin",
+    "PlayerJoinMixin",
+    "PlayerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

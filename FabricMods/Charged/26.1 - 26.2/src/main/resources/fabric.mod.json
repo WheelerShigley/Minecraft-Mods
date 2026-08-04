@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "charged",
+  "version": "1.0.4_26.1-26.2",
+  "name": "Charged",
+  "description": "All entities killed by Charged Creeper drop their heads, not just the first killed entity.",
+  "authors": ["Wheeler-Shigley"],
+  "icon": "assets/charged/icon.png",
+  "environment": "*",
+  "accessWidener": "charged.accesswidener",
+  "entrypoints": {
+    "client": [
+      "me.wheelershigley.www.charged.ChargedClient"
+    ],
+    "main": [
+      "me.wheelershigley.www.charged.Charged"
+    ]
+  },
+  "mixins": [
+    "charged.mixins.json",
+    {
+      "config": "charged.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "fabric-api": "*",
+    "minecraft": ">=26.1"
+  }
+}
