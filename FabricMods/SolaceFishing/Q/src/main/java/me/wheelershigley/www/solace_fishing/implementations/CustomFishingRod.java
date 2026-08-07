@@ -43,7 +43,6 @@ public class CustomFishingRod extends FishingRodItem implements PolymerItem {
             retrieveCast(level, player, hand);
         } else {
             summonCast(level, player, hand);
-            player.awardStat( Stats.ITEM_USED.get(this) );
         }
 
         return InteractionResult.SUCCESS ;
@@ -92,11 +91,9 @@ public class CustomFishingRod extends FishingRodItem implements PolymerItem {
         if(level instanceof ServerLevel serverLevel) {
             int lureSpeed = (int)(EnchantmentHelper.getFishingTimeReduction(serverLevel, itemStack, player) * 20.0F);
             int luck = EnchantmentHelper.getFishingLuckBonus(serverLevel, itemStack, player);
-            Projectile.spawnProjectile(
-                new FishingHook(player, level, luck, lureSpeed),
-                serverLevel,
-                itemStack
-            );
+
+            FishingHook hook = new FishingHook(player, level, luck, lureSpeed);
+            Projectile.spawnProjectile(hook, serverLevel, itemStack);
         }
 
         player.awardStat( Stats.ITEM_USED.get(this) );
