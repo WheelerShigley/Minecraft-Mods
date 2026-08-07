@@ -1,5 +1,8 @@
 {
   "solace_fishing.item_group": "Solace Fish",
 
-  "item.solace_fishing.angelfish": "Angelfish"
+  "item.solace_fishing.angelfish": "Angelfish",
+
+
+  "item.solace_fishing.bamboo_rod": "Bamboo Rod"
 }

@@ -1,0 +1,14 @@
+{
+  "parent": "item/handheld_rod",
+  "textures": {
+    "layer0": "solace_fishing:item/bamboo_rod"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "cast": 1
+      },
+      "model": "solace_fishing:item/bamboo_rod_cast"
+    }
+  ]
+}
