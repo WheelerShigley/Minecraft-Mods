@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "solace_fishing",
+  "version": "${version}",
+  "name": "Solace Fishing",
+  "description": "Custom Fishing! (common-side)",
+  "authors": ["Wheeler-Shigley"],
+  "icon": "assets/solace_fishing/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.www.solace_fishing.SolaceFishing"
+    ]
+  },
+  "mixins": [
+    "solace_fishing.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "fabric-api": "*",
+    "minecraft": ">=26.2"
+  }
+}
