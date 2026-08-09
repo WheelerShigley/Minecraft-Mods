@@ -1,8 +1,8 @@
 package me.wheelershigley.www.solace_fishing;
 
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
+import me.wheelershigley.www.solace_fishing.registrations.FishingItems;
 import me.wheelershigley.www.solace_fishing.registrations.ItemGroup;
-import me.wheelershigley.www.solace_fishing.registrations.RodItems;
 import net.fabricmc.api.ModInitializer;
 
 public class SolaceFishing implements ModInitializer {
@@ -12,7 +12,7 @@ public class SolaceFishing implements ModInitializer {
     @Override
     public void onInitialize() {
         FishItems.initialize();
-        RodItems.initialize();
+        FishingItems.initialize();
 
         ItemGroup.initialize();
     }

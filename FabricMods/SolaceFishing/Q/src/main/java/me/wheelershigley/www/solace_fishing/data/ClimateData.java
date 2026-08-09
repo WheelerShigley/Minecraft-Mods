@@ -151,7 +151,7 @@ public class ClimateData {
         ;
     }
 
-    private double percentize(double value) {
+    public static double percentize(double value) {
         return Math.round(10000.0*value)/100.0;
     }
 

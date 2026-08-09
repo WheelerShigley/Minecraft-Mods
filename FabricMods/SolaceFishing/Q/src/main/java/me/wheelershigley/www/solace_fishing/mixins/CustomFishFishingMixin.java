@@ -46,13 +46,6 @@ public abstract class CustomFishFishingMixin {
             caster.getOnPos()
         );
 
-        //TODO: remove logging
-        caster.sendSystemMessage(
-            Component.literal(
-                climate.toString()
-            )
-        );
-
         Catchables.attemptInitialize();
         ItemStack caught = Catchables.roll(
             climate,

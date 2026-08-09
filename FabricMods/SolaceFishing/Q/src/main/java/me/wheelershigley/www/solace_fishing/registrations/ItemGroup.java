@@ -14,12 +14,13 @@ public class ItemGroup {
             )
         ;
         CreativeModeTabEvents
-                .modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES)
-                .register(
-                    group -> {
-                        group.accept(RodItems.BAMBOO_ROD);
-                    }
-                )
+            .modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES)
+            .register(
+                group -> {
+                    group.accept(FishingItems.PDA);
+                    group.accept(FishingItems.BAMBOO_ROD);
+                }
+            )
         ;
     }
 }
