@@ -65,9 +65,6 @@ public class CustomFishingRod extends FishingRodItem implements PolymerItem {
         assert player.fishing != null;
         ItemStack heldStack = player.getItemInHand(hand);
 
-        //remove cast-tag (for client-side texturing)
-        //heldStack.remove(DataComponents.CUSTOM_MODEL_DATA);
-
         if( !level.isClientSide() ) {
             int damage = player.fishing.retrieve(heldStack);
             heldStack.hurtAndBreak(
@@ -90,17 +87,6 @@ public class CustomFishingRod extends FishingRodItem implements PolymerItem {
     @Unique
     private void summonCast(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-
-        //set cast (for client-side texturing)
-        itemStack.set(
-            DataComponents.CUSTOM_MODEL_DATA,
-            new CustomModelData(
-                List.of(),
-                List.of(),
-                List.of("cast"),
-                List.of()
-            )
-        );
 
         level.playSound(
             null,
