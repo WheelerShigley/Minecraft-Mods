@@ -32,7 +32,8 @@ import java.util.List;
 public class CustomFishingRod extends FishingRodItem implements PolymerItem {
     public static final Item.Properties DEFAULT_PROPERTIES = new Item.Properties()
         .stacksTo(1)
-        .durability(100)
+        .durability(64)
+        .enchantable(1)
     ;
 
     public CustomFishingRod(Properties properties) {

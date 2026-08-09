@@ -7,6 +7,10 @@ public class RodItems extends PolymerItemsRegister {
     public static Item BAMBOO_ROD;
 
     public static void initialize() {
-        BAMBOO_ROD = register("bamboo_rod", CustomFishingRod::new);
+        BAMBOO_ROD = register(
+            "bamboo_rod",
+            CustomFishingRod.DEFAULT_PROPERTIES,
+            CustomFishingRod::new
+        );
     }
 }
