@@ -4,7 +4,11 @@
   "package": "me.wheelershigley.www.solace_fishing.mixins",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "BobbleValidityFixerMixin"
+    "BiomeClimateAccessMixin",
+    "BobbleValidityFixerMixin",
+    "CustomFishFishingMixin",
+    "FishHookRodChangesMixin",
+    "PlayerLeavingCustomModelFixesMixin"
   ],
   "injectors": {
     "defaultRequire": 1

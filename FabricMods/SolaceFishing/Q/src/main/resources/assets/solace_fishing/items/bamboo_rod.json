@@ -1,6 +1,19 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "solace_fishing:item/bamboo_rod"
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "cases": [
+      {
+        "when": "cast",
+        "model": {
+          "type": "minecraft:model",
+          "model": "solace_fishing:item/bamboo_rod_cast"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "solace_fishing:item/bamboo_rod"
+    }
   }
 }
