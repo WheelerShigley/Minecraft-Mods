@@ -60,34 +60,34 @@ public class ClimateStatisticItem {
 
     public double getAverageWeightAt(ClimateData locationData) {
         double temperature_weight = Statistics.normal(
-            means.temperature(),
-            standard_deviations.temperature(),
-            locationData.temperature()
+            means.getTemperature(),
+            standard_deviations.getTemperature(),
+            locationData.getTemperature()
         );
         double humidity_weight = Statistics.normal(
-            means.humidity(),
-            standard_deviations.humidity(),
-            locationData.humidity()
+            means.getHumidity(),
+            standard_deviations.getHumidity(),
+            locationData.getHumidity()
         );
         double continentalness_weight = Statistics.normal(
-            means.continentalness(),
-            standard_deviations.continentalness(),
-            locationData.continentalness()
+            means.getContinentalness(),
+            standard_deviations.getContinentalness(),
+            locationData.getContinentalness()
         );
         double depth_weight = Statistics.normal(
-            means.depth(),
-            standard_deviations.depth(),
-            locationData.depth()
+            means.getDepth(),
+            standard_deviations.getDepth(),
+            locationData.getDepth()
         );
         double erosion_weight = Statistics.normal(
-            means.erosion(),
-            standard_deviations.erosion(),
-            locationData.erosion()
+            means.getErosion(),
+            standard_deviations.getErosion(),
+            locationData.getErosion()
         );
         double weirdness_weight = Statistics.normal(
-            means.weirdness(),
-            standard_deviations.weirdness(),
-            locationData.weirdness()
+            means.getWeirdness(),
+            standard_deviations.getWeirdness(),
+            locationData.getWeirdness()
         );
 
         double average_weight = (

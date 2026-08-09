@@ -11,7 +11,7 @@ import java.util.*;
 
 public class Catchables {
     public static boolean isInitialized = false;
-    public static final Set<ClimateStatisticItem> statisticalCatches = new HashSet<ClimateStatisticItem>();
+    public static final Set<ClimateStatisticItem> statisticalCatches = new HashSet<>();
 
     public static void attemptInitialize() {
         if(isInitialized) {
@@ -21,15 +21,15 @@ public class Catchables {
         Catchables.statisticalCatches.add(
             new ClimateStatisticItem(
                 new ItemStack(Items.BRAIN_CORAL_FAN),
-                new ClimateData(0.0, 0.0, 0.0, 0.0, 62, 0.0),
-                new ClimateData(0.7, 0.7, 0.7, 0.7, 100, 0.7)
+                ClimateData.DEFAULT_MEANS,
+                ClimateData.DEFAULT_DEVIATIONS
             )
         );
         Catchables.statisticalCatches.add(
             new ClimateStatisticItem(
                 new ItemStack(FishItems.ANGELFISH),
-                new ClimateData(0.0, 0.0, 0.0, 0.0, 62, 0.3),
-                new ClimateData(0.7, 0.7, 0.7, 0.7, 100, 0.1)
+                new ClimateData.Builder().of(ClimateData.DEFAULT_MEANS).withWeirdness(0.3).build(),
+                new ClimateData.Builder().of(ClimateData.DEFAULT_DEVIATIONS).withWeirdness(0.1).build()
             )
         );
 
