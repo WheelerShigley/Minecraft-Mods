@@ -6,9 +6,7 @@
   "mixins": [
     "BiomeClimateAccessMixin",
     "BobbleValidityFixerMixin",
-    "CustomFishFishingMixin",
-    "FishHookRodChangesMixin",
-    "PlayerLeavingCustomModelFixesMixin"
+    "CustomFishFishingMixin"
   ],
   "injectors": {
     "defaultRequire": 1
