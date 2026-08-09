@@ -8,12 +8,12 @@ import net.minecraft.world.level.levelgen.DensityFunction;
 import org.jspecify.annotations.NonNull;
 
 public record ClimateData(
-    float temperature,
-    float humidity,
-    float continentalness,
-    float erosion,
-    float depth,
-    float weirdness
+    double temperature,
+    double humidity,
+    double continentalness,
+    double erosion,
+    double depth,
+    double weirdness
 ) {
     public static ClimateData sample(ServerLevel level, BlockPos pos) {
         int blockX = QuartPos.toBlock( pos.getX() );
@@ -25,13 +25,53 @@ public record ClimateData(
 
         Climate.Sampler sampler = level.getChunkSource().getGeneratorState().randomState().sampler();
         return new ClimateData(
-            (float) sampler.temperature().compute(context),
-            (float)sampler.humidity().compute(context),
-            (float)sampler.continentalness().compute(context),
-            (float)sampler.erosion().compute(context),
-            (float)sampler.depth().compute(context),
-            (float)sampler.weirdness().compute(context)
+            sampler.temperature().compute(context),
+            sampler.humidity().compute(context),
+            sampler.continentalness().compute(context),
+            sampler.erosion().compute(context),
+            sampler.depth().compute(context),
+            sampler.weirdness().compute(context)
         );
+    }
+
+    public boolean isInDoubleBounds(ClimateData means, ClimateData standard_deviations) {
+        double mean = means.temperature();
+        double deviation = 2.0*standard_deviations.temperature();
+        if(this.temperature < mean-deviation || mean+deviation < this.temperature) {
+            return false;
+        }
+
+        mean = means.humidity();
+        deviation = standard_deviations.humidity();
+        if(this.humidity < mean-deviation || mean+deviation < this.humidity) {
+            return false;
+        }
+
+        mean = means.continentalness();
+        deviation = standard_deviations.continentalness();
+        if(this.continentalness < mean-deviation || mean+deviation < this.continentalness) {
+            return false;
+        }
+
+        mean = means.erosion();
+        deviation = standard_deviations.continentalness;
+        if(this.continentalness < mean-deviation || mean+deviation < this.continentalness) {
+            return false;
+        }
+
+        mean = means.depth();
+        deviation = standard_deviations.depth();
+        if(this.depth < mean-deviation || mean+deviation < this.depth) {
+            return false;
+        }
+
+        mean = means.weirdness();
+        deviation = standard_deviations.weirdness();
+        if(this.weirdness < mean-deviation || mean+deviation < this.weirdness) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -53,7 +93,7 @@ public record ClimateData(
         ;
     }
 
-    private float percentize(float value) {
-        return Math.round(10000.0f*value)/100.0f;
+    private double percentize(double value) {
+        return Math.round(10000.0*value)/100.0;
     }
 }

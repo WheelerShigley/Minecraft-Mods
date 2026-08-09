@@ -113,7 +113,6 @@ public class CustomFishingRod extends FishingRodItem implements PolymerItem {
             int luck = EnchantmentHelper.getFishingLuckBonus(serverLevel, itemStack, player);
 
             FishingHook hook = new FishingHook(player, level, luck, lureSpeed);
-            //TODO: custom fishes
             Projectile.spawnProjectile(hook, serverLevel, itemStack);
         }
 

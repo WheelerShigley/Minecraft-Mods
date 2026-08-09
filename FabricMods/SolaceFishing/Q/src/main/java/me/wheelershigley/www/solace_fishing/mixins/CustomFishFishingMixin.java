@@ -3,12 +3,12 @@ package me.wheelershigley.www.solace_fishing.mixins;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import me.wheelershigley.www.solace_fishing.data.ClimateData;
+import me.wheelershigley.www.solace_fishing.implementations.Catchables;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,18 +41,24 @@ public abstract class CustomFishFishingMixin {
         }
         assert level instanceof ServerLevel;
 
-        //get climate
         ClimateData climate = ClimateData.sample(
             (ServerLevel)level,
             caster.getOnPos()
         );
 
+        //TODO: remove logging
         caster.sendSystemMessage(
             Component.literal(
                 climate.toString()
             )
         );
 
-        return ObjectArrayList.of( new ItemStack(Items.STONE) );
+        Catchables.attemptInitialize();
+        ItemStack caught = Catchables.roll(
+            climate,
+            level.getRandom()
+        );
+
+        return ObjectArrayList.of(caught);
     }
 }
