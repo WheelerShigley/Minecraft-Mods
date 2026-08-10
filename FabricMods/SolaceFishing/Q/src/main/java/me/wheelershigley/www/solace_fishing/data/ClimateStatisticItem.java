@@ -12,6 +12,7 @@ import java.util.List;
 public class ClimateStatisticItem {
     private final ItemStack datum;
 
+    private double area = 1.0;
     private final ClimateData means;
     private final ClimateData standard_deviations;
 
@@ -20,19 +21,10 @@ public class ClimateStatisticItem {
 
     public ClimateStatisticItem(
         ItemStack datum,
-        ClimateData means, ClimateData standard_deviations
-    ) {
-        this.datum = datum;
-        this.means = means;
-        this.standard_deviations = standard_deviations;
-        isWhitelisted = false;
-    }
-
-    public ClimateStatisticItem(
-        ItemStack datum,
-        ClimateData means, ClimateData standard_deviations,
+        double area, ClimateData means, ClimateData standard_deviations,
         List< ResourceKey<Biome> > whitelist
     ) {
+        setArea(area);
         this.datum = datum;
         this.means = means;
         this.standard_deviations = standard_deviations;
@@ -42,6 +34,20 @@ public class ClimateStatisticItem {
         } else {
             isWhitelisted = false;
         }
+    }
+
+    public ClimateStatisticItem(
+        ItemStack datum,
+        double area, ClimateData means, ClimateData standard_deviations
+    ) {
+        this(datum, area, means, standard_deviations, null);
+    }
+
+    public ClimateStatisticItem(
+        ItemStack datum,
+        ClimateData means, ClimateData standard_deviations
+    ) {
+        this(datum, 1.0, means, standard_deviations, null);
     }
 
     public boolean isInBounds(
@@ -98,7 +104,7 @@ public class ClimateStatisticItem {
             erosion_weight +
             weirdness_weight
         ) / 6.0;
-        return average_weight;
+        return area * average_weight;
     }
 
     public double getAverageStandardDeviation() {
@@ -110,6 +116,15 @@ public class ClimateStatisticItem {
             standard_deviations.getErosion() +
             standard_deviations.getWeirdness()
         ) / 6.0;
+    }
+
+    private void setArea(double area) {
+        // |area|
+        if(area < 0.0) {
+            area = -area;
+        }
+
+        this.area = Math.clamp(area, 0.0, 1.0);
     }
 
     public ItemStack getItem() {

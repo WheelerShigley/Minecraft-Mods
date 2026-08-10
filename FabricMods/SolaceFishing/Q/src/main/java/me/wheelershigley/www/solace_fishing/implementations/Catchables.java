@@ -7,6 +7,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -20,22 +21,10 @@ public class Catchables {
             return;
         }
 
-        //Vanilla fishes, available everywhere
-        addDefault(Items.COD);
-        addDefault(Items.SALMON);
-        addDefault(Items.PUFFERFISH);
-        addDefault(Items.TROPICAL_FISH);
+        // fishes
+        initializeFishes();
 
-        //Custom fishes
-        Catchables.statisticalCatches.add(
-            new ClimateStatisticItem(
-                new ItemStack(FishItems.ANGELFISH),
-                new ClimateData.Builder().of(ClimateData.DEFAULT_MEANS).withWeirdness(0.3).build(),
-                new ClimateData.Builder().of(ClimateData.DEFAULT_DEVIATIONS).withWeirdness(0.1).build()
-            )
-        );
-
-        //rarity deviations
+        // rarity deviations
         for(ClimateStatisticItem item : statisticalCatches) {
             itemsCache.put(
                 item.getItem().getItem(),
@@ -46,10 +35,31 @@ public class Catchables {
         isInitialized = true;
     }
 
-    private static boolean addDefault(Item item) {
+    private static void initializeFishes() {
+        // Vanilla fishes, available everywhere; 60%:25%:13%:2%, like vanilla
+        addDefault(Items.COD,           0.60/0.60);
+        addDefault(Items.SALMON,        0.25/0.60);
+        addDefault(Items.PUFFERFISH,    0.13/0.60);
+        addDefault(Items.TROPICAL_FISH, 0.02/0.60);
+
+        //Custom fishes
+        Catchables.statisticalCatches.add(
+            new ClimateStatisticItem(
+                new ItemStack(FishItems.ANGELFISH),
+                0.2,
+                new ClimateData.Builder().of(ClimateData.DEFAULT_MEANS).withWeirdness(0.3).build(),
+                new ClimateData.Builder().of(ClimateData.DEFAULT_DEVIATIONS).withWeirdness(0.1).build()
+            )
+        );
+    }
+
+    private static boolean addDefault(Item item, @Nullable Double area) {
+        double adjusted_area = (area == null ? 1.0 : area);
+
         return Catchables.statisticalCatches.add(
             new ClimateStatisticItem(
                 new ItemStack(item),
+                adjusted_area,
                 ClimateData.DEFAULT_MEANS.clone(),
                 ClimateData.DEFAULT_DEVIATIONS.clone()
             )

@@ -3,7 +3,6 @@ package me.wheelershigley.www.solace_fishing.implementations;
 import eu.pb4.polymer.core.api.item.PolymerItem;
 import me.wheelershigley.www.solace_fishing.data.ClimateData;
 import me.wheelershigley.www.solace_fishing.menus.ImmutableChestMenu;
-import me.wheelershigley.www.solace_fishing.menus.MainMenu;
 import me.wheelershigley.www.solace_fishing.menus.ProbabilitiesMenu;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;
@@ -50,12 +49,12 @@ public class PDA extends Item implements PolymerItem  {
         }
 
         if( player.isCrouching() ) {
+            simpleClick( (ServerLevel)level, position, player);
+        } else {
             ImmutableChestMenu.open(
                 player,
                 new ProbabilitiesMenu( (ServerLevel)level, position )
             );
-        } else {
-            simpleClick( (ServerLevel)level, position, player);
         }
 
 

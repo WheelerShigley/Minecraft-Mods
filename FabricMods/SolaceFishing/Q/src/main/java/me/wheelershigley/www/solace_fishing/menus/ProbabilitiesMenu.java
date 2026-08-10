@@ -160,11 +160,12 @@ public class ProbabilitiesMenu extends ImmutableChestMenu {
             case EPIC     -> TextColor.LIGHT_PURPLE;
             default       -> TextColor.GRAY;
         };
+        double simplifiedChance = Math.round(10000.0*probability)/100.0;
         item.set(
             DataComponents.LORE,
             ItemLore.EMPTY.withLineAdded(
                 Component.literal(
-                    Double.toString(100.0*probability) + '%'
+                    Double.toString(simplifiedChance) + '%'
                 ).withColor(color)
             )
         );
