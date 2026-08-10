@@ -20,7 +20,7 @@ public class ClimateData {
     ;
 
     public static final ClimateData DEFAULT_MEANS      = new ClimateData(0.0, 0.0, 0.0, 0.0, 62.0,  0.0);
-    public static final ClimateData DEFAULT_DEVIATIONS = new ClimateData(0.5, 0.5, 0.5, 0.5, 100.0, 0.5);
+    public static final ClimateData DEFAULT_DEVIATIONS = new ClimateData(0.5, 0.5, 0.5, 0.5, 150.0, 0.5);
 
     public ClimateData(
         double temperature, double humidity,
@@ -57,37 +57,37 @@ public class ClimateData {
     public boolean isInDoubleBounds(ClimateData means, ClimateData standard_deviations) {
         double mean = means.getTemperature();
         double deviation = 2.0*standard_deviations.getTemperature();
-        if(this.temperature < mean-deviation || mean+deviation < this.temperature) {
+        if(mean+deviation < this.temperature || this.temperature < mean-deviation) {
             return false;
         }
 
         mean = means.getHumidity();
-        deviation = standard_deviations.getHumidity();
-        if(this.humidity < mean-deviation || mean+deviation < this.humidity) {
+        deviation = 2.0*standard_deviations.getHumidity();
+        if(mean+deviation < this.humidity || this.humidity < mean-deviation) {
             return false;
         }
 
         mean = means.getContinentalness();
-        deviation = standard_deviations.getContinentalness();
-        if(this.continentalness < mean-deviation || mean+deviation < this.continentalness) {
+        deviation = 2.0*standard_deviations.getContinentalness();
+        if(mean+deviation < this.continentalness || this.continentalness < mean-deviation) {
             return false;
         }
 
         mean = means.getErosion();
-        deviation = standard_deviations.getContinentalness();
-        if(this.continentalness < mean-deviation || mean+deviation < this.continentalness) {
+        deviation = 2.0*standard_deviations.getErosion();
+        if(mean+deviation < this.erosion || this.erosion < mean-deviation) {
             return false;
         }
 
         mean = means.getDepth();
-        deviation = standard_deviations.getDepth();
-        if(this.depth < mean-deviation || mean+deviation < this.depth) {
+        deviation = 2.0*standard_deviations.getDepth();
+        if(mean+deviation < this.depth || this.depth < mean-deviation) {
             return false;
         }
 
         mean = means.getWeirdness();
-        deviation = standard_deviations.getWeirdness();
-        if(this.weirdness < mean-deviation || mean+deviation < this.weirdness) {
+        deviation = 2.0*standard_deviations.getWeirdness();
+        if(mean+deviation < this.weirdness || this.weirdness < mean-deviation) {
             return false;
         }
 
