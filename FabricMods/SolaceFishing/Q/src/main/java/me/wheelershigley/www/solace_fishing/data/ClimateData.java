@@ -1,13 +1,19 @@
 package me.wheelershigley.www.solace_fishing.data;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import java.awt.*;
 
 public class ClimateData {
     private double
@@ -18,21 +24,27 @@ public class ClimateData {
         depth,
         weirdness
     ;
+    private Holder<Biome> biome = null;
+    private ResourceKey<Level> dimension = null;
 
-    public static final ClimateData DEFAULT_MEANS      = new ClimateData(0.0, 0.0, 0.0, 0.0, 62.0,  0.0);
-    public static final ClimateData DEFAULT_DEVIATIONS = new ClimateData(0.5, 0.5, 0.5, 0.5, 150.0, 0.5);
+    public static final ClimateData DEFAULT_MEANS      = new ClimateData(0.0, 0.0, 0.0, 0.0, 62.0,  0.0, null, null);
+    public static final ClimateData DEFAULT_DEVIATIONS = new ClimateData(0.5, 0.5, 0.5, 0.5, 150.0, 0.5, null, null);
 
     public ClimateData(
         double temperature, double humidity,
         double continentalness, double erosion,
-        double depth, double weirdness
+        double raw_depth, double weirdness,
+        @Nullable Holder<Biome> biome,
+        @Nullable ResourceKey<Level> dimension
     ) {
         setTemperature(temperature);
         setHumidity(humidity);
         setContinentalness(continentalness);
         setErosion(erosion);
-        setDepth(depth);
+        setDepth( adjustDepth(raw_depth) );
         setWeirdness(weirdness);
+        this.biome = biome;
+        this.dimension = dimension;
     }
 
     public static ClimateData sample(ServerLevel level, BlockPos pos) {
@@ -50,7 +62,9 @@ public class ClimateData {
             sampler.continentalness().compute(context),
             sampler.erosion().compute(context),
             sampler.depth().compute(context),
-            sampler.weirdness().compute(context)
+            sampler.weirdness().compute(context),
+            level.getBiome(pos),
+            level.dimension()
         );
     }
 
@@ -94,6 +108,17 @@ public class ClimateData {
         return true;
     }
 
+    private double adjustDepth(double raw_depth) {
+        /* The range of depth, normally is -2 to 1
+           This can be transformed to match the other data-points by the form
+           d_1 = (1/3)(2*d_0+1)
+         */
+        return Math.clamp(
+            ( 2.0*raw_depth + 1.0 )  /  3.0,
+            -1.0, 1.0
+        );
+    }
+
     public double getTemperature() {
         return temperature;
     }
@@ -113,6 +138,13 @@ public class ClimateData {
         return weirdness;
     }
 
+    public Holder<Biome> getBiome() {
+        return biome;
+    }
+    public ResourceKey<Level> getDimension() {
+        return dimension;
+    }
+
     public void setTemperature(double temperature) {
         this.temperature = Math.clamp(temperature, -1.0, 1.0);
     }
@@ -126,8 +158,7 @@ public class ClimateData {
         this.erosion = Math.clamp(erosion, -1.0, 1.0);
     }
     public void setDepth(double depth) {
-        //TODO: proper clamping, based on level
-        this.depth = Math.clamp(depth, -100.0, 400.0);
+        this.depth = depth;
     }
     public void setWeirdness(double weirdness) {
         this.weirdness = Math.clamp(weirdness, -1.0, 1.0);
@@ -164,12 +195,17 @@ public class ClimateData {
             this.continentalness,
             this.erosion,
             this.depth,
-            this.weirdness
+            this.weirdness,
+            this.biome,
+            this.dimension
         );
     }
 
     public static class Builder {
-        private ClimateData data = new ClimateData(0.0, 0.0, 0.0, 0.0, 62, 0.0);
+        private ClimateData data = new ClimateData(
+            0.0, 0.0, 0.0, 0.0, 62, 0.0,
+            null, null
+        );
 
         public Builder of(ClimateData data) {
             this.data = data.clone();
@@ -203,6 +239,15 @@ public class ClimateData {
         }
         public Builder withWeirdness(double weirdness) {
             data.setWeirdness(weirdness);
+            return this;
+        }
+
+        public Builder withBiome(@NotNull Holder<Biome> biome) {
+            data.biome = biome;
+            return this;
+        }
+        public Builder withDimension(@NotNull ResourceKey<Level> level) {
+            data.dimension = level;
             return this;
         }
 

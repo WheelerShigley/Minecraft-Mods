@@ -1,11 +1,12 @@
 package me.wheelershigley.www.solace_fishing.data;
 
 import me.wheelershigley.www.solace_fishing.helpers.Statistics;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -16,51 +17,54 @@ public class ClimateStatisticItem {
     private final ClimateData means;
     private final ClimateData standard_deviations;
 
-    private boolean isWhitelisted = false;
-    private List< ResourceKey<Biome> > whitelist;
+    private List< Holder<Biome> > biomeWhitelist;
+    private List< ResourceKey<Level> > dimensionWhitelist;
 
     public ClimateStatisticItem(
         ItemStack datum,
         double area, ClimateData means, ClimateData standard_deviations,
-        List< ResourceKey<Biome> > whitelist
+        List< Holder<Biome> > biomeWhitelist,
+        List< ResourceKey<Level> > whitelistWhitelist
     ) {
         setArea(area);
         this.datum = datum;
         this.means = means;
         this.standard_deviations = standard_deviations;
-        if( whitelist != null && !whitelist.isEmpty() ) {
-            isWhitelisted = true;
-            this.whitelist = whitelist;
-        } else {
-            isWhitelisted = false;
-        }
+        this.biomeWhitelist = biomeWhitelist;
+        this.dimensionWhitelist = dimensionWhitelist;
     }
 
     public ClimateStatisticItem(
         ItemStack datum,
         double area, ClimateData means, ClimateData standard_deviations
     ) {
-        this(datum, area, means, standard_deviations, null);
+        this(datum, area, means, standard_deviations, null, null);
     }
 
     public ClimateStatisticItem(
         ItemStack datum,
         ClimateData means, ClimateData standard_deviations
     ) {
-        this(datum, 1.0, means, standard_deviations, null);
+        this(datum, 1.0, means, standard_deviations, null, null);
     }
 
-    public boolean isInBounds(
-        @NotNull  ClimateData data,
-        @Nullable ResourceKey<Biome> biome
-    ) {
+    public boolean isInBounds(@NotNull ClimateData data) {
         if(
-            biome != null
-            && isWhitelisted
-            && !whitelist.contains(biome) )
-        {
+            biomeWhitelist != null
+            && !biomeWhitelist.isEmpty()
+            && !biomeWhitelist.contains( data.getBiome() )
+        ) {
             return false;
-        };
+        }
+
+        if(
+            dimensionWhitelist != null
+            && !dimensionWhitelist.isEmpty()
+            && !dimensionWhitelist.contains( data.getDimension() )
+        ) {
+            return false;
+        }
+
         return data.isInDoubleBounds(this.means, this.standard_deviations);
     }
 

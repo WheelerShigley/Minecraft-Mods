@@ -72,7 +72,7 @@ public class Catchables {
         }
         Set<ClimateStatisticItem> validCatches = new HashSet<>();
         for(ClimateStatisticItem item : statisticalCatches) {
-            if( item.isInBounds(locationData, null) ) {
+            if( item.isInBounds(locationData) ) {
                 validCatches.add(item);
             }
         }
