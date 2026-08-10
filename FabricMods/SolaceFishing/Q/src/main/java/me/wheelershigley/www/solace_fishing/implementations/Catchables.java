@@ -4,6 +4,7 @@ import me.wheelershigley.www.solace_fishing.data.ClimateData;
 import me.wheelershigley.www.solace_fishing.data.ClimateStatisticItem;
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -18,13 +19,13 @@ public class Catchables {
             return;
         }
 
-        Catchables.statisticalCatches.add(
-            new ClimateStatisticItem(
-                new ItemStack(Items.BRAIN_CORAL_FAN),
-                ClimateData.DEFAULT_MEANS,
-                ClimateData.DEFAULT_DEVIATIONS
-            )
-        );
+        //Vanilla fishes, available everywhere
+        addDefault(Items.COD);
+        addDefault(Items.SALMON);
+        addDefault(Items.PUFFERFISH);
+        addDefault(Items.TROPICAL_FISH);
+
+        //Custom fishes
         Catchables.statisticalCatches.add(
             new ClimateStatisticItem(
                 new ItemStack(FishItems.ANGELFISH),
@@ -34,6 +35,16 @@ public class Catchables {
         );
 
         isInitialized = true;
+    }
+
+    private static boolean addDefault(Item item) {
+        return Catchables.statisticalCatches.add(
+            new ClimateStatisticItem(
+                new ItemStack(item),
+                ClimateData.DEFAULT_MEANS,
+                ClimateData.DEFAULT_DEVIATIONS
+            )
+        );
     }
 
     private static Set<ClimateStatisticItem> getValidCatchesAt(ClimateData locationData) {

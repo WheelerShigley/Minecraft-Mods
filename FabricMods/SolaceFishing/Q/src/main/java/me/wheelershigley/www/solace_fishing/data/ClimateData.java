@@ -20,19 +20,19 @@ public class ClimateData {
     ;
 
     public static final ClimateData DEFAULT_MEANS      = new ClimateData(0.0, 0.0, 0.0, 0.0, 62.0,  0.0);
-    public static final ClimateData DEFAULT_DEVIATIONS = new ClimateData(0.7, 0.7, 0.7, 0.7, 100.0, 0.7);
+    public static final ClimateData DEFAULT_DEVIATIONS = new ClimateData(0.5, 0.5, 0.5, 0.5, 100.0, 0.5);
 
     public ClimateData(
         double temperature, double humidity,
         double continentalness, double erosion,
         double depth, double weirdness
     ) {
-        this.temperature = temperature;
-        this.humidity = humidity;
-        this.continentalness = continentalness;
-        this.erosion = erosion;
-        this.depth = depth;
-        this.weirdness = weirdness;
+        setTemperature(temperature);
+        setHumidity(humidity);
+        setContinentalness(continentalness);
+        setErosion(erosion);
+        setDepth(depth);
+        setWeirdness(weirdness);
     }
 
     public static ClimateData sample(ServerLevel level, BlockPos pos) {
@@ -114,22 +114,23 @@ public class ClimateData {
     }
 
     public void setTemperature(double temperature) {
-        this.temperature = temperature;
+        this.temperature = Math.clamp(temperature, -1.0, 1.0);
     }
     public void setHumidity(double humidity) {
-        this.humidity = humidity;
+        this.humidity = Math.clamp(humidity, -1.0, 1.0);
     }
     public void setContinentalness(double continentalness) {
-        this.continentalness = continentalness;
+        this.continentalness = Math.clamp(continentalness, -1.0, 1.0);
     }
     public void setErosion(double erosion) {
-        this.erosion = erosion;
+        this.erosion = Math.clamp(erosion, -1.0, 1.0);
     }
     public void setDepth(double depth) {
-        this.depth = depth;
+        //TODO: proper clamping, based on level
+        this.depth = Math.clamp(depth, -100.0, 400.0);
     }
     public void setWeirdness(double weirdness) {
-        this.weirdness = weirdness;
+        this.weirdness = Math.clamp(weirdness, -1.0, 1.0);
     }
 
     @Override
