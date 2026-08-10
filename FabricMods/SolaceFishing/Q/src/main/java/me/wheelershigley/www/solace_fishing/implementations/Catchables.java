@@ -12,6 +12,7 @@ import java.util.*;
 
 public class Catchables {
     public static boolean isInitialized = false;
+    public static final HashMap<Item, ClimateStatisticItem> itemsCache = new HashMap<>();
     public static final Set<ClimateStatisticItem> statisticalCatches = new HashSet<>();
 
     private static void attemptInitialize() {
@@ -33,6 +34,14 @@ public class Catchables {
                 new ClimateData.Builder().of(ClimateData.DEFAULT_DEVIATIONS).withWeirdness(0.1).build()
             )
         );
+
+        //rarity deviations
+        for(ClimateStatisticItem item : statisticalCatches) {
+            itemsCache.put(
+                item.getItem().getItem(),
+                item
+            );
+        }
 
         isInitialized = true;
     }
@@ -72,6 +81,21 @@ public class Catchables {
             );
         }
         return weights;
+    }
+
+    public static Map<ClimateStatisticItem, Double> normalizeWeights(
+            Map<ClimateStatisticItem, Double> weights
+    ) {
+        double weight_sum = weights.values().stream().reduce(0.0, Double::sum);
+
+        Map<ClimateStatisticItem, Double> correctedWeights = new HashMap<>();
+        for(ClimateStatisticItem weight : weights.keySet() ) {
+            correctedWeights.put(
+                weight,
+                weights.get(weight)/weight_sum
+            );
+        }
+        return correctedWeights;
     }
 
     public static ItemStack roll(ClimateData locationData, RandomSource random) {

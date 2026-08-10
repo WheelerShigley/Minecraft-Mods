@@ -2,24 +2,30 @@ package me.wheelershigley.www.solace_fishing.menus;
 
 import me.wheelershigley.www.solace_fishing.data.ClimateData;
 import me.wheelershigley.www.solace_fishing.data.ClimateStatisticItem;
+import me.wheelershigley.www.solace_fishing.implementations.Catchables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.component.ItemLore;
+import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static me.wheelershigley.www.solace_fishing.implementations.Catchables.getValidCatchesAt;
-import static me.wheelershigley.www.solace_fishing.implementations.Catchables.getWeightsForItems;
+import static me.wheelershigley.www.solace_fishing.implementations.Catchables.*;
 
 public class ProbabilitiesMenu extends ImmutableChestMenu {
     public ProbabilitiesMenu(ServerLevel level, BlockPos position) {
@@ -65,9 +71,17 @@ public class ProbabilitiesMenu extends ImmutableChestMenu {
             if(9*6 <= fish_index) {
                 break;
             }
+
+            Item key = entry.getKey().getItem();
+            ClimateStatisticItem value = itemsCache.getOrDefault(key, null);
+
             container.setItem(
                 fish_index++,
-                entry.getKey()
+                adjustedItem(
+                    entry.getKey(),
+                    entry.getValue(),
+                    value == null ? null : value.getAverageStandardDeviation()
+                )
             );
         }
 
@@ -86,7 +100,9 @@ public class ProbabilitiesMenu extends ImmutableChestMenu {
     private void calculateProbabilities(ServerLevel level, BlockPos position) {
         ClimateData locationData = ClimateData.sample(level, position);
         Set<ClimateStatisticItem> validItems = getValidCatchesAt(locationData);
-        Map<ClimateStatisticItem, Double> weights = getWeightsForItems(validItems, locationData);
+        Map<ClimateStatisticItem, Double> weights = normalizeWeights(
+            getWeightsForItems(validItems, locationData)
+        );
 
         Map<ClimateStatisticItem, Double> sortedWeights = weights.entrySet()
             .stream()
@@ -108,5 +124,51 @@ public class ProbabilitiesMenu extends ImmutableChestMenu {
             sortedProbabilities.put( entry.getKey().getItem(), entry.getValue() );
         }
         probabilities = sortedProbabilities;
+    }
+
+    private ItemStack adjustedItem(
+        ItemStack item,
+        double probability,
+        @Nullable Double standard_deviation
+    ) {
+        /* Rarity, based on standard-deviation (s)
+           A s of 0.5 means it is likely always available (very common);
+           0.25 means it is somewhat common
+           0.125 means uncommon (and so forth)
+         */
+        Rarity rarity = Rarity.COMMON;
+        if(standard_deviation != null) {
+            if(standard_deviation < 1.0/8.0) {
+                rarity = Rarity.UNCOMMON;
+            }
+            if(standard_deviation < 1.0/32.0) {
+                rarity = Rarity.RARE;
+            }
+            if(standard_deviation < 1.0/64.0) {
+                rarity = Rarity.EPIC;
+            }
+        }
+        item.set(
+            DataComponents.RARITY,
+            rarity
+        );
+
+        //Probability
+        TextColor color = switch(rarity) {
+            case UNCOMMON -> TextColor.YELLOW;
+            case RARE     -> TextColor.AQUA;
+            case EPIC     -> TextColor.LIGHT_PURPLE;
+            default       -> TextColor.GRAY;
+        };
+        item.set(
+            DataComponents.LORE,
+            ItemLore.EMPTY.withLineAdded(
+                Component.literal(
+                    Double.toString(100.0*probability) + '%'
+                ).withColor(color)
+            )
+        );
+
+        return item;
     }
 }

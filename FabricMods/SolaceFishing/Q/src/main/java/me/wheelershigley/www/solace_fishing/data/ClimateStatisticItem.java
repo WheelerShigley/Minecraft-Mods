@@ -101,6 +101,17 @@ public class ClimateStatisticItem {
         return average_weight;
     }
 
+    public double getAverageStandardDeviation() {
+        return (
+            standard_deviations.getTemperature() +
+            standard_deviations.getHumidity() +
+            standard_deviations.getContinentalness() +
+            standard_deviations.getDepth() +
+            standard_deviations.getErosion() +
+            standard_deviations.getWeirdness()
+        ) / 6.0;
+    }
+
     public ItemStack getItem() {
         return datum.copy();
     }
