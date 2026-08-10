@@ -20,7 +20,7 @@ public abstract class ImmutableChestMenu {
         return new MenuProvider() {
             @Override
             public @NonNull Component getDisplayName() {
-                return Component.translatable("solace_fishing.fishing_menu.title");
+                return Component.translatable( getTranslationKey() );
             }
 
             @Override
@@ -30,17 +30,17 @@ public abstract class ImmutableChestMenu {
                 @NonNull Player player
             ) {
                 return new ChestMenu(
-                    MenuType.GENERIC_9x3,
+                    getMenuType(),
                     containerId, inventory,
                     container,
-                    3
+                    getMenuHeight()
                 ) {
                     @Override
                     public void clicked(
                         final int slotIndex,
                         final int buttonNum,
-                        final ContainerInput containerInput,
-                        final Player player
+                        final @NonNull ContainerInput containerInput,
+                        final @NonNull Player player
                     ) {}
 
                     @Override
@@ -64,5 +64,20 @@ public abstract class ImmutableChestMenu {
         );
     }
 
+    private int getMenuHeight() {
+        MenuType<ChestMenu> menuType = getMenuType();
+
+        if(menuType == MenuType.GENERIC_9x1) { return 1; }
+        if(menuType == MenuType.GENERIC_9x2) { return 2; }
+        if(menuType == MenuType.GENERIC_9x3) { return 3; }
+        if(menuType == MenuType.GENERIC_9x4) { return 4; }
+        if(menuType == MenuType.GENERIC_9x5) { return 5; }
+        if(menuType == MenuType.GENERIC_9x6) { return 6; }
+
+        throw new IllegalStateException("Not a chest menu");
+    }
+
+    public abstract String getTranslationKey();
+    public abstract MenuType<ChestMenu> getMenuType();
     public abstract Container getContainer();
 }

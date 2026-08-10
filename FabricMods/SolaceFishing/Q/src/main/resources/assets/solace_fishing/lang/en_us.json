@@ -10,7 +10,9 @@
 
   "item.solace_fishing.bamboo_rod": "Bamboo Rod",
 
-  "solace_fishing.fishing_menu.title": "Solace Fishing",
+  "solace_fishing.main_menu.title": "Solace Fishing",
+  "solace_fishing.probabilities_menu.title": "Probabilities",
+  "solace_fishing.probabilities_menu.empty": "Nothing here.",
 
   "item.solace_fishing.angelfish": "Angelfish"
 }

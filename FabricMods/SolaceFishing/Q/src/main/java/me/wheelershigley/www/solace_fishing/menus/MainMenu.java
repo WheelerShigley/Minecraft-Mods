@@ -5,10 +5,22 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public class MainMenu extends ImmutableChestMenu {
+    @Override
+    public String getTranslationKey() {
+        return "solace_fishing.main_menu.title";
+    }
+
+    @Override
+    public MenuType<ChestMenu> getMenuType() {
+        return MenuType.GENERIC_9x3;
+    }
+
     @Override
     public Container getContainer() {
         Container container = new SimpleContainer(9*3);
