@@ -14,7 +14,7 @@ public class Catchables {
     public static boolean isInitialized = false;
     public static final Set<ClimateStatisticItem> statisticalCatches = new HashSet<>();
 
-    public static void attemptInitialize() {
+    private static void attemptInitialize() {
         if(isInitialized) {
             return;
         }
@@ -41,13 +41,16 @@ public class Catchables {
         return Catchables.statisticalCatches.add(
             new ClimateStatisticItem(
                 new ItemStack(item),
-                ClimateData.DEFAULT_MEANS,
-                ClimateData.DEFAULT_DEVIATIONS
+                ClimateData.DEFAULT_MEANS.clone(),
+                ClimateData.DEFAULT_DEVIATIONS.clone()
             )
         );
     }
 
-    private static Set<ClimateStatisticItem> getValidCatchesAt(ClimateData locationData) {
+    public static Set<ClimateStatisticItem> getValidCatchesAt(ClimateData locationData) {
+        if(!isInitialized) {
+            attemptInitialize();
+        }
         Set<ClimateStatisticItem> validCatches = new HashSet<>();
         for(ClimateStatisticItem item : statisticalCatches) {
             if( item.isInBounds(locationData, null) ) {
@@ -57,7 +60,7 @@ public class Catchables {
         return validCatches;
     }
 
-    private static Map<ClimateStatisticItem, Double> getWeightsForItems(
+    public static Map<ClimateStatisticItem, Double> getWeightsForItems(
         Set<ClimateStatisticItem> items,
         ClimateData locationData
     ) {

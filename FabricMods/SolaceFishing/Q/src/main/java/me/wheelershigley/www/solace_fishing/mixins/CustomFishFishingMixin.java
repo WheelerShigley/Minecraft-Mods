@@ -46,7 +46,6 @@ public abstract class CustomFishFishingMixin {
             caster.getOnPos()
         );
 
-        Catchables.attemptInitialize();
         ItemStack caught = Catchables.roll(
             climate,
             level.getRandom()
