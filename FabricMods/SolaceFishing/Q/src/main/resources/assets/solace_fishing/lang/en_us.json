@@ -17,6 +17,13 @@
   "item.solace_fishing.bamboo_rod": "Bamboo Rod",
 
   "solace_fishing.main_menu.title": "Solace Fishing",
+  "solace_fishing.main_menu.sell_name": "§cSell Fish",
+  "solace_fishing.main_menu.buy_name": "§cAccessories Shop",
+  "solace_fishing.main_menu.balance_name": "§bPoints Balance",
+  "solace_fishing.main_menu.skills_name": "§cSkills",
+  "solace_fishing.main_menu.event_progress_name": "§eEvents Progress",
+  "solace_fishing.main_menu.leaderboard_name": "§6Leaderboard",
+
   "solace_fishing.probabilities_menu.title": "Probabilities",
   "solace_fishing.probabilities_menu.empty": "Nothing here.",
 
