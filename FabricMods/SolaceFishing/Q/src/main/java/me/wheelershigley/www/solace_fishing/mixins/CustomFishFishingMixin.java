@@ -10,12 +10,16 @@ import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(FishingHook.class)
 public abstract class CustomFishFishingMixin {
+    @Shadow @Final
+    private int luck = 0;
+
     @Shadow
     public abstract @Nullable Player getPlayerOwner();
 
@@ -47,6 +51,7 @@ public abstract class CustomFishFishingMixin {
 
         ItemStack caught = Catchables.roll(
             climate,
+            ( (float)this.luck ) + caster.getLuck(),
             level.getRandom()
         );
 

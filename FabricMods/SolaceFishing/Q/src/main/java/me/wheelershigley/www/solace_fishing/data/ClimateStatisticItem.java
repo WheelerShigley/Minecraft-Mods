@@ -1,7 +1,6 @@
 package me.wheelershigley.www.solace_fishing.data;
 
 import me.wheelershigley.www.solace_fishing.helpers.Statistics;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -17,13 +16,13 @@ public class ClimateStatisticItem {
     private final ClimateData means;
     private final ClimateData standard_deviations;
 
-    private final List< Holder<Biome> > biomeWhitelist;
+    private final List< ResourceKey<Biome> > biomeWhitelist;
     private final List< ResourceKey<Level> > dimensionWhitelist;
 
     public ClimateStatisticItem(
         ItemStack datum,
         double area, ClimateData means, ClimateData standard_deviations,
-        List< Holder<Biome> > biomeWhitelist,
+        List< ResourceKey<Biome> > biomeWhitelist,
         List< ResourceKey<Level> > dimensionWhitelist
     ) {
         setArea(area);
@@ -122,13 +121,16 @@ public class ClimateStatisticItem {
         ) / 6.0;
     }
 
-    private void setArea(double area) {
+    public void setArea(double area) {
         // |area|
         if(area < 0.0) {
             area = -area;
         }
 
         this.area = Math.clamp(area, 0.0, 1.0);
+    }
+    public double getArea() {
+        return this.area;
     }
 
     public ItemStack getItem() {
