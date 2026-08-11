@@ -24,6 +24,7 @@ public class Catchables {
     public static boolean isInitialized = false;
     public static final HashMap<Item, ClimateStatisticItem> itemsCache = new HashMap<>();
 
+    //TODO: replace population with dynamically-gotten loot-tables
     public static final Set<ClimateStatisticItem> statisticalCatches = new HashSet<>();
     public static final Set<ClimateStatisticItem> statisticalTrashes; static {
         statisticalTrashes = new HashSet<>();
@@ -197,7 +198,9 @@ public class Catchables {
             ClimateStatisticItem copy = item.clone();
             if( copy.isInBounds(locationData) ) {
                 if(translation_key != null) {
-                    conditionallyWithTranslatedLore(withLore, item.getItem(), translation_key);
+                    copy.setItem(
+                        conditionallyWithTranslatedLore(withLore, item.getItem(), translation_key)
+                    );
                 }
                 validSubCatches.add(copy);
             }
@@ -205,7 +208,7 @@ public class Catchables {
         return validSubCatches;
     }
 
-    private static Set<ClimateStatisticItem> enforceAreaRatio(
+    private static void enforceAreaRatio(
         double enforced_sum_total, double sum_total, double category_sum_total,
         Set<ClimateStatisticItem> itemsInCategory
     ) {
@@ -213,7 +216,6 @@ public class Catchables {
         for(ClimateStatisticItem item : itemsInCategory) {
             item.setArea( enforcement_ratio * item.getArea() );
         }
-        return itemsInCategory;
     }
 
     public static Map<ClimateStatisticItem, Double> getWeightsForItems(
@@ -267,7 +269,7 @@ public class Catchables {
             }
         }
 
-        // damage and enchant tools/armor
+        // modify tools/armor
         if( result.isDamageableItem() ) {
             result.setDamageValue(
                 random.nextInt( 1, result.getMaxDamage() )
