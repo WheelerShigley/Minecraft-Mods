@@ -127,7 +127,7 @@ public class ClimateStatisticItem {
             area = -area;
         }
 
-        this.area = Math.clamp(area, 0.0, 1.0);
+        this.area = area;
     }
     public double getArea() {
         return this.area;

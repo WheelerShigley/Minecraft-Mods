@@ -35,6 +35,13 @@ public class ItemsHelper {
         return copy;
     }
 
+    public static ItemStack conditionallyWithTranslatedLore(boolean condition, ItemStack item, String key) {
+        if(!condition) {
+            return item;
+        }
+        return stackWithTranslatedLore(item, key);
+    }
+
     public static ItemStack getItemWithGlint(Item item) {
         ItemStack itemStack = new ItemStack(item);
         return getItemWithGlint(itemStack);
