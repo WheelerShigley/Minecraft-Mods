@@ -111,10 +111,10 @@ public class ClimateData {
     private double adjustDepth(double raw_depth) {
         /* The range of depth, normally is -2 to 1
            This can be transformed to match the other data-points by the form
-           d_1 = (1/3)(2*d_0+1)
+           d_1 = -1 * (1/3) * (2*d_0+1)
          */
         return Math.clamp(
-            ( 2.0*raw_depth + 1.0 )  /  3.0,
+            ( 2.0*raw_depth + 1.0 )  /  -3.0,
             -1.0, 1.0
         );
     }
@@ -177,7 +177,7 @@ public class ClimateData {
             percentize(erosion) +
             "%, depth: " +
             percentize(depth) +
-            ", weirdness: " +
+            "%, weirdness: " +
             percentize(weirdness) +
             "%}"
         ;
