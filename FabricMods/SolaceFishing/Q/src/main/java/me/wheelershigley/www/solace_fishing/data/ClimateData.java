@@ -13,9 +13,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
-
 public class ClimateData {
+    public static final ClimateData DEFAULT_MEANS      = new ClimateData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, null, null);
+    public static final ClimateData DEFAULT_DEVIATIONS = new ClimateData(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, null, null);
+
     private double
         temperature,
         humidity,
@@ -27,13 +28,10 @@ public class ClimateData {
     private Holder<Biome> biome = null;
     private ResourceKey<Level> dimension = null;
 
-    public static final ClimateData DEFAULT_MEANS      = new ClimateData(0.0, 0.0, 0.0, 0.0, 62.0,  0.0, null, null);
-    public static final ClimateData DEFAULT_DEVIATIONS = new ClimateData(0.5, 0.5, 0.5, 0.5, 150.0, 0.5, null, null);
-
     public ClimateData(
         double temperature, double humidity,
         double continentalness, double erosion,
-        double raw_depth, double weirdness,
+        double depth, double weirdness,
         @Nullable Holder<Biome> biome,
         @Nullable ResourceKey<Level> dimension
     ) {
@@ -41,7 +39,7 @@ public class ClimateData {
         setHumidity(humidity);
         setContinentalness(continentalness);
         setErosion(erosion);
-        setDepth( adjustDepth(raw_depth) );
+        setDepth(depth);
         setWeirdness(weirdness);
         this.biome = biome;
         this.dimension = dimension;
@@ -61,7 +59,7 @@ public class ClimateData {
             sampler.humidity().compute(context),
             sampler.continentalness().compute(context),
             sampler.erosion().compute(context),
-            sampler.depth().compute(context),
+            normalizeDepth( sampler.depth().compute(context) ),
             sampler.weirdness().compute(context),
             level.getBiome(pos),
             level.dimension()
@@ -108,15 +106,12 @@ public class ClimateData {
         return true;
     }
 
-    private double adjustDepth(double raw_depth) {
+    private static double normalizeDepth(double raw_depth) {
         /* The range of depth, normally is -2 to 1
            This can be transformed to match the other data-points by the form
-           d_1 = -1 * (1/3) * (2*d_0+1)
+           d_1 = (1/3) * (2*d_0+1)
          */
-        return Math.clamp(
-            ( 2.0*raw_depth + 1.0 )  /  -3.0,
-            -1.0, 1.0
-        );
+        return ( 2.0*raw_depth + 1.0 )  /  3.0;
     }
 
     public double getTemperature() {
@@ -158,7 +153,7 @@ public class ClimateData {
         this.erosion = Math.clamp(erosion, -1.0, 1.0);
     }
     public void setDepth(double depth) {
-        this.depth = depth;
+        this.depth = Math.clamp(depth, -1.0, 1.0);
     }
     public void setWeirdness(double weirdness) {
         this.weirdness = Math.clamp(weirdness, -1.0, 1.0);

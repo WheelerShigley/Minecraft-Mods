@@ -4,7 +4,6 @@
   "package": "me.wheelershigley.www.solace_fishing.mixins",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "BiomeClimateAccessMixin",
     "BobbleValidityFixerMixin",
     "CustomFishFishingMixin"
   ],

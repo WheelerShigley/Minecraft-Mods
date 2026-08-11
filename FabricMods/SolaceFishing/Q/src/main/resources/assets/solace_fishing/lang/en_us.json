@@ -10,15 +10,15 @@
   "solace_fishing.pda.seperator_message": "§b<§ePDA§b>§r -------------------",
   "solace_fishing.pda.string_message": "§b<§ePDA§b>§r %s: %s",
 
+  "dimension.solace_fishing.overworld": "§aOverworld",
+  "dimension.solace_fishing.the_nether": "§cNether",
+  "dimension.solace_fishing.the_end": "§eEnd",
+
   "item.solace_fishing.bamboo_rod": "Bamboo Rod",
 
   "solace_fishing.main_menu.title": "Solace Fishing",
   "solace_fishing.probabilities_menu.title": "Probabilities",
   "solace_fishing.probabilities_menu.empty": "Nothing here.",
 
-  "item.solace_fishing.angelfish": "Angelfish",
-
-  "dimension.solace_fishing.overworld": "§aOverworld",
-  "dimension.solace_fishing.the_nether": "§cNether",
-  "dimension.solace_fishing.the_end": "§eEnd"
+  "item.solace_fishing.angelfish": "Angelfish"
 }

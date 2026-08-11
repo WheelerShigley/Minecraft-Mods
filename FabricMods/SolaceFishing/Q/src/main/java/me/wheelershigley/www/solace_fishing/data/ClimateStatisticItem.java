@@ -17,14 +17,14 @@ public class ClimateStatisticItem {
     private final ClimateData means;
     private final ClimateData standard_deviations;
 
-    private List< Holder<Biome> > biomeWhitelist;
-    private List< ResourceKey<Level> > dimensionWhitelist;
+    private final List< Holder<Biome> > biomeWhitelist;
+    private final List< ResourceKey<Level> > dimensionWhitelist;
 
     public ClimateStatisticItem(
         ItemStack datum,
         double area, ClimateData means, ClimateData standard_deviations,
         List< Holder<Biome> > biomeWhitelist,
-        List< ResourceKey<Level> > whitelistWhitelist
+        List< ResourceKey<Level> > dimensionWhitelist
     ) {
         setArea(area);
         this.datum = datum;

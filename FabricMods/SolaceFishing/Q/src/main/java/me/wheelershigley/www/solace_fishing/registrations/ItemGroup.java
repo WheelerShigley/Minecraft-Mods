@@ -6,19 +6,19 @@ import net.minecraft.world.item.CreativeModeTabs;
 public class ItemGroup {
     public static void initialize() {
         CreativeModeTabEvents
-            .modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
+            .modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES)
             .register(
-                group -> {
-                    group.accept(FishItems.ANGELFISH);
+                (group) -> {
+                    group.accept(FishingItems.PDA);
+                    group.accept(FishingItems.BAMBOO_ROD);
                 }
             )
         ;
         CreativeModeTabEvents
-            .modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES)
+            .modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
             .register(
-                group -> {
-                    group.accept(FishingItems.PDA);
-                    group.accept(FishingItems.BAMBOO_ROD);
+                (group) -> {
+                    group.accept(FishItems.ANGELFISH);
                 }
             )
         ;

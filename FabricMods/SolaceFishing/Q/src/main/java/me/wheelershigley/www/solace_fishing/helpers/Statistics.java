@@ -70,8 +70,8 @@ public class Statistics {
            normal distribution, as the antiderivative between an infinite bound and
            an arbitrary position can be found as 0.5*erf(p-mu/(s*root-2)+0.5
          */
-        return 0.5 * Statistics.errorFunction(
-                (percentile - mean) / (Math.sqrt(2.0) * standard_deviation)
-        ) + 0.5;
+        return 0.5 + 0.5 * Statistics.errorFunction(
+            (percentile - mean) / (Math.sqrt(2.0) * standard_deviation)
+        );
     }
 }

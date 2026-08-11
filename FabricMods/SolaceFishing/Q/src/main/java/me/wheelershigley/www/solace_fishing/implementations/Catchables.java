@@ -42,7 +42,7 @@ public class Catchables {
         addDefault(Items.PUFFERFISH,    0.13/0.60);
         addDefault(Items.TROPICAL_FISH, 0.02/0.60);
 
-        //Custom fishes
+        //Custom fish(es)
         Catchables.statisticalCatches.add(
             new ClimateStatisticItem(
                 new ItemStack(FishItems.ANGELFISH),
