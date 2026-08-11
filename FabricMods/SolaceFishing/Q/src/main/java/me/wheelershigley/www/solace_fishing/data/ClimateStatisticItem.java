@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class ClimateStatisticItem {
-    private final ItemStack datum;
+    private ItemStack datum;
 
     private double area = 1.0;
     private final ClimateData means;
@@ -133,7 +133,22 @@ public class ClimateStatisticItem {
         return this.area;
     }
 
+    public void setItem(ItemStack stack) {
+        this.datum = stack;
+    }
     public ItemStack getItem() {
         return datum.copy();
+    }
+
+    @Override
+    public ClimateStatisticItem clone() {
+        return new ClimateStatisticItem(
+            this.getItem(),
+            this.getArea(),
+            this.means,
+            this.standard_deviations,
+            this.biomeWhitelist,
+            this.dimensionWhitelist
+        );
     }
 }

@@ -7,6 +7,7 @@
   "authors": ["Wheeler-Shigley"],
   "icon": "assets/solace_fishing/icon.png",
   "environment": "*",
+  "accessWidener" : "solace_fishing.classtweaker",
   "entrypoints": {
     "main": [
       "me.wheelershigley.www.solace_fishing.SolaceFishing"

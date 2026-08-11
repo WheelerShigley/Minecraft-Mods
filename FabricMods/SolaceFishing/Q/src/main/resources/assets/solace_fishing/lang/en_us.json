@@ -10,6 +10,9 @@
   "solace_fishing.pda.seperator_message": "§b<§ePDA§b>§r -------------------",
   "solace_fishing.pda.string_message": "§b<§ePDA§b>§r %s: %s",
 
+  "solace_fishing.trash": "§8Trash",
+  "solace_fishing.treasure": "§6Treasure",
+
   "dimension.solace_fishing.overworld": "§aOverworld",
   "dimension.solace_fishing.the_nether": "§cNether",
   "dimension.solace_fishing.the_end": "§eEnd",

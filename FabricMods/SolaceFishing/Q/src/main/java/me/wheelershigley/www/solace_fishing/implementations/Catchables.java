@@ -3,16 +3,22 @@ package me.wheelershigley.www.solace_fishing.implementations;
 import me.wheelershigley.www.solace_fishing.data.ClimateData;
 import me.wheelershigley.www.solace_fishing.data.ClimateStatisticItem;
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+
+import static me.wheelershigley.www.solace_fishing.helpers.ItemsHelper.*;
 
 public class Catchables {
     public static boolean isInitialized = false;
@@ -22,12 +28,10 @@ public class Catchables {
     public static final Map<ClimateStatisticItem, Double> trashWeights; static {
         trashWeights = new HashMap<>();
 
-        ItemStack waterBottle = new ItemStack(Items.POTION);
-        waterBottle.set(
-            DataComponents.POTION_CONTENTS,
-            Potions.WATER.components().get(DataComponents.POTION_CONTENTS)
+        ItemStack waterBottle = PotionContents.createItemStack(
+            Items.POTION,
+            Potions.WATER
         );
-
         ItemStack inkSac = new ItemStack(Items.INK_SAC, 10);
 
         trashWeights.put( getDefault(Items.LILY_PAD,        1.0), 0.17 );
@@ -55,6 +59,16 @@ public class Catchables {
             ),
             0.10
         );
+    }
+    public static final Map<ClimateStatisticItem, Double> treasureWeights; static {
+        treasureWeights = new HashMap<>();
+
+        treasureWeights.put(  getDefault( getItemWithGlint(Items.BOW),            1.0), 1.0  );
+        treasureWeights.put(  getDefault( getItemWithGlint(Items.ENCHANTED_BOOK), 1.0), 1.0  );
+        treasureWeights.put(  getDefault( getItemWithGlint(Items.FISHING_ROD),    1.0), 1.0  );
+        treasureWeights.put( getDefault(Items.NAME_TAG,        1.0), 1.0);
+        treasureWeights.put( getDefault(Items.NAUTILUS_SHELL,  1.0), 1.0);
+        treasureWeights.put( getDefault(Items.SADDLE,          1.0), 1.0);
     }
 
     private static void attemptInitialize() {
@@ -111,18 +125,25 @@ public class Catchables {
         );
     }
 
-    public static Set<ClimateStatisticItem> getValidCatchesAt(ClimateData locationData) {
+    public static Set<ClimateStatisticItem> getValidCatchesAt(
+        ClimateData locationData,
+        boolean withTreasure,
+        boolean withLore
+    ) {
         if(!isInitialized) {
             attemptInitialize();
         }
+
+        System.out.println( Boolean.toString(withLore) );
 
         //fish
         double catch_weight_sum = 0.0;
         Set<ClimateStatisticItem> validCatches = new HashSet<>();
         for(ClimateStatisticItem item : statisticalCatches) {
-            if( item.isInBounds(locationData) ) {
-                validCatches.add(item);
-                catch_weight_sum += item.getAverageWeightAt(locationData);
+            ClimateStatisticItem copy = item.clone();
+            if( copy.isInBounds(locationData) ) {
+                validCatches.add(copy);
+                catch_weight_sum += copy.getAverageWeightAt(locationData);
             }
         }
 
@@ -130,9 +151,35 @@ public class Catchables {
         double trash_weight_sum = 0.0;
         Set<ClimateStatisticItem> validTrashes = new HashSet<>();
         for(ClimateStatisticItem item : trashWeights.keySet() ) {
-            if( item.isInBounds(locationData) ) {
-                validTrashes.add(item);
-                trash_weight_sum += item.getAverageWeightAt(locationData);
+            ClimateStatisticItem copy = item.clone();
+            if( copy.isInBounds(locationData) ) {
+                if(withLore) {
+                    copy.setItem(
+                        stackWithTranslatedLore( item.getItem(), "solace_fishing.trash")
+                    );
+                }
+
+                validTrashes.add(copy);
+                trash_weight_sum += copy.getAverageWeightAt(locationData);
+            }
+        }
+
+        //treasure
+        double treasure_weight_sum = 0.0;
+        Set<ClimateStatisticItem> validTreasures = new HashSet<>();
+        if(withTreasure) {
+            for(ClimateStatisticItem item : treasureWeights.keySet() ) {
+                ClimateStatisticItem copy = item.clone();
+                if( copy.isInBounds(locationData) ) {
+                    if(withLore) {
+                        copy.setItem(
+                            stackWithTranslatedLore( item.getItem(), "solace_fishing.treasure")
+                        );
+                    }
+
+                    validTreasures.add(copy);
+                    treasure_weight_sum += copy.getAverageWeightAt(locationData);
+                }
             }
         }
 
@@ -140,10 +187,11 @@ public class Catchables {
         of the total weights; similarly, trashes will comprise 10% of the total weights.
         */
         Set<ClimateStatisticItem> correctedCatches = new HashSet<>();
-        double sum_weight_sum = catch_weight_sum + trash_weight_sum;
+        double sum_weight_sum = catch_weight_sum + trash_weight_sum + treasure_weight_sum;
         double enforcement_ratio;
 
-        enforcement_ratio = (0.90 * sum_weight_sum)/catch_weight_sum;
+        enforcement_ratio = 0.90 - (withTreasure ? 0.05 : 0.00);
+        enforcement_ratio = (enforcement_ratio * sum_weight_sum)/catch_weight_sum;
         for(ClimateStatisticItem item : validCatches) {
             item.setArea( enforcement_ratio * item.getArea() );
             correctedCatches.add(item);
@@ -153,6 +201,14 @@ public class Catchables {
         for(ClimateStatisticItem item : validTrashes) {
             item.setArea( enforcement_ratio * item.getArea() );
             correctedCatches.add(item);
+        }
+
+        if(withTreasure) {
+            enforcement_ratio = (0.05 * sum_weight_sum)/treasure_weight_sum;
+            for(ClimateStatisticItem item : validTreasures) {
+                item.setArea( enforcement_ratio * item.getArea() );
+                correctedCatches.add(item);
+            }
         }
 
         return correctedCatches;
@@ -188,10 +244,14 @@ public class Catchables {
     }
 
     //TODO: integrate luck
-    public static ItemStack roll(ClimateData locationData, float luck, RandomSource random) {
+    public static ItemStack roll(
+        ClimateData locationData,
+        float luck, boolean withTreasure,
+        RandomSource random, RegistryAccess access
+    ) {
         ItemStack result = ItemStack.EMPTY;
 
-        Set<ClimateStatisticItem> validItems = getValidCatchesAt(locationData);
+        Set<ClimateStatisticItem> validItems = getValidCatchesAt(locationData, withTreasure, false);
         Map<ClimateStatisticItem, Double> weights = getWeightsForItems(validItems, locationData);
 
         double weight_sum = weights.values().stream().reduce(0.0, Double::sum);
@@ -210,7 +270,16 @@ public class Catchables {
             result.setDamageValue(
                 random.nextInt( 1, result.getMaxDamage() )
             );
-            // TODO: enchant
+        }
+        if( result.has(DataComponents.ENCHANTMENT_GLINT_OVERRIDE) ) {
+            result.remove(DataComponents.ENCHANTMENT_GLINT_OVERRIDE);
+            result = EnchantmentHelper.enchantItem(
+                random,
+                result,
+                30,
+                access,
+                Optional.empty()
+            );
         }
 
         return result;

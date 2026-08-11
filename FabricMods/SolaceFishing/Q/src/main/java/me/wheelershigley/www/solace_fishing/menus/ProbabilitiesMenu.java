@@ -2,7 +2,6 @@ package me.wheelershigley.www.solace_fishing.menus;
 
 import me.wheelershigley.www.solace_fishing.data.ClimateData;
 import me.wheelershigley.www.solace_fishing.data.ClimateStatisticItem;
-import me.wheelershigley.www.solace_fishing.implementations.Catchables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -10,6 +9,8 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
@@ -19,12 +20,14 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.ItemLore;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isOpenWater;
 import static me.wheelershigley.www.solace_fishing.implementations.Catchables.*;
 
 public class ProbabilitiesMenu extends ImmutableChestMenu {
@@ -98,8 +101,10 @@ public class ProbabilitiesMenu extends ImmutableChestMenu {
     }
 
     private void calculateProbabilities(ServerLevel level, BlockPos position) {
+        boolean withTreasure = isOpenWater(level, position);
+
         ClimateData locationData = ClimateData.sample(level, position);
-        Set<ClimateStatisticItem> validItems = getValidCatchesAt(locationData);
+        Set<ClimateStatisticItem> validItems = getValidCatchesAt(locationData, withTreasure, true);
         Map<ClimateStatisticItem, Double> weights = normalizeWeights(
             getWeightsForItems(validItems, locationData)
         );
@@ -153,7 +158,7 @@ public class ProbabilitiesMenu extends ImmutableChestMenu {
             rarity
         );
 
-        //Probability
+        // Probability
         TextColor color = switch(rarity) {
             case UNCOMMON -> TextColor.YELLOW;
             case RARE     -> TextColor.AQUA;
@@ -161,14 +166,20 @@ public class ProbabilitiesMenu extends ImmutableChestMenu {
             default       -> TextColor.GRAY;
         };
         double simplifiedChance = Math.round(10000.0*probability)/100.0;
-        item.set(
-            DataComponents.LORE,
-            ItemLore.EMPTY.withLineAdded(
-                Component.literal(
-                    Double.toString(simplifiedChance) + '%'
-                ).withColor(color)
-            )
+
+        // Item Lore
+        List<Component> lines = new ArrayList<>();
+        lines.add(
+            Component.literal(
+                Double.toString(simplifiedChance) + "%"
+            ).withColor(color)
         );
+
+        ItemLore existingLore = item.getOrDefault(DataComponents.LORE, ItemLore.EMPTY);
+        lines.addAll( existingLore.lines() );
+
+        item.set( DataComponents.LORE, new ItemLore(lines) );
+
 
         return item;
     }

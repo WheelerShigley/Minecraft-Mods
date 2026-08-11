@@ -53,7 +53,7 @@ public class PDA extends Item implements PolymerItem  {
         }
 
         if( player.isCrouching() ) {
-            simpleClick( (ServerLevel)level, position, player);
+            sendClimateData( (ServerLevel)level, position, player);
         } else {
             ImmutableChestMenu.open(
                 player,
@@ -65,7 +65,7 @@ public class PDA extends Item implements PolymerItem  {
         return InteractionResult.SUCCESS;
     }
 
-    private static void simpleClick(
+    private static void sendClimateData(
         ServerLevel level, BlockPos position,
         Player player
     ) {

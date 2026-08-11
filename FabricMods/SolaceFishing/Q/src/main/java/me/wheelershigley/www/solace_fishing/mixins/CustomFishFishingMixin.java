@@ -23,6 +23,9 @@ public abstract class CustomFishFishingMixin {
     @Shadow
     public abstract @Nullable Player getPlayerOwner();
 
+    @Shadow
+    private boolean openWater;
+
     @ModifyExpressionValue(
         method = "retrieve",
         at = @At(
@@ -30,7 +33,7 @@ public abstract class CustomFishFishingMixin {
             target = "Lnet/minecraft/world/level/storage/loot/LootTable;getRandomItems(Lnet/minecraft/world/level/storage/loot/LootParams;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;"
         )
     )
-    public ObjectArrayList<ItemStack> test(
+    public ObjectArrayList<ItemStack> retrieveBobber(
         ObjectArrayList<ItemStack> original
     ) {
         Player caster = this.getPlayerOwner();
@@ -52,7 +55,9 @@ public abstract class CustomFishFishingMixin {
         ItemStack caught = Catchables.roll(
             climate,
             ( (float)this.luck ) + caster.getLuck(),
-            level.getRandom()
+            this.openWater,
+            level.getRandom(),
+            level.registryAccess()
         );
 
         return ObjectArrayList.of(caught);
