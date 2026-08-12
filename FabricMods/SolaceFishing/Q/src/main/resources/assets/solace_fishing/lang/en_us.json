@@ -20,16 +20,16 @@
   "item.solace_fishing.bamboo_rod": "Bamboo Rod",
 
   "solace_fishing.main_menu.title": "Fishing Menu",
-  "solace_fishing.main_menu.sell_name": "§aSell Fish",
-  "solace_fishing.main_menu.buy_name": "§3Accessories Shop",
+  "solace_fishing.main_menu.sell_name": "§aSell",
+  "solace_fishing.main_menu.buy_name": "§3Market",
   "solace_fishing.main_menu.balance_name": "§2Points Balance",
   "solace_fishing.main_menu.upgrades_name": "§cUpgrades",
   "solace_fishing.main_menu.event_progress_name": "§eEvents Progress",
-  "solace_fishing.main_menu.leaderboard_name": "§6Leaderboard",
+  "solace_fishing.main_menu.leaderboard_name": "§6Leaderboards",
 
   "solace_fishing.sell_menu.title": "§aSell Fish",
   "solace_fishing.buy_menu.title": "§3Angler's Market",
-  "solace_fishing.upgrades_menu.title": "§cUpgrades",
+  "solace_fishing.upgrades_menu.title": "§cUpgrades Tree",
   "solace_fishing.leaderboard_menu.title": "§6Leaderboards",
 
   "solace_fishing.probabilities_menu.title": "Probabilities",

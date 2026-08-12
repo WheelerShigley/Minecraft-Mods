@@ -2,6 +2,7 @@ package me.wheelershigley.www.solace_fishing.menus;
 
 import me.wheelershigley.www.solace_fishing.data.ClimateData;
 import me.wheelershigley.www.solace_fishing.data.ClimateStatisticItem;
+import me.wheelershigley.www.solace_fishing.helpers.ItemsHelper;
 import me.wheelershigley.www.solace_fishing.helpers.MenusHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -74,7 +75,7 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
 
             this.setSlot(
                 fish_index++,
-                adjustedItem(
+                getProbabilityMenuItem(
                     entry.getKey(),
                     entry.getValue(),
                     value == null ? null : value.getAverageStandardDeviation()
@@ -115,11 +116,13 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
         return sortedProbabilities;
     }
 
-    private static ItemStack adjustedItem(
-        ItemStack item,
+    private static ItemStack getProbabilityMenuItem(
+        ItemStack sourceStack,
         double probability,
         @Nullable Double standard_deviation
     ) {
+        ItemStack itemStack = ItemsHelper.getMenuItem(sourceStack.getItem(), false, null);
+
         /* Rarity, based on standard-deviation (s)
            A s of 0.5 means it is likely always available (very common);
            0.25 means it is somewhat common
@@ -137,7 +140,7 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
                 rarity = Rarity.EPIC;
             }
         }
-        item.set(
+        itemStack.set(
             DataComponents.RARITY,
             rarity
         );
@@ -149,22 +152,64 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
             case EPIC     -> TextColor.LIGHT_PURPLE;
             default       -> TextColor.GRAY;
         };
-        double simplifiedChance = Math.round(10000.0*probability)/100.0;
 
         // Item Lore
         List<Component> lines = new ArrayList<>();
         lines.add(
             Component.literal(
-                Double.toString(simplifiedChance) + "%"
+                getHumanReadablePercentage(probability)
             ).withColor(color)
         );
 
-        ItemLore existingLore = item.getOrDefault(DataComponents.LORE, ItemLore.EMPTY);
+        ItemLore existingLore = sourceStack.getOrDefault(DataComponents.LORE, ItemLore.EMPTY);
         lines.addAll( existingLore.lines() );
 
-        item.set( DataComponents.LORE, new ItemLore(lines) );
+        itemStack.set( DataComponents.LORE, new ItemLore(lines) );
 
 
-        return item;
+        return itemStack;
+    }
+
+    private static String getHumanReadablePercentage(double chance) {
+        //transform to percentage
+        chance *= 100.0;
+
+        int scientific_notation_order = 0;
+        while(chance < 1.0-Double.MIN_NORMAL) {
+            scientific_notation_order -= 1;
+            chance *= 10.0;
+        }
+
+        chance = percentageRound(chance);
+        double remainder = percentageRound(chance % 1);
+        chance = (int)chance;
+
+        //when rounded up, re-adjust
+        if(scientific_notation_order < 0 && 10.0 <= chance) {
+            chance /= 10.0;
+            scientific_notation_order += 1;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        if(remainder == 0.0) {
+            stringBuilder.append(
+                Integer.toString( (int) chance)
+            );
+        } else {
+            stringBuilder.append(
+                percentageRound(chance +remainder)
+            );
+        }
+
+        stringBuilder.append('%');
+        if(scientific_notation_order < 0) {
+            stringBuilder.append('e').append(scientific_notation_order);
+        }
+
+        return stringBuilder.toString();
+    }
+
+    private static double percentageRound(double chance) {
+        return Math.round(100.0*chance)/100.0;
     }
 }

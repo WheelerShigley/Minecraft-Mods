@@ -5,14 +5,13 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class ItemsHelper {
     public static ItemStack stackWithTranslatedName(Item item, String key) {
@@ -23,7 +22,9 @@ public class ItemsHelper {
         ItemStack copy = itemStack.copy();
         copy.set(
             DataComponents.CUSTOM_NAME,
-            Component.translatable(key)
+            Component.translatable(key).withStyle(
+                (style) ->  { return style.withItalic(false); }
+            )
         );
         return copy;
     }
@@ -86,9 +87,15 @@ public class ItemsHelper {
             itemStack = getItemWithGlint(itemStack);
         }
 
-        if(translationKey != null) {
-            itemStack = stackWithTranslatedName(itemStack, translationKey);
+        if(translationKey == null) {
+            if(textureItem instanceof BlockItem) {
+                translationKey = textureItem.getDescriptionId();
+            } else {
+                Identifier identifier = BuiltInRegistries.ITEM.getKey(textureItem);
+                translationKey = "item." + identifier.getNamespace() + "." + identifier.getPath();
+            }
         }
+        itemStack = stackWithTranslatedName(itemStack, translationKey);
 
         return itemStack;
     }
