@@ -22,4 +22,11 @@ public abstract class ImmutableSimpleGui extends SimpleGui {
         this.setTitle(  Component.translatable( getTranslationKey() )  );
         this.initializeMenu();
     }
+
+    @Override
+    public void afterRemoval() {
+        if(parent != null) {
+            parent.open();
+        }
+    }
 }
