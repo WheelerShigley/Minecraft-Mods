@@ -2,6 +2,7 @@ package me.wheelershigley.www.solace_fishing.menus;
 
 import eu.pb4.sgui.api.elements.GuiElement;
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
+import me.wheelershigley.www.solace_fishing.registrations.FishingItems;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,20 +33,31 @@ public class MainMenu extends ImmutableSimpleGui {
     public void initializeMenu() {
         final ItemStack
             sellItem = getMenuItem(Items.NAME_TAG,                  false, "solace_fishing.main_menu.sell_name"           ),
-            buyItem  = getMenuItem(Items.EMERALD,                   false, "solace_fishing.main_menu.buy_name"            ),
+            buyItem  = getMenuItem(FishingItems.PDA,                false, "solace_fishing.main_menu.buy_name"            ),
             balItem  = getMenuItem(Items.DYED_BUNDLE.lime(),        false, "solace_fishing.main_menu.balance_name"        ),
-            skillsItem      = getMenuItem(Items.NETHER_STAR,        false, "solace_fishing.main_menu.skills_name"         ),
+            upgradesItem = getMenuItem(Items.NETHER_STAR,           false, "solace_fishing.main_menu.upgrades_name"          ),
             eventsItem      = getMenuItem(Items.OMINOUS_TRIAL_KEY,  false, "solace_fishing.main_menu.event_progress_name" ),
             leaderboardItem = getMenuItem(Items.WRITTEN_BOOK,       false, "solace_fishing.main_menu.leaderboard_name"    )
         ;
-        GuiElement.ClickCallback sellNavigator = (index, type, action, gui) -> {
-            ( new SellMenu(player, this) ).open();
-        };
+        GuiElement.ClickCallback
+            sellNavigator = (index, type, action, gui) -> {
+                ( new SellMenu(player, this) ).open();
+            },
+            buyNavigator = (index, type, action, gui) -> {
+                ( new BuyMenu(player, this) ).open();
+            },
+            upgradeNavigator = (index, type, action, gui) -> {
+                ( new UpgradesMenu(player, this) ).open();
+            },
+            leaderboardNavigator = (index, type, action, gui) -> {
+                ( new LeaderboardsMenu(player, this) ).open();
+            }
+        ;
 
         // left-side: Economics
-        this.setSlot(0*ROW_LENGTH, sellItem, sellNavigator);
-        this.setSlot(1*ROW_LENGTH, buyItem );
-        this.setSlot(2*ROW_LENGTH, balItem );
+        this.setSlot(0*ROW_LENGTH, sellItem, sellNavigator  );
+        this.setSlot(1*ROW_LENGTH, buyItem,  buyNavigator   );
+        this.setSlot(2*ROW_LENGTH, balItem                  );
 
         // center: Index
         for(int colum = 0+2; colum <= ROW_LENGTH-3; colum++) {
@@ -61,8 +73,8 @@ public class MainMenu extends ImmutableSimpleGui {
         }
 
         // right-side: Statistics
-        this.setSlot(1*ROW_LENGTH-1, skillsItem         );
-        this.setSlot(2*ROW_LENGTH-1, eventsItem         );
-        this.setSlot(3*ROW_LENGTH-1, leaderboardItem    );
+        this.setSlot(1*ROW_LENGTH-1, upgradesItem,    upgradeNavigator      );
+        this.setSlot(2*ROW_LENGTH-1, eventsItem                             );
+        this.setSlot(3*ROW_LENGTH-1, leaderboardItem, leaderboardNavigator  );
     }
 }
