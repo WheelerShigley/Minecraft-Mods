@@ -57,7 +57,7 @@ public class PDA extends Item implements PolymerItem  {
         } else {
             ImmutableChestMenu.open(
                 player,
-                new ProbabilitiesMenu( (ServerLevel)level, position )
+                new ProbabilitiesMenu( (ServerLevel)level, position, player.getInventory() )
             );
         }
 

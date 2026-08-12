@@ -27,6 +27,8 @@
   "solace_fishing.main_menu.event_progress_name": "§eEvents Progress",
   "solace_fishing.main_menu.leaderboard_name": "§6Leaderboard",
 
+  "solace_fishing.sell_menu.title": "§cSell Fish",
+
   "solace_fishing.probabilities_menu.title": "Probabilities",
   "solace_fishing.probabilities_menu.empty": "Nothing here.",
 

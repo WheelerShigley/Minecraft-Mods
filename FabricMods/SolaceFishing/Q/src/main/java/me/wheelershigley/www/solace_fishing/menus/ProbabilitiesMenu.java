@@ -9,8 +9,7 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
@@ -30,28 +29,13 @@ import java.util.stream.Collectors;
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isOpenWater;
 import static me.wheelershigley.www.solace_fishing.implementations.Catchables.*;
 
+@Deprecated
 public class ProbabilitiesMenu extends ImmutableChestMenu {
-    public ProbabilitiesMenu(ServerLevel level, BlockPos position) {
-        calculateProbabilities(level, position);
-    }
-
-    private LinkedHashMap<ItemStack, Double> probabilities;
-    private MenuType<ChestMenu> menuType = MenuType.GENERIC_9x6;
-
-    @Override
-    public String getTranslationKey() {
-        return "solace_fishing.probabilities_menu.title";
-    }
-
-    @Override
-    public MenuType<ChestMenu> getMenuType() {
-        return menuType;
-    }
-
-    @Override
-    public Container getContainer() {
-        Container container = getMinimumContainer();
-        menuType = switch( container.getContainerSize() ) {
+    private static LinkedHashMap<ItemStack, Double> probabilities;
+    private static final MenuType<ChestMenu> MENU_TYPE;
+    private static final Container CONTAINER; static {
+        CONTAINER = ProbabilitiesMenu.getMinimumContainer();
+        MENU_TYPE = switch( CONTAINER.getContainerSize() ) {
             case 1*9 -> MenuType.GENERIC_9x1;
             case 2*9 -> MenuType.GENERIC_9x2;
             case 3*9 -> MenuType.GENERIC_9x3;
@@ -66,7 +50,7 @@ public class ProbabilitiesMenu extends ImmutableChestMenu {
                 DataComponents.CUSTOM_NAME,
                 Component.translatable("solace_fishing.probabilities_menu.empty")
             );
-            container.setItem(4, emptinessIndicator);
+            CONTAINER.setItem(4, emptinessIndicator);
         }
 
         int fish_index = 0;
@@ -78,7 +62,7 @@ public class ProbabilitiesMenu extends ImmutableChestMenu {
             Item key = entry.getKey().getItem();
             ClimateStatisticItem value = itemsCache.getOrDefault(key, null);
 
-            container.setItem(
+            CONTAINER.setItem(
                 fish_index++,
                 adjustedItem(
                     entry.getKey(),
@@ -87,11 +71,23 @@ public class ProbabilitiesMenu extends ImmutableChestMenu {
                 )
             );
         }
-
-        return container;
     }
 
-    private Container getMinimumContainer() {
+    public ProbabilitiesMenu(
+        ServerLevel level, BlockPos position,
+        Inventory inventory
+    ) {
+        calculateProbabilities(level, position);
+        super(
+            ProbabilitiesMenu.MENU_TYPE,
+            0,
+            inventory,
+            ProbabilitiesMenu.CONTAINER,
+            ProbabilitiesMenu.CONTAINER.getContainerSize()/9
+        );
+    }
+
+    private static Container getMinimumContainer() {
         for(int height = 1; height < 5; height++) {
             if (probabilities.size() <= 9*height) {
                 return new SimpleContainer(9*height);
@@ -100,7 +96,7 @@ public class ProbabilitiesMenu extends ImmutableChestMenu {
         return new SimpleContainer(9*6);
     }
 
-    private void calculateProbabilities(ServerLevel level, BlockPos position) {
+    private static void calculateProbabilities(ServerLevel level, BlockPos position) {
         boolean withTreasure = isOpenWater(level, position);
 
         ClimateData locationData = ClimateData.sample(level, position);
@@ -131,10 +127,10 @@ public class ProbabilitiesMenu extends ImmutableChestMenu {
         probabilities = sortedProbabilities;
     }
 
-    private ItemStack adjustedItem(
-        ItemStack item,
-        double probability,
-        @Nullable Double standard_deviation
+    private static ItemStack adjustedItem(
+            ItemStack item,
+            double probability,
+            @Nullable Double standard_deviation
     ) {
         /* Rarity, based on standard-deviation (s)
            A s of 0.5 means it is likely always available (very common);
@@ -182,5 +178,22 @@ public class ProbabilitiesMenu extends ImmutableChestMenu {
 
 
         return item;
+    }
+
+    @Override
+    public void addChildren() {}
+
+    @Override
+    public MenuType<ChestMenu> getMenuType() {
+        return ProbabilitiesMenu.MENU_TYPE;
+    }
+    @Override
+    public Container getContainer() {
+        return SellMenu.container;
+    }
+
+    @Override
+    public String getTranslationKey() {
+        return "solace_fishing.probabilities_menu.title";
     }
 }
