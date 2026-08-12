@@ -3,7 +3,6 @@ package me.wheelershigley.www.solace_fishing.implementations;
 import eu.pb4.polymer.core.api.item.PolymerItem;
 import me.wheelershigley.www.solace_fishing.SolaceFishing;
 import me.wheelershigley.www.solace_fishing.data.ClimateData;
-import me.wheelershigley.www.solace_fishing.menus.ImmutableChestMenu;
 import me.wheelershigley.www.solace_fishing.menus.ProbabilitiesMenu;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;
@@ -11,6 +10,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -39,26 +39,29 @@ public class PDA extends Item implements PolymerItem  {
         final @NonNull Player player,
         final @NonNull InteractionHand hand
     ) {
-        if( !(level instanceof ServerLevel) ) {
+        if( !(level instanceof ServerLevel)
+            || !(player instanceof ServerPlayer)
+        ) {
             return InteractionResult.PASS;
         }
-        assert level instanceof ServerLevel;
+        ServerLevel serverLevel = (ServerLevel)level;
+        ServerPlayer serverPlayer = (ServerPlayer)player;
 
-        HitResult hit = player.pick(5.0D, 0.0F, true);
+        HitResult hit = serverPlayer.pick(5.0D, 0.0F, true);
         BlockPos position;
         if(hit.getType() == HitResult.Type.BLOCK) {
             position = ( (BlockHitResult)hit ).getBlockPos();
         } else {
-            position = player.getOnPos();
+            position = serverPlayer.getOnPos();
         }
 
         if( player.isCrouching() ) {
-            sendClimateData( (ServerLevel)level, position, player);
+            sendClimateData( serverLevel, position, serverPlayer);
         } else {
-            ImmutableChestMenu.open(
-                player,
-                new ProbabilitiesMenu( (ServerLevel)level, position, player.getInventory() )
+            ProbabilitiesMenu menu = new ProbabilitiesMenu(
+                serverLevel, position, serverPlayer, null
             );
+            menu.open();
         }
 
 

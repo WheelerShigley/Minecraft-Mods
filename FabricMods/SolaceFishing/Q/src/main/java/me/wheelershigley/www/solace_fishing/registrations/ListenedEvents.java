@@ -1,9 +1,7 @@
 package me.wheelershigley.www.solace_fishing.registrations;
 
 import me.wheelershigley.www.solace_fishing.implementations.CustomFishingRod;
-import me.wheelershigley.www.solace_fishing.menus.ImmutableChestMenu;
 import me.wheelershigley.www.solace_fishing.menus.MainMenu;
-import me.wheelershigley.www.solace_fishing.menus.TestMenu;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
@@ -25,13 +23,9 @@ public class ListenedEvents {
                     && !level.isClientSide()
                     && player.isCrouching()
                 ) {
-                    TestMenu gui = new TestMenu( (ServerPlayer)player );
+                    MainMenu gui = new MainMenu( (ServerPlayer)player );
                     gui.open();
 
-                    /*ImmutableChestMenu.open(
-                        player,
-                        new MainMenu( (ServerPlayer)player )
-                    );*/
                     return InteractionResult.SUCCESS;
                 }
                 return InteractionResult.PASS;
