@@ -1,10 +1,18 @@
 package me.wheelershigley.www.solace_fishing.helpers;
 
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class ItemsHelper {
     public static ItemStack stackWithTranslatedName(Item item, String key) {
@@ -53,5 +61,35 @@ public class ItemsHelper {
             true
         );
         return copy;
+    }
+
+    public static ItemStack getMenuItem(
+        Item textureItem,
+        boolean enchantable,
+        @Nullable String translationKey
+    ) {
+        ItemStack itemStack = new ItemStack(Items.PAPER);
+
+        itemStack.set(
+            DataComponents.ITEM_MODEL,
+            BuiltInRegistries.ITEM.getKey(textureItem)
+        );
+
+        CompoundTag menuItemTag = new CompoundTag();
+        menuItemTag.putBoolean("MenuItem", true);
+        itemStack.set(
+            DataComponents.CUSTOM_DATA,
+            CustomData.of(menuItemTag)
+        );
+
+        if(enchantable) {
+            itemStack = getItemWithGlint(itemStack);
+        }
+
+        if(translationKey != null) {
+            itemStack = stackWithTranslatedName(itemStack, translationKey);
+        }
+
+        return itemStack;
     }
 }
