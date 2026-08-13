@@ -4,6 +4,7 @@ import me.wheelershigley.www.solace_fishing.implementations.Bobber;
 import me.wheelershigley.www.solace_fishing.implementations.Hook;
 import me.wheelershigley.www.solace_fishing.implementations.Line;
 import me.wheelershigley.www.solace_fishing.registrations.CustomComponents;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -59,10 +60,11 @@ public class RodAccessories {
             items.put( "bobber", this.getBobber() );
         }
 
-        item.set(
-            CustomComponents.STORED_ITEMS,
-            items
-        );
+        if( items.isEmpty() ) {
+            item.remove(CustomComponents.STORED_ITEMS);
+        } else {
+            item.set(CustomComponents.STORED_ITEMS, items);
+        }
     }
 
     public ItemStack attemptSwap(ItemStack itemStack) {
@@ -70,15 +72,15 @@ public class RodAccessories {
 
         Item item = itemStack.getItem();
         if(item instanceof Hook) {
-            returnStack = this.getHook();
+            returnStack = this.getHook().copy();
             this.setHook(itemStack);
         }
         if(item instanceof Line) {
-            returnStack = this.getLine();
+            returnStack = this.getLine().copy();
             this.setLine(itemStack);
         }
         if(item instanceof Bobber) {
-            returnStack = this.getBobber();
+            returnStack = this.getBobber().copy();
             this.setBobber(itemStack);
         }
 
@@ -87,13 +89,13 @@ public class RodAccessories {
 
     public boolean hasAnInstanceOf(Item item) {
         if(item instanceof Hook) {
-            return this.getHook().isEmpty();
+            return !this.getHook().isEmpty();
         }
         if(item instanceof Line) {
-            return this.getLine().isEmpty();
+            return !this.getLine().isEmpty();
         }
         if(item instanceof Bobber) {
-            return this.getBobber().isEmpty();
+            return !this.getBobber().isEmpty();
         }
         return false;
     }
@@ -124,6 +126,7 @@ public class RodAccessories {
             this.removeLine();
             return returnStack;
         }
+
         return returnStack;
     }
 

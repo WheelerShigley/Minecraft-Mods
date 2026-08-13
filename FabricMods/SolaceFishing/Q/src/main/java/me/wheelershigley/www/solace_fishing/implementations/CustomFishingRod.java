@@ -4,19 +4,15 @@ import eu.pb4.polymer.core.api.item.PolymerItem;
 import me.wheelershigley.www.solace_fishing.data.RodAccessories;
 import me.wheelershigley.www.solace_fishing.registrations.CustomComponents;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.inventory.ClickAction;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -25,9 +21,6 @@ import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.HashMap;
-
-import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingAccessory;
-import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingRod;
 
 public class CustomFishingRod extends FishingRodItem implements PolymerItem {
     public static final Item.Properties DEFAULT_PROPERTIES = new Item.Properties()
@@ -111,102 +104,5 @@ public class CustomFishingRod extends FishingRodItem implements PolymerItem {
 
         player.awardStat( Stats.ITEM_USED.get(this) );
         itemStack.causeUseVibration(player, GameEvent.ITEM_INTERACT_START);
-    }
-
-    /* Bundle-like Features */
-
-    @Override
-    public boolean overrideStackedOnOther(
-        @NonNull ItemStack self, final @NonNull Slot slot,
-        final @NonNull ClickAction clickAction, final @NonNull Player player
-    ) {
-        ItemStack other = slot.getItem();
-        boolean selfIsRod  = isFishingRod(  self.getItem() );
-        boolean otherIsRod = isFishingRod( other.getItem() );
-
-        //Neither are rod, do nothing
-        if( !selfIsRod && !otherIsRod ) {
-            return false;
-        }
-
-        ItemStack rod, potentialAccessory;
-        if(selfIsRod) {
-            rod = self;
-            potentialAccessory = other;
-        } else {
-            rod = other;
-            potentialAccessory = self;
-        }
-
-        RodAccessories accessories = RodAccessories.get(rod);
-        if(accessories == null) {
-            return false;
-        }
-        boolean hasInstance = accessories.hasAnInstanceOf( potentialAccessory.getItem() );
-
-        // Simple Placement/Swap (same as nothing)
-        if( selfIsRod && other.isEmpty() ) {
-            //Drop item
-            if( !accessories.isEmpty() && clickAction.equals(ClickAction.SECONDARY) ) {
-                other = accessories.pop();
-                accessories.set(rod);
-                slot.set(other);
-                return true;
-            }
-
-            return false;
-        }
-        if(  !isFishingAccessory( other.getItem() )  ) {
-            return false;
-        }
-
-        // Swap Accessory
-        if(!hasInstance) {
-            ItemStack swappedStack = accessories.attemptSwap(other);
-            accessories.set(self);
-            other = swappedStack;
-        }
-
-        // Absorption + Placement
-        if(hasInstance) {
-            accessories.attemptSwap(other);
-            accessories.set(self);
-            other = self;
-            self = ItemStack.EMPTY;
-
-            player.containerMenu.setCarried(self);
-        }
-
-        if( slot.getItem() != other ) {
-            slot.set(other);
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean overrideOtherStackedOnMe(
-        final @NonNull ItemStack self, @NonNull ItemStack other,
-        final @NonNull Slot slot, final @NonNull ClickAction clickAction,
-        final @NonNull Player player, final @NonNull SlotAccess carriedItem
-    ) {
-        if(
-            player.level().isClientSide()
-            || self.isEmpty()
-            || carriedItem.get().isEmpty()
-        ) {
-            return false;
-        }
-
-        RodAccessories accessories = RodAccessories.get(self);
-        if (accessories == null) {
-            return false;
-        }
-
-        ItemStack swapped = accessories.attemptSwap(other);
-        accessories.set(self);
-        carriedItem.set(swapped); //broken?
-
-        return true;
     }
 }
