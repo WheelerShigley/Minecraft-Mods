@@ -19,6 +19,9 @@
 
   "item.solace_fishing.bamboo_rod": "Bamboo Rod",
 
+  "item.solace_fishing.a_bobber": "Red Bobber",
+  "item.solace_fishing.another_bobber": "Blue Bobber",
+
   "solace_fishing.main_menu.title": "Fishing Menu",
   "solace_fishing.main_menu.sell_name": "§aSell",
   "solace_fishing.main_menu.buy_name": "§3Market",
