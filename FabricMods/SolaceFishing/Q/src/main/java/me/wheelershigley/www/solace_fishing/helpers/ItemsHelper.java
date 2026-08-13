@@ -1,5 +1,8 @@
 package me.wheelershigley.www.solace_fishing.helpers;
 
+import me.wheelershigley.www.solace_fishing.implementations.Bobber;
+import me.wheelershigley.www.solace_fishing.implementations.Hook;
+import me.wheelershigley.www.solace_fishing.implementations.Line;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
