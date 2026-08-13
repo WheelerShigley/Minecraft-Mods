@@ -7,10 +7,10 @@ public class FishingItems extends PolymerItemsRegister {
     public static Item PDA;
     public static Item BAMBOO_ROD;
 
-    public static Item A_HOOK;
-    public static Item ANOTHER_HOOK;
-    public static Item A_LINE;
-    public static Item ANOTHER_LINE;
+    public static Item MAGNETA_HOOK;
+    public static Item CYAN_HOOK;
+    public static Item GREEN_LINE;
+    public static Item YELLOW_LINE;
     public static Item RED_BOBBER;
     public static Item BLUE_BOBBER;
 
@@ -27,24 +27,24 @@ public class FishingItems extends PolymerItemsRegister {
             CustomFishingRod::new
         );
 
-        A_HOOK = register(
-            "a_hook",
+        MAGNETA_HOOK = register(
+            "magenta_hook",
             Hook.DEFAULT_PROPERTIES,
             Hook::new
         );
-        ANOTHER_HOOK = register(
-            "another_hook",
+        CYAN_HOOK = register(
+            "cyan_hook",
             Hook.DEFAULT_PROPERTIES,
             Hook::new
         );
 
-        A_LINE = register(
-            "a_line",
+        GREEN_LINE = register(
+            "green_line",
             Line.DEFAULT_PROPERTIES,
             Line::new
         );
-        ANOTHER_LINE = register(
-            "another_line",
+        YELLOW_LINE = register(
+            "yellow_line",
             Line.DEFAULT_PROPERTIES,
             Line::new
         );

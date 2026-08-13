@@ -120,9 +120,6 @@ public class CustomFishingRod extends FishingRodItem implements PolymerItem {
         @NonNull ItemStack self, final @NonNull Slot slot,
         final @NonNull ClickAction clickAction, final @NonNull Player player
     ) {
-        player.sendSystemMessage(
-            Component.literal("A: stacked on other, as " + clickAction.name() )
-        );
         ItemStack other = slot.getItem();
         boolean selfIsRod  = isFishingRod(  self.getItem() );
         boolean otherIsRod = isFishingRod( other.getItem() );
@@ -193,10 +190,6 @@ public class CustomFishingRod extends FishingRodItem implements PolymerItem {
         final @NonNull Slot slot, final @NonNull ClickAction clickAction,
         final @NonNull Player player, final @NonNull SlotAccess carriedItem
     ) {
-        player.sendSystemMessage(
-                Component.literal("B: stacked on me")
-        );
-
         if(
             player.level().isClientSide()
             || self.isEmpty()

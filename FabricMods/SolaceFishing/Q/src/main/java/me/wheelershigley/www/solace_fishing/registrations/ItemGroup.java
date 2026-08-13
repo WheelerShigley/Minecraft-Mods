@@ -12,10 +12,10 @@ public class ItemGroup {
                     group.accept(FishingItems.PDA);
                     group.accept(FishingItems.BAMBOO_ROD);
 
-                    group.accept(FishingItems.A_HOOK);
-                    group.accept(FishingItems.ANOTHER_HOOK);
-                    group.accept(FishingItems.A_LINE);
-                    group.accept(FishingItems.ANOTHER_LINE);
+                    group.accept(FishingItems.MAGNETA_HOOK);
+                    group.accept(FishingItems.CYAN_HOOK);
+                    group.accept(FishingItems.YELLOW_LINE);
+                    group.accept(FishingItems.GREEN_LINE);
                     group.accept(FishingItems.RED_BOBBER);
                     group.accept(FishingItems.BLUE_BOBBER);
                 }
