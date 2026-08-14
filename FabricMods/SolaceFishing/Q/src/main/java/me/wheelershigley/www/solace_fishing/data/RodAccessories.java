@@ -21,6 +21,7 @@ public class RodAccessories {
         bobber
     ;
 
+    public RodAccessories() {}
     public RodAccessories(ItemStack hook, ItemStack line, ItemStack bobber) {
         this.hook = hook;
         this.line = line;
@@ -179,5 +180,34 @@ public class RodAccessories {
     }
     public void removeBobber() {
         this.bobber = ItemStack.EMPTY;
+    }
+
+    public String toString() {
+        boolean hasPrevious = false;
+        StringBuilder builder = new StringBuilder();
+        builder.append('{');
+
+        if( !this.getLine().isEmpty() ) {
+            builder.append("line: ").append( this.getLine() );
+            hasPrevious = true;
+        }
+        if( !this.getBobber().isEmpty() ) {
+            builder
+                .append(hasPrevious ? "; " : "")
+                .append("bobber: ")
+                .append( this.getBobber() )
+            ;
+            hasPrevious = true;
+        }
+        if( !this.getHook().isEmpty() ) {
+            builder
+                .append(hasPrevious ? "; " : "")
+                .append("hook: ")
+                .append( this.getHook() )
+            ;
+        }
+
+        builder.append('}');
+        return builder.toString();
     }
 }
