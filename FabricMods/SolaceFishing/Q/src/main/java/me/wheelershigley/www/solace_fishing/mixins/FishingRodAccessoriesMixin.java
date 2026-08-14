@@ -1,6 +1,7 @@
 package me.wheelershigley.www.solace_fishing.mixins;
 
 import me.wheelershigley.www.solace_fishing.data.RodAccessories;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.entity.SlotAccess;
@@ -43,31 +44,19 @@ public class FishingRodAccessoriesMixin {
             return;
         }
 
-        // Accessories (only put seperator on first line)
-        boolean seperate = true, current;
-        current = acceptItemName(accessories.getLine(),   builder, seperate);
-        seperate = !current;
-        current = acceptItemName(accessories.getBobber(), builder, seperate);
-        seperate = (seperate && !current);
-        current = acceptItemName(accessories.getHook(),   builder, seperate);
+        // Accessories
+        acceptItemName(accessories.getLine(),   builder);
+        acceptItemName(accessories.getBobber(), builder);
+        acceptItemName(accessories.getHook(),   builder);
     }
 
     @Unique
-    private boolean acceptItemName(ItemStack item, Consumer<Component> builder, boolean seperate) {
+    private boolean acceptItemName(ItemStack item, Consumer<Component> builder) {
         if( !item.isEmpty() ) {
-            if(seperate) {
-                builder.accept(
-                    Component
-                        .translatable("item.solace_fishing.accessories_seperator")
-                        .withColor(TextColor.GRAY)
-                );
-            }
-
             builder.accept(
                 item.getHoverName()
                 .copy().withColor(TextColor.GRAY)
             );
-
             return true;
         }
         return false;
@@ -200,10 +189,14 @@ public class FishingRodAccessoriesMixin {
         }
 
         if( ClickAction.PRIMARY.equals(clickAction) ) {
+            boolean swap = accessories.hasAnInstanceOf( other.getItem() );
+
             //Absorb
-            accessories.attemptSwap(other);
+            ItemStack swappedStack = accessories.attemptSwap(other);
             accessories.set(self);
-            player.containerMenu.setCarried(ItemStack.EMPTY);
+            player.containerMenu.setCarried(
+                swap ? swappedStack : ItemStack.EMPTY
+            );
 
             cir.setReturnValue(true);
             return;

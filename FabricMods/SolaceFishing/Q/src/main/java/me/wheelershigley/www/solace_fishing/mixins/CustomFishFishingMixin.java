@@ -2,8 +2,12 @@ package me.wheelershigley.www.solace_fishing.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import me.wheelershigley.www.solace_fishing.SolaceFishing;
+import me.wheelershigley.www.solace_fishing.data.AccessorizedFishingHook;
 import me.wheelershigley.www.solace_fishing.data.ClimateData;
+import me.wheelershigley.www.solace_fishing.data.RodAccessories;
 import me.wheelershigley.www.solace_fishing.implementations.Catchables;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
@@ -50,6 +54,13 @@ public abstract class CustomFishFishingMixin {
         ClimateData climate = ClimateData.sample(
             (ServerLevel)level,
             caster.getOnPos()
+        );
+        RodAccessories accessories = ( (AccessorizedFishingHook)this ).solace_fishing$getAccessories();
+
+        caster.sendSystemMessage(
+            Component.literal(
+                "TODO: integrate accessories; hook-association(s): " + accessories.toString()
+            )
         );
 
         ItemStack caught = Catchables.roll(
