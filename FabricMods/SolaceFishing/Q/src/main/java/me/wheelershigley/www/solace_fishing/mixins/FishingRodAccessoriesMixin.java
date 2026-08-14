@@ -26,42 +26,6 @@ import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isF
 @Mixin(Item.class)
 public class FishingRodAccessoriesMixin {
     @Inject(
-        method = "appendHoverText",
-        at = @At("HEAD")
-    )
-    public void appendAccessoriesTooltip(
-        ItemStack itemStack, Item.TooltipContext context,
-        TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag,
-        CallbackInfo ci
-    ) {
-        if(  !isFishingRod( itemStack.getItem() )  ) {
-            return;
-        }
-
-        RodAccessories accessories = RodAccessories.get(itemStack);
-        if(accessories == null) {
-            return;
-        }
-
-        // Accessories
-        acceptItemName(accessories.getLine(),   builder);
-        acceptItemName(accessories.getBobber(), builder);
-        acceptItemName(accessories.getHook(),   builder);
-    }
-
-    @Unique
-    private boolean acceptItemName(ItemStack item, Consumer<Component> builder) {
-        if( !item.isEmpty() ) {
-            builder.accept(
-                item.getHoverName()
-                .copy().withColor(TextColor.GRAY)
-            );
-            return true;
-        }
-        return false;
-    }
-
-    @Inject(
         method = "overrideStackedOnOther",
         at = @At("HEAD"),
         cancellable = true

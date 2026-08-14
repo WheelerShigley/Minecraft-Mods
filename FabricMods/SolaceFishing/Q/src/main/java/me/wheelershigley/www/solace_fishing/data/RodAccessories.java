@@ -3,15 +3,21 @@ package me.wheelershigley.www.solace_fishing.data;
 import me.wheelershigley.www.solace_fishing.implementations.Bobber;
 import me.wheelershigley.www.solace_fishing.implementations.Hook;
 import me.wheelershigley.www.solace_fishing.implementations.Line;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.ItemLore;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +28,8 @@ public class RodAccessories {
         CUSTOM_DATA_TAG = "accessories",
         HOOK_TAG = "hook",
         LINE_TAG = "line",
-        BOBBER_TAG = "bobber"
+        BOBBER_TAG = "bobber",
+        SEPERATOR = ": "
     ;
 
     ItemStack
@@ -199,13 +206,27 @@ public class RodAccessories {
 
     public void set(ItemStack itemStack) {
         CompoundTag accessoriesTag = new CompoundTag();
+        ArrayList<Component> accessoriesLore = new ArrayList<>();
 
+        //TODO Abstract the below tripple into a function [and apply it, here]
         if( !this.getLine().isEmpty() ) {
             ItemStack.CODEC
                 .encodeStart( NbtOps.INSTANCE, this.getLine() )
                 .result()
                 .ifPresent(
-                    tag -> accessoriesTag.put(LINE_TAG, tag)
+                    tag -> {
+                        accessoriesTag.put(LINE_TAG, tag);
+                        accessoriesLore.add(
+                            Component
+                                .literal(LINE_TAG+SEPERATOR)
+                                .append(
+                                    this.getLine().getHoverName()
+                                )
+                                .withStyle(
+                                    Style.EMPTY.withColor(TextColor.GRAY)
+                                )
+                        );
+                    }
                 )
             ;
         }
@@ -214,7 +235,19 @@ public class RodAccessories {
                 .encodeStart( NbtOps.INSTANCE, this.getBobber() )
                 .result()
                 .ifPresent(
-                        tag -> accessoriesTag.put(BOBBER_TAG, tag)
+                    tag -> {
+                        accessoriesTag.put(BOBBER_TAG, tag);
+                        accessoriesLore.add(
+                            Component
+                                .literal(BOBBER_TAG+SEPERATOR)
+                                .append(
+                                    this.getBobber().getHoverName()
+                                )
+                                .withStyle(
+                                    Style.EMPTY.withColor(TextColor.GRAY)
+                                )
+                        );
+                    }
                 )
             ;
         }
@@ -223,18 +256,31 @@ public class RodAccessories {
                 .encodeStart( NbtOps.INSTANCE, this.getHook() )
                 .result()
                 .ifPresent(
-                    tag -> accessoriesTag.put(HOOK_TAG, tag)
+                    tag -> {
+                        accessoriesTag.put(HOOK_TAG, tag);
+                        accessoriesLore.add(
+                            Component
+                                .literal(HOOK_TAG+SEPERATOR)
+                                .append(
+                                    this.getHook().getHoverName()
+                                )
+                                .withStyle(
+                                    Style.EMPTY.withColor(TextColor.GRAY)
+                                )
+                        );
+                    }
                 )
             ;
         }
 
         CustomData customData = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        ItemLore   loreData   = itemStack.getOrDefault(DataComponents.LORE,        ItemLore.EMPTY  );
+
         customData = customData.update(
             tag -> {
                 tag.remove(CUSTOM_DATA_TAG);
             }
         );
-
         if( !accessoriesTag.isEmpty() ) {
             customData = customData.update(
                 tag -> {
@@ -242,11 +288,43 @@ public class RodAccessories {
                 }
             );
         }
+        /* Remove potentially-duplicate Lores */ {
+            ArrayList<Component> newLoreLines = new ArrayList<>();
+            loreData.lines().forEach(
+                line -> {
+                    boolean include = true;
+                    String entry = line.getString();
+                    if( entry.startsWith(LINE_TAG+SEPERATOR) ) {
+                        include = false;
+                    }
+                    if( entry.startsWith(BOBBER_TAG+SEPERATOR) ) {
+                        include = false;
+                    }
+                    if( entry.startsWith(HOOK_TAG+SEPERATOR) ) {
+                        include = false;
+                    }
+
+                    if(include) {
+                        newLoreLines.add(line);
+                    }
+                }
+            );
+
+            //newestLines
+            newLoreLines.addAll(accessoriesLore);
+
+            loreData = new ItemLore(newLoreLines);
+        }
 
         if( customData.isEmpty() ) {
             itemStack.remove(DataComponents.CUSTOM_DATA);
         } else {
             itemStack.set(DataComponents.CUSTOM_DATA, customData);
+        }
+        if( loreData.lines().isEmpty() ) {
+            itemStack.remove(DataComponents.LORE);
+        } else {
+            itemStack.set(DataComponents.LORE, loreData);
         }
     }
 
