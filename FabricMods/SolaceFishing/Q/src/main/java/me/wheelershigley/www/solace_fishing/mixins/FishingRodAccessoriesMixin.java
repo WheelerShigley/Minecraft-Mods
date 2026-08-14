@@ -1,7 +1,6 @@
 package me.wheelershigley.www.solace_fishing.mixins;
 
 import me.wheelershigley.www.solace_fishing.data.RodAccessories;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.entity.SlotAccess;

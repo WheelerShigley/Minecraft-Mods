@@ -2,8 +2,8 @@ package me.wheelershigley.www.solace_fishing.implementations;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
 import me.wheelershigley.www.solace_fishing.data.RodAccessories;
-import me.wheelershigley.www.solace_fishing.registrations.CustomComponents;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -27,7 +28,7 @@ public class CustomFishingRod extends FishingRodItem implements PolymerItem {
         .stacksTo(1)
         .durability(64)
         .enchantable(1)
-        .component( CustomComponents.STORED_ITEMS, new HashMap<>() )
+        .component(DataComponents.CUSTOM_DATA, CustomData.EMPTY)
     ;
 
     public CustomFishingRod(Properties properties) {

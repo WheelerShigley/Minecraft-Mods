@@ -3,10 +3,13 @@ package me.wheelershigley.www.solace_fishing.data;
 import me.wheelershigley.www.solace_fishing.implementations.Bobber;
 import me.wheelershigley.www.solace_fishing.implementations.Hook;
 import me.wheelershigley.www.solace_fishing.implementations.Line;
-import me.wheelershigley.www.solace_fishing.registrations.CustomComponents;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -15,6 +18,13 @@ import java.util.Map;
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingRod;
 
 public class RodAccessories {
+    private static final String
+        CUSTOM_DATA_TAG = "accessories",
+        HOOK_TAG = "hook",
+        LINE_TAG = "line",
+        BOBBER_TAG = "bobber"
+    ;
+
     ItemStack
         hook,
         line,
@@ -33,39 +43,14 @@ public class RodAccessories {
             return null;
         }
 
+        Map<String, ItemStack> storedItems = getAccessories(rod);
         ItemStack
-            stored_hook   = ItemStack.EMPTY,
-            stored_line   = ItemStack.EMPTY,
-            stored_bobber = ItemStack.EMPTY
-        ; {
-        Map<String, ItemStack> storedItems = rod.get(CustomComponents.STORED_ITEMS);
-            if(storedItems != null) {
-                stored_hook   = storedItems.getOrDefault("hook",   ItemStack.EMPTY);
-                stored_line   = storedItems.getOrDefault("line",   ItemStack.EMPTY);
-                stored_bobber = storedItems.getOrDefault("bobber", ItemStack.EMPTY);
-            }
-        }
+            stored_hook   = storedItems.getOrDefault(HOOK_TAG,   ItemStack.EMPTY),
+            stored_line   = storedItems.getOrDefault(LINE_TAG,   ItemStack.EMPTY),
+            stored_bobber = storedItems.getOrDefault(BOBBER_TAG, ItemStack.EMPTY)
+        ;
 
         return new RodAccessories(stored_hook, stored_line, stored_bobber);
-    }
-
-    public void set(ItemStack item) {
-        Map<String, ItemStack> items = new HashMap<>();
-        if( !this.getHook().isEmpty() ) {
-            items.put( "hook", this.getHook() );
-        }
-        if( !this.getLine().isEmpty() ) {
-            items.put( "line", this.getLine() );
-        }
-        if( !this.getBobber().isEmpty() ) {
-            items.put( "bobber", this.getBobber() );
-        }
-
-        if( items.isEmpty() ) {
-            item.remove(CustomComponents.STORED_ITEMS);
-        } else {
-            item.set(CustomComponents.STORED_ITEMS, items);
-        }
     }
 
     public ItemStack attemptSwap(ItemStack itemStack) {
@@ -182,19 +167,126 @@ public class RodAccessories {
         this.bobber = ItemStack.EMPTY;
     }
 
+
+    public static Map<String, ItemStack> getAccessories(ItemStack itemStack) {
+        Map<String, ItemStack> accessories = new HashMap<>();
+
+        CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
+        if(customData == null) {
+            return accessories;
+        }
+
+        CompoundTag tag = customData.copyTag();
+        if( !tag.contains(CUSTOM_DATA_TAG) ) {
+            return accessories;
+        }
+
+        CompoundTag accessoriesTag = tag.getCompoundOrEmpty(CUSTOM_DATA_TAG);
+        for( String key : accessoriesTag.keySet() ) {
+            Tag current = accessoriesTag.get(key);
+
+            ItemStack.CODEC
+                .parse(NbtOps.INSTANCE, current)
+                .result()
+                .ifPresent(
+                    stack -> accessories.put(key, stack)
+                )
+            ;
+        }
+
+        return accessories;
+    }
+
+    public void set(ItemStack itemStack) {
+        CompoundTag accessoriesTag = new CompoundTag();
+
+        if( !this.getLine().isEmpty() ) {
+            ItemStack.CODEC
+                .encodeStart( NbtOps.INSTANCE, this.getLine() )
+                .result()
+                .ifPresent(
+                    tag -> accessoriesTag.put(LINE_TAG, tag)
+                )
+            ;
+        }
+        if( !this.getBobber().isEmpty() ) {
+            ItemStack.CODEC
+                .encodeStart( NbtOps.INSTANCE, this.getBobber() )
+                .result()
+                .ifPresent(
+                        tag -> accessoriesTag.put(BOBBER_TAG, tag)
+                )
+            ;
+        }
+        if( !this.getHook().isEmpty() ) {
+            ItemStack.CODEC
+                .encodeStart( NbtOps.INSTANCE, this.getHook() )
+                .result()
+                .ifPresent(
+                    tag -> accessoriesTag.put(HOOK_TAG, tag)
+                )
+            ;
+        }
+
+        CustomData customData = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        customData = customData.update(
+            tag -> {
+                tag.remove(CUSTOM_DATA_TAG);
+            }
+        );
+
+        if( !accessoriesTag.isEmpty() ) {
+            customData = customData.update(
+                tag -> {
+                    tag.put(CUSTOM_DATA_TAG, accessoriesTag);
+                }
+            );
+        }
+
+        if( customData.isEmpty() ) {
+            itemStack.remove(DataComponents.CUSTOM_DATA);
+        } else {
+            itemStack.set(DataComponents.CUSTOM_DATA, customData);
+        }
+    }
+
+    @Deprecated
+    public static void removeAccessories(ItemStack itemStack) {
+        CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
+        if(customData == null) {
+            return;
+        }
+
+        CompoundTag tag = customData.copyTag();
+        tag.remove(CUSTOM_DATA_TAG);
+        if( tag.isEmpty() ) {
+            itemStack.remove(DataComponents.CUSTOM_DATA);
+        } else {
+            itemStack.set(
+                DataComponents.CUSTOM_DATA,
+                CustomData.of(tag)
+            );
+        }
+    }
+
     public String toString() {
         boolean hasPrevious = false;
         StringBuilder builder = new StringBuilder();
         builder.append('{');
 
         if( !this.getLine().isEmpty() ) {
-            builder.append("line: ").append( this.getLine() );
+            builder
+                .append(LINE_TAG)
+                .append(": ")
+                .append( this.getLine() )
+            ;
             hasPrevious = true;
         }
         if( !this.getBobber().isEmpty() ) {
             builder
                 .append(hasPrevious ? "; " : "")
-                .append("bobber: ")
+                .append(BOBBER_TAG)
+                .append(": ")
                 .append( this.getBobber() )
             ;
             hasPrevious = true;
@@ -202,7 +294,8 @@ public class RodAccessories {
         if( !this.getHook().isEmpty() ) {
             builder
                 .append(hasPrevious ? "; " : "")
-                .append("hook: ")
+                .append(HOOK_TAG)
+                .append(": ")
                 .append( this.getHook() )
             ;
         }
