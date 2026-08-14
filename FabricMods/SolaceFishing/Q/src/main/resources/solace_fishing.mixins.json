@@ -6,7 +6,7 @@
   "mixins": [
     "BobbleValidityFixerMixin",
     "CustomFishFishingMixin",
-    "TemporaryMixin"
+    "FishingRodAccessoriesMixin"
   ],
   "injectors": {
     "defaultRequire": 1

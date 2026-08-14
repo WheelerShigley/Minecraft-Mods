@@ -19,12 +19,13 @@
 
   "item.solace_fishing.bamboo_rod": "Bamboo Rod",
 
-  "item.solace_fishing.magenta_hook": "Magenta Bobber",
-  "item.solace_fishing.cyan_hook": "Cyan Bobber",
-  "item.solace_fishing.yellow_line": "Yellow Bobber",
-  "item.solace_fishing.green_line": "Green Bobber",
-  "item.solace_fishing.red_bobber": "Red Bobber",
-  "item.solace_fishing.blue_bobber": "Blue Bobber",
+  "item.solace_fishing.accessories_seperator": "§m-------------§r",
+  "item.solace_fishing.magenta_hook": "§dMagenta§r Hook",
+  "item.solace_fishing.cyan_hook": "§3Cyan§r Hook",
+  "item.solace_fishing.yellow_line": "§eYellow§r Line",
+  "item.solace_fishing.green_line": "§aGreen§r Line",
+  "item.solace_fishing.red_bobber": "§cRed§r Bobber",
+  "item.solace_fishing.blue_bobber": "§9Blue§r Bobber",
 
   "solace_fishing.main_menu.title": "Fishing Menu",
   "solace_fishing.main_menu.sell_name": "§aSell",

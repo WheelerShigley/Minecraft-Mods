@@ -1,22 +1,78 @@
 package me.wheelershigley.www.solace_fishing.mixins;
 
 import me.wheelershigley.www.solace_fishing.data.RodAccessories;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.function.Consumer;
 
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingAccessory;
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingRod;
 
 @Mixin(Item.class)
 public class FishingRodAccessoriesMixin {
+    @Inject(
+        method = "appendHoverText",
+        at = @At("HEAD")
+    )
+    public void appendAccessoriesTooltip(
+        ItemStack itemStack, Item.TooltipContext context,
+        TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag,
+        CallbackInfo ci
+    ) {
+        if(  !isFishingRod( itemStack.getItem() )  ) {
+            return;
+        }
+
+        RodAccessories accessories = RodAccessories.get(itemStack);
+        if(accessories == null) {
+            return;
+        }
+
+        // Accessories (only put seperator on first line)
+        boolean seperate = true, current;
+        current = acceptItemName(accessories.getLine(),   builder, seperate);
+        seperate = !current;
+        current = acceptItemName(accessories.getBobber(), builder, seperate);
+        seperate = (seperate && !current);
+        current = acceptItemName(accessories.getHook(),   builder, seperate);
+    }
+
+    @Unique
+    private boolean acceptItemName(ItemStack item, Consumer<Component> builder, boolean seperate) {
+        if( !item.isEmpty() ) {
+            if(seperate) {
+                builder.accept(
+                    Component
+                        .translatable("item.solace_fishing.accessories_seperator")
+                        .withColor(TextColor.GRAY)
+                );
+            }
+
+            builder.accept(
+                item.getHoverName()
+                .copy().withColor(TextColor.GRAY)
+            );
+
+            return true;
+        }
+        return false;
+    }
+
     @Inject(
         method = "overrideStackedOnOther",
         at = @At("HEAD"),
