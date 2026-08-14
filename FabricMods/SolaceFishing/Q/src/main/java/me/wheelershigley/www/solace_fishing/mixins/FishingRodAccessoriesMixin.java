@@ -1,6 +1,7 @@
 package me.wheelershigley.www.solace_fishing.mixins;
 
 import me.wheelershigley.www.solace_fishing.data.RodAccessories;
+import me.wheelershigley.www.solace_fishing.data.RodAccessoryLoreRenderedComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.entity.SlotAccess;
@@ -61,7 +62,8 @@ public class FishingRodAccessoriesMixin {
             potentialAccessory = self;
         }
 
-        RodAccessories accessories = RodAccessories.get(rod);
+        RodAccessories accessories = RodAccessoryLoreRenderedComponent.get(rod);
+        RodAccessoryLoreRenderedComponent componentRenderer = new RodAccessoryLoreRenderedComponent(accessories);
         if(accessories == null) {
             return;
         }
@@ -72,7 +74,7 @@ public class FishingRodAccessoriesMixin {
                 //Drop item into slot
                 if( !accessories.isEmpty() ) {
                     ItemStack popped = accessories.pop();
-                    accessories.set(rod);
+                    componentRenderer.set(rod);
                     slot.set(popped);
                 }
                 cir.setReturnValue(true);
@@ -94,7 +96,7 @@ public class FishingRodAccessoriesMixin {
             }
 
             ItemStack swappedStack = accessories.attemptSwap(other);
-            accessories.set(self);
+            componentRenderer.set(self);
             player.containerMenu.setCarried(self);
             slot.set(swappedStack);
         }
@@ -106,7 +108,7 @@ public class FishingRodAccessoriesMixin {
             }
 
             accessories.attemptSwap(other);
-            accessories.set(self);
+            componentRenderer.set(self);
 
             slot.set(ItemStack.EMPTY);
             player.containerMenu.setCarried(self);
@@ -135,7 +137,8 @@ public class FishingRodAccessoriesMixin {
             return;
         }
 
-        RodAccessories accessories = RodAccessories.get(self);
+        RodAccessories accessories = RodAccessoryLoreRenderedComponent.get(self);
+        RodAccessoryLoreRenderedComponent componentRenderer = new RodAccessoryLoreRenderedComponent(accessories);
         if (accessories == null) {
             return;
         }
@@ -156,7 +159,7 @@ public class FishingRodAccessoriesMixin {
 
             //Absorb
             ItemStack swappedStack = accessories.attemptSwap(other);
-            accessories.set(self);
+            componentRenderer.set(self);
             player.containerMenu.setCarried(
                 swap ? swappedStack : ItemStack.EMPTY
             );

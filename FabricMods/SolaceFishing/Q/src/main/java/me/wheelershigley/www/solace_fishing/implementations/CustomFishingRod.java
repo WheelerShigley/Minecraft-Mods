@@ -1,7 +1,9 @@
 package me.wheelershigley.www.solace_fishing.implementations;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
+import me.wheelershigley.www.solace_fishing.data.LoreRenderedComponent;
 import me.wheelershigley.www.solace_fishing.data.RodAccessories;
+import me.wheelershigley.www.solace_fishing.data.RodAccessoryLoreRenderedComponent;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
@@ -86,7 +88,7 @@ public class CustomFishingRod extends FishingRodItem implements PolymerItem {
         ItemStack itemStack = player.getItemInHand(hand);
 
         //TODO: Use Accessories
-        RodAccessories.get(itemStack);
+        RodAccessoryLoreRenderedComponent.get(itemStack);
 
         level.playSound(
             null,

@@ -2,6 +2,7 @@ package me.wheelershigley.www.solace_fishing.mixins;
 
 import me.wheelershigley.www.solace_fishing.data.AccessorizedFishingHook;
 import me.wheelershigley.www.solace_fishing.data.RodAccessories;
+import me.wheelershigley.www.solace_fishing.data.RodAccessoryLoreRenderedComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
@@ -32,6 +33,6 @@ public class AccessoriesWithBobberMixin implements AccessorizedFishingHook {
         CallbackInfo ci
     ) {
         ItemStack rod = player.getMainHandItem();
-        this.accessories = RodAccessories.get(rod);
+        this.accessories = RodAccessoryLoreRenderedComponent.get(rod);
     }
 }
