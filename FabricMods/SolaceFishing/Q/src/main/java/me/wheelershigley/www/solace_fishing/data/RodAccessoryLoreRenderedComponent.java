@@ -74,7 +74,7 @@ public class RodAccessoryLoreRenderedComponent extends LoreRenderedComponent<Rod
                 .parse(NbtOps.INSTANCE, current)
                 .result()
                 .ifPresent(
-                        stack -> accessories.put(key, stack)
+                    stack -> accessories.put(key, stack)
                 )
             ;
         }
@@ -174,19 +174,19 @@ public class RodAccessoryLoreRenderedComponent extends LoreRenderedComponent<Rod
 
         if( !this.customData.getLine().isEmpty() ) {
             accessoriesTag.put(
-                    LINE_TAG,
+                LINE_TAG,
                 toTag( this.customData.getLine() )
             );
         }
         if( !this.customData.getBobber().isEmpty() ) {
             accessoriesTag.put(
-                    BOBBER_TAG,
+                BOBBER_TAG,
                 toTag( this.customData.getBobber() )
             );
         }
         if( !this.customData.getHook().isEmpty() ) {
             accessoriesTag.put(
-                    HOOK_TAG,
+                HOOK_TAG,
                 toTag( this.customData.getHook() )
             );
         }

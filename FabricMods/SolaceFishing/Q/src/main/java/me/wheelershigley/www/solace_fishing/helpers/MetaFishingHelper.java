@@ -1,9 +1,6 @@
 package me.wheelershigley.www.solace_fishing.helpers;
 
-import me.wheelershigley.www.solace_fishing.implementations.Bobber;
-import me.wheelershigley.www.solace_fishing.implementations.CustomFishingRod;
-import me.wheelershigley.www.solace_fishing.implementations.Hook;
-import me.wheelershigley.www.solace_fishing.implementations.Line;
+import me.wheelershigley.www.solace_fishing.implementations.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.projectile.FishingHook;
@@ -104,10 +101,6 @@ public class MetaFishingHelper {
     }
 
     public static boolean isFishingAccessory(Item item) {
-        return
-               item instanceof Hook
-            || item instanceof Line
-            || item instanceof Bobber
-        ;
+        return (item instanceof AccessoryItem);
     }
 }
