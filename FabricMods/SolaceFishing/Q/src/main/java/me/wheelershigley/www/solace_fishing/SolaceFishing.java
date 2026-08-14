@@ -1,5 +1,6 @@
 package me.wheelershigley.www.solace_fishing;
 
+import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
 import me.wheelershigley.www.solace_fishing.registrations.FishingItems;
 import me.wheelershigley.www.solace_fishing.registrations.ItemGroup;
@@ -16,5 +17,7 @@ public class SolaceFishing implements ModInitializer {
 
         ItemGroup.initialize();
         ListenedEvents.register();
+
+        PolymerResourcePackUtils.addModAssets(MOD_ID);
     }
 }

@@ -35,6 +35,7 @@ dependencies {
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     implementation "eu.pb4:polymer-core:0.17.3+26.2"
     implementation "eu.pb4:sgui:2.1.0+26.2"
+    implementation "eu.pb4:polymer-resource-pack:0.17.3+26.2"
 }
 
 processResources {
