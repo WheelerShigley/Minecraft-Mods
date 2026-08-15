@@ -1,6 +1,0 @@
-{
-  "parent": "item/handheld_rod",
-  "textures": {
-    "layer0": "solace_fishing:item/bamboo_rod_cast"
-  }
-}

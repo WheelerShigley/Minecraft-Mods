@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "solace_fishing:item/yellow_line"
+    "layer0": "solace_fishing:item/accessories/green_line"
   }
 }

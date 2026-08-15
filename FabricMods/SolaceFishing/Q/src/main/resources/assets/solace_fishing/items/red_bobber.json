@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "solace_fishing:item/red_bobber"
+    "model": "solace_fishing:item/accessories/red_bobber"
   }
 }

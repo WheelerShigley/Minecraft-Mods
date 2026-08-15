@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "solace_fishing:item/red_bobber"
+    "layer0": "solace_fishing:item/accessories/red_bobber"
   }
 }

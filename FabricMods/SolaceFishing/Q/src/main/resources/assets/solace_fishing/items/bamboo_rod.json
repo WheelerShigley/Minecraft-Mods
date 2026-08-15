@@ -2,11 +2,11 @@
   "model": {
     "property": "minecraft:fishing_rod/cast",
     "on_true": {
-      "model": "solace_fishing:item/bamboo_rod_cast",
+      "model": "solace_fishing:item/tools/bamboo_rod_cast",
       "type":"minecraft:model"
     },
     "on_false": {
-      "model": "solace_fishing:item/bamboo_rod",
+      "model": "solace_fishing:item/tools/bamboo_rod",
       "type":"minecraft:model"
     },
     "type":"minecraft:condition"

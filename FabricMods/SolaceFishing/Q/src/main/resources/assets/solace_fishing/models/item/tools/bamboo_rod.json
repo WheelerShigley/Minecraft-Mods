@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld_rod",
   "textures": {
-    "layer0": "solace_fishing:item/bamboo_rod"
+    "layer0": "solace_fishing:item/tools/bamboo_rod"
   }
 }
