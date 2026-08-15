@@ -19,5 +19,6 @@ public class SolaceFishing implements ModInitializer {
         ListenedEvents.register();
 
         PolymerResourcePackUtils.addModAssets(MOD_ID);
+        PolymerResourcePackUtils.markAsRequired();
     }
 }

@@ -32,12 +32,12 @@ public class MainMenu extends ImmutableSimpleGui {
     @Override
     public void initializeMenu() {
         final ItemStack
-            sellItem = getMenuItem(Items.NAME_TAG,                  false, "solace_fishing.main_menu.sell_name"           ),
-            buyItem  = getMenuItem(FishingItems.PDA,                false, "solace_fishing.main_menu.buy_name"            ),
-            balItem  = getMenuItem(Items.DYED_BUNDLE.lime(),        false, "solace_fishing.main_menu.balance_name"        ),
-            upgradesItem = getMenuItem(Items.NETHER_STAR,           false, "solace_fishing.main_menu.upgrades_name"          ),
-            eventsItem      = getMenuItem(Items.OMINOUS_TRIAL_KEY,  false, "solace_fishing.main_menu.event_progress_name" ),
-            leaderboardItem = getMenuItem(Items.WRITTEN_BOOK,       false, "solace_fishing.main_menu.leaderboard_name"    )
+            sellItem = getMenuItem(Items.NAME_TAG,                 false, "solace_fishing.main_menu.sell_name"           ),
+            buyItem  = getMenuItem(FishingItems.PDA,               false, "solace_fishing.main_menu.buy_name"            ),
+            balItem  = getMenuItem(Items.DYED_BUNDLE.lime(),       false, "solace_fishing.main_menu.balance_name"        ),
+            upgradesItem = getMenuItem(Items.NETHER_STAR,          false, "solace_fishing.main_menu.upgrades_name"          ),
+            eventsItem      = getMenuItem(Items.OMINOUS_TRIAL_KEY, false, "solace_fishing.main_menu.event_progress_name" ),
+            leaderboardItem = getMenuItem(Items.WRITTEN_BOOK,      false, "solace_fishing.main_menu.leaderboard_name"    )
         ;
         GuiElement.ClickCallback
             sellNavigator = (index, type, action, gui) -> {

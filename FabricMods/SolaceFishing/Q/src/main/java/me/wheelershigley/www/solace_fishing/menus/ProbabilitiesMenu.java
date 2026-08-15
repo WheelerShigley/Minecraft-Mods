@@ -26,20 +26,20 @@ import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.*;
 import static me.wheelershigley.www.solace_fishing.implementations.Catchables.*;
 
 public class ProbabilitiesMenu extends ImmutableSimpleGui {
+    private final FishingContext context;
     private final LinkedHashMap<ItemStack, Double> probabilities;
 
     public ProbabilitiesMenu(
         ServerLevel level, BlockPos position,
         ServerPlayer player, @Nullable ImmutableSimpleGui parent
     ) {
-        FishingContext context; {
+        ItemStack rod = getFirstFishingRod(player);
+        if(rod == null) {
+            //generic rod
+            rod = new ItemStack(Items.FISHING_ROD);
+        }
+        FishingContext subContext; {
             Block medium = level.getBlockState(position).getBlock();
-
-            ItemStack rod = getFirstFishingRod(player);
-            if(rod == null) {
-                //generic rod
-                rod = new ItemStack(Items.FISHING_ROD);
-            }
 
             float luck = player.getLuck() + (float)getLuckOfRod(level, rod);
 
@@ -47,13 +47,14 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
 
             ClimateData environment = ClimateData.sample(level, position);
 
-            context = new FishingContext(
+            subContext = new FishingContext(
                 medium, rod.getItem(), luck, accessories, environment
             );
         }
 
-        LinkedHashMap<ItemStack, Double> probabilitiesCache = calculateProbabilities(level, position, context);
-        MenuType<?> menuType = getMinimumChestMenu( probabilitiesCache.size() );
+        LinkedHashMap<ItemStack, Double> probabilitiesCache = calculateProbabilities(level, position, subContext);
+        MenuType<?> menuType = getMinimumChestMenu( probabilitiesCache.size()+ROW_LENGTH );
+        this.context = subContext;
         this.probabilities = probabilitiesCache;
 
         super(player, menuType, parent);
@@ -67,20 +68,23 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
     @Override
     public MenuType<?> getMenuType() {
         if( this.probabilities == null) {
-            return MenuType.GENERIC_9x1;
+            return MenuType.GENERIC_9x2;
         }
-        return getMinimumChestMenu( probabilities.size() );
+        return getMinimumChestMenu( probabilities.size()+ROW_LENGTH );
     }
 
     @Override
     public void initializeMenu() {
+        // Top row is for context-information
+        setContextRow(this, context, 0);
+
         if( probabilities == null || probabilities.isEmpty() ) {
             ItemStack emptinessIndicator = new ItemStack(Items.BARRIER);
             emptinessIndicator.set(
                 DataComponents.CUSTOM_NAME,
                 Component.translatable("solace_fishing.probabilities_menu.empty")
             );
-            this.setSlot(4, emptinessIndicator);
+            this.setSlot(ROW_LENGTH+4, emptinessIndicator);
             return;
         }
 
@@ -94,7 +98,7 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
             ClimateStatisticItem value = itemsCache.getOrDefault(key, null);
 
             this.setSlot(
-                fish_index++,
+                ROW_LENGTH + fish_index++,
                 getProbabilityMenuItem(
                     entry.getKey(),
                     entry.getValue(),
