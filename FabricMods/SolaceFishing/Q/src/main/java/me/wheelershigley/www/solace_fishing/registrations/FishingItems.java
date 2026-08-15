@@ -69,16 +69,9 @@ public class FishingItems extends PolymerItemsRegister {
         );
 
 
-        final ItemLore rubberDuckLure = new ItemLore(
-            List.of(
-                Component
-                    .translatable("item.solace_fishing.rubber_duck_bobber.description")
-                    .withColor(TextColor.GRAY)
-            )
-        );
         RUBBER_DUCK_BOBBER = register(
             "rubber_duck_bobber",
-            Bobber.DEFAULT_PROPERTIES.component(DataComponents.LORE, rubberDuckLure),
+            Bobber.DEFAULT_PROPERTIES,
             Bobber::new
         );
     }

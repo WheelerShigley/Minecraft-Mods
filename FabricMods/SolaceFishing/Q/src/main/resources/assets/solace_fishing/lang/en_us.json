@@ -27,8 +27,6 @@
   "item.solace_fishing.blue_bobber": "§9Blue§r Bobber",
   "item.solace_fishing.rubber_duck_bobber": "§eRubber Duck§r Bobber",
 
-  "item.solace_fishing.rubber_duck_bobber.description": "§l2× Trash§r-Chance",
-
   "solace_fishing.context_row.environment": "§7Environment",
   "solace_fishing.context_row.medium": "§3Medium",
   "solace_fishing.context_row.climate": "§7Climate",
