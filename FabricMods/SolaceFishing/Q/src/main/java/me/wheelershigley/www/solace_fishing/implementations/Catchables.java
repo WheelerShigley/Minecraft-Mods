@@ -5,6 +5,7 @@ import me.wheelershigley.www.solace_fishing.data.ClimateStatisticItem;
 import me.wheelershigley.www.solace_fishing.data.FishingContext;
 import me.wheelershigley.www.solace_fishing.data.ResultCategory;
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
+import me.wheelershigley.www.solace_fishing.registrations.FishingItems;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.RandomSource;
@@ -181,19 +182,32 @@ public class Catchables {
         return correctedCatches;
     }
 
-    //TODO: integrate accessory modifiers and enchantments
+    //TODO: integrate enchantment(s)
     /* By Default, the sum-weight of treasures should comprise 5%
     of the total weights; similarly, trashes will comprise 10% of the total weights.
     */
     private static Map<ResultCategory, Double> getCategoryWeightsForContext(
         FishingContext context, boolean includeTreasure
     ) {
-        Map<ResultCategory, Double> intendedWeights = new HashMap<>();
-
         double treasure_weight = (includeTreasure ? 0.05 : 0.00);
-        intendedWeights.put(ResultCategory.Catch,    0.90 - treasure_weight);
-        intendedWeights.put(ResultCategory.Trash,    0.10                  );
-        intendedWeights.put(ResultCategory.Treasure, treasure_weight       );
+        double catch_weight    = 0.9 - treasure_weight;
+        double trash_weight    = 0.1;
+
+        // Double Trash-changes when using a Rubber-Duck-Bobber
+        ItemStack bobber = context.accessories().getBobber();
+        if( !bobber.isEmpty() && bobber.getItem() == FishingItems.RUBBER_DUCK_BOBBER ) {
+            double sum_nontrash_weight = treasure_weight + catch_weight;
+
+            trash_weight    *= 2.0;
+            treasure_weight *= (1.0 - trash_weight) / sum_nontrash_weight;
+            catch_weight    *= (1.0 - trash_weight) / sum_nontrash_weight;
+        }
+
+
+        Map<ResultCategory, Double> intendedWeights = new HashMap<>();
+        intendedWeights.put(ResultCategory.Catch,    catch_weight   );
+        intendedWeights.put(ResultCategory.Trash,    trash_weight   );
+        intendedWeights.put(ResultCategory.Treasure, treasure_weight);
 
         return intendedWeights;
     }

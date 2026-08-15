@@ -1,7 +1,13 @@
 package me.wheelershigley.www.solace_fishing.registrations;
 
 import me.wheelershigley.www.solace_fishing.implementations.*;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.ItemLore;
+
+import java.util.List;
 
 public class FishingItems extends PolymerItemsRegister {
     public static Item PDA;
@@ -61,9 +67,18 @@ public class FishingItems extends PolymerItemsRegister {
             Bobber.DEFAULT_PROPERTIES,
             Bobber::new
         );
+
+
+        final ItemLore rubberDuckLure = new ItemLore(
+            List.of(
+                Component
+                    .translatable("item.solace_fishing.rubber_duck_bobber.description")
+                    .withColor(TextColor.GRAY)
+            )
+        );
         RUBBER_DUCK_BOBBER = register(
             "rubber_duck_bobber",
-            Bobber.DEFAULT_PROPERTIES,
+            Bobber.DEFAULT_PROPERTIES.component(DataComponents.LORE, rubberDuckLure),
             Bobber::new
         );
     }
