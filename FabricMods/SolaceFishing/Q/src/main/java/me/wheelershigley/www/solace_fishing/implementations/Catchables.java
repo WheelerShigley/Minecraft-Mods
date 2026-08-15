@@ -2,6 +2,8 @@ package me.wheelershigley.www.solace_fishing.implementations;
 
 import me.wheelershigley.www.solace_fishing.data.ClimateData;
 import me.wheelershigley.www.solace_fishing.data.ClimateStatisticItem;
+import me.wheelershigley.www.solace_fishing.data.FishingContext;
+import me.wheelershigley.www.solace_fishing.data.ResultCategory;
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
@@ -125,8 +127,8 @@ public class Catchables {
         );
     }
 
-    public static Set<ClimateStatisticItem> getValidCatchesAt(
-        ClimateData locationData,
+    public static Set<ClimateStatisticItem> getWeightedValidCatches(
+        FishingContext context,
         boolean withTreasure,
         boolean withLore
     ) {
@@ -136,14 +138,14 @@ public class Catchables {
 
         // Validation-pass
         Set<ClimateStatisticItem> validFishes = getValidSubCatchesAt(
-            statisticalCatches, locationData, withLore, null
+            statisticalCatches, context, withLore, null
         );
         Set<ClimateStatisticItem> validTrashes = getValidSubCatchesAt(
-            statisticalTrashes, locationData, withLore, "solace_fishing.trash"
+            statisticalTrashes, context, withLore, "solace_fishing.trash"
         );
         Set<ClimateStatisticItem> validTreasures = getValidSubCatchesAt(
             withTreasure ? statisticalTreasures : Set.of(),
-            locationData,
+            context,
             withLore,
             "solace_fishing.treasure"
         );
@@ -151,31 +153,23 @@ public class Catchables {
         // Weights
         double fishes_sum_weight = 0.0;
         for(ClimateStatisticItem item : validFishes) {
-            fishes_sum_weight += item.getAverageWeightAt(locationData);
+            fishes_sum_weight += item.getAverageWeightAt( context.environment() );
         }
         double trashes_sum_weight = 0.0;
         for(ClimateStatisticItem item : validTrashes) {
-            trashes_sum_weight += item.getAverageWeightAt(locationData);
+            trashes_sum_weight += item.getAverageWeightAt( context.environment() );
         }
         double treasures_sum_weight = 0.0;
         for(ClimateStatisticItem item : validTreasures) {
-            treasures_sum_weight += item.getAverageWeightAt(locationData);
+            treasures_sum_weight += item.getAverageWeightAt( context.environment() );
         }
 
-        // Weight-corrections
-        /* The sum-weight of treasures should comprise 5%
-        of the total weights; similarly, trashes will comprise 10% of the total weights.
-        */
+        Map<ResultCategory, Double> intendedWeights = getCategoryWeightsForContext(context, withTreasure);
         double weights_sum = fishes_sum_weight + trashes_sum_weight + treasures_sum_weight;
 
-        enforceAreaRatio(
-            withTreasure ? 0.85 : 0.90,
-            weights_sum,
-            fishes_sum_weight,
-            validFishes
-        );
-        enforceAreaRatio(0.10, weights_sum, trashes_sum_weight,   validTrashes  );
-        enforceAreaRatio(0.05, weights_sum, treasures_sum_weight, validTreasures);
+        enforceAreaRatio( intendedWeights.get(ResultCategory.Catch),    weights_sum, fishes_sum_weight,    validFishes    );
+        enforceAreaRatio( intendedWeights.get(ResultCategory.Trash),    weights_sum, trashes_sum_weight,   validTrashes   );
+        enforceAreaRatio( intendedWeights.get(ResultCategory.Treasure), weights_sum, treasures_sum_weight, validTreasures );
 
         // Category Joining
         Set<ClimateStatisticItem> correctedCatches = new HashSet<>();
@@ -187,16 +181,33 @@ public class Catchables {
         return correctedCatches;
     }
 
+    //TODO: integrate accessory modifiers and enchantments
+    /* By Default, the sum-weight of treasures should comprise 5%
+    of the total weights; similarly, trashes will comprise 10% of the total weights.
+    */
+    private static Map<ResultCategory, Double> getCategoryWeightsForContext(
+        FishingContext context, boolean includeTreasure
+    ) {
+        Map<ResultCategory, Double> intendedWeights = new HashMap<>();
+
+        double treasure_weight = (includeTreasure ? 0.05 : 0.00);
+        intendedWeights.put(ResultCategory.Catch,    0.90 - treasure_weight);
+        intendedWeights.put(ResultCategory.Trash,    0.10                  );
+        intendedWeights.put(ResultCategory.Treasure, treasure_weight       );
+
+        return intendedWeights;
+    }
+
     private static Set<ClimateStatisticItem> getValidSubCatchesAt(
         Set<ClimateStatisticItem> potentialItems,
-        ClimateData locationData,
+        FishingContext context,
         boolean withLore,
         @Nullable String translation_key
     ) {
         Set<ClimateStatisticItem> validSubCatches = new HashSet<>();
         for(ClimateStatisticItem item : potentialItems) {
             ClimateStatisticItem copy = item.clone();
-            if( copy.isInBounds(locationData) ) {
+            if(  copy.isInBounds( context.environment() )  ) {
                 if(translation_key != null) {
                     copy.setItem(
                         conditionallyWithTranslatedLore(withLore, item.getItem(), translation_key)
@@ -249,14 +260,14 @@ public class Catchables {
 
     //TODO: integrate luck
     public static ItemStack roll(
-        ClimateData locationData,
-        float luck, boolean withTreasure,
+        FishingContext context,
+        boolean withTreasure,
         RandomSource random, RegistryAccess access
     ) {
         ItemStack result = ItemStack.EMPTY;
 
-        Set<ClimateStatisticItem> validItems = getValidCatchesAt(locationData, withTreasure, false);
-        Map<ClimateStatisticItem, Double> weights = getWeightsForItems(validItems, locationData);
+        Set<ClimateStatisticItem> validItems = getWeightedValidCatches(context, withTreasure, false);
+        Map<ClimateStatisticItem, Double> weights = getWeightsForItems(validItems, context.environment());
 
         double weight_sum = weights.values().stream().reduce(0.0, Double::sum);
         double weightcentile = random.nextDouble() * weight_sum;

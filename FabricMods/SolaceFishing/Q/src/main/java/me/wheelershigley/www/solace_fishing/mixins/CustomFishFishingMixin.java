@@ -5,22 +5,35 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import me.wheelershigley.www.solace_fishing.SolaceFishing;
 import me.wheelershigley.www.solace_fishing.data.AccessorizedFishingHook;
 import me.wheelershigley.www.solace_fishing.data.ClimateData;
+import me.wheelershigley.www.solace_fishing.data.FishingContext;
 import me.wheelershigley.www.solace_fishing.data.RodAccessories;
 import me.wheelershigley.www.solace_fishing.implementations.Catchables;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
+import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.getFirstFishingRod;
+
 @Mixin(FishingHook.class)
-public abstract class CustomFishFishingMixin {
+public abstract class CustomFishFishingMixin extends Projectile {
+    public CustomFishFishingMixin(EntityType<? extends Projectile> type, Level level) {
+        super(type, level);
+    }
+
     @Shadow @Final
     private int luck = 0;
 
@@ -51,21 +64,42 @@ public abstract class CustomFishFishingMixin {
         }
         assert level instanceof ServerLevel;
 
-        ClimateData climate = ClimateData.sample(
-            (ServerLevel)level,
-            caster.getOnPos()
-        );
-        RodAccessories accessories = ( (AccessorizedFishingHook)this ).solace_fishing$getAccessories();
+        FishingContext context; {
+            BlockPos position = this.blockPosition().below();
+            Block medium = level.getBlockState(position).getBlock();
 
+            ItemStack rodStack = getFirstFishingRod(caster);
+            Item rod = (rodStack == null ? Items.FISHING_ROD : rodStack.getItem() );
+
+            float luck = caster.getLuck() + (float)this.luck;
+
+            RodAccessories accessories = ( (AccessorizedFishingHook)this ).solace_fishing$getAccessories();
+
+            ClimateData climate = ClimateData.sample(
+                    (ServerLevel)level,
+                    caster.getOnPos()
+            );
+
+            context = new FishingContext(
+                medium, rod, luck, accessories, climate
+            );
+
+        }
+
+        //TODO: resolve
         caster.sendSystemMessage(
             Component.literal(
-                "TODO: integrate accessories; hook-association(s): " + accessories.toString()
+                "TODO: integrate whole context."
+            )
+        );
+        caster.sendSystemMessage(
+            Component.literal(
+                "This context: " + context.toString()
             )
         );
 
         ItemStack caught = Catchables.roll(
-            climate,
-            ( (float)this.luck ) + caster.getLuck(),
+            context,
             this.openWater,
             level.getRandom(),
             level.registryAccess()

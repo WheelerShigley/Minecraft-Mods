@@ -1,7 +1,6 @@
 package me.wheelershigley.www.solace_fishing.menus;
 
-import me.wheelershigley.www.solace_fishing.data.ClimateData;
-import me.wheelershigley.www.solace_fishing.data.ClimateStatisticItem;
+import me.wheelershigley.www.solace_fishing.data.*;
 import me.wheelershigley.www.solace_fishing.helpers.ItemsHelper;
 import me.wheelershigley.www.solace_fishing.helpers.MenusHelper;
 import net.minecraft.core.BlockPos;
@@ -16,13 +15,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static me.wheelershigley.www.solace_fishing.helpers.MenusHelper.getMinimumChestMenu;
-import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isOpenWater;
+import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.*;
 import static me.wheelershigley.www.solace_fishing.implementations.Catchables.*;
 
 public class ProbabilitiesMenu extends ImmutableSimpleGui {
@@ -32,7 +32,27 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
         ServerLevel level, BlockPos position,
         ServerPlayer player, @Nullable ImmutableSimpleGui parent
     ) {
-        LinkedHashMap<ItemStack, Double> probabilitiesCache = calculateProbabilities(level, position);
+        FishingContext context; {
+            Block medium = level.getBlockState(position).getBlock();
+
+            ItemStack rod = getFirstFishingRod(player);
+            if(rod == null) {
+                //generic rod
+                rod = new ItemStack(Items.FISHING_ROD);
+            }
+
+            float luck = player.getLuck() + (float)getLuckOfRod(level, rod);
+
+            RodAccessories accessories = RodAccessoryLoreRenderedComponent.get(rod);
+
+            ClimateData environment = ClimateData.sample(level, position);
+
+            context = new FishingContext(
+                medium, rod.getItem(), luck, accessories, environment
+            );
+        }
+
+        LinkedHashMap<ItemStack, Double> probabilitiesCache = calculateProbabilities(level, position, context);
         MenuType<?> menuType = getMinimumChestMenu( probabilitiesCache.size() );
         this.probabilities = probabilitiesCache;
 
@@ -84,14 +104,13 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
         }
     }
 
-
-    private static LinkedHashMap<ItemStack, Double> calculateProbabilities(ServerLevel level, BlockPos position) {
+    //integrate luck, rods, and accessories
+    private static LinkedHashMap<ItemStack, Double> calculateProbabilities(ServerLevel level, BlockPos position, FishingContext context) {
         boolean withTreasure = isOpenWater(level, position);
 
-        ClimateData locationData = ClimateData.sample(level, position);
-        Set<ClimateStatisticItem> validItems = getValidCatchesAt(locationData, withTreasure, true);
+        Set<ClimateStatisticItem> validItems = getWeightedValidCatches(context, withTreasure, true);
         Map<ClimateStatisticItem, Double> weights = normalizeWeights(
-            getWeightsForItems(validItems, locationData)
+            getWeightsForItems( validItems, context.environment() )
         );
 
         Map<ClimateStatisticItem, Double> sortedWeights = weights.entrySet()

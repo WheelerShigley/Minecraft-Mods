@@ -6,6 +6,10 @@ import me.wheelershigley.www.solace_fishing.implementations.Line;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.Map;
+
+import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingRod;
+
 public class RodAccessories {
     ItemStack hook, line, bobber;
 
