@@ -44,7 +44,9 @@ public class FishItems extends PolymerItemsRegister {
     ) {
         return properties -> new DistributableItem(
             properties,
-            new DistributionData(mean, standardDeviation)
+            new DistributionData(mean, standardDeviation),
+            0.0,
+            100.0
         );
     }
 

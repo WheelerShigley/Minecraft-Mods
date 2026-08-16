@@ -1,19 +1,22 @@
-package me.wheelershigley.www.solace_fishing.data;
+package me.wheelershigley.www.solace_fishing.data.lore;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
 
 public abstract class LoreRenderedComponent<C> {
-    public final C customData;
+    public final C data;
 
     public LoreRenderedComponent(C customComponent) {
-        this.customData = customComponent;
+        this.data = customComponent;
+    }
+
+    public C getData() {
+        return data;
     }
 
     abstract ItemLore toLore();
     abstract CustomData toCustomData();
 
-    //abstract static C get(ItemStack itemStack);
-    abstract void set(ItemStack itemStack);
+    public abstract void set(ItemStack itemStack);
 }

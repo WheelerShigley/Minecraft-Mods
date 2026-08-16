@@ -1,6 +1,7 @@
 package me.wheelershigley.www.solace_fishing.menus;
 
 import me.wheelershigley.www.solace_fishing.data.*;
+import me.wheelershigley.www.solace_fishing.data.lore.LoreRenderedRodAccessoryComponent;
 import me.wheelershigley.www.solace_fishing.helpers.ItemsHelper;
 import me.wheelershigley.www.solace_fishing.helpers.MenusHelper;
 import net.minecraft.core.BlockPos;
@@ -43,7 +44,7 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
 
             float luck = player.getLuck() + (float)getLuckOfRod(level, rod);
 
-            RodAccessories accessories = RodAccessoryLoreRenderedComponent.get(rod);
+            RodAccessories accessories = LoreRenderedRodAccessoryComponent.get(rod);
 
             ClimateData environment = ClimateData.sample(level, position);
 

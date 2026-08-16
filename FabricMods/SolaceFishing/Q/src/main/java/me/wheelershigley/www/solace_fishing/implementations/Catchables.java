@@ -1,6 +1,7 @@
 package me.wheelershigley.www.solace_fishing.implementations;
 
 import me.wheelershigley.www.solace_fishing.data.*;
+import me.wheelershigley.www.solace_fishing.data.lore.LoreRenderedLengthComponent;
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
 import me.wheelershigley.www.solace_fishing.registrations.FishingItems;
 import net.minecraft.core.RegistryAccess;
@@ -318,10 +319,10 @@ public class Catchables {
             return result;
         }
 
-        System.out.println(
-            // TODO
+        LoreRenderedLengthComponent lengthComponent = new LoreRenderedLengthComponent(
             lengthData.roll(random)
         );
+        lengthComponent.set(result);
 
         return result;
     }

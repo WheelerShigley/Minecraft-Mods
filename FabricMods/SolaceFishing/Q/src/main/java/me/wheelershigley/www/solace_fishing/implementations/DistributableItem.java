@@ -8,16 +8,23 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class DistributableItem extends Item implements PolymerItem {
     private final DistributionData distributionData;
+    private final Double minimum, maximum;
 
     public DistributableItem(
         Properties properties,
-        @NotNull DistributionData distributionData
+        @NotNull  DistributionData distributionData,
+        @Nullable Double minimum,
+        @Nullable Double maximum
     ) {
         super(properties);
+
         this.distributionData = distributionData;
+        this.minimum = minimum;
+        this.maximum = maximum;
     }
 
     public DistributionData getDistributionData() {
@@ -25,7 +32,13 @@ public class DistributableItem extends Item implements PolymerItem {
     }
 
     public double getDistributionResult(RandomSource random) {
-        return distributionData.roll(random);
+        double result = distributionData.roll(random);
+
+        if(minimum != null && maximum != null) {
+            result = Math.clamp(result, minimum, maximum);
+        }
+
+        return result;
     }
 
     @Override

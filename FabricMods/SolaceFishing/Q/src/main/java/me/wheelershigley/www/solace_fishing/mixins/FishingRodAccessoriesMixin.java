@@ -1,25 +1,17 @@
 package me.wheelershigley.www.solace_fishing.mixins;
 
 import me.wheelershigley.www.solace_fishing.data.RodAccessories;
-import me.wheelershigley.www.solace_fishing.data.RodAccessoryLoreRenderedComponent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextColor;
+import me.wheelershigley.www.solace_fishing.data.lore.LoreRenderedRodAccessoryComponent;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.function.Consumer;
 
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingAccessory;
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingRod;
@@ -62,8 +54,8 @@ public class FishingRodAccessoriesMixin {
             potentialAccessory = self;
         }
 
-        RodAccessories accessories = RodAccessoryLoreRenderedComponent.get(rod);
-        RodAccessoryLoreRenderedComponent componentRenderer = new RodAccessoryLoreRenderedComponent(accessories);
+        RodAccessories accessories = LoreRenderedRodAccessoryComponent.get(rod);
+        LoreRenderedRodAccessoryComponent componentRenderer = new LoreRenderedRodAccessoryComponent(accessories);
         if(accessories == null) {
             return;
         }
@@ -137,8 +129,8 @@ public class FishingRodAccessoriesMixin {
             return;
         }
 
-        RodAccessories accessories = RodAccessoryLoreRenderedComponent.get(self);
-        RodAccessoryLoreRenderedComponent componentRenderer = new RodAccessoryLoreRenderedComponent(accessories);
+        RodAccessories accessories = LoreRenderedRodAccessoryComponent.get(self);
+        LoreRenderedRodAccessoryComponent componentRenderer = new LoreRenderedRodAccessoryComponent(accessories);
         if (accessories == null) {
             return;
         }

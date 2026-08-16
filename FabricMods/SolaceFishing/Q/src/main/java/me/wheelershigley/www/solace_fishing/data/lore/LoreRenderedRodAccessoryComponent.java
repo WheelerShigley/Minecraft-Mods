@@ -1,5 +1,6 @@
-package me.wheelershigley.www.solace_fishing.data;
+package me.wheelershigley.www.solace_fishing.data.lore;
 
+import me.wheelershigley.www.solace_fishing.data.RodAccessories;
 import me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -24,7 +25,7 @@ import java.util.*;
 
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingRod;
 
-public class RodAccessoryLoreRenderedComponent extends LoreRenderedComponent<RodAccessories> {
+public class LoreRenderedRodAccessoryComponent extends LoreRenderedComponent<RodAccessories> {
     private static final String
         CUSTOM_DATA_TAG = "accessories",
         HOOK_TAG = "hook",
@@ -32,7 +33,7 @@ public class RodAccessoryLoreRenderedComponent extends LoreRenderedComponent<Rod
         BOBBER_TAG = "bobber"
     ;
 
-    public RodAccessoryLoreRenderedComponent(RodAccessories customComponent) {
+    public LoreRenderedRodAccessoryComponent(RodAccessories customComponent) {
         super(customComponent);
     }
 
@@ -172,26 +173,26 @@ public class RodAccessoryLoreRenderedComponent extends LoreRenderedComponent<Rod
         CustomData data = CustomData.EMPTY;
         CompoundTag accessoriesTag = new CompoundTag();
 
-        if( !this.customData.getLine().isEmpty() ) {
+        if( !this.data.getLine().isEmpty() ) {
             accessoriesTag.put(
                 LINE_TAG,
-                toTag( this.customData.getLine() )
+                toTag( this.data.getLine() )
             );
         }
-        if( !this.customData.getBobber().isEmpty() ) {
+        if( !this.data.getBobber().isEmpty() ) {
             accessoriesTag.put(
                 BOBBER_TAG,
-                toTag( this.customData.getBobber() )
+                toTag( this.data.getBobber() )
             );
         }
-        if( !this.customData.getHook().isEmpty() ) {
+        if( !this.data.getHook().isEmpty() ) {
             accessoriesTag.put(
                 HOOK_TAG,
-                toTag( this.customData.getHook() )
+                toTag( this.data.getHook() )
             );
         }
 
-        if( !this.customData.isEmpty() ) {
+        if( !this.data.isEmpty() ) {
             data = data.update(
                 tag -> {
                     tag.put(CUSTOM_DATA_TAG, accessoriesTag);
@@ -213,9 +214,9 @@ public class RodAccessoryLoreRenderedComponent extends LoreRenderedComponent<Rod
     @Override
     public ItemLore toLore() {
         List<Component> potentialLores = new ArrayList<>();
-        potentialLores.add(  getItemStackAsTranslatableComponent( customData.getLine()   )  );
-        potentialLores.add(  getItemStackAsTranslatableComponent( customData.getBobber() )  );
-        potentialLores.add(  getItemStackAsTranslatableComponent( customData.getHook()   )  );
+        potentialLores.add(  getItemStackAsTranslatableComponent( data.getLine()   )  );
+        potentialLores.add(  getItemStackAsTranslatableComponent( data.getBobber() )  );
+        potentialLores.add(  getItemStackAsTranslatableComponent( data.getHook()   )  );
 
         // Only allow filled lines
         List<Component> lores = new ArrayList<>();
