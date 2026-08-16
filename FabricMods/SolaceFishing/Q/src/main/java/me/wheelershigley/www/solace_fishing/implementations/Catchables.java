@@ -1,9 +1,6 @@
 package me.wheelershigley.www.solace_fishing.implementations;
 
-import me.wheelershigley.www.solace_fishing.data.ClimateData;
-import me.wheelershigley.www.solace_fishing.data.ClimateStatisticItem;
-import me.wheelershigley.www.solace_fishing.data.FishingContext;
-import me.wheelershigley.www.solace_fishing.data.ResultCategory;
+import me.wheelershigley.www.solace_fishing.data.*;
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
 import me.wheelershigley.www.solace_fishing.registrations.FishingItems;
 import net.minecraft.core.RegistryAccess;
@@ -22,6 +19,7 @@ import java.util.*;
 
 import static me.wheelershigley.www.solace_fishing.helpers.ItemsHelper.*;
 import static me.wheelershigley.www.solace_fishing.helpers.ItemsHelper.conditionallyWithTranslatedLore;
+import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.getDistributedItem;
 
 public class Catchables {
     public static boolean isInitialized = false;
@@ -104,7 +102,7 @@ public class Catchables {
         Catchables.statisticalCatches.add(
             new ClimateStatisticItem(
                 new ItemStack(FishItems.ANGELFISH),
-                0.2,
+                1.0,
                 new ClimateData.Builder().of(ClimateData.DEFAULT_MEANS).withWeirdness(0.3).build(),
                 new ClimateData.Builder().of(ClimateData.DEFAULT_DEVIATIONS).withWeirdness(0.1).build()
             )
@@ -272,7 +270,6 @@ public class Catchables {
         return correctedWeights;
     }
 
-    //TODO: integrate luck
     public static ItemStack roll(
         FishingContext context,
         boolean withTreasure,
@@ -310,6 +307,21 @@ public class Catchables {
                 Optional.empty()
             );
         }
+
+
+        DistributableItem lengthedItem = getDistributedItem(result);
+        if(lengthedItem == null) {
+            return result;
+        }
+        DistributionData lengthData = lengthedItem.getDistributionData();
+        if(lengthData == null) {
+            return result;
+        }
+
+        System.out.println(
+            // TODO
+            lengthData.roll(random)
+        );
 
         return result;
     }

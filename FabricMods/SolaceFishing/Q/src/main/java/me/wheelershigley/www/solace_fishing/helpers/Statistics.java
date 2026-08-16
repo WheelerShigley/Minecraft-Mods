@@ -62,16 +62,4 @@ public class Statistics {
 
         return product_accumulator;
     }
-
-    public static double roll(double mean, double standard_deviation, Random random) {
-        double percentile = random.nextDouble(0.0, 1.0);
-
-        /* Cumulative-Density-Function of the Probability-Distribution-Function,
-           normal distribution, as the antiderivative between an infinite bound and
-           an arbitrary position can be found as 0.5*erf(p-mu/(s*root-2)+0.5
-         */
-        return 0.5 + 0.5 * Statistics.errorFunction(
-            (percentile - mean) / (Math.sqrt(2.0) * standard_deviation)
-        );
-    }
 }

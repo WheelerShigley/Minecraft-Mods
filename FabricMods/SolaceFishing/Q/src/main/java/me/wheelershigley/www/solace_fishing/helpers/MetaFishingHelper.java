@@ -1,16 +1,15 @@
 package me.wheelershigley.www.solace_fishing.helpers;
 
 import me.wheelershigley.www.solace_fishing.implementations.*;
+import me.wheelershigley.www.solace_fishing.registrations.FishItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackLinkedSet;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -21,7 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
+import java.util.HashMap;
 
 // Based on FishingHook.class
 public class MetaFishingHelper {
@@ -103,6 +102,28 @@ public class MetaFishingHelper {
             if(  isFishingRod( current.getItem() )  ) {
                 return current;
             }
+        }
+
+        return null;
+    }
+
+    private static final HashMap<Item, DistributableItem> vanillaTranslations; static {
+        vanillaTranslations = new HashMap<>();
+
+        vanillaTranslations.put(Items.COD, FishItems.VANILLA_COD);
+        vanillaTranslations.put(Items.SALMON, FishItems.VANILLA_SALMON);
+        vanillaTranslations.put(Items.PUFFERFISH, FishItems.VANILLA_PUFFERFISH);
+        vanillaTranslations.put(Items.TROPICAL_FISH, FishItems.VANILLA_TROPICAL_FISH);
+    }
+    public static @Nullable DistributableItem getDistributedItem(ItemStack stack) {
+        Item item = stack.getItem();
+
+        if( vanillaTranslations.containsKey(item) ) {
+            return vanillaTranslations.get(item);
+        }
+
+        if( item instanceof DistributableItem) {
+            return (DistributableItem)item;
         }
 
         return null;
