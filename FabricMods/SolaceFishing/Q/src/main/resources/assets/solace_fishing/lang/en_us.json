@@ -58,5 +58,5 @@
 
   "item.solace_fishing.angelfish": "Angelfish",
 
-  "solace_fishing.lore.length": "Length: %.2fm"
+  "solace_fishing.lore.length": "Length: %.2f%sm"
 }

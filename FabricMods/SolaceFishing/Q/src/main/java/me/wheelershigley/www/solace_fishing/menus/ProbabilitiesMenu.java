@@ -1,8 +1,10 @@
 package me.wheelershigley.www.solace_fishing.menus;
 
+import com.mojang.datafixers.util.Pair;
 import me.wheelershigley.www.solace_fishing.data.*;
 import me.wheelershigley.www.solace_fishing.data.lore.LoreRenderedRodAccessoryComponent;
 import me.wheelershigley.www.solace_fishing.helpers.ItemsHelper;
+import me.wheelershigley.www.solace_fishing.helpers.MathsHelper;
 import me.wheelershigley.www.solace_fishing.helpers.MenusHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -22,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static me.wheelershigley.www.solace_fishing.helpers.MathsHelper.percentageRound;
 import static me.wheelershigley.www.solace_fishing.helpers.MenusHelper.getMinimumChestMenu;
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.*;
 import static me.wheelershigley.www.solace_fishing.implementations.Catchables.*;
@@ -195,23 +198,25 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
     }
 
     private static String getHumanReadablePercentage(double chance) {
-        //transform to percentage
-        chance *= 100.0;
+        Pair<Double, Integer> notatedChance = MathsHelper.notate(100.0*chance);
 
-        int scientific_notation_order = 0;
-        while(chance < 1.0-Double.MIN_NORMAL) {
-            scientific_notation_order -= 1;
-            chance *= 10.0;
+        //force to be fixed-point
+        while( 0 < notatedChance.getSecond() ) {
+            notatedChance = new Pair<>(
+                10.0 * notatedChance.getFirst(),
+                notatedChance.getSecond() - 1
+            );
         }
 
-        chance = percentageRound(chance);
+        chance = percentageRound( notatedChance.getFirst() );
+        int order = notatedChance.getSecond();
         double remainder = percentageRound(chance % 1);
         chance = (int)chance;
 
         //when rounded up, re-adjust
-        if(scientific_notation_order < 0 && 10.0 <= chance) {
+        if(order < 0 && 10.0 <= chance) {
             chance /= 10.0;
-            scientific_notation_order += 1;
+            order += 1;
         }
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -226,14 +231,10 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
         }
 
         stringBuilder.append('%');
-        if(scientific_notation_order < 0) {
-            stringBuilder.append('e').append(scientific_notation_order);
+        if(order < 0) {
+            stringBuilder.append('e').append(order);
         }
 
         return stringBuilder.toString();
-    }
-
-    private static double percentageRound(double chance) {
-        return Math.round(100.0*chance)/100.0;
     }
 }

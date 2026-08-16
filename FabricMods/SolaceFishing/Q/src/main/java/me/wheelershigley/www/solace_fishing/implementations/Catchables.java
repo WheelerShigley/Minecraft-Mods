@@ -314,13 +314,8 @@ public class Catchables {
         if(lengthedItem == null) {
             return result;
         }
-        DistributionData lengthData = lengthedItem.getDistributionData();
-        if(lengthData == null) {
-            return result;
-        }
-
         LoreRenderedLengthComponent lengthComponent = new LoreRenderedLengthComponent(
-            lengthData.roll(random)
+            lengthedItem.getDistributionResult(random)
         );
         lengthComponent.set(result);
 

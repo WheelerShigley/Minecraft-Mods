@@ -1,8 +1,14 @@
 package me.wheelershigley.www.solace_fishing.data.lore;
 
+import com.mojang.datafixers.util.Pair;
+import me.wheelershigley.www.solace_fishing.data.NotatedNumber;
+import me.wheelershigley.www.solace_fishing.helpers.MathsHelper;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
@@ -21,12 +27,16 @@ public class LoreRenderedLengthComponent extends LoreRenderedComponent<Double> {
 
     @Override
     ItemLore toLore() {
+        NotatedNumber length = new NotatedNumber(this.data);
+        String prefix = length.setOrderAndGetPrefix();
+
         List<Component> lore = new ArrayList<>();
         lore.add(
             Component.translatable(
                 "solace_fishing.lore.length",
-                this.data
-            )
+                MathsHelper.percentageRound( length.getNumber() ),
+                prefix
+            ).withStyle( Style.EMPTY.withItalic(false).withColor(TextColor.GRAY) )
         );
         return new ItemLore(lore);
     }
