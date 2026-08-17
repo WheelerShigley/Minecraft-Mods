@@ -49,10 +49,10 @@ public class NotatedNumber {
         SI_UNITS.put( +9, "G" );
         SI_UNITS.put( +6, "M" );
         SI_UNITS.put( +3, "k" );
-        SI_UNITS.put( +2, "h" );
-        SI_UNITS.put( +1, "da");
+        //SI_UNITS.put( +2, "h" );
+        //SI_UNITS.put( +1, "da");
         SI_UNITS.put(  0, ""  );
-        SI_UNITS.put( -1, "d" );
+        //SI_UNITS.put( -1, "d" );
         SI_UNITS.put( -2, "c" );
         SI_UNITS.put( -3, "m" );
         SI_UNITS.put( -6, "μ" );
