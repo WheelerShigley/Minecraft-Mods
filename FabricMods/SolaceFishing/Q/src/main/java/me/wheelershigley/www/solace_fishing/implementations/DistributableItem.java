@@ -1,7 +1,8 @@
 package me.wheelershigley.www.solace_fishing.implementations;
 
+import com.mojang.datafixers.util.Pair;
 import eu.pb4.polymer.core.api.item.PolymerItem;
-import me.wheelershigley.www.solace_fishing.data.DistributionData;
+import me.wheelershigley.www.solace_fishing.data.NormalDistribution;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
@@ -11,12 +12,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DistributableItem extends Item implements PolymerItem {
-    private final DistributionData distributionData;
+    private final NormalDistribution distributionData;
     private final Double minimum, maximum;
 
     public DistributableItem(
         Properties properties,
-        @NotNull  DistributionData distributionData,
+        @NotNull NormalDistribution distributionData,
         @Nullable Double minimum,
         @Nullable Double maximum
     ) {
@@ -27,18 +28,18 @@ public class DistributableItem extends Item implements PolymerItem {
         this.maximum = maximum;
     }
 
-    public DistributionData getDistributionData() {
+    public NormalDistribution getDistributionData() {
         return distributionData;
     }
 
     public double getDistributionResult(RandomSource random) {
-        double result = distributionData.roll(random);
-
         if(minimum != null && maximum != null) {
-            result = Math.clamp(result, minimum, maximum);
+            return distributionData.boundedRoll(
+                random,
+                new Pair<>(minimum, maximum)
+            );
         }
-
-        return result;
+        return distributionData.roll(random);
     }
 
     @Override

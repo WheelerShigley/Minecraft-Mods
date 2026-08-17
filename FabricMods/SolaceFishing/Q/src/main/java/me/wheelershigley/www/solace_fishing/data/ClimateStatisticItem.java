@@ -1,6 +1,5 @@
 package me.wheelershigley.www.solace_fishing.data;
 
-import me.wheelershigley.www.solace_fishing.helpers.Statistics;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -68,34 +67,40 @@ public class ClimateStatisticItem {
     }
 
     public double getAverageWeightAt(ClimateData locationData) {
-        double temperature_weight = Statistics.normal(
+        double temperature_weight = new NormalDistribution(
             means.getTemperature(),
-            standard_deviations.getTemperature(),
+            standard_deviations.getTemperature()
+        ).evaluate(
             locationData.getTemperature()
         );
-        double humidity_weight = Statistics.normal(
+        double humidity_weight = new NormalDistribution(
             means.getHumidity(),
-            standard_deviations.getHumidity(),
+            standard_deviations.getHumidity()
+        ).evaluate(
             locationData.getHumidity()
         );
-        double continentalness_weight = Statistics.normal(
+        double continentalness_weight = new NormalDistribution(
             means.getContinentalness(),
-            standard_deviations.getContinentalness(),
+            standard_deviations.getContinentalness()
+        ).evaluate(
             locationData.getContinentalness()
         );
-        double depth_weight = Statistics.normal(
+        double depth_weight = new NormalDistribution(
             means.getDepth(),
-            standard_deviations.getDepth(),
+            standard_deviations.getDepth()
+        ).evaluate(
             locationData.getDepth()
         );
-        double erosion_weight = Statistics.normal(
+        double erosion_weight = new NormalDistribution(
             means.getErosion(),
-            standard_deviations.getErosion(),
+            standard_deviations.getErosion()
+        ).evaluate(
             locationData.getErosion()
         );
-        double weirdness_weight = Statistics.normal(
+        double weirdness_weight = new NormalDistribution(
             means.getWeirdness(),
-            standard_deviations.getWeirdness(),
+            standard_deviations.getWeirdness()
+        ).evaluate(
             locationData.getWeirdness()
         );
 

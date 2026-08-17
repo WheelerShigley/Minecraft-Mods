@@ -1,6 +1,6 @@
 package me.wheelershigley.www.solace_fishing.registrations;
 
-import me.wheelershigley.www.solace_fishing.data.DistributionData;
+import me.wheelershigley.www.solace_fishing.data.NormalDistribution;
 import me.wheelershigley.www.solace_fishing.implementations.DistributableItem;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -44,7 +44,7 @@ public class FishItems extends PolymerItemsRegister {
     ) {
         return properties -> new DistributableItem(
             properties,
-            new DistributionData(mean, standardDeviation),
+            new NormalDistribution(mean, standardDeviation),
             0.0,
             100.0
         );

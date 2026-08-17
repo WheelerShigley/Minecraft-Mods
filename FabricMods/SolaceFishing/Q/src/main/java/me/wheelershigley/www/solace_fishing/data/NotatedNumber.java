@@ -1,7 +1,5 @@
 package me.wheelershigley.www.solace_fishing.data;
 
-import com.mojang.datafixers.util.Pair;
-
 import java.util.Collections;
 import java.util.HashMap;
 
