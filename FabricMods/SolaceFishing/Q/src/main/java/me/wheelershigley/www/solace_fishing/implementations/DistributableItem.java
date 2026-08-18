@@ -34,7 +34,7 @@ public class DistributableItem extends Item implements PolymerItem {
 
     public double getDistributionResult(RandomSource random) {
         if(minimum != null && maximum != null) {
-            return distributionData.boundedRoll(
+            return distributionData.simpleBoundRoll(
                 random,
                 new Pair<>(minimum, maximum)
             );

@@ -35,7 +35,7 @@ public record NormalDistribution(double mean, double standard_deviation) {
     /* This CDF is of the triple-PDF composed of the normal PDF and its reflections across some bounds.
      * The sum-antiderivative of the PDF and its reflections give an error-function sum, as below
      */
-    public double boundedRoll(RandomSource random, Pair<Double, Double> bounds) {
+    public double inverseDoubleBoundedRoll(RandomSource random, Pair<Double, Double> bounds) {
         double minimum = bounds.getFirst();
         double maximum = bounds.getSecond();
         final double COMMON_DENOMINATOR = sqrt(2) * this.standard_deviation;
@@ -57,4 +57,24 @@ public record NormalDistribution(double mean, double standard_deviation) {
             )
         );
     }
+
+    // Bound-Normalized CDF for a Normal-Distribution
+    public double simpleBoundRoll(RandomSource random, final Pair<Double, Double> bounds) {
+        final double minimum = bounds.getFirst();
+        final double maximum = bounds.getSecond();
+        final double percentile = random.nextDouble();
+
+        final double COMMON_DENOMINATOR = sqrt(2) * this.standard_deviation;
+        final double lowerBoundIntegration = Erf.erf( (minimum - this.mean) / COMMON_DENOMINATOR );
+        final double upperBoundIntegration = Erf.erf( (maximum - this.mean) / COMMON_DENOMINATOR );
+
+        double test = Erf.erfInv(
+            upperBoundIntegration * percentile +
+            lowerBoundIntegration * (1.0 - percentile)
+        );
+        return this.mean + (
+                COMMON_DENOMINATOR * test
+        );
+    }
+
 }
