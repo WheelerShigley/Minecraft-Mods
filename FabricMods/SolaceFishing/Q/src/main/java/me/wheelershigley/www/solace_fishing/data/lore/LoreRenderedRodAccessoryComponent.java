@@ -3,6 +3,7 @@ package me.wheelershigley.www.solace_fishing.data.lore;
 import me.wheelershigley.www.solace_fishing.data.RodAccessories;
 import me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper;
 import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -19,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.*;
@@ -32,18 +34,20 @@ public class LoreRenderedRodAccessoryComponent extends LoreRenderedComponent<Rod
         LINE_TAG = "line",
         BOBBER_TAG = "bobber"
     ;
+    private final Level level;
 
-    public LoreRenderedRodAccessoryComponent(RodAccessories customComponent) {
+    public LoreRenderedRodAccessoryComponent(RodAccessories customComponent, Level level) {
         super(customComponent);
+        this.level = level;
     }
 
     //@Override
-    public static RodAccessories get(ItemStack itemStack) {
+    public static RodAccessories get(ItemStack itemStack, Level level) {
         if(  !isFishingRod( itemStack.getItem() )  ) {
             return null;
         }
 
-        Map<String, ItemStack> storedItems = getAccessories(itemStack);
+        Map<String, ItemStack> storedItems = getAccessories(itemStack, level.registryAccess() );
         ItemStack
             stored_hook   = storedItems.getOrDefault(HOOK_TAG,   ItemStack.EMPTY),
             stored_line   = storedItems.getOrDefault(LINE_TAG,   ItemStack.EMPTY),
@@ -54,7 +58,7 @@ public class LoreRenderedRodAccessoryComponent extends LoreRenderedComponent<Rod
     }
 
     @Unique
-    public static Map<String, ItemStack> getAccessories(ItemStack itemStack) {
+    public static Map<String, ItemStack> getAccessories(ItemStack itemStack, RegistryAccess registryAccess) {
         Map<String, ItemStack> accessories = new HashMap<>();
 
         CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
@@ -72,7 +76,10 @@ public class LoreRenderedRodAccessoryComponent extends LoreRenderedComponent<Rod
             Tag current = accessoriesTag.get(key);
 
             ItemStack.CODEC
-                .parse(NbtOps.INSTANCE, current)
+                .parse(
+                    registryAccess.createSerializationContext(NbtOps.INSTANCE),
+                    current
+                )
                 .result()
                 .ifPresent(
                     stack -> accessories.put(key, stack)
@@ -105,14 +112,15 @@ public class LoreRenderedRodAccessoryComponent extends LoreRenderedComponent<Rod
         );
 
         // Set ItemStack components
-        itemStack.remove(DataComponents.LORE);
-        itemStack.remove(DataComponents.CUSTOM_DATA);
-
         if( !lore.lines().isEmpty() ) {
             itemStack.set(DataComponents.LORE, lore);
+        } else {
+            itemStack.remove(DataComponents.LORE);
         }
         if( !data.isEmpty() ) {
             itemStack.set(DataComponents.CUSTOM_DATA, data);
+        } else {
+            itemStack.remove(DataComponents.CUSTOM_DATA);
         }
     }
 
@@ -170,53 +178,59 @@ public class LoreRenderedRodAccessoryComponent extends LoreRenderedComponent<Rod
 
     @Override
     public CustomData toCustomData() {
-        CustomData data = CustomData.EMPTY;
+        RegistryAccess access = this.level.registryAccess();
+        CustomData localData = CustomData.EMPTY;
         CompoundTag accessoriesTag = new CompoundTag();
 
         if( !this.data.getLine().isEmpty() ) {
             accessoriesTag.put(
                 LINE_TAG,
-                toTag( this.data.getLine() )
+                toTag(this.data.getLine(), access)
             );
         }
         if( !this.data.getBobber().isEmpty() ) {
             accessoriesTag.put(
                 BOBBER_TAG,
-                toTag( this.data.getBobber() )
+                toTag(this.data.getBobber(), access)
             );
         }
         if( !this.data.getHook().isEmpty() ) {
             accessoriesTag.put(
                 HOOK_TAG,
-                toTag( this.data.getHook() )
+                toTag(this.data.getHook(), access)
             );
         }
 
         if( !this.data.isEmpty() ) {
-            data = data.update(
+            localData = localData.update(
                 tag -> {
                     tag.put(CUSTOM_DATA_TAG, accessoriesTag);
                 }
             );
         }
-        return data;
+        return localData;
     }
 
     @Unique
-    private Tag toTag(ItemStack itemStack) {
+    private Tag toTag(ItemStack itemStack, RegistryAccess registryAccess) {
         return ItemStack.CODEC
-            .encodeStart(NbtOps.INSTANCE, itemStack)
+            .encodeStart(
+                registryAccess.createSerializationContext(NbtOps.INSTANCE),
+                itemStack
+            )
             .result()
-            .orElse(EndTag.INSTANCE)
+            .orElseThrow()
         ;
     }
 
     @Override
     public ItemLore toLore() {
+        RegistryAccess access = this.level.registryAccess();
+
         List<Component> potentialLores = new ArrayList<>();
-        potentialLores.add(  getItemStackAsTranslatableComponent( data.getLine()   )  );
-        potentialLores.add(  getItemStackAsTranslatableComponent( data.getBobber() )  );
-        potentialLores.add(  getItemStackAsTranslatableComponent( data.getHook()   )  );
+        potentialLores.add( getItemStackAsTranslatableComponent(data.getLine(),   access) );
+        potentialLores.add( getItemStackAsTranslatableComponent(data.getBobber(), access) );
+        potentialLores.add( getItemStackAsTranslatableComponent(data.getHook(),   access) );
 
         // Only allow filled lines
         List<Component> lores = new ArrayList<>();
@@ -231,7 +245,9 @@ public class LoreRenderedRodAccessoryComponent extends LoreRenderedComponent<Rod
     }
 
     @Unique
-    private static Component getItemStackAsTranslatableComponent(ItemStack itemStack) {
+    private static Component getItemStackAsTranslatableComponent(
+        ItemStack itemStack, RegistryAccess registryAccess
+    ) {
         Component result = Component.empty();
 
         if( itemStack.isEmpty() ) {
@@ -239,7 +255,10 @@ public class LoreRenderedRodAccessoryComponent extends LoreRenderedComponent<Rod
         }
 
         return ItemStack.CODEC
-            .encodeStart(NbtOps.INSTANCE, itemStack)
+            .encodeStart(
+                registryAccess.createSerializationContext(NbtOps.INSTANCE),
+                itemStack
+            )
             .result()
             .map(
                 _ -> Component

@@ -29,6 +29,9 @@ public class CustomFishingRod extends FishingRodItem implements PolymerItem {
         .component(DataComponents.CUSTOM_DATA, CustomData.EMPTY)
     ;
 
+    public CustomFishingRod() {
+        super(DEFAULT_PROPERTIES);
+    }
     public CustomFishingRod(Properties properties) {
         super(properties);
     }
@@ -84,7 +87,7 @@ public class CustomFishingRod extends FishingRodItem implements PolymerItem {
         ItemStack itemStack = player.getItemInHand(hand);
 
         //TODO: Use Accessories
-        LoreRenderedRodAccessoryComponent.get(itemStack);
+        LoreRenderedRodAccessoryComponent.get(itemStack, level);
 
         level.playSound(
             null,

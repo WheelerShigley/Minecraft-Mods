@@ -3,16 +3,17 @@ package me.wheelershigley.www.solace_fishing.data;
 import me.wheelershigley.www.solace_fishing.implementations.Bobber;
 import me.wheelershigley.www.solace_fishing.implementations.Hook;
 import me.wheelershigley.www.solace_fishing.implementations.Line;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 
-import java.util.Map;
 import java.util.function.Consumer;
-
-import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingRod;
 
 public class RodAccessories {
     ItemStack hook, line, bobber;
@@ -103,6 +104,33 @@ public class RodAccessories {
         if( this.getLine().isDamageableItem() ) {
             this.line.hurtAndBreak(1, level, player, onBreak);
         }
+    }
+    public int mend(int experience, Level level) {
+        int repair_amount = 0;
+
+        ItemStack[] items = new ItemStack[]{this.hook, this.line, this.bobber};
+        for(ItemStack item : items) {
+            if( item.isDamageableItem() && hasMending(item, level) ) {
+                repair_amount = Math.min(experience, item.getDamageValue() );
+                item.setDamageValue( item.getDamageValue() - repair_amount );
+                experience -= repair_amount;
+                if(experience <= 0) {
+                    return 0;
+                }
+            }
+        }
+
+        return experience;
+    }
+    private static boolean hasMending(ItemStack itemStack, Level level) {
+        return 0 < EnchantmentHelper.getItemEnchantmentLevel(
+                level
+                    .registryAccess()
+                    .lookupOrThrow(Registries.ENCHANTMENT)
+                    .getOrThrow(Enchantments.MENDING)
+                ,
+                itemStack
+        );
     }
 
     public boolean setHook(ItemStack hook) {

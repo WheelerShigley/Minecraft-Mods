@@ -106,7 +106,7 @@ public abstract class CustomFishFishingMixin extends Projectile {
         if(rodStack != null) {
             RodAccessories accessories = context.accessories();
             accessories.damage( (ServerLevel)level, (ServerPlayer)caster);
-            LoreRenderedRodAccessoryComponent componentRenderer = new LoreRenderedRodAccessoryComponent(accessories);
+            LoreRenderedRodAccessoryComponent componentRenderer = new LoreRenderedRodAccessoryComponent(accessories, level);
             componentRenderer.set(rodStack);
         }
 

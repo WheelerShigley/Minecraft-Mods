@@ -6,14 +6,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-public class AccessoryItem extends Item implements PolymerItem {
-    public static final Item.Properties DEFAULT_PROPERTIES = new Item.Properties()
-        .stacksTo(1)
-    ;
+public abstract class AccessoryItem extends Item implements PolymerItem {
+    public abstract Item.Properties getDefaultProperties();
 
-    public AccessoryItem() {
-        super(DEFAULT_PROPERTIES);
-    }
     public AccessoryItem(Properties properties) {
         super(properties);
     }

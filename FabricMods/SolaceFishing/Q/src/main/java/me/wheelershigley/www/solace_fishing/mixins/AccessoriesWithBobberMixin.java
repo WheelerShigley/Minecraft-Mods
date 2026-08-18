@@ -33,6 +33,6 @@ public class AccessoriesWithBobberMixin implements AccessorizedFishingHook {
         CallbackInfo ci
     ) {
         ItemStack rod = player.getMainHandItem();
-        this.accessories = LoreRenderedRodAccessoryComponent.get(rod);
+        this.accessories = LoreRenderedRodAccessoryComponent.get(rod, level);
     }
 }

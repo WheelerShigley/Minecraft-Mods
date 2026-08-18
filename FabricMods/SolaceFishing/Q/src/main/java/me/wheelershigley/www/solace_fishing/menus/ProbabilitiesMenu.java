@@ -47,7 +47,7 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
 
             float luck = player.getLuck() + (float)getLuckOfRod(level, rod);
 
-            RodAccessories accessories = LoreRenderedRodAccessoryComponent.get(rod);
+            RodAccessories accessories = LoreRenderedRodAccessoryComponent.get(rod, level);
 
             ClimateData environment = ClimateData.sample(level, position);
 
