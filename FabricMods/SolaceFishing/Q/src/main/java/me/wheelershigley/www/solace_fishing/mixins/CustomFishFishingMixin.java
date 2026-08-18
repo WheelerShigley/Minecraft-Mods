@@ -65,7 +65,7 @@ public abstract class CustomFishFishingMixin extends Projectile {
         assert level instanceof ServerLevel;
 
         FishingContext context; {
-            BlockPos position = this.blockPosition().below();
+            BlockPos position = this.blockPosition();
             Block medium = level.getBlockState(position).getBlock();
 
             ItemStack rodStack = getFirstFishingRod(caster);
@@ -74,16 +74,11 @@ public abstract class CustomFishFishingMixin extends Projectile {
             float luck = caster.getLuck() + (float)this.luck;
 
             RodAccessories accessories = ( (AccessorizedFishingHook)this ).solace_fishing$getAccessories();
-
-            ClimateData climate = ClimateData.sample(
-                    (ServerLevel)level,
-                    caster.getOnPos()
-            );
+            ClimateData climate = ClimateData.sample( (ServerLevel)level, position);
 
             context = new FishingContext(
                 medium, rod, luck, accessories, climate
             );
-
         }
 
         //TODO: resolve
