@@ -3,10 +3,14 @@ package me.wheelershigley.www.solace_fishing.data;
 import me.wheelershigley.www.solace_fishing.implementations.Bobber;
 import me.wheelershigley.www.solace_fishing.implementations.Hook;
 import me.wheelershigley.www.solace_fishing.implementations.Line;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingRod;
 
@@ -81,6 +85,24 @@ public class RodAccessories {
         }
 
         return returnStack;
+    }
+
+    private final Consumer<Item> onBreak = new Consumer<Item>() {
+        @Override
+        public void accept(Item item) {
+            item = Items.AIR;
+        }
+    };
+    public void damage(ServerLevel level, ServerPlayer player) {
+        if( this.getHook().isDamageableItem() ) {
+            this.hook.hurtAndBreak(1, level, player, onBreak);
+        }
+        if( this.getBobber().isDamageableItem() ) {
+            this.bobber.hurtAndBreak(1, level, player, onBreak);
+        }
+        if( this.getLine().isDamageableItem() ) {
+            this.line.hurtAndBreak(1, level, player, onBreak);
+        }
     }
 
     public boolean setHook(ItemStack hook) {

@@ -7,10 +7,12 @@ import me.wheelershigley.www.solace_fishing.data.AccessorizedFishingHook;
 import me.wheelershigley.www.solace_fishing.data.ClimateData;
 import me.wheelershigley.www.solace_fishing.data.FishingContext;
 import me.wheelershigley.www.solace_fishing.data.RodAccessories;
+import me.wheelershigley.www.solace_fishing.data.lore.LoreRenderedRodAccessoryComponent;
 import me.wheelershigley.www.solace_fishing.implementations.Catchables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
@@ -57,6 +59,7 @@ public abstract class CustomFishFishingMixin extends Projectile {
         if(caster == null) {
             return original;
         }
+        ItemStack rodStack = getFirstFishingRod(caster);
 
         Level level = caster.level();
         if( !(level instanceof ServerLevel) ) {
@@ -68,7 +71,6 @@ public abstract class CustomFishFishingMixin extends Projectile {
             BlockPos position = this.blockPosition();
             Block medium = level.getBlockState(position).getBlock();
 
-            ItemStack rodStack = getFirstFishingRod(caster);
             Item rod = (rodStack == null ? Items.FISHING_ROD : rodStack.getItem() );
 
             float luck = caster.getLuck() + (float)this.luck;
@@ -99,6 +101,14 @@ public abstract class CustomFishFishingMixin extends Projectile {
             level.getRandom(),
             level.registryAccess()
         );
+
+        //damage accessories
+        if(rodStack != null) {
+            RodAccessories accessories = context.accessories();
+            accessories.damage( (ServerLevel)level, (ServerPlayer)caster);
+            LoreRenderedRodAccessoryComponent componentRenderer = new LoreRenderedRodAccessoryComponent(accessories);
+            componentRenderer.set(rodStack);
+        }
 
         return ObjectArrayList.of(caught);
     }
