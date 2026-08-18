@@ -68,12 +68,11 @@ public record NormalDistribution(double mean, double standard_deviation) {
         final double lowerBoundIntegration = Erf.erf( (minimum - this.mean) / COMMON_DENOMINATOR );
         final double upperBoundIntegration = Erf.erf( (maximum - this.mean) / COMMON_DENOMINATOR );
 
-        double test = Erf.erfInv(
-            upperBoundIntegration * percentile +
-            lowerBoundIntegration * (1.0 - percentile)
-        );
         return this.mean + (
-                COMMON_DENOMINATOR * test
+            COMMON_DENOMINATOR * Erf.erfInv(
+                upperBoundIntegration * percentile +
+                lowerBoundIntegration * (1.0 - percentile)
+            )
         );
     }
 

@@ -310,6 +310,10 @@ public class Catchables {
         }
 
 
+        if( context.accessories().getHook().isEmpty() ) {
+            return result;
+        }
+
         DistributableItem lengthedItem = getDistributedItem(result);
         if(lengthedItem == null) {
             return result;
