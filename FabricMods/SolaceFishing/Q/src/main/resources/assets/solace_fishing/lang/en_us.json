@@ -25,6 +25,7 @@
   "item.solace_fishing.green_line": "§aGreen§r Line",
   "item.solace_fishing.red_bobber": "§cRed§r Bobber",
   "item.solace_fishing.blue_bobber": "§9Blue§r Bobber",
+  "item.solace_fishing.bell_bobber": "§6Bell§r Bobber",
   "item.solace_fishing.rubber_duck_bobber": "§eRubber Duck§r Bobber",
 
   "solace_fishing.context_row.environment": "§7Environment",

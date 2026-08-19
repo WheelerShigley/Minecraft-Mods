@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "AccessoriesWithBobberMixin",
+    "BellBobberRingMixin",
     "BobbleValidityFixerMixin",
     "CustomFishFishingMixin",
     "FishingRodAccessoriesMixin",
