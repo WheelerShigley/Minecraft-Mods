@@ -300,9 +300,10 @@ public class Catchables {
         }
         if( result.has(DataComponents.ENCHANTMENT_GLINT_OVERRIDE) ) {
             result.remove(DataComponents.ENCHANTMENT_GLINT_OVERRIDE);
+
             result = EnchantmentHelper.enchantItem(
                 random,
-                result,
+                result.getItem() == Items.ENCHANTED_BOOK ? new ItemStack(Items.BOOK) : result,
                 30,
                 access,
                 Optional.empty()

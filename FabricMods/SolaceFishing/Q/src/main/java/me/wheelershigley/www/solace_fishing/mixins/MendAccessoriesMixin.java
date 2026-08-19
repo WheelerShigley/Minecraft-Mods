@@ -5,15 +5,11 @@ import me.wheelershigley.www.solace_fishing.data.lore.LoreRenderedRodAccessoryCo
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantedItemInUse;
-import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Optional;
 
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingRod;
 
@@ -21,37 +17,18 @@ import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isF
 public class MendAccessoriesMixin {
     @Inject(
         method = "repairPlayerItems",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/ExperienceOrb;repairPlayerItems(Lnet/minecraft/server/level/ServerPlayer;I)I"
-        ),
-        cancellable = true
-    )
-    private static void repairAccessoriesOfMendingRod(
-        ServerPlayer player, int amount, CallbackInfoReturnable<Integer> cir
-    ) {
-        amount = attemptRepair(player, amount);
-        cir.setReturnValue(amount);
-    }
-
-    @Inject(
-        method = "repairPlayerItems",
-        at = @At("TAIL"),
+        at = @At("RETURN"),
         cancellable = true
     )
     private static void repairAccessoriesOfNonMendingRod(
         ServerPlayer player, int amount,
         CallbackInfoReturnable<Integer> cir
     ) {
-        Optional<EnchantedItemInUse> selected = EnchantmentHelper.getRandomItemWith(EnchantmentEffectComponents.REPAIR_WITH_XP, player, ItemStack::isDamaged);
-        if( selected.isPresent() ) {
-            return;
-        }
-
         amount = attemptRepair(player, amount);
         cir.setReturnValue(amount);
     }
 
+    @Unique
     private static int attemptRepair(ServerPlayer player, int amount) {
         // repair accessory
         ItemStack rod = player.getMainHandItem();
