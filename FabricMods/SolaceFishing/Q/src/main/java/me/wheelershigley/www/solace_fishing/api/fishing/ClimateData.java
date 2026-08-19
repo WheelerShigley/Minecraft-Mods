@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_fishing.data;
+package me.wheelershigley.www.solace_fishing.api.fishing;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -14,9 +14,6 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public class ClimateData {
-    public static final ClimateData DEFAULT_MEANS      = new ClimateData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, null, null);
-    public static final ClimateData DEFAULT_DEVIATIONS = new ClimateData(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, null, null);
-
     private double
         temperature,
         humidity,

@@ -1,8 +1,12 @@
 package me.wheelershigley.www.solace_fishing.implementations;
 
-import me.wheelershigley.www.solace_fishing.data.*;
-import me.wheelershigley.www.solace_fishing.data.lore.LoreRenderedLengthComponent;
-import me.wheelershigley.www.solace_fishing.data.statistics.NormalDistribution;
+import me.wheelershigley.www.solace_fishing.api.*;
+import me.wheelershigley.www.solace_fishing.api.fishing.ClimateData;
+import me.wheelershigley.www.solace_fishing.api.fishing.ClimatePreference;
+import me.wheelershigley.www.solace_fishing.api.fishing.ClimatePreferencedItem;
+import me.wheelershigley.www.solace_fishing.api.fishing.FishingContext;
+import me.wheelershigley.www.solace_fishing.api.lore.LoreRenderedLengthComponent;
+import me.wheelershigley.www.solace_fishing.api.statistics.NormalDistribution;
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
@@ -14,12 +18,11 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.biome.Biomes;
-import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-import static me.wheelershigley.www.solace_fishing.data.ClimatePreference.DEFAULT_PREFERENCE;
+import static me.wheelershigley.www.solace_fishing.api.fishing.ClimatePreference.DEFAULT_PREFERENCE;
 import static me.wheelershigley.www.solace_fishing.helpers.ItemsHelper.*;
 import static me.wheelershigley.www.solace_fishing.helpers.ItemsHelper.conditionallyWithTranslatedLore;
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.getDistributedItem;

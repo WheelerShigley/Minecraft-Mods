@@ -1,8 +1,11 @@
 package me.wheelershigley.www.solace_fishing.menus;
 
 import com.mojang.datafixers.util.Pair;
-import me.wheelershigley.www.solace_fishing.data.*;
-import me.wheelershigley.www.solace_fishing.data.lore.LoreRenderedRodAccessoryComponent;
+import me.wheelershigley.www.solace_fishing.api.fishing.ClimateData;
+import me.wheelershigley.www.solace_fishing.api.fishing.ClimatePreferencedItem;
+import me.wheelershigley.www.solace_fishing.api.fishing.FishingContext;
+import me.wheelershigley.www.solace_fishing.api.fishing.RodAccessories;
+import me.wheelershigley.www.solace_fishing.api.lore.LoreRenderedRodAccessoryComponent;
 import me.wheelershigley.www.solace_fishing.helpers.ItemsHelper;
 import me.wheelershigley.www.solace_fishing.helpers.MathsHelper;
 import me.wheelershigley.www.solace_fishing.helpers.MenusHelper;
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 
 import static me.wheelershigley.www.solace_fishing.helpers.MathsHelper.percentageRound;
 import static me.wheelershigley.www.solace_fishing.helpers.MenusHelper.getMinimumChestMenu;
+import static me.wheelershigley.www.solace_fishing.helpers.MenusHelper.setContextRow;
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.*;
 import static me.wheelershigley.www.solace_fishing.implementations.Catchables.*;
 

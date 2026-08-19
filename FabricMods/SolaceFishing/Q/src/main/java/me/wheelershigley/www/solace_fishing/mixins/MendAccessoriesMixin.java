@@ -1,7 +1,7 @@
 package me.wheelershigley.www.solace_fishing.mixins;
 
-import me.wheelershigley.www.solace_fishing.data.RodAccessories;
-import me.wheelershigley.www.solace_fishing.data.lore.LoreRenderedRodAccessoryComponent;
+import me.wheelershigley.www.solace_fishing.api.fishing.RodAccessories;
+import me.wheelershigley.www.solace_fishing.api.lore.LoreRenderedRodAccessoryComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.item.ItemStack;

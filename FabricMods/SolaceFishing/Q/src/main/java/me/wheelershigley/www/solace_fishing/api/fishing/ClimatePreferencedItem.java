@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_fishing.data;
+package me.wheelershigley.www.solace_fishing.api.fishing;
 
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;

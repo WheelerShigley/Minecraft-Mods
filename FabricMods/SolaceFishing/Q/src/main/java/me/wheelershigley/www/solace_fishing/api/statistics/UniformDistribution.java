@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_fishing.data.statistics;
+package me.wheelershigley.www.solace_fishing.api.statistics;
 
 public class UniformDistribution extends Distribution {
     private final double value;

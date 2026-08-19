@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_fishing.data;
+package me.wheelershigley.www.solace_fishing.api;
 
 public enum ResultCategory {
     Catch,

@@ -1,7 +1,7 @@
 package me.wheelershigley.www.solace_fishing.mixins;
 
-import me.wheelershigley.www.solace_fishing.data.AccessorizedFishingHook;
-import me.wheelershigley.www.solace_fishing.data.RodAccessories;
+import me.wheelershigley.www.solace_fishing.api.fishing.AccessorizedFishingHook;
+import me.wheelershigley.www.solace_fishing.api.fishing.RodAccessories;
 import me.wheelershigley.www.solace_fishing.registrations.FishingItems;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;

@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_fishing.data;
+package me.wheelershigley.www.solace_fishing.api;
 
 import java.util.Collections;
 import java.util.HashMap;

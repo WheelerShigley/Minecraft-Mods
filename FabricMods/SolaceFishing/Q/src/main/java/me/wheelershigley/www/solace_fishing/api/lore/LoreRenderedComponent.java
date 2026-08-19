@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_fishing.data.lore;
+package me.wheelershigley.www.solace_fishing.api.lore;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;

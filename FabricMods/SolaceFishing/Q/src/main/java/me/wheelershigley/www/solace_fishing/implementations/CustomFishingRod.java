@@ -1,7 +1,7 @@
 package me.wheelershigley.www.solace_fishing.implementations;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
-import me.wheelershigley.www.solace_fishing.data.lore.LoreRenderedRodAccessoryComponent;
+import me.wheelershigley.www.solace_fishing.api.lore.LoreRenderedRodAccessoryComponent;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;

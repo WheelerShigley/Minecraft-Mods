@@ -2,7 +2,7 @@ package me.wheelershigley.www.solace_fishing.implementations;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
 import me.wheelershigley.www.solace_fishing.SolaceFishing;
-import me.wheelershigley.www.solace_fishing.data.ClimateData;
+import me.wheelershigley.www.solace_fishing.api.fishing.ClimateData;
 import me.wheelershigley.www.solace_fishing.menus.ProbabilitiesMenu;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;

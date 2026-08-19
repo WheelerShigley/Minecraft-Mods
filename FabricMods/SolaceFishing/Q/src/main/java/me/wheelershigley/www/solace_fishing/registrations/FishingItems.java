@@ -1,6 +1,5 @@
 package me.wheelershigley.www.solace_fishing.registrations;
 
-import me.wheelershigley.www.solace_fishing.Constants;
 import me.wheelershigley.www.solace_fishing.implementations.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;

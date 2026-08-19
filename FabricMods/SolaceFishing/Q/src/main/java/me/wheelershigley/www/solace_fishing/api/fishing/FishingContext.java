@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_fishing.data;
+package me.wheelershigley.www.solace_fishing.api.fishing;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;

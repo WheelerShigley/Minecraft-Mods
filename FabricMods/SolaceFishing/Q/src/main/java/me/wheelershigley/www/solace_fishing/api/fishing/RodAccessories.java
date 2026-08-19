@@ -1,6 +1,7 @@
-package me.wheelershigley.www.solace_fishing.data;
+package me.wheelershigley.www.solace_fishing.api.fishing;
 
 import me.wheelershigley.www.solace_fishing.Constants;
+import me.wheelershigley.www.solace_fishing.api.ResultCategory;
 import me.wheelershigley.www.solace_fishing.implementations.Bobber;
 import me.wheelershigley.www.solace_fishing.implementations.Hook;
 import me.wheelershigley.www.solace_fishing.implementations.Line;

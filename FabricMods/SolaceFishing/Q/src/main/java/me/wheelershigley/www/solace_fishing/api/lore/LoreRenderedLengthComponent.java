@@ -1,9 +1,7 @@
-package me.wheelershigley.www.solace_fishing.data.lore;
+package me.wheelershigley.www.solace_fishing.api.lore;
 
-import com.mojang.datafixers.util.Pair;
-import me.wheelershigley.www.solace_fishing.data.NotatedNumber;
+import me.wheelershigley.www.solace_fishing.api.NotatedNumber;
 import me.wheelershigley.www.solace_fishing.helpers.MathsHelper;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

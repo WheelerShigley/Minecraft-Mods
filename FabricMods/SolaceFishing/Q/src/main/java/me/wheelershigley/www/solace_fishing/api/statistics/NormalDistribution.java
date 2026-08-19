@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_fishing.data.statistics;
+package me.wheelershigley.www.solace_fishing.api.statistics;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.util.RandomSource;

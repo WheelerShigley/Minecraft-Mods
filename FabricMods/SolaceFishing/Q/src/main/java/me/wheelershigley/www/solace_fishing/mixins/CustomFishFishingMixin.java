@@ -2,12 +2,11 @@ package me.wheelershigley.www.solace_fishing.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import me.wheelershigley.www.solace_fishing.SolaceFishing;
-import me.wheelershigley.www.solace_fishing.data.AccessorizedFishingHook;
-import me.wheelershigley.www.solace_fishing.data.ClimateData;
-import me.wheelershigley.www.solace_fishing.data.FishingContext;
-import me.wheelershigley.www.solace_fishing.data.RodAccessories;
-import me.wheelershigley.www.solace_fishing.data.lore.LoreRenderedRodAccessoryComponent;
+import me.wheelershigley.www.solace_fishing.api.fishing.AccessorizedFishingHook;
+import me.wheelershigley.www.solace_fishing.api.fishing.ClimateData;
+import me.wheelershigley.www.solace_fishing.api.fishing.FishingContext;
+import me.wheelershigley.www.solace_fishing.api.fishing.RodAccessories;
+import me.wheelershigley.www.solace_fishing.api.lore.LoreRenderedRodAccessoryComponent;
 import me.wheelershigley.www.solace_fishing.implementations.Catchables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

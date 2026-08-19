@@ -1,13 +1,12 @@
-package me.wheelershigley.www.solace_fishing.data.lore;
+package me.wheelershigley.www.solace_fishing.api.lore;
 
-import me.wheelershigley.www.solace_fishing.data.RodAccessories;
+import me.wheelershigley.www.solace_fishing.api.fishing.RodAccessories;
 import me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.EndTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;

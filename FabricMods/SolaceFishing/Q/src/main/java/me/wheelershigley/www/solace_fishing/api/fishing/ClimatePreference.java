@@ -1,8 +1,8 @@
-package me.wheelershigley.www.solace_fishing.data;
+package me.wheelershigley.www.solace_fishing.api.fishing;
 
-import me.wheelershigley.www.solace_fishing.data.statistics.Distribution;
-import me.wheelershigley.www.solace_fishing.data.statistics.NormalDistribution;
-import me.wheelershigley.www.solace_fishing.data.statistics.UniformDistribution;
+import me.wheelershigley.www.solace_fishing.api.statistics.Distribution;
+import me.wheelershigley.www.solace_fishing.api.statistics.NormalDistribution;
+import me.wheelershigley.www.solace_fishing.api.statistics.UniformDistribution;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;

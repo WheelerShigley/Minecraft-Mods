@@ -1,6 +1,6 @@
 package me.wheelershigley.www.solace_fishing.registrations;
 
-import me.wheelershigley.www.solace_fishing.data.statistics.NormalDistribution;
+import me.wheelershigley.www.solace_fishing.api.statistics.NormalDistribution;
 import me.wheelershigley.www.solace_fishing.implementations.DistributableItem;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -40,11 +40,11 @@ public class FishItems extends PolymerItemsRegister {
 
     private static Function<Item.Properties, DistributableItem> getFishProperties(
         double mean,
-        double standardDeviation
+        double standard_deviation
     ) {
         return properties -> new DistributableItem(
             properties,
-            new NormalDistribution(mean, standardDeviation),
+            new NormalDistribution(mean, standard_deviation),
             0.0,
             100.0
         );
