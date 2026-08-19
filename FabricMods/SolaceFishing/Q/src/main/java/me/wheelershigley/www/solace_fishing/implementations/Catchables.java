@@ -140,13 +140,13 @@ public class Catchables {
             statisticalCatches, context, withLore, null
         );
         Set<ClimatePreferencedItem> validTrashes = getValidSubCatchesAt(
-            statisticalTrashes, context, withLore, "solace_fishing.trash"
+            statisticalTrashes, context, withLore, "solace_fishing.category.trash"
         );
         Set<ClimatePreferencedItem> validTreasures = getValidSubCatchesAt(
             withTreasure ? statisticalTreasures : Set.of(),
             context,
             withLore,
-            "solace_fishing.treasure"
+            "solace_fishing.category.treasure"
         );
 
         // Weights

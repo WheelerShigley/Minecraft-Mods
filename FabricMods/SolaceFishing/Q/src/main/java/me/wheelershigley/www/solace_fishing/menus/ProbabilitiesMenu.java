@@ -38,7 +38,7 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
     private final LinkedHashMap<ItemStack, Double> probabilities;
 
     public ProbabilitiesMenu(
-        ServerLevel level, BlockPos position,
+        ServerLevel level, BlockPos position, boolean forceTreasure,
         ServerPlayer player, @Nullable ImmutableSimpleGui parent
     ) {
         ItemStack rod = getFirstFishingRod(player);
@@ -63,7 +63,7 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
             );
         }
 
-        LinkedHashMap<ItemStack, Double> probabilitiesCache = calculateProbabilities(level, position, subContext);
+        LinkedHashMap<ItemStack, Double> probabilitiesCache = calculateProbabilities(level, position, subContext, forceTreasure);
         MenuType<?> menuType = getMinimumChestMenu( probabilitiesCache.size()+ROW_LENGTH );
         this.context = subContext;
         this.probabilities = probabilitiesCache;
@@ -120,8 +120,8 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
     }
 
     //integrate luck, rods, and accessories
-    private static LinkedHashMap<ItemStack, Double> calculateProbabilities(ServerLevel level, BlockPos position, FishingContext context) {
-        boolean withTreasure = isOpenWater(level, position);
+    private static LinkedHashMap<ItemStack, Double> calculateProbabilities(ServerLevel level, BlockPos position, FishingContext context, boolean forceTreasure) {
+        boolean withTreasure = forceTreasure || isOpenWater(level, position);
 
         Set<ClimatePreferencedItem> validItems = getWeightedValidCatches(context, withTreasure, true);
         Map<ClimatePreferencedItem, Double> weights = normalizeWeights(
