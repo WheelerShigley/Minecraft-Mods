@@ -164,7 +164,7 @@ public class Catchables {
             treasures_sum_weight += item.getAverageWeightAt( context.environment() );
         }
 
-        Map<ResultCategory, Double> intendedWeights = getCategoryWeightsForContext(context, withTreasure);
+        Map<ResultCategory, Double> intendedWeights = context.accessories().getCategoryWeightRatios(withTreasure);
         double weights_sum = fishes_sum_weight + trashes_sum_weight + treasures_sum_weight;
 
         enforceAreaRatio( intendedWeights.get(ResultCategory.Catch),    weights_sum, fishes_sum_weight,    validFishes    );
@@ -179,36 +179,6 @@ public class Catchables {
 
 
         return correctedCatches;
-    }
-
-    //TODO: integrate enchantment(s)
-    /* By Default, the sum-weight of treasures should comprise 5%
-    of the total weights; similarly, trashes will comprise 10% of the total weights.
-    */
-    private static Map<ResultCategory, Double> getCategoryWeightsForContext(
-        FishingContext context, boolean includeTreasure
-    ) {
-        double treasure_weight = (includeTreasure ? 0.05 : 0.00);
-        double catch_weight    = 0.9 - treasure_weight;
-        double trash_weight    = 0.1;
-
-        // Double Trash-changes when using a Rubber-Duck-Bobber
-        ItemStack bobber = context.accessories().getBobber();
-        if( !bobber.isEmpty() && bobber.getItem() == FishingItems.RUBBER_DUCK_BOBBER ) {
-            double sum_nontrash_weight = treasure_weight + catch_weight;
-
-            trash_weight    *= 2.0;
-            treasure_weight *= (1.0 - trash_weight) / sum_nontrash_weight;
-            catch_weight    *= (1.0 - trash_weight) / sum_nontrash_weight;
-        }
-
-
-        Map<ResultCategory, Double> intendedWeights = new HashMap<>();
-        intendedWeights.put(ResultCategory.Catch,    catch_weight   );
-        intendedWeights.put(ResultCategory.Trash,    trash_weight   );
-        intendedWeights.put(ResultCategory.Treasure, treasure_weight);
-
-        return intendedWeights;
     }
 
     private static Set<ClimateStatisticItem> getValidSubCatchesAt(

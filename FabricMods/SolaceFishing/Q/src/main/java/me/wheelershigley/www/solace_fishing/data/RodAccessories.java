@@ -16,7 +16,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class RodAccessories {
@@ -196,6 +197,87 @@ public class RodAccessories {
     private int getLuck(ItemStack itemStack) {
         CustomData customData = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
         return customData.copyTag().getInt(Constants.LUCK_TAG).orElse(0);
+    }
+
+    public Map<ResultCategory, Double> getCategoryWeightRatios(final boolean isInOpenWater) {
+        Map<ResultCategory, Double> weightRatios = getDefaultWeightRatios(isInOpenWater);
+
+        final Map<ResultCategory, Double> accessoryRations; {
+            final Map<ResultCategory, Double> hookRatios   = getWeightRatios( this.getHook()   );
+            final Map<ResultCategory, Double> bobberRatios = getWeightRatios( this.getBobber() );
+            final Map<ResultCategory, Double> lineRatios   = getWeightRatios( this.getLine()   );
+            accessoryRations = multiplyRatios(hookRatios, bobberRatios, lineRatios);
+        }
+
+        for(Map.Entry<ResultCategory, Double> entry : weightRatios.entrySet() ) {
+            if(  accessoryRations.containsKey( entry.getKey() )  ) {
+                weightRatios.put(
+                    entry.getKey(),
+                    entry.getValue() * accessoryRations.get( entry.getKey() )
+                );
+            }
+        }
+
+        //normalization
+        double sum_weight = weightRatios.values().stream().reduce(0.0, Double::sum);
+        weightRatios.values().forEach(
+            weight -> weight = weight/sum_weight
+        );
+
+        return weightRatios;
+    }
+    @SafeVarargs
+    private Map<ResultCategory, Double> multiplyRatios(final Map<ResultCategory, Double>... weightRatioses) {
+        Map<ResultCategory, Double> weightRatios = new HashMap<>();
+
+        for( Map<ResultCategory, Double> ratios : weightRatioses ) {
+            for(  Map.Entry<ResultCategory, Double> ratio : ratios.entrySet() ) {
+                if(  !weightRatios.containsKey( ratio.getKey() )  ) {
+                    weightRatios.put( ratio.getKey(), ratio.getValue() );
+                } else {
+                    weightRatios.put(
+                        ratio.getKey(),
+                        weightRatios.get( ratio.getKey() ) + ratio.getValue()
+                    );
+                }
+            }
+        }
+
+        return weightRatios;
+    }
+    private Map<ResultCategory, Double> getWeightRatios(final ItemStack itemStack) {
+        if( itemStack == null || itemStack.isEmpty() ) {
+            return new HashMap<>();
+        }
+
+        CustomData customData = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        double catch_weight    = customData.copyTag().getDoubleOr(Constants.CATCH_MULTIPLIER_TAG,    0.0);
+        double treasure_weight = customData.copyTag().getDoubleOr(Constants.TREASURE_MULTIPLIER_TAG, 0.0);
+        double trash_weight    = customData.copyTag().getDoubleOr(Constants.TRASH_MULTIPLIER_TAG,    0.0);
+
+        Map<ResultCategory, Double> weightRatios = new HashMap<>();
+        if(catch_weight != 0.0) {
+            weightRatios.put(ResultCategory.Catch, catch_weight);
+        }
+        if(treasure_weight != 0.0) {
+            weightRatios.put(ResultCategory.Treasure, treasure_weight);
+        }
+        if(trash_weight != 0.0) {
+            weightRatios.put(ResultCategory.Trash, trash_weight);
+        }
+        return weightRatios;
+    }
+    private Map<ResultCategory, Double> getDefaultWeightRatios(final boolean isInOpenWater) {
+        double treasure_weight = (isInOpenWater ? 0.05 : 0.00);
+        double catch_weight    = 0.9 - treasure_weight;
+        double trash_weight    = 0.1;
+
+        Map<ResultCategory, Double> defaultWeightRatios = new HashMap<>();
+        defaultWeightRatios.put(ResultCategory.Treasure, treasure_weight);
+        defaultWeightRatios.put(ResultCategory.Catch,    catch_weight   );
+        defaultWeightRatios.put(ResultCategory.Trash,    trash_weight   );
+
+        return defaultWeightRatios;
     }
 
     public void removeHook() {

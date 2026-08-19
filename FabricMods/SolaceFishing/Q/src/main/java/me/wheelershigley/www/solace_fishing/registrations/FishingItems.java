@@ -7,7 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.CustomData;
 
-import java.awt.*;
+import static me.wheelershigley.www.solace_fishing.Constants.*;
 
 public class FishingItems extends PolymerItemsRegister {
     public static Item PDA;
@@ -22,6 +22,14 @@ public class FishingItems extends PolymerItemsRegister {
     public static Item BELL_BOBBER;
     public static Item LUCKY_BOBBER;
     public static Item RUBBER_DUCK_BOBBER;
+
+    private final static CustomData rubberDuckCustomData; static {
+        CompoundTag customDataTag = new CompoundTag();
+        customDataTag.putDouble(TRASH_MULTIPLIER_TAG, 2.0);
+        customDataTag.putDouble(TREASURE_MULTIPLIER_TAG, 0.9);
+        customDataTag.putDouble(CATCH_MULTIPLIER_TAG, 0.9);
+        rubberDuckCustomData = CustomData.of(customDataTag);
+    }
 
     public static void initialize() {
         PDA = register(
@@ -70,24 +78,35 @@ public class FishingItems extends PolymerItemsRegister {
         );
         LUCKY_BOBBER = register(
             "lucky_bobber",
-            Bobber.DEFAULT_PROPERTIES
+            Bobber
+                .DEFAULT_PROPERTIES
                 .component(
                     DataComponents.CUSTOM_DATA,
-                    CustomData.of( getLuckTag(1) )
+                    CustomData.of(
+                        getIntegerTag(LUCK_TAG, 1)
+                    )
                 )
             ,
             Bobber::new
         );
         RUBBER_DUCK_BOBBER = register(
             "rubber_duck_bobber",
-            Bobber.DEFAULT_PROPERTIES,
+            Bobber
+                .DEFAULT_PROPERTIES
+                .component(DataComponents.CUSTOM_DATA, rubberDuckCustomData)
+            ,
             Bobber::new
         );
     }
 
-    private static CompoundTag getLuckTag(int luck) {
+    private static CompoundTag getIntegerTag(String key, int value) {
         CompoundTag luckTag = new CompoundTag();
-        luckTag.putInt(Constants.LUCK_TAG, luck);
+        luckTag.putInt(key, value);
+        return luckTag;
+    }
+    private static CompoundTag getDoubleTag(String key, double value) {
+        CompoundTag luckTag = new CompoundTag();
+        luckTag.putDouble(key, value);
         return luckTag;
     }
 }
