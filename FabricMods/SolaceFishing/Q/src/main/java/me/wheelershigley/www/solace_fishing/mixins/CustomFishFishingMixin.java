@@ -73,10 +73,10 @@ public abstract class CustomFishFishingMixin extends Projectile {
 
             Item rod = (rodStack == null ? Items.FISHING_ROD : rodStack.getItem() );
 
-            float luck = caster.getLuck() + (float)this.luck;
-
             RodAccessories accessories = ( (AccessorizedFishingHook)this ).solace_fishing$getAccessories();
             ClimateData climate = ClimateData.sample( (ServerLevel)level, position);
+
+            float luck = caster.getLuck() + (float)this.luck + accessories.getLuck();
 
             context = new FishingContext(
                 medium, rod, luck, accessories, climate

@@ -1,18 +1,22 @@
 package me.wheelershigley.www.solace_fishing.data;
 
+import me.wheelershigley.www.solace_fishing.Constants;
 import me.wheelershigley.www.solace_fishing.implementations.Bobber;
 import me.wheelershigley.www.solace_fishing.implementations.Hook;
 import me.wheelershigley.www.solace_fishing.implementations.Line;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class RodAccessories {
@@ -172,6 +176,26 @@ public class RodAccessories {
             return ItemStack.EMPTY;
         }
         return bobber;
+    }
+
+    public int getLuck() {
+        int accumulator = 0;
+
+        if( !this.getLine().isEmpty() ) {
+            accumulator += getLuck( this.getLine() );
+        }
+        if( !this.getBobber().isEmpty() ) {
+            accumulator += getLuck( this.getBobber() );
+        }
+        if( !this.getHook().isEmpty() ) {
+            accumulator += getLuck( this.getHook() );
+        }
+
+        return accumulator;
+    }
+    private int getLuck(ItemStack itemStack) {
+        CustomData customData = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        return customData.copyTag().getInt(Constants.LUCK_TAG).orElse(0);
     }
 
     public void removeHook() {

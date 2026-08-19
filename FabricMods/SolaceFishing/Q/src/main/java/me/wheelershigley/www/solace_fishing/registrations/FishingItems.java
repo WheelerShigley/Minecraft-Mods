@@ -1,7 +1,13 @@
 package me.wheelershigley.www.solace_fishing.registrations;
 
+import me.wheelershigley.www.solace_fishing.Constants;
 import me.wheelershigley.www.solace_fishing.implementations.*;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.CustomData;
+
+import java.awt.*;
 
 public class FishingItems extends PolymerItemsRegister {
     public static Item PDA;
@@ -64,7 +70,12 @@ public class FishingItems extends PolymerItemsRegister {
         );
         LUCKY_BOBBER = register(
             "lucky_bobber",
-            Bobber.DEFAULT_PROPERTIES,
+            Bobber.DEFAULT_PROPERTIES
+                .component(
+                    DataComponents.CUSTOM_DATA,
+                    CustomData.of( getLuckTag(1) )
+                )
+            ,
             Bobber::new
         );
         RUBBER_DUCK_BOBBER = register(
@@ -72,5 +83,11 @@ public class FishingItems extends PolymerItemsRegister {
             Bobber.DEFAULT_PROPERTIES,
             Bobber::new
         );
+    }
+
+    private static CompoundTag getLuckTag(int luck) {
+        CompoundTag luckTag = new CompoundTag();
+        luckTag.putInt(Constants.LUCK_TAG, luck);
+        return luckTag;
     }
 }

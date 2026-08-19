@@ -45,9 +45,12 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
         FishingContext subContext; {
             Block medium = level.getBlockState(position).getBlock();
 
-            float luck = player.getLuck() + (float)getLuckOfRod(level, rod);
-
             RodAccessories accessories = LoreRenderedRodAccessoryComponent.get(rod, level);
+
+            float luck = player.getLuck() + (float)getLuckOfRod(level, rod);
+            if(accessories != null) {
+                luck += accessories.getLuck();
+            }
 
             ClimateData environment = ClimateData.sample(level, position);
 
