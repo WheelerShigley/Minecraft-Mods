@@ -15,6 +15,7 @@ public class FishingItems extends PolymerItemsRegister {
     public static Item RED_BOBBER;
     public static Item BLUE_BOBBER;
     public static Item BELL_BOBBER;
+    public static Item LUCKY_BOBBER;
     public static Item RUBBER_DUCK_BOBBER;
 
     public static void initialize() {
@@ -64,6 +65,11 @@ public class FishingItems extends PolymerItemsRegister {
         );
         BELL_BOBBER = register(
             "bell_bobber",
+            Bobber.DEFAULT_PROPERTIES,
+            Bobber::new
+        );
+        LUCKY_BOBBER = register(
+            "lucky_bobber",
             Bobber.DEFAULT_PROPERTIES,
             Bobber::new
         );

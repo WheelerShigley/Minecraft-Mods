@@ -19,6 +19,7 @@ public class ItemGroup {
                     group.accept(FishingItems.RED_BOBBER);
                     group.accept(FishingItems.BLUE_BOBBER);
                     group.accept(FishingItems.BELL_BOBBER);
+                    group.accept(FishingItems.LUCKY_BOBBER);
                     group.accept(FishingItems.RUBBER_DUCK_BOBBER);
                 }
             )
