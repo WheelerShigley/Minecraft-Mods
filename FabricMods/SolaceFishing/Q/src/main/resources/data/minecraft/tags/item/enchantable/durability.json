@@ -2,10 +2,10 @@
   "replace": false,
   "values": [
     "solace_fishing:bamboo_rod",
+    "solace_fishing:basic_bobber",
+    "solace_fishing:bell_bobber",
+    "solace_fishing:lucky_bobber",
     "solace_fishing:rubber_duck_bobber",
-
-    "solace_fishing:red_bobber",
-    "solace_fishing:blue_bobber",
     "solace_fishing:yellow_line",
     "solace_fishing:green_line"
   ]

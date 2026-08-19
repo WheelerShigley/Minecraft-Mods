@@ -56,13 +56,13 @@ public abstract class ImmutableSimpleGui extends SimpleGui {
 
         // Menu Items
         ItemStack
-            enviornment = getMenuItem(Items.GRASS_BLOCK,        false, "solace_fishing.context_row.environment"),
-            medium      = getMenuItem(Items.WATER_BUCKET,       false, "solace_fishing.context_row.medium"     ),
-            climate     = getMenuItem(Items.TORCHFLOWER,        false, "solace_fishing.context_row.climate"    ),
-            rod         = getMenuItem(context.rod(),            false, "solace_fishing.context_row.fishing_rod"),
-            accessories = getMenuItem(FishingItems.RED_BOBBER,  false, "solace_fishing.context_row.accessories"),
-            upgrades    = getMenuItem(Items.NETHER_STAR,        false, "solace_fishing.context_row.upgrades"   ),
-            luck        = getMenuItem(Items.EXPERIENCE_BOTTLE,  true,  "solace_fishing.context_row.luck")
+            enviornment = getMenuItem(Items.GRASS_BLOCK,         false, "solace_fishing.context_row.environment"),
+            medium      = getMenuItem(Items.WATER_BUCKET,        false, "solace_fishing.context_row.medium"     ),
+            climate     = getMenuItem(Items.TORCHFLOWER,         false, "solace_fishing.context_row.climate"    ),
+            rod         = getMenuItem(context.rod(),             false, "solace_fishing.context_row.fishing_rod"),
+            accessories = getMenuItem(FishingItems.BASIC_BOBBER, false, "solace_fishing.context_row.accessories"),
+            upgrades    = getMenuItem(Items.NETHER_STAR,         false, "solace_fishing.context_row.upgrades"   ),
+            luck        = getMenuItem(Items.EXPERIENCE_BOTTLE,   true,  "solace_fishing.context_row.luck")
         ;
 
         // Lore
