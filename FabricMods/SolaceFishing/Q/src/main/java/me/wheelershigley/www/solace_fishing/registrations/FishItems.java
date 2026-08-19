@@ -1,6 +1,6 @@
 package me.wheelershigley.www.solace_fishing.registrations;
 
-import me.wheelershigley.www.solace_fishing.data.NormalDistribution;
+import me.wheelershigley.www.solace_fishing.data.statistics.NormalDistribution;
 import me.wheelershigley.www.solace_fishing.implementations.DistributableItem;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;

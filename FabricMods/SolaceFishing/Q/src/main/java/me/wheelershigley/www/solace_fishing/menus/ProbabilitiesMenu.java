@@ -102,14 +102,14 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
             }
 
             Item key = entry.getKey().getItem();
-            ClimateStatisticItem value = itemsCache.getOrDefault(key, null);
+            ClimatePreferencedItem value = itemsCache.getOrDefault(key, null);
 
             this.setSlot(
                 ROW_LENGTH + fish_index++,
                 getProbabilityMenuItem(
                     entry.getKey(),
                     entry.getValue(),
-                    value == null ? null : value.getAverageStandardDeviation()
+                    value == null ? null : value.getAveragePickiness()
                 )
             );
         }
@@ -119,15 +119,15 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
     private static LinkedHashMap<ItemStack, Double> calculateProbabilities(ServerLevel level, BlockPos position, FishingContext context) {
         boolean withTreasure = isOpenWater(level, position);
 
-        Set<ClimateStatisticItem> validItems = getWeightedValidCatches(context, withTreasure, true);
-        Map<ClimateStatisticItem, Double> weights = normalizeWeights(
+        Set<ClimatePreferencedItem> validItems = getWeightedValidCatches(context, withTreasure, true);
+        Map<ClimatePreferencedItem, Double> weights = normalizeWeights(
             getWeightsForItems( validItems, context.environment() )
         );
 
-        Map<ClimateStatisticItem, Double> sortedWeights = weights.entrySet()
+        Map<ClimatePreferencedItem, Double> sortedWeights = weights.entrySet()
             .stream()
             .sorted(
-                Map.Entry.<ClimateStatisticItem, Double>comparingByValue().reversed()
+                Map.Entry.<ClimatePreferencedItem, Double>comparingByValue().reversed()
             )
             .collect(
                 Collectors.toMap(
@@ -140,7 +140,7 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
         ;
 
         LinkedHashMap<ItemStack, Double> sortedProbabilities = new LinkedHashMap<>();
-        for( Map.Entry<ClimateStatisticItem, Double> entry : sortedWeights.entrySet() ) {
+        for( Map.Entry<ClimatePreferencedItem, Double> entry : sortedWeights.entrySet() ) {
             sortedProbabilities.put( entry.getKey().getItem(), entry.getValue() );
         }
         return sortedProbabilities;
@@ -149,24 +149,19 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
     private static ItemStack getProbabilityMenuItem(
         ItemStack sourceStack,
         double probability,
-        @Nullable Double standard_deviation
+        @Nullable Double pickiness
     ) {
         ItemStack itemStack = ItemsHelper.getMenuItem(sourceStack.getItem(), false, null);
 
-        /* Rarity, based on standard-deviation (s)
-           A s of 0.5 means it is likely always available (very common);
-           0.25 means it is somewhat common
-           0.125 means uncommon (and so forth)
-         */
         Rarity rarity = Rarity.COMMON;
-        if(standard_deviation != null) {
-            if(standard_deviation < 1.0/8.0) {
+        if(pickiness != null) {
+            if(1.0 <= pickiness) {
                 rarity = Rarity.UNCOMMON;
             }
-            if(standard_deviation < 1.0/32.0) {
+            if(2.0 <= pickiness) {
                 rarity = Rarity.RARE;
             }
-            if(standard_deviation < 1.0/64.0) {
+            if(4.0 <+ pickiness) {
                 rarity = Rarity.EPIC;
             }
         }

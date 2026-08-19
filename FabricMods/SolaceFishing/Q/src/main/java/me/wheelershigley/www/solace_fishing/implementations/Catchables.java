@@ -2,8 +2,8 @@ package me.wheelershigley.www.solace_fishing.implementations;
 
 import me.wheelershigley.www.solace_fishing.data.*;
 import me.wheelershigley.www.solace_fishing.data.lore.LoreRenderedLengthComponent;
+import me.wheelershigley.www.solace_fishing.data.statistics.NormalDistribution;
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
-import me.wheelershigley.www.solace_fishing.registrations.FishingItems;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.RandomSource;
@@ -14,21 +14,23 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.biome.Biomes;
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import static me.wheelershigley.www.solace_fishing.data.ClimatePreference.DEFAULT_PREFERENCE;
 import static me.wheelershigley.www.solace_fishing.helpers.ItemsHelper.*;
 import static me.wheelershigley.www.solace_fishing.helpers.ItemsHelper.conditionallyWithTranslatedLore;
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.getDistributedItem;
 
 public class Catchables {
     public static boolean isInitialized = false;
-    public static final HashMap<Item, ClimateStatisticItem> itemsCache = new HashMap<>();
+    public static final HashMap<Item, ClimatePreferencedItem> itemsCache = new HashMap<>();
 
     //TODO: replace population with dynamically-gotten loot-tables
-    public static final Set<ClimateStatisticItem> statisticalCatches = new HashSet<>();
-    public static final Set<ClimateStatisticItem> statisticalTrashes; static {
+    public static final Set<ClimatePreferencedItem> statisticalCatches = new HashSet<>();
+    public static final Set<ClimatePreferencedItem> statisticalTrashes; static {
         statisticalTrashes = new HashSet<>();
 
         ItemStack waterBottle = PotionContents.createItemStack(
@@ -52,17 +54,16 @@ public class Catchables {
 
         //in Jungles, Bamboo is added to the junk loot-table
         statisticalTrashes.add(
-            new ClimateStatisticItem(
+            new ClimatePreferencedItem(
                 new ItemStack(Items.BAMBOO),
-                0.1,
-                ClimateData.DEFAULT_MEANS.clone(),
-                ClimateData.DEFAULT_DEVIATIONS.clone(),
-                List.of(Biomes.JUNGLE, Biomes.SPARSE_JUNGLE, Biomes.BAMBOO_JUNGLE),
-                null
+                (new ClimatePreference.Builder()).withBiomes(
+                    List.of(Biomes.JUNGLE, Biomes.SPARSE_JUNGLE, Biomes.BAMBOO_JUNGLE)
+                ).build(),
+                0.1
             )
         );
     }
-    public static final Set<ClimateStatisticItem> statisticalTreasures; static {
+    public static final Set<ClimatePreferencedItem> statisticalTreasures; static {
         statisticalTreasures = new HashSet<>();
 
         statisticalTreasures.add(  getDefault( getItemWithGlint(Items.BOW),            1.0) );
@@ -82,7 +83,7 @@ public class Catchables {
         initializeFishes();
 
         // rarity deviations
-        for(ClimateStatisticItem item : statisticalCatches) {
+        for(ClimatePreferencedItem item : statisticalCatches) {
             itemsCache.put(
                 item.getItem().getItem(),
                 item
@@ -101,33 +102,28 @@ public class Catchables {
 
         //Custom fish(es)
         Catchables.statisticalCatches.add(
-            new ClimateStatisticItem(
+            new ClimatePreferencedItem(
                 new ItemStack(FishItems.ANGELFISH),
-                1.0,
-                new ClimateData.Builder().of(ClimateData.DEFAULT_MEANS).withWeirdness(0.3).build(),
-                new ClimateData.Builder().of(ClimateData.DEFAULT_DEVIATIONS).withWeirdness(0.1).build()
+                (new ClimatePreference.Builder()).withWeirdnessPreference(
+                    new NormalDistribution(0.3, 0.25)
+                ).build(),
+                1.0
             )
         );
     }
 
-    private static ClimateStatisticItem getDefault(Item item, @Nullable Double area) {
+    private static ClimatePreferencedItem getDefault(Item item, @Nullable Double area) {
         return getDefault(
             new ItemStack(item),
             area
         );
     }
-    private static ClimateStatisticItem getDefault(ItemStack item, @Nullable Double area) {
+    private static ClimatePreferencedItem getDefault(ItemStack item, @Nullable Double area) {
         double adjusted_area = (area == null ? 1.0 : area);
-
-        return new ClimateStatisticItem(
-            item,
-            adjusted_area,
-            ClimateData.DEFAULT_MEANS.clone(),
-            ClimateData.DEFAULT_DEVIATIONS.clone()
-        );
+        return new ClimatePreferencedItem(item, DEFAULT_PREFERENCE, adjusted_area);
     }
 
-    public static Set<ClimateStatisticItem> getWeightedValidCatches(
+    public static Set<ClimatePreferencedItem> getWeightedValidCatches(
         FishingContext context,
         boolean withTreasure,
         boolean withLore
@@ -137,13 +133,13 @@ public class Catchables {
         }
 
         // Validation-pass
-        Set<ClimateStatisticItem> validFishes = getValidSubCatchesAt(
+        Set<ClimatePreferencedItem> validFishes = getValidSubCatchesAt(
             statisticalCatches, context, withLore, null
         );
-        Set<ClimateStatisticItem> validTrashes = getValidSubCatchesAt(
+        Set<ClimatePreferencedItem> validTrashes = getValidSubCatchesAt(
             statisticalTrashes, context, withLore, "solace_fishing.trash"
         );
-        Set<ClimateStatisticItem> validTreasures = getValidSubCatchesAt(
+        Set<ClimatePreferencedItem> validTreasures = getValidSubCatchesAt(
             withTreasure ? statisticalTreasures : Set.of(),
             context,
             withLore,
@@ -152,15 +148,15 @@ public class Catchables {
 
         // Weights
         double fishes_sum_weight = 0.0;
-        for(ClimateStatisticItem item : validFishes) {
+        for(ClimatePreferencedItem item : validFishes) {
             fishes_sum_weight += item.getAverageWeightAt( context.environment() );
         }
         double trashes_sum_weight = 0.0;
-        for(ClimateStatisticItem item : validTrashes) {
+        for(ClimatePreferencedItem item : validTrashes) {
             trashes_sum_weight += item.getAverageWeightAt( context.environment() );
         }
         double treasures_sum_weight = 0.0;
-        for(ClimateStatisticItem item : validTreasures) {
+        for(ClimatePreferencedItem item : validTreasures) {
             treasures_sum_weight += item.getAverageWeightAt( context.environment() );
         }
 
@@ -172,7 +168,7 @@ public class Catchables {
         enforceAreaRatio( intendedWeights.get(ResultCategory.Treasure), weights_sum, treasures_sum_weight, validTreasures );
 
         // Category Joining
-        Set<ClimateStatisticItem> correctedCatches = new HashSet<>();
+        Set<ClimatePreferencedItem> correctedCatches = new HashSet<>();
         correctedCatches.addAll(validFishes);
         correctedCatches.addAll(validTrashes);
         correctedCatches.addAll(validTreasures);
@@ -181,15 +177,15 @@ public class Catchables {
         return correctedCatches;
     }
 
-    private static Set<ClimateStatisticItem> getValidSubCatchesAt(
-        Set<ClimateStatisticItem> potentialItems,
+    private static Set<ClimatePreferencedItem> getValidSubCatchesAt(
+        Set<ClimatePreferencedItem> potentialItems,
         FishingContext context,
         boolean withLore,
         @Nullable String translation_key
     ) {
-        Set<ClimateStatisticItem> validSubCatches = new HashSet<>();
-        for(ClimateStatisticItem item : potentialItems) {
-            ClimateStatisticItem copy = item.clone();
+        Set<ClimatePreferencedItem> validSubCatches = new HashSet<>();
+        for(ClimatePreferencedItem item : potentialItems) {
+            ClimatePreferencedItem copy = item.clone();
             if(  copy.isInBounds( context.environment() )  ) {
                 if(translation_key != null) {
                     copy.setItem(
@@ -204,20 +200,20 @@ public class Catchables {
 
     private static void enforceAreaRatio(
         double enforced_sum_total, double sum_total, double category_sum_total,
-        Set<ClimateStatisticItem> itemsInCategory
+        Set<ClimatePreferencedItem> itemsInCategory
     ) {
         double enforcement_ratio = (enforced_sum_total * sum_total)/category_sum_total;
-        for(ClimateStatisticItem item : itemsInCategory) {
+        for(ClimatePreferencedItem item : itemsInCategory) {
             item.setArea( enforcement_ratio * item.getArea() );
         }
     }
 
-    public static Map<ClimateStatisticItem, Double> getWeightsForItems(
-        Set<ClimateStatisticItem> items,
+    public static Map<ClimatePreferencedItem, Double> getWeightsForItems(
+        Set<ClimatePreferencedItem> items,
         ClimateData locationData
     ) {
-        Map<ClimateStatisticItem, Double> weights = new HashMap<>();
-        for(ClimateStatisticItem item : items) {
+        Map<ClimatePreferencedItem, Double> weights = new HashMap<>();
+        for(ClimatePreferencedItem item : items) {
             weights.put(
                 item,
                 item.getAverageWeightAt(locationData)
@@ -226,13 +222,13 @@ public class Catchables {
         return weights;
     }
 
-    public static Map<ClimateStatisticItem, Double> normalizeWeights(
-            Map<ClimateStatisticItem, Double> weights
+    public static Map<ClimatePreferencedItem, Double> normalizeWeights(
+            Map<ClimatePreferencedItem, Double> weights
     ) {
         double weight_sum = weights.values().stream().reduce(0.0, Double::sum);
 
-        Map<ClimateStatisticItem, Double> correctedWeights = new HashMap<>();
-        for(ClimateStatisticItem weight : weights.keySet() ) {
+        Map<ClimatePreferencedItem, Double> correctedWeights = new HashMap<>();
+        for(ClimatePreferencedItem weight : weights.keySet() ) {
             correctedWeights.put(
                 weight,
                 weights.get(weight)/weight_sum
@@ -248,13 +244,13 @@ public class Catchables {
     ) {
         ItemStack result = ItemStack.EMPTY;
 
-        Set<ClimateStatisticItem> validItems = getWeightedValidCatches(context, withTreasure, false);
-        Map<ClimateStatisticItem, Double> weights = getWeightsForItems(validItems, context.environment());
+        Set<ClimatePreferencedItem> validItems = getWeightedValidCatches(context, withTreasure, false);
+        Map<ClimatePreferencedItem, Double> weights = getWeightsForItems(validItems, context.environment());
 
         double weight_sum = weights.values().stream().reduce(0.0, Double::sum);
         double weightcentile = random.nextDouble() * weight_sum;
 
-        for(ClimateStatisticItem item : validItems) {
+        for(ClimatePreferencedItem item : validItems) {
             weightcentile -= weights.get(item);
             if(weightcentile <= 0.0) {
                 result = item.getItem();

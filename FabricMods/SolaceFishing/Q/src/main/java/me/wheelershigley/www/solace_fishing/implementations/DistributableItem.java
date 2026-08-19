@@ -2,7 +2,7 @@ package me.wheelershigley.www.solace_fishing.implementations;
 
 import com.mojang.datafixers.util.Pair;
 import eu.pb4.polymer.core.api.item.PolymerItem;
-import me.wheelershigley.www.solace_fishing.data.NormalDistribution;
+import me.wheelershigley.www.solace_fishing.data.statistics.NormalDistribution;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
