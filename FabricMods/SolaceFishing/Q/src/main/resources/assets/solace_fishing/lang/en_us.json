@@ -1,5 +1,11 @@
 {
   "item.solace_fishing.pda": "PDA",
+  "solace_fishing.pda.temperature": "temperature",
+  "solace_fishing.pda.humidity": "humidity",
+  "solace_fishing.pda.erosion": "erosion",
+  "solace_fishing.pda.continentalness": "continentalness",
+  "solace_fishing.pda.weirdness": "weirdness",
+  "solace_fishing.pda.height": "height",
 
   "solace_fishing.category.catch": "§eCatch",
   "solace_fishing.category.trash": "§8Trash",

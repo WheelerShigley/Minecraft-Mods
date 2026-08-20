@@ -22,6 +22,7 @@ import java.util.List;
 
 import static me.wheelershigley.www.solace_fishing.helpers.ItemsHelper.appendLore;
 import static me.wheelershigley.www.solace_fishing.helpers.ItemsHelper.getMenuItem;
+import static me.wheelershigley.www.solace_fishing.helpers.MathsHelper.percentageRound;
 
 public class MenusHelper {
     private static final int ROW_SIZE = 9;
@@ -119,37 +120,37 @@ public class MenusHelper {
         climateComponents.add(
             getTranslatedPercentageLore(
                 "solace_fishing.pda.temperature",
-                ClimateData.percentize( climate.getTemperature() )
+                percentageRound( 100.0*climate.getTemperature() )
             )
         );
         climateComponents.add(
             getTranslatedPercentageLore(
                 "solace_fishing.pda.humidity",
-                ClimateData.percentize( climate.getHumidity() )
+                percentageRound( 100.0*climate.getHumidity() )
             )
         );
         climateComponents.add(
             getTranslatedPercentageLore(
                 "solace_fishing.pda.erosion",
-                ClimateData.percentize( climate.getErosion() )
+                percentageRound( 100.0*climate.getErosion() )
             )
         );
         climateComponents.add(
             getTranslatedPercentageLore(
                 "solace_fishing.pda.continentalness",
-                ClimateData.percentize( climate.getContinentalness() )
+                percentageRound( 100.0*climate.getContinentalness() )
             )
         );
         climateComponents.add(
             getTranslatedPercentageLore(
                 "solace_fishing.pda.weirdness",
-                ClimateData.percentize( climate.getWeirdness() )
+                percentageRound( 100.0*climate.getWeirdness() )
             )
         );
         climateComponents.add(
             getTranslatedPercentageLore(
-                "solace_fishing.pda.depth",
-                ClimateData.percentize( climate.getDepth() )
+                "solace_fishing.pda.height",
+                percentageRound( 100.0*climate.getHeight() )
             )
         );
 

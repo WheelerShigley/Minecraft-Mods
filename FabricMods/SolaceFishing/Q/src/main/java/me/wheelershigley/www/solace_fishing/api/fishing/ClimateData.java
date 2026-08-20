@@ -13,13 +13,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import static me.wheelershigley.www.solace_fishing.helpers.MathsHelper.percentageRound;
+
 public class ClimateData {
     private double
         temperature,
         humidity,
         continentalness,
         erosion,
-        depth,
+        height,
         weirdness
     ;
     private Holder<Biome> biome = null;
@@ -28,7 +30,7 @@ public class ClimateData {
     public ClimateData(
         double temperature, double humidity,
         double continentalness, double erosion,
-        double depth, double weirdness,
+        double height, double weirdness,
         @Nullable Holder<Biome> biome,
         @Nullable ResourceKey<Level> dimension
     ) {
@@ -36,7 +38,7 @@ public class ClimateData {
         setHumidity(humidity);
         setContinentalness(continentalness);
         setErosion(erosion);
-        setDepth(depth);
+        setHeight(height);
         setWeirdness(weirdness);
         this.biome = biome;
         this.dimension = dimension;
@@ -56,55 +58,15 @@ public class ClimateData {
             sampler.humidity().compute(context),
             sampler.continentalness().compute(context),
             sampler.erosion().compute(context),
-            normalizeDepth( sampler.depth().compute(context) ),
+            normalizeHeight( sampler.depth().compute(context) ),
             sampler.weirdness().compute(context),
             level.getBiome(pos),
             level.dimension()
         );
     }
 
-    public boolean isInDoubleBounds(ClimateData means, ClimateData standard_deviations) {
-        double mean = means.getTemperature();
-        double deviation = 2.0*standard_deviations.getTemperature();
-        if(mean+deviation < this.temperature || this.temperature < mean-deviation) {
-            return false;
-        }
-
-        mean = means.getHumidity();
-        deviation = 2.0*standard_deviations.getHumidity();
-        if(mean+deviation < this.humidity || this.humidity < mean-deviation) {
-            return false;
-        }
-
-        mean = means.getContinentalness();
-        deviation = 2.0*standard_deviations.getContinentalness();
-        if(mean+deviation < this.continentalness || this.continentalness < mean-deviation) {
-            return false;
-        }
-
-        mean = means.getErosion();
-        deviation = 2.0*standard_deviations.getErosion();
-        if(mean+deviation < this.erosion || this.erosion < mean-deviation) {
-            return false;
-        }
-
-        mean = means.getDepth();
-        deviation = 2.0*standard_deviations.getDepth();
-        if(mean+deviation < this.depth || this.depth < mean-deviation) {
-            return false;
-        }
-
-        mean = means.getWeirdness();
-        deviation = 2.0*standard_deviations.getWeirdness();
-        if(mean+deviation < this.weirdness || this.weirdness < mean-deviation) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private static double normalizeDepth(double raw_depth) {
-        /* The range of depth, normally is -2 to 1
+    private static double normalizeHeight(double raw_depth) {
+        /* The range of height, normally is -2 to 1
            This can be transformed to match the other data-points by the form
            d_1 = (1/3) * (2*d_0+1)
          */
@@ -123,8 +85,8 @@ public class ClimateData {
     public double getErosion() {
         return erosion;
     }
-    public double getDepth() {
-        return depth;
+    public double getHeight() {
+        return height;
     }
     public double getWeirdness() {
         return weirdness;
@@ -149,8 +111,8 @@ public class ClimateData {
     public void setErosion(double erosion) {
         this.erosion = Math.clamp(erosion, -1.0, 1.0);
     }
-    public void setDepth(double depth) {
-        this.depth = Math.clamp(depth, -1.0, 1.0);
+    public void setHeight(double height) {
+        this.height = Math.clamp(height, -1.0, 1.0);
     }
     public void setWeirdness(double weirdness) {
         this.weirdness = Math.clamp(weirdness, -1.0, 1.0);
@@ -160,23 +122,19 @@ public class ClimateData {
     public @NonNull String toString() {
         return
             "ClimateData = {temperature: " +
-            percentize(temperature) +
+            percentageRound(temperature) +
             "%, humidity: " +
-            percentize(humidity) +
+            percentageRound(humidity) +
             "%, continentalness: " +
-            percentize(continentalness) +
+            percentageRound(continentalness) +
             "%, erosion: " +
-            percentize(erosion) +
-            "%, depth: " +
-            percentize(depth) +
+            percentageRound(erosion) +
+            "%, height: " +
+            percentageRound(height) +
             "%, weirdness: " +
-            percentize(weirdness) +
+            percentageRound(weirdness) +
             "%}"
         ;
-    }
-
-    public static double percentize(double value) {
-        return Math.round(10000.0*value)/100.0;
     }
 
     @Override
@@ -186,7 +144,7 @@ public class ClimateData {
             this.humidity,
             this.continentalness,
             this.erosion,
-            this.depth,
+            this.height,
             this.weirdness,
             this.biome,
             this.dimension
@@ -205,11 +163,11 @@ public class ClimateData {
         }
 
         public Builder withDepth(@NotNull Level level) {
-            data.setDepth( level.getSeaLevel() );
+            data.setHeight( level.getSeaLevel() );
             return this;
         }
         public Builder withDepth(double depth) {
-            data.setDepth(depth);
+            data.setHeight(depth);
             return this;
         }
 

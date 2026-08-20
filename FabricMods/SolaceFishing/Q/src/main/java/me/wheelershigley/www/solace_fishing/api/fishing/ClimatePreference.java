@@ -49,7 +49,7 @@ public class ClimatePreference {
             && humidityPreference.isInBounds(           locationData.getHumidity()          )
             && continentalnessPreference.isInBounds(    locationData.getContinentalness()   )
             && erosionPreference.isInBounds(            locationData.getErosion()           )
-            && depthPreference.isInBounds(              locationData.getDepth()             )
+            && depthPreference.isInBounds(              locationData.getHeight()             )
             && weirdnessPreference.isInBounds(          locationData.getWeirdness()         )
             && (
                 biomes.isEmpty()     || biomes.contains( locationData.getBiome() )
@@ -66,7 +66,7 @@ public class ClimatePreference {
         accumulator +=        humidityPreference.get( locationData.getHumidity()        );
         accumulator += continentalnessPreference.get( locationData.getContinentalness() );
         accumulator +=         erosionPreference.get( locationData.getErosion()         );
-        accumulator +=           depthPreference.get( locationData.getDepth()           );
+        accumulator +=           depthPreference.get( locationData.getHeight()           );
         accumulator +=       weirdnessPreference.get( locationData.getWeirdness()       );
 
         return accumulator/6.0;
