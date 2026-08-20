@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "window",
+  "version": "${version}",
+  "name": "Window",
+  "description": "Custom Portals and Dimension-Manager",
+  "authors": ["Wheeler-Shigley"],
+  "icon": "assets/window/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.www.window.Window"
+    ]
+  },
+  "mixins": [
+    "window.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
