@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -87,7 +88,12 @@ public class ItemsHelper {
         @Nullable String translationKey
     ) {
         Identifier textureIdentifier = BuiltInRegistries.ITEM.getKey(textureItem);
-        return getMenuItem(translationKey, textureIdentifier, components, enchantable);
+        return getMenuItem(
+            translationKey != null ? translationKey : textureItem.getDescriptionId(),
+            textureIdentifier,
+            components,
+            enchantable
+        );
     }
     public static ItemStack getMenuItem(
         @Nullable String translationKey,
@@ -106,6 +112,13 @@ public class ItemsHelper {
 
                 setComponent(itemStack, component);
             }
+        }
+
+        if(translationKey != null) {
+            itemStack.set(
+                DataComponents.CUSTOM_NAME,
+                Component.translatable(translationKey).withStyle( Style.EMPTY.withItalic(false) )
+            );
         }
 
         CompoundTag menuItemTag = new CompoundTag();
