@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import me.wheelershigley.www.window.CustomPortal;
 import me.wheelershigley.www.window.api.LevelArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -55,7 +56,7 @@ public class WindowCommands implements ModInitializer {
                     .then(
                         Commands.argument("level", new LevelArgumentType() )
                             .suggests(LevelArgumentType::listStaticSuggestions)
-                            .executes(WindowCommands::executeTeleport)
+                            .executes(WindowCommands::teleport)
                     )
             )
         ;
@@ -64,31 +65,16 @@ public class WindowCommands implements ModInitializer {
         return source.permissions().hasPermission(Permissions.COMMANDS_MODERATOR);
     }
 
-    private static int executeTeleport(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+    private static int teleport(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
-
         ResourceKey<Level> levelKey = context.getArgument("level", ResourceKey.class);
         ServerLevel serverLevel = context.getSource().getServer().getLevel(levelKey);
-        if(serverLevel == null){
+
+        TeleportTransition transition = CustomPortal.getTransition(player, serverLevel);
+        if(transition == null) {
             return -1;
         }
-
-        if( player.level().equals(serverLevel) ){
-            return 1;
-        }
-
-        //TODO: FIND A SAFE LOCATION TO TELEPORT TO
-        player.teleport(
-            new TeleportTransition(
-                serverLevel,
-                player.position(), //TODO: interdimensional-scale transform
-                player.getDeltaMovement(),
-                player.getYRot(),
-                player.getXRot(),
-                TeleportTransition.PLAY_PORTAL_SOUND
-            )
-        );
-
-        return 1;
+        player.teleport(transition);
+        return 0;
     }
 }
