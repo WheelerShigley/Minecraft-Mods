@@ -19,7 +19,7 @@ public class Window implements ModInitializer {
         PolymerResourcePackUtils.markAsRequired();
 
         LevelArgumentType.register();
-        WindowCommands.registerCommands();
+        WindowCommands.registerCommand();
         WindowBlocks.staticInitialize();
     }
 }

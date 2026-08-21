@@ -1,4 +1,4 @@
-package me.wheelershigley.www.window;
+package me.wheelershigley.www.window.portal;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

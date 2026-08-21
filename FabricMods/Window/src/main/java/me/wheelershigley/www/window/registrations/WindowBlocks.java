@@ -1,7 +1,7 @@
 package me.wheelershigley.www.window.registrations;
 
 import me.wheelershigley.www.window.BlockItemIds;
-import me.wheelershigley.www.window.CustomPortalBlock;
+import me.wheelershigley.www.window.portal.CustomPortalBlock;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

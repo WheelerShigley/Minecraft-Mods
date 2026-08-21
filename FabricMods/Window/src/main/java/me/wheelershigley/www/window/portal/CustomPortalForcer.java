@@ -1,4 +1,4 @@
-package me.wheelershigley.www.window;
+package me.wheelershigley.www.window.portal;
 
 import me.wheelershigley.www.window.api.CustomPoiTypes;
 import me.wheelershigley.www.window.registrations.WindowBlocks;

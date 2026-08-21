@@ -4,29 +4,35 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import me.wheelershigley.www.window.CustomPortal;
+import me.wheelershigley.www.window.WindowConfig;
+import me.wheelershigley.www.window.portal.CustomPortal;
 import me.wheelershigley.www.window.api.LevelArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.blocks.BlockInput;
+import net.minecraft.commands.arguments.blocks.BlockStateArgument;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.portal.TeleportTransition;
 
-public class WindowCommands implements ModInitializer {
-    @Override
-    public void onInitialize() {
-        registerCommands();
-    }
-
-    public static void registerCommands() {
+public class WindowCommands {
+    public static void registerCommand() {
         CommandRegistrationCallback.EVENT.register(
-            (dispatcher, registryAccess, environment) -> {
+            (dispatcher, context, selection) -> {
+                final LiteralCommandNode<CommandSourceStack> WINDOW_COMMAND = getWindowCommand(context);
+
                 // Window Command, with Aliases
                 dispatcher.getRoot().addChild(WINDOW_COMMAND);
                 dispatcher.register(
@@ -42,12 +48,16 @@ public class WindowCommands implements ModInitializer {
             }
         );
     }
-    private static final LiteralCommandNode<CommandSourceStack> WINDOW_COMMAND = Commands.literal("window")
-        .requires(WindowCommands::getWindowsCommandPermission)
-        .then( tpCommandlet("tp") )
-        .then( tpCommandlet("goto") )
-        .build()
-    ;
+    private static LiteralCommandNode<CommandSourceStack> getWindowCommand(CommandBuildContext context) {
+        return Commands.literal("window")
+            .requires(WindowCommands::getWindowsCommandPermission)
+            .then( tpCommandlet("tp") )
+            .then( tpCommandlet("goto") )
+            .then( linkCommandlet("link", context) )
+            .build()
+        ;
+    }
+
     private static ArgumentBuilder<CommandSourceStack, ?> tpCommandlet(String name) {
         return Commands.literal(name)
             .requires(WindowCommands::getWindowsCommandPermission)
@@ -64,7 +74,6 @@ public class WindowCommands implements ModInitializer {
     private static boolean getWindowsCommandPermission(CommandSourceStack source) {
         return source.permissions().hasPermission(Permissions.COMMANDS_MODERATOR);
     }
-
     private static int teleport(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
         ResourceKey<Level> levelKey = context.getArgument("level", ResourceKey.class);
@@ -75,6 +84,53 @@ public class WindowCommands implements ModInitializer {
             return -1;
         }
         player.teleport(transition);
+        return 0;
+    }
+
+    private static ArgumentBuilder<CommandSourceStack, ?> linkCommandlet(String name, CommandBuildContext context) {
+        return Commands.literal(name)
+            .requires(WindowCommands::getWindowsCommandPermission)
+            .then(
+                Commands.literal("list")
+                    .executes(WindowCommands::linksList)
+            )
+            .then(
+                Commands.argument("material", BlockStateArgument.block(context) )
+                    .then(
+                        Commands.argument("igniter", BlockStateArgument.block(context) )
+                            .then(
+                                Commands.argument("level", new LevelArgumentType() )
+                                    .suggests(LevelArgumentType::listStaticSuggestions)
+                                    .executes(WindowCommands::link)
+                            )
+                    )
+            )
+        ;
+    }
+    private static int link(CommandContext<CommandSourceStack> context) {
+        BlockInput inputMaterial = BlockStateArgument.getBlock(context, "material");
+        Block material = inputMaterial.getState().getBlock();
+        //TODO: igniter
+        ResourceKey<Level> levelKey = context.getArgument("level", ResourceKey.class);
+        ServerLevel serverLevel = context.getSource().getServer().getLevel(levelKey);
+
+        Identifier materialIdentifier = BuiltInRegistries.BLOCK.getKey(material);
+        Identifier levelIdentifier = levelKey.identifier();
+
+        WindowConfig.INSTANCE.blockToLevel.put(materialIdentifier, levelIdentifier);
+        return 0;
+    }
+    private static int linksList(CommandContext<CommandSourceStack> context) {
+        ServerPlayer requestor = context.getSource().getPlayer();
+        if(requestor == null) {
+            return -1;
+        }
+
+        requestor.sendSystemMessage(
+            Component.literal(
+                WindowConfig.INSTANCE.toString()
+            )
+        );
         return 0;
     }
 }
