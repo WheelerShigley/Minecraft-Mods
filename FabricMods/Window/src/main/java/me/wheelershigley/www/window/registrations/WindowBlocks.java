@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import java.util.function.Function;
 
-public class ModBlocks implements ModInitializer {
+public class WindowBlocks implements ModInitializer {
     public static void staticInitialize() {}
 
     @Override

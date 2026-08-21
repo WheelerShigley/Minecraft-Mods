@@ -32,6 +32,7 @@ import java.util.Map;
 
 import static me.wheelershigley.www.window.Window.getWindowIdentifier;
 
+//TODO Colorations
 public class CustomPortalBlock extends Block implements Portal, PolymerTexturedBlock {
     public static final EnumProperty<Direction.Axis> AXIS;
     private static final Map<Direction.Axis, VoxelShape> SHAPES;

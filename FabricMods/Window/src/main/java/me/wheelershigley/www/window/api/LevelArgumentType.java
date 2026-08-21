@@ -6,7 +6,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import me.wheelershigley.www.window.Window;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
@@ -35,7 +34,7 @@ public class LevelArgumentType implements ArgumentType< ResourceKey<Level> > {
     }
 
     public static <S> CompletableFuture<Suggestions> listStaticSuggestions(
-            final CommandContext<S> context, final SuggestionsBuilder builder
+        final CommandContext<S> context, final SuggestionsBuilder builder
     ) {
         if( !(context.getSource() instanceof CommandSourceStack source) ) {
             return Suggestions.empty();

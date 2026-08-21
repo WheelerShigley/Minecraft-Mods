@@ -1,8 +1,6 @@
 package me.wheelershigley.www.window;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.references.BlockItemId;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
 
@@ -13,9 +11,4 @@ public class BlockItemIds {
         Registries.BLOCK,
         getWindowIdentifier("custom_portal")
     );
-
-    private static BlockItemId create(String path) {
-        Identifier id = getWindowIdentifier(path);
-        return BlockItemId.create(id, id);
-    }
 }
