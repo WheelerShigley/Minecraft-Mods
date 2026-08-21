@@ -1,6 +1,9 @@
 package me.wheelershigley.www.window;
 
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
+import me.wheelershigley.www.window.api.LevelArgumentType;
+import me.wheelershigley.www.window.registrations.ModBlocks;
+import me.wheelershigley.www.window.registrations.WindowCommands;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.Identifier;
 
@@ -15,6 +18,8 @@ public class Window implements ModInitializer {
         PolymerResourcePackUtils.addModAssets(MOD_ID);
         PolymerResourcePackUtils.markAsRequired();
 
+        LevelArgumentType.register();
+        WindowCommands.registerCommands();
         ModBlocks.staticInitialize();
     }
 }
