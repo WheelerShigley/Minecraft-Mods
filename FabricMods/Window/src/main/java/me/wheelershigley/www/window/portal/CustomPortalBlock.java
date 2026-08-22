@@ -1,5 +1,6 @@
 package me.wheelershigley.www.window.portal;
 
+import com.mojang.serialization.MapCodec;
 import eu.pb4.polymer.blocks.api.BlockModelType;
 import eu.pb4.polymer.blocks.api.PolymerBlockModel;
 import eu.pb4.polymer.blocks.api.PolymerBlockResourceUtils;
@@ -14,8 +15,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Portal;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -31,7 +35,7 @@ import java.util.Map;
 import static me.wheelershigley.www.window.Window.getWindowIdentifier;
 
 //TODO Colorations
-public class CustomPortalBlock extends Block implements Portal, PolymerTexturedBlock {
+public class CustomPortalBlock extends BaseEntityBlock implements Portal, PolymerTexturedBlock {
     public static final EnumProperty<Direction.Axis> AXIS;
     private static final Map<Direction.Axis, VoxelShape> SHAPES;
     //public static final EnumProperty<DyeColor> COLOR;
@@ -43,6 +47,11 @@ public class CustomPortalBlock extends Block implements Portal, PolymerTexturedB
                 .setValue(AXIS, Direction.Axis.X)
                 //.setValue(COLOR, DyeColor.WHITE)
         );
+    }
+
+    @Override
+    protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
+        return simpleCodec(CustomPortalBlock::new);
     }
 
     private static final BlockState POLYMER_PORTAL_X = PolymerBlockResourceUtils.requestBlock(
@@ -83,6 +92,11 @@ public class CustomPortalBlock extends Block implements Portal, PolymerTexturedB
         if( entity.canUsePortal(false) ) {
             entity.setAsInsidePortal(this, pos);
         }
+    }
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new CustomPortalBlockEntity(pos, state);
     }
 
     @Override

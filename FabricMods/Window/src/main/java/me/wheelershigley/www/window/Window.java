@@ -22,6 +22,7 @@ public class Window implements ModInitializer {
         LevelArgumentType.register();
         WindowCommands.registerCommand();
         WindowBlocks.staticInitialize();
+        WindowBlockEntities.staticInitialize();
 
         WindowPersistentConfigurations.registerPersistentConfig();
     }
