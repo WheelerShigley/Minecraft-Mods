@@ -4,11 +4,10 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import me.wheelershigley.www.window.Window;
 import me.wheelershigley.www.window.WindowConfig;
+import me.wheelershigley.www.window.api.PortalDefinition;
 import me.wheelershigley.www.window.portal.CustomPortal;
 import me.wheelershigley.www.window.api.LevelArgumentType;
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -16,9 +15,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.blocks.BlockInput;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -26,7 +23,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.portal.TeleportTransition;
 
 public class WindowCommands {
@@ -112,18 +108,15 @@ public class WindowCommands {
     private static int link(CommandContext<CommandSourceStack> context) {
         BlockInput inputMaterial = BlockStateArgument.getBlock(context, "material");
         Block material = inputMaterial.getState().getBlock();
-        //TODO: igniter
+        BlockInput inputIgniter = BlockStateArgument.getBlock(context, "igniter");
+        Block igniter = inputIgniter.getState().getBlock();
         ResourceKey<Level> levelKey = context.getArgument("level", ResourceKey.class);
-        ServerLevel serverLevel = context.getSource().getServer().getLevel(levelKey);
-
-        Identifier materialIdentifier = BuiltInRegistries.BLOCK.getKey(material);
-        Identifier levelIdentifier = levelKey.identifier();
 
         MinecraftServer server = context.getSource().getServer();
-        WindowConfig.INSTANCE.blockToLevel.put(materialIdentifier, levelIdentifier);
-        WindowConfig.INSTANCE.save(
-            server.getServerDirectory().resolve(WindowPersistentConfigurations.FILENAME)
+        WindowConfig.INSTANCE.definitions.add(
+            new PortalDefinition(material, igniter, levelKey)
         );
+        WindowPersistentConfigurations.save();
         return 0;
     }
     private static int linksList(CommandContext<CommandSourceStack> context) {

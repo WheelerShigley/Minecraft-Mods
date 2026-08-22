@@ -5,40 +5,44 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import me.wheelershigley.www.window.api.PortalDefinition;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class WindowConfig {
     public static WindowConfig INSTANCE = new WindowConfig();
-    public Map<Identifier, Identifier> blockToLevel = new HashMap<>();
+    public Set<PortalDefinition> definitions = new HashSet<>();
 
     public WindowConfig() {}
-    public WindowConfig(Map<Identifier, Identifier> blockToLevel) {
-        this.blockToLevel = blockToLevel;
+    public WindowConfig(Set<PortalDefinition> definitions) {
+        this.definitions = definitions;
     }
 
     public static final Codec<WindowConfig> CODEC = RecordCodecBuilder.create(
         (instance) -> {
             return instance.group(
                 Codec
-                    .unboundedMap(
-                        Identifier.CODEC,
-                        Identifier.CODEC
+                    .list(PortalDefinition.CODEC)
+                    .xmap(
+                        list -> (Set<PortalDefinition>)( new HashSet<>(list) ),
+                        ArrayList::new
                     )
-                    .fieldOf("block_to_level")
-                    .forGetter(config -> config.blockToLevel)
+                    .fieldOf("definitions")
+                    .forGetter(config -> config.definitions)
             ).apply(instance, WindowConfig::new);
         }
     );
 
     public static WindowConfig load(Path path) {
         if( !Files.exists(path) ) {
-            return new WindowConfig();
+            WindowConfig config = new WindowConfig();
+            config.save(path);
+            return config;
         }
 
         try {
@@ -79,16 +83,14 @@ public class WindowConfig {
         label = label.substring(0, label.length() - 1);
         builder.append(label);
 
-        for( Map.Entry<Identifier, Identifier> entry : blockToLevel.entrySet() ) {
+        for(PortalDefinition definition : definitions) {
             builder
                 .append("\n    ")
-                .append( entry.getKey() )
-                .append(" => ")
-                .append( entry.getValue() )
+                .append( definition.toString() )
             ;
         }
 
-        if( blockToLevel.isEmpty() ) {
+        if( definitions.isEmpty() ) {
             String empty = Component.translatable("command.window.empty").getString();
             builder.append("\n    ").append(empty);
         }
