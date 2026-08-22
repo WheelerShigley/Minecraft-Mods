@@ -1,15 +1,20 @@
 package me.wheelershigley.www.window;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 public class WindowConfig {
-    public static final WindowConfig INSTANCE = new WindowConfig();
+    public static WindowConfig INSTANCE = new WindowConfig();
     public Map<Identifier, Identifier> blockToLevel = new HashMap<>();
 
     public WindowConfig() {}
@@ -30,6 +35,41 @@ public class WindowConfig {
             ).apply(instance, WindowConfig::new);
         }
     );
+
+    public static WindowConfig load(Path path) {
+        if( !Files.exists(path) ) {
+            return new WindowConfig();
+        }
+
+        try {
+            String json = Files.readString(path);
+            JsonElement element = JsonParser.parseString(json);
+
+            return CODEC
+                .parse(JsonOps.INSTANCE, element)
+                .getOrThrow()
+            ;
+        } catch(Exception exception) {
+            throw new RuntimeException("Failed to load Window config.", exception);
+        }
+    }
+
+    public void save(Path path) {
+        try {
+            JsonElement element = CODEC
+                .encodeStart(JsonOps.INSTANCE, this)
+                .getOrThrow()
+            ;
+
+            Files.createDirectories( path.getParent() );
+            Files.writeString(
+                path,
+                element.toString()
+            );
+        } catch(Exception exception) {
+            throw new RuntimeException("Failed to save Window config.", exception);
+        }
+    }
 
     @Override
     public String toString() {
