@@ -7,11 +7,11 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.wheelershigley.www.window.WindowConfig;
 import me.wheelershigley.www.window.api.PortalDefinition;
 import me.wheelershigley.www.window.portal.CustomPortal;
-import me.wheelershigley.www.window.api.LevelArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.blocks.BlockInput;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
@@ -62,9 +62,7 @@ public class WindowCommands {
             .then(
                 Commands.argument("player", EntityArgument.player() )
                     .then(
-                        Commands.argument("level", new LevelArgumentType() )
-                            .suggests(LevelArgumentType::listStaticSuggestions)
-                            .executes(WindowCommands::teleport)
+                        Commands.argument("level", DimensionArgument.dimension() )
                     )
             )
         ;
@@ -97,9 +95,7 @@ public class WindowCommands {
                     .then(
                         Commands.argument("igniter", BlockStateArgument.block(context) )
                             .then(
-                                Commands.argument("level", new LevelArgumentType() )
-                                    .suggests(LevelArgumentType::listStaticSuggestions)
-                                    .executes(WindowCommands::link)
+                                Commands.argument("level", DimensionArgument.dimension() )
                             )
                     )
             )

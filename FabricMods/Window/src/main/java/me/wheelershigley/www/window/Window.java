@@ -1,7 +1,7 @@
 package me.wheelershigley.www.window;
 
+import eu.pb4.polymer.core.api.block.PolymerBlockUtils;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
-import me.wheelershigley.www.window.api.LevelArgumentType;
 import me.wheelershigley.www.window.registrations.WindowBlocks;
 import me.wheelershigley.www.window.registrations.WindowCommands;
 import me.wheelershigley.www.window.registrations.WindowPersistentConfigurations;
@@ -19,10 +19,11 @@ public class Window implements ModInitializer {
         PolymerResourcePackUtils.addModAssets(MOD_ID);
         PolymerResourcePackUtils.markAsRequired();
 
-        LevelArgumentType.register();
         WindowCommands.registerCommand();
         WindowBlocks.staticInitialize();
+
         WindowBlockEntities.staticInitialize();
+        PolymerBlockUtils.registerBlockEntity( WindowBlockEntities.CUSTOM_PORTAL );
 
         WindowPersistentConfigurations.registerPersistentConfig();
     }
