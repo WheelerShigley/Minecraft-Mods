@@ -311,11 +311,17 @@ public class CustomPortal {
         // fill the portal-volume
         for(int i = 0; i < innerBounds.x; i++) {
             for(int j = 0; j < innerBounds.y; j++) {
-                level.setBlock(
-                    corner.relative(plane.getFirst(), -i).relative(plane.getSecond(), -j),
-                    portalBlockState,
-                    Block.UPDATE_ALL
-                );
+                BlockPos position = corner
+                    .relative(plane.getFirst(), -i)
+                    .relative(plane.getSecond(), -j)
+                ;
+                level.setBlock(position, portalBlockState, Block.UPDATE_ALL);
+
+                CustomPortalBlockEntity blockEntity = (CustomPortalBlockEntity)level.getBlockEntity(position);
+                if(blockEntity != null) {
+                    blockEntity.setFrame(  frameMaterial   );
+                    blockEntity.setIgniter(ignitionMaterial);
+                }
             }
         }
         return true;
