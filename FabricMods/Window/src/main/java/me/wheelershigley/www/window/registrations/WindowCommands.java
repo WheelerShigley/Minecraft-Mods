@@ -16,12 +16,9 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.blocks.BlockInput;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permissions;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.portal.TeleportTransition;
 
@@ -70,10 +67,9 @@ public class WindowCommands {
     private static boolean getWindowsCommandPermission(CommandSourceStack source) {
         return source.permissions().hasPermission(Permissions.COMMANDS_MODERATOR);
     }
-    private static int teleport(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        ServerPlayer player = EntityArgument.getPlayer(context, "player");
-        ResourceKey<Level> levelKey = context.getArgument("level", ResourceKey.class);
-        ServerLevel serverLevel = context.getSource().getServer().getLevel(levelKey);
+        private static int teleport(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+            ServerPlayer player = EntityArgument.getPlayer(context, "player");
+            ServerLevel serverLevel = DimensionArgument.getDimension(context, "level");
 
         TeleportTransition transition = CustomPortal.getTransition(player, serverLevel);
         if(transition == null) {
@@ -96,21 +92,21 @@ public class WindowCommands {
                         Commands.argument("igniter", BlockStateArgument.block(context) )
                             .then(
                                 Commands.argument("level", DimensionArgument.dimension() )
+                                    .executes(WindowCommands::link)
                             )
                     )
             )
         ;
     }
-    private static int link(CommandContext<CommandSourceStack> context) {
+    private static int link(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         BlockInput inputMaterial = BlockStateArgument.getBlock(context, "material");
         Block material = inputMaterial.getState().getBlock();
         BlockInput inputIgniter = BlockStateArgument.getBlock(context, "igniter");
         Block igniter = inputIgniter.getState().getBlock();
-        ResourceKey<Level> levelKey = context.getArgument("level", ResourceKey.class);
+        ServerLevel serverLevel = DimensionArgument.getDimension(context, "level");
 
-        MinecraftServer server = context.getSource().getServer();
         WindowConfig.INSTANCE.definitions.add(
-            new PortalDefinition(material, igniter, levelKey)
+            new PortalDefinition(material, igniter, serverLevel.dimension() )
         );
         WindowPersistentConfigurations.save();
         return 0;

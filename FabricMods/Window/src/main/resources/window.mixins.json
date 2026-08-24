@@ -4,7 +4,8 @@
   "package": "me.wheelershigley.www.window.mixins",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "CustomPortalPOIMixin"
+    "CustomPortalPOIMixin",
+    "IgnitionAttemptMixin"
   ],
   "injectors": {
     "defaultRequire": 1
