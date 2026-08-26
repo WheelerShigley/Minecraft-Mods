@@ -4,6 +4,7 @@ import me.wheelershigley.www.window.WindowBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,7 +28,6 @@ public class CustomPortalBlockEntity extends BlockEntity {
             Identifier.CODEC,
             BuiltInRegistries.BLOCK.getKey(frame)
         );
-
         output.store(
             "igniter",
             Identifier.CODEC,
@@ -45,7 +45,6 @@ public class CustomPortalBlockEntity extends BlockEntity {
                 block -> this.frame = block
             )
         ;
-
         input.read("igniter", Identifier.CODEC)
             .flatMap(BuiltInRegistries.BLOCK::getOptional)
             .ifPresent(

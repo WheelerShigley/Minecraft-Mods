@@ -17,7 +17,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Portal;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -34,18 +33,15 @@ import java.util.Map;
 
 import static me.wheelershigley.www.window.Window.getWindowIdentifier;
 
-//TODO Colorations
 public class CustomPortalBlock extends BaseEntityBlock implements Portal, PolymerTexturedBlock {
     public static final EnumProperty<Direction.Axis> AXIS;
     private static final Map<Direction.Axis, VoxelShape> SHAPES;
-    //public static final EnumProperty<DyeColor> COLOR;
 
     public CustomPortalBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(
             ( this.stateDefinition.any() )
                 .setValue(AXIS, Direction.Axis.X)
-                //.setValue(COLOR, DyeColor.WHITE)
         );
     }
 
@@ -76,7 +72,7 @@ public class CustomPortalBlock extends BaseEntityBlock implements Portal, Polyme
     }
 
     protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(AXIS/*, COLOR*/);
+        builder.add(AXIS);
     }
 
     protected void entityInside(
@@ -128,6 +124,5 @@ public class CustomPortalBlock extends BaseEntityBlock implements Portal, Polyme
             Direction.Axis.Y, Block.box(0, 0, 0, 16, 4, 16),
             Direction.Axis.Z, Block.box(0, 0, 0, 16, 16, 4)
         );
-        //COLOR = EnumProperty.create("color", DyeColor.class);
     }
 }
