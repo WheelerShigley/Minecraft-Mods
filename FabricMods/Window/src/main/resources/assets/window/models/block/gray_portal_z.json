@@ -1,6 +1,7 @@
 {
   "textures": {
-    "portal": "window:block/portal"
+    "portal": "window:block/gray_portal",
+    "particle": "#portal"
   },
   "elements": [
     {

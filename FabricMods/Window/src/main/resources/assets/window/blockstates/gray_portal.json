@@ -1,13 +1,13 @@
 {
   "variants": {
     "axis=x": {
-      "model": "window:block/portal_x"
+      "model": "window:block/gray_portal_x"
     },
     "axis=y": {
-      "model": "window:block/portal_y"
+      "model": "window:block/gray_portal_y"
     },
     "axis=z": {
-      "model": "window:block/portal_z"
+      "model": "window:block/gray_portal_z"
     }
   }
 }

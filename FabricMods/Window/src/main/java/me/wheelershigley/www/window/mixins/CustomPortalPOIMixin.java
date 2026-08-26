@@ -35,6 +35,7 @@ public class CustomPortalPOIMixin {
         at = @At("TAIL")
     )
     private static void bootstrap(Registry<PoiType> registry, CallbackInfoReturnable<PoiType> cir) {
+        //TODO: consider all custom portals
         register(registry, CUSTOM_PORTAL, getBlockStates(WindowBlocks.WHITE_PORTAL), 0, 1);
     }
 }

@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -29,6 +30,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static me.wheelershigley.www.window.Window.getWindowIdentifier;
@@ -36,43 +38,77 @@ import static me.wheelershigley.www.window.Window.getWindowIdentifier;
 public class PortalBlock extends BaseEntityBlock implements Portal, PolymerTexturedBlock {
     public static final EnumProperty<Direction.Axis> AXIS;
     private static final Map<Direction.Axis, VoxelShape> SHAPES;
+    public static final EnumProperty<DyeColor> COLOR;
 
-    public PortalBlock(Properties properties) {
+    public PortalBlock(Properties properties, DyeColor color) {
         super(properties);
         this.registerDefaultState(
             ( this.stateDefinition.any() )
                 .setValue(AXIS, Direction.Axis.X)
+                .setValue(COLOR, color)
         );
     }
 
     @Override
     protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
-        return simpleCodec(PortalBlock::new);
+        return MapCodec.unit(this);
     }
 
-    private static final BlockState POLYMER_PORTAL_X = PolymerBlockResourceUtils.requestBlock(
-        BlockModelType.TRIPWIRE_FLAT,
-        PolymerBlockModel.of( getWindowIdentifier("block/portal_x") )
-    );
-    private static final BlockState POLYMER_PORTAL_Y = PolymerBlockResourceUtils.requestBlock(
-        BlockModelType.TRIPWIRE_FLAT,
-        PolymerBlockModel.of( getWindowIdentifier("block/portal_y") )
-    );
-    private static final BlockState POLYMER_PORTAL_Z = PolymerBlockResourceUtils.requestBlock(
-        BlockModelType.TRIPWIRE_FLAT,
-        PolymerBlockModel.of( getWindowIdentifier("block/portal_z") )
-    );
+
+    private static final Map<DyeColor, BlockState> coloredPolymerBlockStatesX = new HashMap<>();
+    private static final Map<DyeColor, BlockState> coloredPolymerBlockStatesY = new HashMap<>();
+    private static final Map<DyeColor, BlockState> coloredPolymerBlockStatesZ = new HashMap<>();
+    static {
+        DyeColor[] colors = DyeColor.values();
+        for(DyeColor color : colors) {
+            String color_name = color.getSerializedName();
+
+            coloredPolymerBlockStatesX.put(
+                color,
+                PolymerBlockResourceUtils.requestBlock(
+                    BlockModelType.FULL_BLOCK,
+                    PolymerBlockModel.of(
+                        getWindowIdentifier("block/"+ color_name +"_portal_x")
+                    )
+                )
+            );
+            coloredPolymerBlockStatesY.put(
+                color,
+                PolymerBlockResourceUtils.requestBlock(
+                    BlockModelType.FULL_BLOCK,
+                    PolymerBlockModel.of(
+                        getWindowIdentifier("block/"+ color_name +"_portal_y")
+                    )
+                )
+            );
+            coloredPolymerBlockStatesZ.put(
+                color,
+                PolymerBlockResourceUtils.requestBlock(
+                    BlockModelType.FULL_BLOCK,
+                    PolymerBlockModel.of(
+                        getWindowIdentifier("block/"+ color_name +"_portal_z")
+                    )
+                )
+            );
+        }
+    }
     @Override
     public BlockState getPolymerBlockState(BlockState state, @Nullable PacketContext context) {
-        return switch( state.getValue(AXIS) ) {
-            case X -> POLYMER_PORTAL_X;
-            case Y -> POLYMER_PORTAL_Y;
-            case Z -> POLYMER_PORTAL_Z;
+        final DyeColor _COLOR = state.getValue(COLOR);
+        BlockState result = switch( state.getValue(AXIS) ) {
+            case X -> coloredPolymerBlockStatesX.get(_COLOR);
+            case Y -> coloredPolymerBlockStatesY.get(_COLOR);
+            case Z -> coloredPolymerBlockStatesZ.get(_COLOR);
         };
+
+        if(result == null) {
+            int a = 0;
+        }
+        return result;
     }
 
     protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(AXIS);
+        builder.add(AXIS, COLOR);
     }
 
     protected void entityInside(
@@ -92,7 +128,7 @@ public class PortalBlock extends BaseEntityBlock implements Portal, PolymerTextu
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new PortalBlockEntity(pos, state);
+        return new PortalBlockEntity( pos, state, state.getValue(COLOR) );
     }
 
     @Override
@@ -124,5 +160,6 @@ public class PortalBlock extends BaseEntityBlock implements Portal, PolymerTextu
             Direction.Axis.Y, Block.box(0, 0, 0, 16, 4, 16),
             Direction.Axis.Z, Block.box(0, 0, 0, 16, 16, 4)
         );
+        COLOR = EnumProperty.create("color", DyeColor.class);
     }
 }

@@ -1,11 +1,13 @@
 package me.wheelershigley.www.window.portal;
 
-import me.wheelershigley.www.window.WindowBlockEntities;
+import me.wheelershigley.www.window.registrations.WindowBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -14,8 +16,29 @@ public class PortalBlockEntity extends BlockEntity {
     private Block frame;
     private Block igniter;
 
-    public PortalBlockEntity(BlockPos pos, BlockState state) {
-        super(WindowBlockEntities.WHITE_PORTAL, pos, state);
+    public PortalBlockEntity(BlockPos pos, BlockState state, DyeColor color) {
+        super(getBlockEntityType(color), pos, state);
+    }
+
+    private static BlockEntityType<PortalBlockEntity> getBlockEntityType(DyeColor color) {
+        return switch (color) {
+            case WHITE ->       WindowBlockEntities.WHITE_PORTAL;
+            case LIGHT_GRAY ->  WindowBlockEntities.LIGHT_GRAY_PORTAL;
+            case GRAY ->        WindowBlockEntities.GRAY_PORTAL;
+            case BLACK ->       WindowBlockEntities.BLACK_PORTAL;
+            case BROWN ->       WindowBlockEntities.BROWN_PORTAL;
+            case RED ->         WindowBlockEntities.RED_PORTAL;
+            case ORANGE ->      WindowBlockEntities.ORANGE_PORTAL;
+            case YELLOW ->      WindowBlockEntities.YELLOW_PORTAL;
+            case LIME ->        WindowBlockEntities.LIME_PORTAL;
+            case GREEN ->       WindowBlockEntities.GREEN_PORTAL;
+            case CYAN ->        WindowBlockEntities.CYAN_PORTAL;
+            case LIGHT_BLUE ->  WindowBlockEntities.LIGHT_BLUE_PORTAL;
+            case BLUE ->        WindowBlockEntities.BLUE_PORTAL;
+            case PURPLE ->      WindowBlockEntities.PURPLE_PORTAL;
+            case MAGENTA ->     WindowBlockEntities.MAGENTA_PORTAL;
+            case PINK ->        WindowBlockEntities.PINK_PORTAL;
+        };
     }
 
     @Override
