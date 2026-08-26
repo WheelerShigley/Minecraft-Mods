@@ -1,7 +1,7 @@
 package me.wheelershigley.www.window.registrations;
 
 import me.wheelershigley.www.window.BlockItemIds;
-import me.wheelershigley.www.window.portal.CustomPortalBlock;
+import me.wheelershigley.www.window.portal.PortalBlock;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -17,12 +17,12 @@ public class WindowBlocks implements ModInitializer {
     @Override
     public void onInitialize() {
         // Force Initializations
-        CUSTOM_PORTAL_BLOCK.getClass();
+        PORTAL.getClass();
     }
 
-    public static final Block CUSTOM_PORTAL_BLOCK = register(
-        BlockItemIds.CUSTOM_PORTAL_BLOCK,
-        CustomPortalBlock::new,
+    public static final Block PORTAL = register(
+        BlockItemIds.PORTAL,
+        PortalBlock::new,
         BlockBehaviour.Properties.of().noOcclusion().noCollision()
     );
 

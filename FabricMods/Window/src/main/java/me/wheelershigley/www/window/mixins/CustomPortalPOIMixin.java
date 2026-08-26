@@ -2,8 +2,6 @@ package me.wheelershigley.www.window.mixins;
 
 import me.wheelershigley.www.window.registrations.WindowBlocks;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
@@ -37,6 +35,6 @@ public class CustomPortalPOIMixin {
         at = @At("TAIL")
     )
     private static void bootstrap(Registry<PoiType> registry, CallbackInfoReturnable<PoiType> cir) {
-        register(registry, CUSTOM_PORTAL, getBlockStates(WindowBlocks.CUSTOM_PORTAL_BLOCK), 0, 1);
+        register(registry, CUSTOM_PORTAL, getBlockStates(WindowBlocks.PORTAL), 0, 1);
     }
 }

@@ -7,7 +7,6 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.wheelershigley.www.window.api.PortalDefinition;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.block.Block;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

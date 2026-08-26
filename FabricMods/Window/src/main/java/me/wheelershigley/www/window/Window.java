@@ -23,7 +23,7 @@ public class Window implements ModInitializer {
         WindowBlocks.staticInitialize();
 
         WindowBlockEntities.staticInitialize();
-        PolymerBlockUtils.registerBlockEntity( WindowBlockEntities.CUSTOM_PORTAL );
+        PolymerBlockUtils.registerBlockEntity( WindowBlockEntities.PORTAL);
 
         WindowPersistentConfigurations.registerPersistentConfig();
     }

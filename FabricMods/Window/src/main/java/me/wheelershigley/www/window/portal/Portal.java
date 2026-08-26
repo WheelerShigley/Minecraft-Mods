@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class CustomPortal {
+public class Portal {
     public static final int MIN_WIDTH = 2;
 
     public static TeleportTransition getTransition(ServerPlayer player, ServerLevel toDimension) {
@@ -42,7 +42,7 @@ public class CustomPortal {
             player.getZ() * teleportationScale
         );
 
-        CustomPortalForcer customPortalForcer = new CustomPortalForcer(toDimension);
+        PortalForcer customPortalForcer = new PortalForcer(toDimension);
         Optional<BlockPos> exitPortalPos = customPortalForcer.findClosestPortalPosition(
             approximateExitPos,
             teleportationScale,
@@ -112,7 +112,7 @@ public class CustomPortal {
                 level, position,
                 Pair.of(Direction.Axis.X, Direction.Axis.Y),
                 frameMaterial, ignitionMaterial,
-                WindowBlocks.CUSTOM_PORTAL_BLOCK.defaultBlockState().setValue(CustomPortalBlock.AXIS, Direction.Axis.X)
+                WindowBlocks.PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, Direction.Axis.X)
             );
         }
         if(!worked && y_axis && z_axis) {
@@ -120,7 +120,7 @@ public class CustomPortal {
                 level, position,
                 Pair.of(Direction.Axis.Y, Direction.Axis.Z),
                 frameMaterial, ignitionMaterial,
-                WindowBlocks.CUSTOM_PORTAL_BLOCK.defaultBlockState().setValue(CustomPortalBlock.AXIS, Direction.Axis.Z)
+                WindowBlocks.PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, Direction.Axis.Z)
             );
         }
         if(!worked && x_axis && z_axis) {
@@ -128,7 +128,7 @@ public class CustomPortal {
                 level, position,
                 Pair.of(Direction.Axis.X, Direction.Axis.Z),
                 frameMaterial, ignitionMaterial,
-                WindowBlocks.CUSTOM_PORTAL_BLOCK.defaultBlockState().setValue(CustomPortalBlock.AXIS, Direction.Axis.Y)
+                WindowBlocks.PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, Direction.Axis.Y)
             );
         }
         return worked;
@@ -229,7 +229,6 @@ public class CustomPortal {
             }
 
             corner = newDatum.relative(plane.getSecond(), corner_delta_second-1);
-            System.out.println( "corner @ " + corner.toString() );
         }
 
         // ensure the region is air/ignition [(+,+) to (-,-)]
@@ -277,7 +276,6 @@ public class CustomPortal {
             }
 
             innerBounds = new Vec2(first_bound, second_bound);
-            System.out.println( "innerBounds @ " + innerBounds.toString() );
         }
 
         // check that the frame is valid
@@ -317,7 +315,7 @@ public class CustomPortal {
                 ;
                 level.setBlock(position, portalBlockState, Block.UPDATE_ALL);
 
-                CustomPortalBlockEntity blockEntity = (CustomPortalBlockEntity)level.getBlockEntity(position);
+                PortalBlockEntity blockEntity = (PortalBlockEntity)level.getBlockEntity(position);
                 if(blockEntity != null) {
                     blockEntity.setFrame(  frameMaterial   );
                     blockEntity.setIgniter(ignitionMaterial);

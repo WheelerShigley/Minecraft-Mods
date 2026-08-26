@@ -24,10 +24,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class CustomPortalForcer {
+public class PortalForcer {
 
     private final ServerLevel level;
-    public CustomPortalForcer(final ServerLevel level) {
+    public PortalForcer(final ServerLevel level) {
         this.level = level;
     }
 
@@ -163,7 +163,7 @@ public class CustomPortalForcer {
         ;
         PoiManager poiManager = this.level.getPoiManager();
         //TODO: set blockState material
-        BlockState portalBlockState = WindowBlocks.CUSTOM_PORTAL_BLOCK.defaultBlockState().setValue(CustomPortalBlock.AXIS, portalAxis);
+        BlockState portalBlockState = WindowBlocks.PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, portalAxis);
         for(int width = 0; width < 2; ++width) {
             for(int height = 0; height < 3; ++height) {
                 mutable.setWithOffset(closestFullPosition, width * direction.getStepX(), height, width * direction.getStepZ());

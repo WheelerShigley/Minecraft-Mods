@@ -1,16 +1,16 @@
 {
   "textures": {
-    "portal": "window:block/custom_portal"
+    "portal": "window:block/portal"
   },
   "elements": [
     {
-      "from": [0, 6, 0],
-      "to": [16, 10, 16],
+      "from": [6, 0, 0],
+      "to": [10, 16, 16],
       "faces": {
-        "up": {
+        "east": {
           "texture": "#portal"
         },
-        "down": {
+        "west": {
           "texture": "#portal"
         }
       }

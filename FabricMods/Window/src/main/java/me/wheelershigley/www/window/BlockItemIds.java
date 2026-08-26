@@ -7,8 +7,9 @@ import net.minecraft.world.level.block.Block;
 import static me.wheelershigley.www.window.Window.getWindowIdentifier;
 
 public class BlockItemIds {
-    public static final ResourceKey<Block> CUSTOM_PORTAL_BLOCK = ResourceKey.create(
+    public static final String PORTAL_PATH = "portal";
+    public static final ResourceKey<Block> PORTAL = ResourceKey.create(
         Registries.BLOCK,
-        getWindowIdentifier("custom_portal")
+        getWindowIdentifier(PORTAL_PATH)
     );
 }

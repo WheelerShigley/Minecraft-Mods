@@ -33,11 +33,11 @@ import java.util.Map;
 
 import static me.wheelershigley.www.window.Window.getWindowIdentifier;
 
-public class CustomPortalBlock extends BaseEntityBlock implements Portal, PolymerTexturedBlock {
+public class PortalBlock extends BaseEntityBlock implements Portal, PolymerTexturedBlock {
     public static final EnumProperty<Direction.Axis> AXIS;
     private static final Map<Direction.Axis, VoxelShape> SHAPES;
 
-    public CustomPortalBlock(Properties properties) {
+    public PortalBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(
             ( this.stateDefinition.any() )
@@ -47,20 +47,20 @@ public class CustomPortalBlock extends BaseEntityBlock implements Portal, Polyme
 
     @Override
     protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
-        return simpleCodec(CustomPortalBlock::new);
+        return simpleCodec(PortalBlock::new);
     }
 
     private static final BlockState POLYMER_PORTAL_X = PolymerBlockResourceUtils.requestBlock(
         BlockModelType.TRIPWIRE_FLAT,
-        PolymerBlockModel.of( getWindowIdentifier("block/custom_portal_x") )
+        PolymerBlockModel.of( getWindowIdentifier("block/portal_x") )
     );
     private static final BlockState POLYMER_PORTAL_Y = PolymerBlockResourceUtils.requestBlock(
         BlockModelType.TRIPWIRE_FLAT,
-        PolymerBlockModel.of( getWindowIdentifier("block/custom_portal_y") )
+        PolymerBlockModel.of( getWindowIdentifier("block/portal_y") )
     );
     private static final BlockState POLYMER_PORTAL_Z = PolymerBlockResourceUtils.requestBlock(
         BlockModelType.TRIPWIRE_FLAT,
-        PolymerBlockModel.of( getWindowIdentifier("block/custom_portal_z") )
+        PolymerBlockModel.of( getWindowIdentifier("block/portal_z") )
     );
     @Override
     public BlockState getPolymerBlockState(BlockState state, @Nullable PacketContext context) {
@@ -92,7 +92,7 @@ public class CustomPortalBlock extends BaseEntityBlock implements Portal, Polyme
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new CustomPortalBlockEntity(pos, state);
+        return new PortalBlockEntity(pos, state);
     }
 
     @Override

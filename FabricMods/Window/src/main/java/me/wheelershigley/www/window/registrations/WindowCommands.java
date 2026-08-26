@@ -6,7 +6,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.wheelershigley.www.window.WindowConfig;
 import me.wheelershigley.www.window.api.PortalDefinition;
-import me.wheelershigley.www.window.portal.CustomPortal;
+import me.wheelershigley.www.window.portal.Portal;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -71,7 +71,7 @@ public class WindowCommands {
             ServerPlayer player = EntityArgument.getPlayer(context, "player");
             ServerLevel serverLevel = DimensionArgument.getDimension(context, "level");
 
-        TeleportTransition transition = CustomPortal.getTransition(player, serverLevel);
+        TeleportTransition transition = Portal.getTransition(player, serverLevel);
         if(transition == null) {
             return -1;
         }

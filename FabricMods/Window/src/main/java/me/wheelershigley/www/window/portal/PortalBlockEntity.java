@@ -4,19 +4,18 @@ import me.wheelershigley.www.window.WindowBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public class CustomPortalBlockEntity extends BlockEntity {
+public class PortalBlockEntity extends BlockEntity {
     private Block frame;
     private Block igniter;
 
-    public CustomPortalBlockEntity(BlockPos pos, BlockState state) {
-        super(WindowBlockEntities.CUSTOM_PORTAL, pos, state);
+    public PortalBlockEntity(BlockPos pos, BlockState state) {
+        super(WindowBlockEntities.PORTAL, pos, state);
     }
 
     @Override

@@ -1,5 +1,5 @@
 {
-  "block.window.custom_portal": "Custom Portal",
+  "block.window.portal": "Custom Portal",
 
   "command.window.link_title": "Material-to-Dimension Links:",
   "command.window.empty": "None"
