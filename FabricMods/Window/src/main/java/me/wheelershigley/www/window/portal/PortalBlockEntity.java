@@ -15,7 +15,7 @@ public class PortalBlockEntity extends BlockEntity {
     private Block igniter;
 
     public PortalBlockEntity(BlockPos pos, BlockState state) {
-        super(WindowBlockEntities.PORTAL, pos, state);
+        super(WindowBlockEntities.WHITE_PORTAL, pos, state);
     }
 
     @Override

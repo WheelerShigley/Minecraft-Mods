@@ -163,7 +163,7 @@ public class PortalForcer {
         ;
         PoiManager poiManager = this.level.getPoiManager();
         //TODO: set blockState material
-        BlockState portalBlockState = WindowBlocks.PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, portalAxis);
+        BlockState portalBlockState = WindowBlocks.WHITE_PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, portalAxis);
         for(int width = 0; width < 2; ++width) {
             for(int height = 0; height < 3; ++height) {
                 mutable.setWithOffset(closestFullPosition, width * direction.getStepX(), height, width * direction.getStepZ());

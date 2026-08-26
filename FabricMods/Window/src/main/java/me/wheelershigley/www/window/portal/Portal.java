@@ -112,7 +112,7 @@ public class Portal {
                 level, position,
                 Pair.of(Direction.Axis.X, Direction.Axis.Y),
                 frameMaterial, ignitionMaterial,
-                WindowBlocks.PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, Direction.Axis.X)
+                WindowBlocks.WHITE_PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, Direction.Axis.X)
             );
         }
         if(!worked && y_axis && z_axis) {
@@ -120,7 +120,7 @@ public class Portal {
                 level, position,
                 Pair.of(Direction.Axis.Y, Direction.Axis.Z),
                 frameMaterial, ignitionMaterial,
-                WindowBlocks.PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, Direction.Axis.Z)
+                WindowBlocks.WHITE_PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, Direction.Axis.Z)
             );
         }
         if(!worked && x_axis && z_axis) {
@@ -128,7 +128,7 @@ public class Portal {
                 level, position,
                 Pair.of(Direction.Axis.X, Direction.Axis.Z),
                 frameMaterial, ignitionMaterial,
-                WindowBlocks.PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, Direction.Axis.Y)
+                WindowBlocks.WHITE_PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, Direction.Axis.Y)
             );
         }
         return worked;

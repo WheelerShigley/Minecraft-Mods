@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 
 public class CustomPoiTypes {
-    public static ResourceKey<PoiType> CUSTOM_PORTAL = createKey("custom_portal");
+    public static ResourceKey<PoiType> CUSTOM_PORTAL = createKey("portal");
 
     private static ResourceKey<PoiType> createKey(final String name) {
         return ResourceKey.create(

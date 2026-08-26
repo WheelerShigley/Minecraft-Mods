@@ -16,6 +16,7 @@ public class Window implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        LazyStateGen.generate();
         PolymerResourcePackUtils.addModAssets(MOD_ID);
         PolymerResourcePackUtils.markAsRequired();
 
@@ -23,7 +24,7 @@ public class Window implements ModInitializer {
         WindowBlocks.staticInitialize();
 
         WindowBlockEntities.staticInitialize();
-        PolymerBlockUtils.registerBlockEntity( WindowBlockEntities.PORTAL);
+        PolymerBlockUtils.registerBlockEntity( WindowBlockEntities.WHITE_PORTAL );
 
         WindowPersistentConfigurations.registerPersistentConfig();
     }
