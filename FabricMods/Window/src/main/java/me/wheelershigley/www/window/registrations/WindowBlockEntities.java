@@ -1,16 +1,17 @@
 package me.wheelershigley.www.window.registrations;
 
 import eu.pb4.polymer.core.api.block.PolymerBlockUtils;
+import me.wheelershigley.www.window.portal.PortalBlock;
 import me.wheelershigley.www.window.portal.PortalBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import static me.wheelershigley.www.window.BlockItemIds.*;
 import static me.wheelershigley.www.window.Window.getWindowIdentifier;
-import static me.wheelershigley.www.window.portal.PortalBlock.COLOR;
 
 public class WindowBlockEntities {
     public static void staticInitialize() {}
@@ -40,7 +41,8 @@ public class WindowBlockEntities {
             getWindowIdentifier(path),
             FabricBlockEntityTypeBuilder.create(
                 (pos, state) -> {
-                    return new PortalBlockEntity(pos, state, state.getValue(COLOR) );
+                    DyeColor color = ( (PortalBlock)state.getBlock() ).COLOR;
+                    return new PortalBlockEntity(pos, state, color);
                 },
                 block
             ).build()
