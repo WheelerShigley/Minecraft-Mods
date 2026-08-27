@@ -28,6 +28,7 @@ public class ItemGroup {
             .register(
                 (group) -> {
                     group.accept(FishItems.ANGELFISH);
+                    group.accept(FishItems.YELLOWFIN_TUNA);
                 }
             )
         ;

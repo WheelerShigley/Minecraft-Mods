@@ -18,8 +18,10 @@ public class FishItems extends PolymerItemsRegister {
         VANILLA_PUFFERFISH,
         VANILLA_TROPICAL_FISH
     ;
-
-    public static DistributableItem ANGELFISH;
+    public static DistributableItem
+        ANGELFISH,
+        YELLOWFIN_TUNA
+    ;
 
     public static void initialize() {
         VANILLA_COD = simpleRegister("vanilla_cod");
@@ -27,7 +29,8 @@ public class FishItems extends PolymerItemsRegister {
         VANILLA_PUFFERFISH = simpleRegister("vanilla_pufferfish");
         VANILLA_TROPICAL_FISH = simpleRegister("vanilla_tropical_fish");
 
-        ANGELFISH = simpleRegister("angelfish");
+        ANGELFISH       = simpleRegister("angelfish"     );
+        YELLOWFIN_TUNA  = simpleRegister("yellowfin_tuna");
     }
 
     private static DistributableItem simpleRegister(String name) {

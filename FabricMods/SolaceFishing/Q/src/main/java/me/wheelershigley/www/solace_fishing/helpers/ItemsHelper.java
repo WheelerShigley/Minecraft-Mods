@@ -83,7 +83,7 @@ public class ItemsHelper {
     }
     public static ItemStack getMenuItem(
         Item textureItem,
-        @Nullable DataComponentMap components,
+        @Nullable DataComponentMap components,  
         boolean enchantable,
         @Nullable String translationKey
     ) {
