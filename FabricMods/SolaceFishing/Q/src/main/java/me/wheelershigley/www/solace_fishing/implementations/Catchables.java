@@ -104,6 +104,7 @@ public class Catchables {
         Catchables.statisticalCatches.add( getDefault(Items.TROPICAL_FISH, 0.02/0.60) );
 
         //Custom fish(es)
+        Catchables.statisticalCatches.add( getDefault(FishItems.ALBACORE_TUNA,  1.0) );
         Catchables.statisticalCatches.add( getDefault(FishItems.YELLOWFIN_TUNA, 1.0) );
         Catchables.statisticalCatches.add(
             new ClimatePreferencedItem(

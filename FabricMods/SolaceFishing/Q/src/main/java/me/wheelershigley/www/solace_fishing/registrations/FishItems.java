@@ -19,6 +19,7 @@ public class FishItems extends PolymerItemsRegister {
         VANILLA_TROPICAL_FISH
     ;
     public static DistributableItem
+        ALBACORE_TUNA,
         ANGELFISH,
         YELLOWFIN_TUNA
     ;
@@ -31,6 +32,7 @@ public class FishItems extends PolymerItemsRegister {
 
         ANGELFISH       = simpleRegister("angelfish"     );
         YELLOWFIN_TUNA  = simpleRegister("yellowfin_tuna");
+        ALBACORE_TUNA   = simpleRegister("albacore_tuna" );
     }
 
     private static DistributableItem simpleRegister(String name) {

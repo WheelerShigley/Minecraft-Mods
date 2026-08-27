@@ -57,6 +57,7 @@
 
   "item.solace_fishing.angelfish": "Angelfish",
   "item.solace_fishing.yellowfin_tuna": "Yellowfin Tuna",
+  "item.solace_fishing.albacore_tuna": "Albacore Tuna",
 
   "solace_fishing.lore.length": "Length: %.2f%sm"
 }

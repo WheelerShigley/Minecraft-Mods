@@ -27,6 +27,7 @@ public class ItemGroup {
             .modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
             .register(
                 (group) -> {
+                    group.accept(FishItems.ALBACORE_TUNA);
                     group.accept(FishItems.ANGELFISH);
                     group.accept(FishItems.YELLOWFIN_TUNA);
                 }
