@@ -8,9 +8,14 @@ import eu.pb4.polymer.blocks.api.PolymerTexturedBlock;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.item.DyeColor;
@@ -20,6 +25,8 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Portal;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -27,14 +34,15 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Vector3f;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
 import static me.wheelershigley.www.window.Window.getWindowIdentifier;
+import static me.wheelershigley.www.window.portal.PortalBlockEntity.getBlockEntityType;
 
 public class PortalBlock extends BaseEntityBlock implements Portal, PolymerTexturedBlock {
     public static final EnumProperty<Direction.Axis> AXIS;
@@ -54,7 +62,6 @@ public class PortalBlock extends BaseEntityBlock implements Portal, PolymerTextu
     protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
         return MapCodec.unit(this);
     }
-
 
     private static final Map<DyeColor, BlockState> coloredPolymerBlockStatesX = new HashMap<>();
     private static final Map<DyeColor, BlockState> coloredPolymerBlockStatesY = new HashMap<>();
@@ -125,6 +132,18 @@ public class PortalBlock extends BaseEntityBlock implements Portal, PolymerTextu
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new PortalBlockEntity(pos, state, COLOR);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+        Level level, BlockState state, BlockEntityType<T> type
+    ) {
+        return createTickerHelper(
+            type,
+            getBlockEntityType(COLOR),
+            PortalBlockEntity::tick
+        );
     }
 
     @Override
