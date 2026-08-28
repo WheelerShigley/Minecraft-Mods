@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "window:block/black_portal_x"
+    "model": "window:block/black_portal"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "window:block/purple_portal_x"
+    "model": "window:block/purple_portal"
   }
 }
