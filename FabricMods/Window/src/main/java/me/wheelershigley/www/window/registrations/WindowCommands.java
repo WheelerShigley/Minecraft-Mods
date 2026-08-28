@@ -91,8 +91,11 @@ public class WindowCommands {
                     .then(
                         Commands.argument("igniter", BlockStateArgument.block(context) )
                             .then(
-                                Commands.argument("level", DimensionArgument.dimension() )
-                                    .executes(WindowCommands::link)
+                                Commands.argument("from_level", DimensionArgument.dimension() )
+                                    .then(
+                                        Commands.argument("to_level", DimensionArgument.dimension() )
+                                            .executes(WindowCommands::link)
+                                    )
                             )
                     )
             )
@@ -103,10 +106,11 @@ public class WindowCommands {
         Block material = inputMaterial.getState().getBlock();
         BlockInput inputIgniter = BlockStateArgument.getBlock(context, "igniter");
         Block igniter = inputIgniter.getState().getBlock();
-        ServerLevel serverLevel = DimensionArgument.getDimension(context, "level");
+        ServerLevel fromLevel = DimensionArgument.getDimension(context, "from_level");
+        ServerLevel   tolevel = DimensionArgument.getDimension(context, "to_level");
 
         WindowConfig.INSTANCE.definitions.add(
-            new PortalDefinition(material, igniter, serverLevel.dimension() )
+            new PortalDefinition(material, igniter, fromLevel.dimension(), tolevel.dimension() )
         );
         WindowPersistentConfigurations.save();
         return 0;

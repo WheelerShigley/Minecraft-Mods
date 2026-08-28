@@ -81,10 +81,14 @@ public class WindowConfig {
         label = label.substring(0, label.length() - 1);
         builder.append(label);
 
+        int link_counter = 0;
         for(PortalDefinition definition : definitions) {
+            if(0 < link_counter++) {
+                builder.append("\n");
+            }
             builder
                 .append("\n    ")
-                .append( definition.toString() )
+                .append( definition.toString().replace("\n","\n    ") )
             ;
         }
 

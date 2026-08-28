@@ -11,21 +11,29 @@ import net.minecraft.world.level.block.Block;
 public record PortalDefinition(
     Block frameMaterial,
     Block ignitionMaterial,
-    ResourceKey<Level> dimension
+    ResourceKey<Level> fromDimension,
+    ResourceKey<Level>   toDimension
 ) {
     public static final Codec<PortalDefinition> CODEC = RecordCodecBuilder.create(
         instance -> instance.group(
             BuiltInRegistries.BLOCK.byNameCodec()
                 .fieldOf("frame_material")
-                .forGetter(PortalDefinition::frameMaterial),
+                .forGetter(PortalDefinition::frameMaterial)
+            ,
 
             BuiltInRegistries.BLOCK.byNameCodec()
                 .fieldOf("ignition_material")
-                .forGetter(PortalDefinition::ignitionMaterial),
+                .forGetter(PortalDefinition::ignitionMaterial)
+            ,
 
             ResourceKey.codec(Registries.DIMENSION)
-                .fieldOf("dimension")
-                .forGetter(PortalDefinition::dimension)
+                .fieldOf("from_dimension")
+                .forGetter(PortalDefinition::fromDimension)
+            ,
+
+            ResourceKey.codec(Registries.DIMENSION)
+                .fieldOf("to_dimension")
+                .forGetter(PortalDefinition::toDimension)
         ).apply(instance, PortalDefinition::new)
     );
 
@@ -35,8 +43,10 @@ public record PortalDefinition(
             BuiltInRegistries.BLOCK.getKey(frameMaterial) +
             " + " +
             BuiltInRegistries.BLOCK.getKey(ignitionMaterial) +
-            " => " +
-            dimension.identifier()
+            ":\n" +
+            fromDimension.identifier() +
+            " <=> " +
+            toDimension.identifier()
         ;
     }
 }
