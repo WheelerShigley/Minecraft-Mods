@@ -4,17 +4,24 @@ import com.mojang.math.Transformation;
 import eu.pb4.polymer.virtualentity.api.elements.InteractionElement;
 import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
 import eu.pb4.polymer.virtualentity.api.elements.VirtualElement;
+import me.wheelershigley.www.window.portal.PortalBlock;
 import me.wheelershigley.www.window.portal.PortalBlockEntity;
+import me.wheelershigley.www.window.registrations.WindowBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityAttachments;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.StainedGlassBlock;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 
@@ -68,7 +75,18 @@ public class DisplayHelper {
                     if(     player.level() instanceof ServerLevel serverLevel
                          && player.gameMode.isCreative()
                     ) {
+                        DyeColor color; {
+                            PortalBlock block = (PortalBlock)serverLevel.getBlockState(position).getBlock();
+                            color = block.COLOR;
+                        }
                         serverLevel.destroyBlock(position, false, player);
+
+                        // Play sounds and Spawn particles
+                        serverLevel.setBlockAndUpdate(
+                            position,
+                            Blocks.STAINED_GLASS.pick(color).defaultBlockState()
+                        );
+                        serverLevel.destroyBlock(position, false, null);
                     }
                 }
             }
