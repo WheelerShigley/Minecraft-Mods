@@ -1,5 +1,6 @@
 package me.wheelershigley.www.window.registrations;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -19,6 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permissions;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.portal.TeleportTransition;
 
@@ -94,7 +96,18 @@ public class WindowCommands {
                                 Commands.argument("from_level", DimensionArgument.dimension() )
                                     .then(
                                         Commands.argument("to_level", DimensionArgument.dimension() )
-                                            .executes(WindowCommands::link)
+                                            .then(
+                                                Commands.argument("color", StringArgumentType.word() )
+                                                    .suggests(
+                                                        (_context, _builder) -> {
+                                                            for( DyeColor color : DyeColor.values() ) {
+                                                                _builder.suggest( color.getName() );
+                                                            }
+                                                            return _builder.buildFuture();
+                                                        }
+                                                    )
+                                                    .executes(WindowCommands::link)
+                                            )
                                     )
                             )
                     )
@@ -109,8 +122,12 @@ public class WindowCommands {
         ServerLevel fromLevel = DimensionArgument.getDimension(context, "from_level");
         ServerLevel   tolevel = DimensionArgument.getDimension(context, "to_level");
 
+        DyeColor color = DyeColor.valueOf(
+            StringArgumentType.getString(context, "color").toUpperCase()
+        );
+
         WindowConfig.INSTANCE.definitions.add(
-            new PortalDefinition(material, igniter, fromLevel.dimension(), tolevel.dimension() )
+            new PortalDefinition(material, igniter, fromLevel.dimension(), tolevel.dimension(), color)
         );
         WindowPersistentConfigurations.save();
         return 0;

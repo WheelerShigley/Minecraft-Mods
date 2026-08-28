@@ -10,6 +10,9 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static net.minecraft.world.item.DyeColor.*;
 
 public class WindowBlocks implements ModInitializer {
@@ -54,6 +57,27 @@ public class WindowBlocks implements ModInitializer {
         MAGENTA_PORTAL      = registerPortal(BlockItemIds.MAGENTA_PORTAL,       MAGENTA     ),
         PINK_PORTAL         = registerPortal(BlockItemIds.PINK_PORTAL,          PINK        )
     ;
+
+    public static final Map<DyeColor, Block> coloredPortals; static {
+        coloredPortals = new HashMap<>();
+
+        coloredPortals.put(WHITE,       WHITE_PORTAL        );
+        coloredPortals.put(LIGHT_GRAY,  LIGHT_GRAY_PORTAL   );
+        coloredPortals.put(GRAY,        GRAY_PORTAL         );
+        coloredPortals.put(BLACK,       BLACK_PORTAL        );
+        coloredPortals.put(BROWN,       BROWN_PORTAL        );
+        coloredPortals.put(RED,         RED_PORTAL          );
+        coloredPortals.put(ORANGE,      ORANGE_PORTAL       );
+        coloredPortals.put(YELLOW,      YELLOW_PORTAL       );
+        coloredPortals.put(LIME,        LIME_PORTAL         );
+        coloredPortals.put(GREEN,       GREEN_PORTAL        );
+        coloredPortals.put(CYAN,        CYAN_PORTAL         );
+        coloredPortals.put(LIGHT_BLUE,  LIGHT_BLUE_PORTAL   );
+        coloredPortals.put(BLUE,        BLUE_PORTAL         );
+        coloredPortals.put(PURPLE,      PURPLE_PORTAL       );
+        coloredPortals.put(MAGENTA,     MAGENTA_PORTAL      );
+        coloredPortals.put(PINK,        PINK_PORTAL         );
+    }
 
     private static Block registerPortal(ResourceKey<Block> key, DyeColor color) {
         Block block = new PortalBlock(

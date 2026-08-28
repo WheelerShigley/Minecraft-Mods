@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
@@ -12,7 +13,8 @@ public record PortalDefinition(
     Block frameMaterial,
     Block ignitionMaterial,
     ResourceKey<Level> fromDimension,
-    ResourceKey<Level>   toDimension
+    ResourceKey<Level>   toDimension,
+    DyeColor color
 ) {
     public static final Codec<PortalDefinition> CODEC = RecordCodecBuilder.create(
         instance -> instance.group(
@@ -34,6 +36,11 @@ public record PortalDefinition(
             ResourceKey.codec(Registries.DIMENSION)
                 .fieldOf("to_dimension")
                 .forGetter(PortalDefinition::toDimension)
+            ,
+
+            DyeColor.CODEC
+                .fieldOf("color")
+                .forGetter(PortalDefinition::color)
         ).apply(instance, PortalDefinition::new)
     );
 
@@ -46,7 +53,10 @@ public record PortalDefinition(
             ":\n" +
             fromDimension.identifier() +
             " <=> " +
-            toDimension.identifier()
+            toDimension.identifier() +
+            " (" +
+            color.getSerializedName() +
+            ")"
         ;
     }
 }

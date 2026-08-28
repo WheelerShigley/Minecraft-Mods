@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.BlockUtil;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -92,7 +93,8 @@ public class Portal {
 
     public static boolean attemptPortal(
         Level level, BlockPos position,
-        Block frameMaterial, Block ignitionMaterial
+        Block frameMaterial, Block ignitionMaterial,
+        DyeColor color
     ) {
         List<Direction> directions = getMaterialDirections(level, position, frameMaterial);
         if( directions.isEmpty() ) {
@@ -106,13 +108,14 @@ public class Portal {
         boolean y_axis = validAxises.getOrDefault(Direction.Axis.Y, Boolean.FALSE);
         boolean z_axis = validAxises.getOrDefault(Direction.Axis.Z, Boolean.FALSE);
 
+        BlockState state = WindowBlocks.coloredPortals.get(color).defaultBlockState();
         boolean worked = false;
         if(x_axis && y_axis) {
             worked = attemptFramePlane(
                 level, position,
                 Pair.of(Direction.Axis.X, Direction.Axis.Y),
                 frameMaterial, ignitionMaterial,
-                WindowBlocks.WHITE_PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, Direction.Axis.Z)
+                state.setValue(PortalBlock.AXIS, Direction.Axis.Z)
             );
         }
         if(!worked && y_axis && z_axis) {
@@ -120,7 +123,7 @@ public class Portal {
                 level, position,
                 Pair.of(Direction.Axis.Y, Direction.Axis.Z),
                 frameMaterial, ignitionMaterial,
-                WindowBlocks.WHITE_PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, Direction.Axis.X)
+                state.setValue(PortalBlock.AXIS, Direction.Axis.X)
             );
         }
         if(!worked && x_axis && z_axis) {
@@ -128,7 +131,7 @@ public class Portal {
                 level, position,
                 Pair.of(Direction.Axis.X, Direction.Axis.Z),
                 frameMaterial, ignitionMaterial,
-                WindowBlocks.WHITE_PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, Direction.Axis.Y)
+                state.setValue(PortalBlock.AXIS, Direction.Axis.Y)
             );
         }
         return worked;
@@ -185,9 +188,9 @@ public class Portal {
 
             validity.put(
                 axisDirection.getKey(),
-                    bounds.containsKey(first) && bounds.get(first).isPresent()
-                    && bounds.containsKey(second) && bounds.get(second).isPresent()
-                    && bounds.get(first).get() + bounds.get(second).get() <= PortalShape.MAX_WIDTH
+                bounds.containsKey(first) && bounds.get(first).isPresent()
+                && bounds.containsKey(second) && bounds.get(second).isPresent()
+                && bounds.get(first).get() + bounds.get(second).get() <= PortalShape.MAX_WIDTH
             );
         }
 
@@ -313,13 +316,7 @@ public class Portal {
                     .relative(plane.getFirst(), -i)
                     .relative(plane.getSecond(), -j)
                 ;
-                level.setBlock(position, portalBlockState, Block.UPDATE_ALL);
-
-                PortalBlockEntity blockEntity = (PortalBlockEntity)level.getBlockEntity(position);
-                if(blockEntity != null) {
-                    blockEntity.setFrame(  frameMaterial   );
-                    blockEntity.setIgniter(ignitionMaterial);
-                }
+                level.setBlock(position, portalBlockState, Block.UPDATE_CLIENTS);
             }
         }
         return true;
