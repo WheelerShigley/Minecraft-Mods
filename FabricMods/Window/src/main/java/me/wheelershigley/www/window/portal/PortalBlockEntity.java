@@ -1,10 +1,18 @@
 package me.wheelershigley.www.window.portal;
 
+import com.mojang.math.Transformation;
+import eu.pb4.polymer.virtualentity.api.ElementHolder;
+import eu.pb4.polymer.virtualentity.api.attachment.ChunkAttachment;
+import eu.pb4.polymer.virtualentity.api.elements.BlockDisplayElement;
+import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
+import me.wheelershigley.www.window.api.DisplayHelper;
 import me.wheelershigley.www.window.registrations.WindowBlockEntities;
+import me.wheelershigley.www.window.registrations.WindowBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -12,21 +20,55 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.WoolCarpetBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
+import java.util.HashMap;
+
+import static me.wheelershigley.www.window.Window.getWindowIdentifier;
+import static me.wheelershigley.www.window.api.DisplayHelper.getPaneDisplay;
 
 public class PortalBlockEntity extends BlockEntity {
     private Block frame;
     private Block igniter;
 
+    private final ElementHolder holder = new ElementHolder();
+    private ChunkAttachment attachment;
+
     public PortalBlockEntity(BlockPos pos, BlockState state, DyeColor color) {
         super(getBlockEntityType(color), pos, state);
+    }
+
+    public void initializeHolder(ServerLevel level) {
+        if(attachment != null) {
+            return;
+        }
+
+        PortalBlock block = (PortalBlock)level.getBlockState( this.getBlockPos() ).getBlock();
+        holder.addElement(
+            getPaneDisplay(
+                block.COLOR,
+                getBlockState().getValue(BlockStateProperties.AXIS)
+            )
+        );
+
+        attachment = (ChunkAttachment)ChunkAttachment.ofTicking(holder, level, worldPosition);
     }
 
     public static BlockEntityType<PortalBlockEntity> getBlockEntityType(DyeColor color) {
@@ -92,6 +134,10 @@ public class PortalBlockEntity extends BlockEntity {
             return;
         }
         ServerLevel serverLevel = (ServerLevel)level;
+
+        //every tick
+        blockEntity.initializeHolder(serverLevel);
+
         RandomSource random = serverLevel.getRandom();
         if( random.nextInt(20) != 0) {
             //animateTick() is 20x less often than tick()
@@ -164,5 +210,15 @@ public class PortalBlockEntity extends BlockEntity {
     public void setIgniter(Block igniter) {
         this.igniter = igniter;
         this.setChanged();
+    }
+
+    @Override
+    public void setRemoved() {
+        if(attachment != null) {
+            attachment.destroy();
+            attachment = null;
+        }
+
+        super.setRemoved();
     }
 }

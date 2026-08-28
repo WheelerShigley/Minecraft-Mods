@@ -51,7 +51,29 @@ public class LazyStateGen {
                         .resolve(color + "_portal_" + axis.toString().toLowerCase() + ".json")
                     ;
                     Files.createDirectories( blockModelPath.getParent() );
-                    Files.writeString(blockModelPath, getBlockModel(color, axis), StandardCharsets.UTF_8);
+                    Files.writeString(blockModelPath, getModel(color, axis, false), StandardCharsets.UTF_8);
+                }
+
+                /* {color}_portal_{axis}.json (item-models) */ {
+                    Path blockModelPath = resourceRoot
+                        .resolve("assets")
+                        .resolve(MOD_ID)
+                        .resolve("models").resolve("item")
+                        .resolve(color + "_portal.json")
+                    ;
+                    Files.createDirectories( blockModelPath.getParent() );
+                    Files.writeString(blockModelPath, itemModel( color, 'x'), StandardCharsets.UTF_8);
+                }
+
+                /* {color}_portal_{axis}.json (items) */ {
+                    Path blockModelPath = resourceRoot
+                        .resolve("assets")
+                        .resolve(MOD_ID)
+                        .resolve("items")
+                        .resolve(color + "_portal.json")
+                    ;
+                    Files.createDirectories( blockModelPath.getParent() );
+                    Files.writeString(blockModelPath, itemModel( color, 'x'), StandardCharsets.UTF_8);
                 }
 
                 // {color}_portal.png.mcmeta (texture-animations)
@@ -91,7 +113,7 @@ public class LazyStateGen {
             "}\n"
         ;
     }
-    private static String getBlockModel(String color, Direction.Axis axis) {
+    private static String getModel(String color, Direction.Axis axis, boolean item) {
         final String from, to; {
             from = switch(axis) {
                 case X -> "6, 0, 0";
@@ -124,6 +146,7 @@ public class LazyStateGen {
 
         return
             "{\n" +
+            (item ? "  \"parent\": \"minecraft:block/block\",\n" : "") +
             "  \"textures\": {\n" +
             "    \"portal\": \"window:block/" + color + "_portal\",\n" +
             "    \"particle\": \"#portal\"\n" +
@@ -143,6 +166,16 @@ public class LazyStateGen {
             "    }\n" +
             "  ]\n" +
             "}"
+        ;
+    }
+    private static final String itemModel(String color, char axis) {
+        return
+            "{\n" +
+            "  \"model\": {\n" +
+            "    \"type\": \"minecraft:model\",\n" +
+            "    \"model\": \"window:block/" + color + "_portal_" + axis + "\"\n" +
+            "  }\n" +
+            "}\n"
         ;
     }
     private static final String MCMETA =

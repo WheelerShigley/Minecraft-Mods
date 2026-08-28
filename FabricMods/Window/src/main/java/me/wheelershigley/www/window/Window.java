@@ -1,10 +1,7 @@
 package me.wheelershigley.www.window;
 
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
-import me.wheelershigley.www.window.registrations.WindowBlockEntities;
-import me.wheelershigley.www.window.registrations.WindowBlocks;
-import me.wheelershigley.www.window.registrations.WindowCommands;
-import me.wheelershigley.www.window.registrations.WindowPersistentConfigurations;
+import me.wheelershigley.www.window.registrations.*;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.Identifier;
 
@@ -23,6 +20,7 @@ public class Window implements ModInitializer {
         WindowBlocks.staticInitialize();
         WindowBlockEntities.staticInitialize();
         WindowBlockEntities.registerBlockEntities();
+        //WindowVirtualBlocks.register();
 
         WindowCommands.registerCommand();
         WindowPersistentConfigurations.registerPersistentConfig();
