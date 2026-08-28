@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Mixin(Level.class)
-public class IgnitionAttemptMixin {
+public abstract class IgnitionAttemptMixin {
     @Inject(
         method = "setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z",
         at = @At("TAIL")
@@ -26,7 +26,6 @@ public class IgnitionAttemptMixin {
         CallbackInfoReturnable<Boolean> cir
     ) {
         Set<Block> frameMaterials = new HashSet<>();
-
         boolean ignition = false;
         for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
             if(  definition.ignitionMaterial().equals( blockState.getBlock() )  ) {
