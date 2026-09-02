@@ -22,7 +22,7 @@ import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Unique;
 
 public class CustomFishingRod extends FishingRodItem implements PolymerItem {
-    public static final Item.Properties DEFAULT_PROPERTIES = new Item.Properties()
+    public static final Properties DEFAULT_PROPERTIES = new Properties()
         .stacksTo(1)
         .durability(64)
         .enchantable(1)

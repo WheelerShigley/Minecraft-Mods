@@ -1,5 +1,6 @@
 package me.wheelershigley.www.solace_fishing.helpers;
 
+import me.wheelershigley.www.solace_fishing.api.fishing.FishItem;
 import me.wheelershigley.www.solace_fishing.implementations.*;
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
 import net.minecraft.core.BlockPos;
@@ -107,7 +108,7 @@ public class MetaFishingHelper {
         return null;
     }
 
-    private static final HashMap<Item, DistributableItem> vanillaTranslations; static {
+    private static final HashMap<Item, FishItem> vanillaTranslations; static {
         vanillaTranslations = new HashMap<>();
 
         vanillaTranslations.put(Items.COD, FishItems.VANILLA_COD);
@@ -115,15 +116,15 @@ public class MetaFishingHelper {
         vanillaTranslations.put(Items.PUFFERFISH, FishItems.VANILLA_PUFFERFISH);
         vanillaTranslations.put(Items.TROPICAL_FISH, FishItems.VANILLA_TROPICAL_FISH);
     }
-    public static @Nullable DistributableItem getDistributedItem(ItemStack stack) {
+    public static @Nullable FishItem getFishItem(ItemStack stack) {
         Item item = stack.getItem();
 
         if( vanillaTranslations.containsKey(item) ) {
             return vanillaTranslations.get(item);
         }
 
-        if( item instanceof DistributableItem) {
-            return (DistributableItem)item;
+        if( item instanceof FishItem) {
+            return (FishItem)item;
         }
 
         return null;

@@ -12,6 +12,7 @@ public class UniformDistribution extends Distribution {
         return value;
     }
 
+    //TODO?
     @Override
     public boolean isInBounds(double value) {
         return true;

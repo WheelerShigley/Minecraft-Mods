@@ -3,17 +3,19 @@ package me.wheelershigley.www.solace_fishing.api.fishing;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Supplier;
+
 public class ClimatePreferencedItem {
-    private ItemStack datum;
+    private Supplier<ItemStack> datumSupplier;
     private final ClimatePreference preference;
     private double area_multiplier = 1.0;
 
     public ClimatePreferencedItem(
-        ItemStack datum,
+        Supplier<ItemStack> datumSupplier,
         ClimatePreference preference,
         double area_multiplier
     ) {
-        this.datum = datum;
+        this.datumSupplier = datumSupplier;
         this.preference = preference;
         setArea(area_multiplier);
     }
@@ -41,18 +43,18 @@ public class ClimatePreferencedItem {
         return this.area_multiplier;
     }
 
-    public void setItem(ItemStack stack) {
-        this.datum = stack;
+    public void setItemSupplier(Supplier<ItemStack> stackSupplier) {
+        this.datumSupplier = stackSupplier;
     }
     public ItemStack getItem() {
-        return datum.copy();
+        return datumSupplier.get();
     }
 
     @Override
     public ClimatePreferencedItem clone() {
         return new ClimatePreferencedItem(
-            this.datum.copy(),
-            this.preference,
+            () -> this.datumSupplier.get(),
+            this.preference.clone(),
             this.area_multiplier
         );
     }

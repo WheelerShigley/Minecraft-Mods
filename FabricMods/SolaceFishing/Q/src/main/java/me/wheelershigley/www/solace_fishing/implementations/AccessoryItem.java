@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public abstract class AccessoryItem extends Item implements PolymerItem {
-    public abstract Item.Properties getDefaultProperties();
+    public abstract Properties getDefaultProperties();
 
     public AccessoryItem(Properties properties) {
         super(properties);

@@ -66,10 +66,10 @@ public class NormalDistribution extends Distribution {
     public boolean isInBounds(double value) {
         // Anything outside of two standard-deviations is considered out-of-bounds
         double deviation = (value - mean) / standard_deviation;
-        if(deviation < -2.0 || 2.0 < deviation) {
-            return false;
+        if(-2.0 <= deviation && deviation <= 2.0) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     public double getMean() {

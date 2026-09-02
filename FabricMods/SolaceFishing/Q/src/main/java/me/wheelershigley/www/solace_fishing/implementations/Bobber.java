@@ -3,7 +3,7 @@ package me.wheelershigley.www.solace_fishing.implementations;
 import net.minecraft.world.item.Item;
 
 public class Bobber extends AccessoryItem  {
-    public static final Item.Properties DEFAULT_PROPERTIES = new Item.Properties()
+    public static final Properties DEFAULT_PROPERTIES = new Properties()
         .stacksTo(1)
         .durability(64)
     ;

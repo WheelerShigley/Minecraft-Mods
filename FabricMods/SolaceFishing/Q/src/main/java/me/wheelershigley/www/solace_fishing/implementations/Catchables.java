@@ -1,12 +1,9 @@
 package me.wheelershigley.www.solace_fishing.implementations;
 
 import me.wheelershigley.www.solace_fishing.api.*;
-import me.wheelershigley.www.solace_fishing.api.fishing.ClimateData;
-import me.wheelershigley.www.solace_fishing.api.fishing.ClimatePreference;
-import me.wheelershigley.www.solace_fishing.api.fishing.ClimatePreferencedItem;
-import me.wheelershigley.www.solace_fishing.api.fishing.FishingContext;
+import me.wheelershigley.www.solace_fishing.api.fishing.*;
 import me.wheelershigley.www.solace_fishing.api.lore.LoreRenderedLengthComponent;
-import me.wheelershigley.www.solace_fishing.api.statistics.NormalDistribution;
+import me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper;
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
@@ -25,7 +22,7 @@ import java.util.*;
 import static me.wheelershigley.www.solace_fishing.api.fishing.ClimatePreference.DEFAULT_PREFERENCE;
 import static me.wheelershigley.www.solace_fishing.helpers.ItemsHelper.*;
 import static me.wheelershigley.www.solace_fishing.helpers.ItemsHelper.conditionallyWithTranslatedLore;
-import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.getDistributedItem;
+import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.getFishItem;
 
 public class Catchables {
     public static boolean isInitialized = false;
@@ -58,7 +55,7 @@ public class Catchables {
         //in Jungles, Bamboo is added to the junk loot-table
         statisticalTrashes.add(
             new ClimatePreferencedItem(
-                new ItemStack(Items.BAMBOO),
+                () -> { return new ItemStack(Items.BAMBOO); },
                 (new ClimatePreference.Builder()).withBiomes(
                     List.of(Biomes.JUNGLE, Biomes.SPARSE_JUNGLE, Biomes.BAMBOO_JUNGLE)
                 ).build(),
@@ -106,15 +103,7 @@ public class Catchables {
         //Custom fish(es)
         Catchables.statisticalCatches.add( getDefault(FishItems.ALBACORE_TUNA,  1.0) );
         Catchables.statisticalCatches.add( getDefault(FishItems.YELLOWFIN_TUNA, 1.0) );
-        Catchables.statisticalCatches.add(
-            new ClimatePreferencedItem(
-                new ItemStack(FishItems.ANGELFISH),
-                (new ClimatePreference.Builder()).withWeirdnessPreference(
-                    new NormalDistribution(0.3, 0.25)
-                ).build(),
-                1.0
-            )
-        );
+        Catchables.statisticalCatches.add( getDefault(FishItems.ANGELFISH,      1.0) );
     }
 
     private static ClimatePreferencedItem getDefault(Item item, @Nullable Double area) {
@@ -123,9 +112,21 @@ public class Catchables {
             area
         );
     }
-    private static ClimatePreferencedItem getDefault(ItemStack item, @Nullable Double area) {
+    private static ClimatePreferencedItem getDefault(ItemStack stack, @Nullable Double area) {
         double adjusted_area = (area == null ? 1.0 : area);
-        return new ClimatePreferencedItem(item, DEFAULT_PREFERENCE, adjusted_area);
+
+        FishItem fishItem = MetaFishingHelper.getFishItem(stack);
+        if(fishItem != null) {
+            ClimatePreferencedItem preferences = fishItem.preferences.clone();
+            preferences.setArea( preferences.getArea() * adjusted_area );
+            return preferences;
+        }
+
+        return new ClimatePreferencedItem(
+            () -> stack,
+            DEFAULT_PREFERENCE,
+            adjusted_area
+        );
     }
 
     public static Set<ClimatePreferencedItem> getWeightedValidCatches(
@@ -193,8 +194,8 @@ public class Catchables {
             ClimatePreferencedItem copy = item.clone();
             if(  copy.isInBounds( context.environment() )  ) {
                 if(translation_key != null) {
-                    copy.setItem(
-                        conditionallyWithTranslatedLore(withLore, item.getItem(), translation_key)
+                    copy.setItemSupplier(
+                        () -> conditionallyWithTranslatedLore(withLore, item.getItem(), translation_key)
                     );
                 }
                 validSubCatches.add(copy);
@@ -285,13 +286,12 @@ public class Catchables {
         if( context.accessories().getHook().isEmpty() ) {
             return result;
         }
-
-        DistributableItem lengthedItem = getDistributedItem(result);
-        if(lengthedItem == null) {
+        FishItem metaDataItem = getFishItem(result);
+        if(metaDataItem == null) {
             return result;
         }
         LoreRenderedLengthComponent lengthComponent = new LoreRenderedLengthComponent(
-            lengthedItem.getDistributionResult(random)
+            metaDataItem.rollLength(random)
         );
         lengthComponent.set(result);
 
