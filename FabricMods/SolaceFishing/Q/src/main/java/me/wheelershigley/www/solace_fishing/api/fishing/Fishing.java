@@ -25,18 +25,18 @@ import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.get
 
 public class Fishing {
     //TODO: replace with data-driven getter
-    private static ClimatePreferencedSampleSpace treasureSampleSpace; static {
+    private static final ClimatePreferencedSampleSpace treasureSampleSpace; static {
         Set<ClimatePreferencedItem> treasures = new HashSet<>();
-        treasures.add(  getDefault( getItemWithGlint(Items.BOW),            1.0)  );
-        treasures.add(  getDefault( getItemWithGlint(Items.ENCHANTED_BOOK), 1.0)  );
-        treasures.add(  getDefault( getItemWithGlint(Items.FISHING_ROD),    1.0)  );
-        treasures.add( getDefault(Items.NAME_TAG,        1.0) );
-        treasures.add( getDefault(Items.NAUTILUS_SHELL,  1.0) );
-        treasures.add( getDefault(Items.SADDLE,          1.0) );
+        treasures.add(  getDefault( getItemWithGlint(Items.BOW),            null)  );
+        treasures.add(  getDefault( getItemWithGlint(Items.ENCHANTED_BOOK), null)  );
+        treasures.add(  getDefault( getItemWithGlint(Items.FISHING_ROD),    null)  );
+        treasures.add( getDefault(Items.NAME_TAG,       null) );
+        treasures.add( getDefault(Items.NAUTILUS_SHELL, null) );
+        treasures.add( getDefault(Items.SADDLE,         null) );
 
         treasureSampleSpace = new ClimatePreferencedSampleSpace(treasures);
     }
-    public static final ClimatePreferencedSampleSpace trashSampleSpace; static {
+    private static final ClimatePreferencedSampleSpace trashSampleSpace; static {
         Set<ClimatePreferencedItem> trashes = new HashSet<>();
 
         ItemStack waterBottle = PotionContents.createItemStack(
@@ -71,19 +71,19 @@ public class Fishing {
 
         trashSampleSpace = new ClimatePreferencedSampleSpace(trashes);
     }
-    public static final ClimatePreferencedSampleSpace marineAnimalsSampleSpace; static {
+    private static final ClimatePreferencedSampleSpace marineAnimalsSampleSpace; static {
         Set<ClimatePreferencedItem> marineAnimals = new HashSet<>();
 
-        // Vanilla fishes, available everywhere; 60%:25%:13%:2%, like vanilla
-        marineAnimals.add( getDefault(Items.COD,           0.60/0.60) );
-        marineAnimals.add( getDefault(Items.SALMON,        0.25/0.60) );
-        marineAnimals.add( getDefault(Items.PUFFERFISH,    0.13/0.60) );
-        marineAnimals.add( getDefault(Items.TROPICAL_FISH, 0.02/0.60) );
+        // Vanilla fish(es)
+        marineAnimals.add( getDefault(Items.COD,            null) );
+        marineAnimals.add( getDefault(Items.SALMON,         null) );
+        marineAnimals.add( getDefault(Items.PUFFERFISH,     null) );
+        marineAnimals.add( getDefault(Items.TROPICAL_FISH,  null) );
 
         //Custom fish(es)
-        marineAnimals.add( getDefault(FishItems.ALBACORE_TUNA,  1.0) );
-        marineAnimals.add( getDefault(FishItems.YELLOWFIN_TUNA, 1.0) );
-        marineAnimals.add( getDefault(FishItems.ANGELFISH,      1.0) );
+        marineAnimals.add( getDefault(FishItems.ALBACORE_TUNA,  null) );
+        marineAnimals.add( getDefault(FishItems.YELLOWFIN_TUNA, null) );
+        marineAnimals.add( getDefault(FishItems.ANGELFISH,      null) );
 
         marineAnimalsSampleSpace = new ClimatePreferencedSampleSpace(marineAnimals);
     }
@@ -91,23 +91,19 @@ public class Fishing {
     private static ClimatePreferencedItem getDefault(Item item, @Nullable Double area) {
         return getDefault(
             new ItemStack(item),
-            area
+            area == null ? 1.0 : area
         );
     }
     private static ClimatePreferencedItem getDefault(ItemStack stack, @Nullable Double area) {
-        double adjusted_area = (area == null ? 1.0 : area);
-
         FishItem fishItem = MetaFishingHelper.getFishItem(stack);
         if(fishItem != null) {
-            ClimatePreferencedItem preferences = fishItem.preferences.clone();
-            preferences.setArea( preferences.getArea() * adjusted_area );
-            return preferences;
+            return fishItem.preferences.clone();
         }
 
         return new ClimatePreferencedItem(
             () -> stack,
             DEFAULT_PREFERENCE,
-            adjusted_area
+            area == null ? 1.0 : area
         );
     }
     //end TODO

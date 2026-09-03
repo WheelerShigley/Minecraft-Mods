@@ -13,6 +13,7 @@ public class SolaceFishing implements ModInitializer {
     /* KNOWN BUGS
      * Caught Enchanted-Books are sometimes unenchanted
      * Length is applied twice (Hooked Fish)
+     * isOpenWater is unimplemented when fishing, and PDA's Probability-Menu (normal interact)
      */
 
     @Override
