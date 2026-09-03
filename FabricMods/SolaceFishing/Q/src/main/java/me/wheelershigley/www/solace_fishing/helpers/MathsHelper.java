@@ -5,6 +5,10 @@ import com.mojang.datafixers.util.Pair;
 public class MathsHelper {
     private static final double ORDER_DATUM = 1.0 - Double.MIN_NORMAL;
     public static Pair<Double, Integer> notate(double number) {
+        if(number == 0.0) {
+            return new Pair<Double, Integer>(0.0, 0);
+        }
+
         int order = 0;
         while(number < ORDER_DATUM) {
             order -= 1;

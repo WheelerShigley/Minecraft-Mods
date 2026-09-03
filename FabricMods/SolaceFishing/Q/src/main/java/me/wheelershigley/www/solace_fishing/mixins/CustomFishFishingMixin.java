@@ -66,9 +66,7 @@ public abstract class CustomFishFishingMixin extends Projectile {
         assert level instanceof ServerLevel;
 
         FishingContext context; {
-            //TODO: use
             boolean isOpenWater = this.isOpenWaterFishing();
-
             BlockPos position = this.blockPosition();
             Block medium = level.getBlockState(position).getBlock();
 
@@ -80,7 +78,7 @@ public abstract class CustomFishFishingMixin extends Projectile {
             float luck = caster.getLuck() + (float)this.luck + accessories.getLuck();
 
             context = new FishingContext(
-                medium, rod, luck, accessories, climate
+                medium, rod, luck, accessories, climate, isOpenWater
             );
         }
 

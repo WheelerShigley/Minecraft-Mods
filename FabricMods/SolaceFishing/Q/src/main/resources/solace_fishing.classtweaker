@@ -1,3 +1,4 @@
 classTweaker v1 official
 accessible class net/minecraft/world/entity/projectile/FishingHook$OpenWaterType
 accessible method net/minecraft/world/entity/projectile/FishingHook getOpenWaterTypeForArea (Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/entity/projectile/FishingHook$OpenWaterType;
+accessible method net/minecraft/world/entity/projectile/FishingHook calculateOpenWater (Lnet/minecraft/core/BlockPos;)Z

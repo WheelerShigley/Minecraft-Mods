@@ -12,8 +12,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
@@ -42,8 +45,11 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
             rod = new ItemStack(Items.FISHING_ROD);
         }
         FishingContext subContext; {
-            Block medium = level.getBlockState(position).getBlock();
+            FishingHook hook = new FishingHook(EntityTypes.FISHING_BOBBER, level);
+            boolean isOpenWater = ( forceTreasure || hook.calculateOpenWater(position) );
+            hook.remove(Entity.RemovalReason.DISCARDED);
 
+            Block medium = level.getBlockState(position).getBlock();
             RodAccessories accessories = LoreRenderedRodAccessoryComponent.get(rod, level);
 
             float luck = player.getLuck() + (float)getLuckOfRod(level, rod);
@@ -54,13 +60,14 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
             ClimateData environment = ClimateData.sample(level, position);
 
             subContext = new FishingContext(
-                medium, rod.getItem(), luck, accessories, environment
+                medium, rod.getItem(), luck, accessories, environment, isOpenWater
             );
         }
 
         LinkedHashSet<ClimatePreferencedItem> sortedLocalSampleSpace = Fishing
             .getLocalSampleSpace(subContext)
             .getSortedSubSpace(subContext)
+            .getCleaned()
             .getSamples()
         ;
 
@@ -190,7 +197,7 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
         StringBuilder stringBuilder = new StringBuilder();
         if(remainder == 0.0) {
             stringBuilder.append(
-                Integer.toString( (int) chance)
+                Integer.toString( (int)chance )
             );
         } else {
             stringBuilder.append(

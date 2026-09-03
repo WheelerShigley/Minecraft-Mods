@@ -9,7 +9,8 @@ public record FishingContext(
     Item rod,
     float luck,
     RodAccessories accessories,
-    ClimateData environment
+    ClimateData environment,
+    boolean isOpenWater
 ) {
     @Override
     public @NonNull String toString() {
@@ -20,6 +21,7 @@ public record FishingContext(
             ", luck: " + luck +
             ", accessories: " + accessories +
             ", environment: " + environment +
+            ", open-water: " + isOpenWater +
             "]"
         ;
     }

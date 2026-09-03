@@ -11,9 +11,9 @@ public class SolaceFishing implements ModInitializer {
     public static final String MOD_ID = "solace_fishing";
 
     /* KNOWN BUGS
+     * Enchanted Treasure Items don't appear Enchanted in the Probabilities-Menu (PDA)
      * Caught Enchanted-Books are sometimes unenchanted
      * Length is applied twice (Hooked Fish)
-     * isOpenWater is unimplemented when fishing, and PDA's Probability-Menu (normal interact)
      */
 
     @Override

@@ -109,7 +109,7 @@ public class ClimatePreferencedSampleSpace extends SampleSpace<ClimatePreference
     }
 
     @Override
-    public SampleSpace<ClimatePreferencedItem, ItemStack> getSortedSubSpace(FishingContext context) {
+    public ClimatePreferencedSampleSpace getSortedSubSpace(FishingContext context) {
         ClimatePreferencedSampleSpace validCatches = this.subSpace(context);
 
         HashSet<ClimatePreferencedItem> sortedSamples = validCatches.getSamples()
@@ -125,5 +125,15 @@ public class ClimatePreferencedSampleSpace extends SampleSpace<ClimatePreference
         ;
 
         return new ClimatePreferencedSampleSpace(sortedSamples);
+    }
+
+    public ClimatePreferencedSampleSpace getCleaned() {
+        LinkedHashSet<ClimatePreferencedItem> samples = new LinkedHashSet<>();
+        for( ClimatePreferencedItem sample : this.getSamples() ) {
+            if(sample.getArea() != 0.0) {
+                samples.add(sample);
+            }
+        }
+        return new ClimatePreferencedSampleSpace(samples);
     }
 }

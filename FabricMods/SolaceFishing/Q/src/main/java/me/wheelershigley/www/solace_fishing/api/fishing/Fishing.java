@@ -5,8 +5,10 @@ import me.wheelershigley.www.solace_fishing.api.lore.LoreRenderedLengthComponent
 import me.wheelershigley.www.solace_fishing.api.statistics.ClimatePreferencedSampleSpace;
 import me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper;
 import me.wheelershigley.www.solace_fishing.registrations.FishItems;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -113,8 +115,7 @@ public class Fishing {
         ClimatePreferencedSampleSpace localTrashes   = (ClimatePreferencedSampleSpace)        trashSampleSpace.getSortedSubSpace(context);
         ClimatePreferencedSampleSpace localTreasures = (ClimatePreferencedSampleSpace)     treasureSampleSpace.getSortedSubSpace(context);
 
-        //TODO: withTreasure in context
-        Map<ResultCategory, Double> intendedWeights = context.accessories().getCategoryWeightRatios(true);
+        Map<ResultCategory, Double> intendedWeights = context.accessories().getCategoryWeightRatios( context.isOpenWater() );
         localAnimals.normalize(   intendedWeights.get(ResultCategory.Catch   ) );
         localTrashes.normalize(   intendedWeights.get(ResultCategory.Trash   ) );
         localTreasures.normalize( intendedWeights.get(ResultCategory.Treasure) );
@@ -159,7 +160,7 @@ public class Fishing {
             return result;
         }
         LoreRenderedLengthComponent lengthComponent = new LoreRenderedLengthComponent(
-                metaDataItem.rollLength(random)
+            metaDataItem.rollLength(random)
         );
         lengthComponent.set(result);
         return result;
