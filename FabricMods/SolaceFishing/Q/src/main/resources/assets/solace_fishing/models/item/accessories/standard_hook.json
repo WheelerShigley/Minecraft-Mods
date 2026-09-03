@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "solace_fishing:item/accessories/magenta_hook"
+    "layer0": "solace_fishing:item/accessories/standard_hook"
   }
 }

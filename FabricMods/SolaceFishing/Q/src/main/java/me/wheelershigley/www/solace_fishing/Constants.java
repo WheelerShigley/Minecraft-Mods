@@ -9,6 +9,8 @@ public class Constants {
         TRASH_MULTIPLIER_TAG     = "accessory_trash_multiplier",
 
         DEPTH_MINIMUM_PERCENTAGE = "minimum_percentage",
-        DEPTH_MAXIMUM_PERCENTAGE = "maximum_percentage"
+        DEPTH_MAXIMUM_PERCENTAGE = "maximum_percentage",
+
+        SIZE_PERCENTILE_MULTIPLIER = "size_percentile_multiplier"
     ;
 }

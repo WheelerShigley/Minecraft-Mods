@@ -160,16 +160,13 @@ public class Fishing {
             return result;
         }
         LoreRenderedLengthComponent lengthComponent = new LoreRenderedLengthComponent(
-            metaDataItem.rollLength(random)
+            metaDataItem.rollLength( random, context.accessories().getProductSizePercentileMultiplier() )
         );
         lengthComponent.set(result);
         return result;
     }
 
     public static ItemStack getCatch(FishingContext context, RandomSource random) {
-        return adjustCatch(
-            getLocalSampleSpace(context).sample(random, context),
-            context
-        );
+        return getLocalSampleSpace(context).sample(random, context);
     }
 }

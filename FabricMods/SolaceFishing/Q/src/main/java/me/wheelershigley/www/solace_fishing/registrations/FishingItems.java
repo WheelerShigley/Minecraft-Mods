@@ -12,9 +12,9 @@ public class FishingItems extends PolymerItemsRegister {
     public static Item PDA;
     public static Item BAMBOO_ROD;
 
-    //TODO: remove dummy accessories
-    public static Item MAGENTA_HOOK;
-    public static Item CYAN_HOOK;
+    public static Item TINY_HOOK;
+    public static Item STANDARD_HOOK;
+    public static Item LARGE_HOOK;
     public static Item SURFACE_LINE;
     public static Item CENTER_LINE;
     public static Item FLOOR_LINE;
@@ -29,7 +29,10 @@ public class FishingItems extends PolymerItemsRegister {
         SURFACE_LINE_CUSTOM_DATA,
         CENTER_LINE_CUSTOM_DATA,
         FLOOR_LINE_CUSTOM_DATA,
-        DOUBLE_LINE_CUSTOM_DATA
+        DOUBLE_LINE_CUSTOM_DATA,
+        TINY_HOOK_CUSTOM_DATA,
+        STANDARD_HOOK_CUSTOM_DATA,
+        LARGE_HOOK_CUSTOM_DATA
     ;
     static {
         CompoundTag rubberDuckTag = new CompoundTag();
@@ -54,6 +57,18 @@ public class FishingItems extends PolymerItemsRegister {
         CompoundTag doubleTag = new CompoundTag();
         doubleTag.putDouble(DEPTH_MAXIMUM_PERCENTAGE, 2.0);
         DOUBLE_LINE_CUSTOM_DATA = CustomData.of(doubleTag);
+
+        CompoundTag tinyHookTag = new CompoundTag();
+        tinyHookTag.putDouble(SIZE_PERCENTILE_MULTIPLIER, 0.95);
+        TINY_HOOK_CUSTOM_DATA = CustomData.of(tinyHookTag);
+
+        CompoundTag standardHookTag = new CompoundTag();
+        standardHookTag.putDouble(SIZE_PERCENTILE_MULTIPLIER, 0.95);
+        STANDARD_HOOK_CUSTOM_DATA = CustomData.of(standardHookTag);
+
+        CompoundTag largeHookTag = new CompoundTag();
+        largeHookTag.putDouble(SIZE_PERCENTILE_MULTIPLIER, 0.95);
+        LARGE_HOOK_CUSTOM_DATA = CustomData.of(largeHookTag);
     }
 
     public static void initialize() {
@@ -69,14 +84,19 @@ public class FishingItems extends PolymerItemsRegister {
             CustomFishingRod::new
         );
 
-        MAGENTA_HOOK = register(
-            "magenta_hook",
-            Hook.DEFAULT_PROPERTIES,
+        TINY_HOOK = register(
+            "tiny_hook",
+            Hook.DEFAULT_PROPERTIES.component(DataComponents.CUSTOM_DATA, TINY_HOOK_CUSTOM_DATA),
             Hook::new
         );
-        CYAN_HOOK = register(
-            "cyan_hook",
-            Hook.DEFAULT_PROPERTIES,
+        STANDARD_HOOK = register(
+            "standard_hook",
+            Hook.DEFAULT_PROPERTIES.component(DataComponents.CUSTOM_DATA, STANDARD_HOOK_CUSTOM_DATA),
+            Hook::new
+        );
+        LARGE_HOOK = register(
+            "large_hook",
+            Hook.DEFAULT_PROPERTIES.component(DataComponents.CUSTOM_DATA, LARGE_HOOK_CUSTOM_DATA),
             Hook::new
         );
 

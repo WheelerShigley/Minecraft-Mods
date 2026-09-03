@@ -89,7 +89,7 @@ public class ClimatePreferencedSampleSpace extends SampleSpace<ClimatePreference
             return result;
         }
         LoreRenderedLengthComponent lengthComponent = new LoreRenderedLengthComponent(
-            metaDataItem.rollLength(random)
+            metaDataItem.rollLength( random, context.accessories().getProductSizePercentileMultiplier() )
         );
         lengthComponent.set(result);
 

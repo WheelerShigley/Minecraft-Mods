@@ -23,12 +23,12 @@ public class FishItem extends Item {
         this.preferences = climatePreference;
     }
 
-    public @Nullable Double rollLength(RandomSource random) {
+    public @Nullable Double rollLength(RandomSource random, double multiplier) {
         if(lengthDistribution == null) {
             return null;
         }
 
-        return lengthDistribution.getZValue( random.nextDouble() );
+        return lengthDistribution.getZValue( multiplier * random.nextDouble() );
     }
 
     public @Nullable Double getLikelihoodAtDepth(double minimum_depth, double maximum_depth) {

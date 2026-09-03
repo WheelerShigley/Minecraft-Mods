@@ -207,6 +207,13 @@ public class RodAccessories {
         }
         return accumulator;
     }
+    public double getProductSizePercentileMultiplier() {
+        double accumulator = 1.0;
+        for(ItemStack accessory : getAccessories() ) {
+            accumulator *= getSizePercentileMultiplier(accessory);
+        }
+        return accumulator;
+    }
 
     private int getLuck(ItemStack itemStack) {
         CustomData customData = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
@@ -219,6 +226,10 @@ public class RodAccessories {
     private double getMaximumDepthPercentage(ItemStack itemStack) {
         CustomData customData = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
         return customData.copyTag().getDoubleOr(Constants.DEPTH_MAXIMUM_PERCENTAGE, 1.0);
+    }
+    private double getSizePercentileMultiplier(ItemStack itemStack) {
+        CustomData customData = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        return customData.copyTag().getDoubleOr(Constants.SIZE_PERCENTILE_MULTIPLIER, 1.0);
     }
 
 

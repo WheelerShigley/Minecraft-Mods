@@ -12,8 +12,9 @@ public class ItemGroup {
                     group.accept(FishingItems.PDA);
                     group.accept(FishingItems.BAMBOO_ROD);
 
-                    group.accept(FishingItems.MAGENTA_HOOK);
-                    group.accept(FishingItems.CYAN_HOOK);
+                    group.accept(FishingItems.TINY_HOOK);
+                    group.accept(FishingItems.STANDARD_HOOK);
+                    group.accept(FishingItems.LARGE_HOOK);
 
                     group.accept(FishingItems.SURFACE_LINE);
                     group.accept(FishingItems.CENTER_LINE);
