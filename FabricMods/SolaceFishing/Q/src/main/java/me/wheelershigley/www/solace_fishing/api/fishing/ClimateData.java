@@ -25,14 +25,14 @@ public class ClimateData {
         weirdness
     ;
     private Holder<Biome> biome = null;
-    private ResourceKey<Level> dimension = null;
+    private Level dimension = null;
 
     public ClimateData(
         double temperature, double humidity,
         double continentalness, double erosion,
         double height, double weirdness,
         @Nullable Holder<Biome> biome,
-        @Nullable ResourceKey<Level> dimension
+        @Nullable Level dimension
     ) {
         setTemperature(temperature);
         setHumidity(humidity);
@@ -61,7 +61,7 @@ public class ClimateData {
             normalizeHeight( sampler.depth().compute(context) ),
             sampler.weirdness().compute(context),
             level.getBiome(pos),
-            level.dimension()
+            level
         );
     }
 
@@ -92,10 +92,10 @@ public class ClimateData {
         return weirdness;
     }
 
-    public Holder<Biome> getBiome() {
+    public Holder<Biome> getBiomeHolder() {
         return biome;
     }
-    public ResourceKey<Level> getDimension() {
+    public Level getLevel() {
         return dimension;
     }
 
@@ -196,7 +196,7 @@ public class ClimateData {
             data.biome = biome;
             return this;
         }
-        public Builder withDimension(@NotNull ResourceKey<Level> level) {
+        public Builder withDimension(@NotNull Level level) {
             data.dimension = level;
             return this;
         }

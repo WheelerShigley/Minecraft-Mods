@@ -10,6 +10,11 @@ import net.fabricmc.api.ModInitializer;
 public class SolaceFishing implements ModInitializer {
     public static final String MOD_ID = "solace_fishing";
 
+    /* KNOWN BUGS
+     * Caught Enchanted-Books are sometimes unenchanted
+     * Length is applied twice (Hooked Fish)
+     */
+
     @Override
     public void onInitialize() {
         FishItems.initialize();

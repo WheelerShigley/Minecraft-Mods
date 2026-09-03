@@ -59,9 +59,9 @@ public class ClimatePreference {
             ) && weirdnessPreference.isInBounds(
                 locationData.getWeirdness()
             ) && (
-                biomes.isEmpty()     || biomes.contains( locationData.getBiome() )
+                biomes.isEmpty()     || biomes.contains( locationData.getBiomeHolder() )
             ) && (
-                dimensions.isEmpty() || dimensions.contains( locationData.getDimension() )
+                dimensions.isEmpty() || dimensions.contains( locationData.getLevel() )
             )
         ;
     }

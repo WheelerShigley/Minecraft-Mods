@@ -1,10 +1,7 @@
 package me.wheelershigley.www.solace_fishing.menus;
 
 import com.mojang.datafixers.util.Pair;
-import me.wheelershigley.www.solace_fishing.api.fishing.ClimateData;
-import me.wheelershigley.www.solace_fishing.api.fishing.ClimatePreferencedItem;
-import me.wheelershigley.www.solace_fishing.api.fishing.FishingContext;
-import me.wheelershigley.www.solace_fishing.api.fishing.RodAccessories;
+import me.wheelershigley.www.solace_fishing.api.fishing.*;
 import me.wheelershigley.www.solace_fishing.api.lore.LoreRenderedRodAccessoryComponent;
 import me.wheelershigley.www.solace_fishing.helpers.ItemsHelper;
 import me.wheelershigley.www.solace_fishing.helpers.MathsHelper;
@@ -25,17 +22,15 @@ import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static me.wheelershigley.www.solace_fishing.helpers.MathsHelper.percentageRound;
 import static me.wheelershigley.www.solace_fishing.helpers.MenusHelper.getMinimumChestMenu;
 import static me.wheelershigley.www.solace_fishing.helpers.MenusHelper.setContextRow;
 import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.*;
-import static me.wheelershigley.www.solace_fishing.implementations.Catchables.*;
 
 public class ProbabilitiesMenu extends ImmutableSimpleGui {
     private final FishingContext context;
-    private final LinkedHashMap<ItemStack, Double> probabilities;
+    private final LinkedHashSet<ClimatePreferencedItem> probabilities;
 
     public ProbabilitiesMenu(
         ServerLevel level, BlockPos position, boolean forceTreasure,
@@ -63,10 +58,15 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
             );
         }
 
-        LinkedHashMap<ItemStack, Double> probabilitiesCache = calculateProbabilities(level, position, subContext, forceTreasure);
-        MenuType<?> menuType = getMinimumChestMenu( probabilitiesCache.size()+ROW_LENGTH );
+        LinkedHashSet<ClimatePreferencedItem> sortedLocalSampleSpace = Fishing
+            .getLocalSampleSpace(subContext)
+            .getSortedSubSpace(subContext)
+            .getSamples()
+        ;
+
+        MenuType<?> menuType = getMinimumChestMenu( sortedLocalSampleSpace.size()+ROW_LENGTH );
         this.context = subContext;
-        this.probabilities = probabilitiesCache;
+        this.probabilities = sortedLocalSampleSpace;
 
         super(player, menuType, parent);
     }
@@ -100,54 +100,20 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
         }
 
         int fish_index = 0;
-        for( Map.Entry<ItemStack, Double> entry : probabilities.entrySet() ) {
+        for(ClimatePreferencedItem entry : probabilities) {
             if( MenusHelper.sizeOf( this.getMenuType() ) <= fish_index ) {
                 break;
             }
 
-            Item key = entry.getKey().getItem();
-            ClimatePreferencedItem value = itemsCache.getOrDefault(key, null);
-
             this.setSlot(
                 ROW_LENGTH + fish_index++,
                 getProbabilityMenuItem(
-                    entry.getKey(),
-                    entry.getValue(),
-                    value == null ? null : value.getAveragePickiness()
+                    entry.getItem(),
+                    entry.getArea(),
+                    entry.getAveragePickiness()
                 )
             );
         }
-    }
-
-    //integrate luck, rods, and accessories
-    private static LinkedHashMap<ItemStack, Double> calculateProbabilities(ServerLevel level, BlockPos position, FishingContext context, boolean forceTreasure) {
-        boolean withTreasure = forceTreasure || isOpenWater(level, position);
-
-        Set<ClimatePreferencedItem> validItems = getWeightedValidCatches(context, withTreasure, true);
-        Map<ClimatePreferencedItem, Double> weights = normalizeWeights(
-            getWeightsForItems( validItems, context.environment() )
-        );
-
-        Map<ClimatePreferencedItem, Double> sortedWeights = weights.entrySet()
-            .stream()
-            .sorted(
-                Map.Entry.<ClimatePreferencedItem, Double>comparingByValue().reversed()
-            )
-            .collect(
-                Collectors.toMap(
-                    Map.Entry::getKey,
-                    Map.Entry::getValue,
-                    (a, b) -> a,
-                    LinkedHashMap::new
-                )
-            )
-        ;
-
-        LinkedHashMap<ItemStack, Double> sortedProbabilities = new LinkedHashMap<>();
-        for( Map.Entry<ClimatePreferencedItem, Double> entry : sortedWeights.entrySet() ) {
-            sortedProbabilities.put( entry.getKey().getItem(), entry.getValue() );
-        }
-        return sortedProbabilities;
     }
 
     private static ItemStack getProbabilityMenuItem(
