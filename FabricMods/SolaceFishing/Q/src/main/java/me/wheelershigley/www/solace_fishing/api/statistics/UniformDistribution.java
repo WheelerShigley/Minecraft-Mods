@@ -8,11 +8,16 @@ public class UniformDistribution extends Distribution {
     }
 
     @Override
-    public double get(double percentile) {
+    public double getZValue(double percentile) {
         return value;
     }
 
-    //TODO?
+    @Override
+    public double getPercentile(double minimum, double maximum) {
+        double difference = Math.abs(maximum - minimum);
+        return 0.5 * value * difference;
+    }
+
     @Override
     public boolean isInBounds(double value) {
         return true;

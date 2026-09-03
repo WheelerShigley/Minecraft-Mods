@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import me.wheelershigley.www.solace_fishing.api.fishing.*;
 import me.wheelershigley.www.solace_fishing.api.lore.LoreRenderedRodAccessoryComponent;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
@@ -40,9 +39,6 @@ public abstract class CustomFishFishingMixin extends Projectile {
     @Shadow
     private boolean openWater;
 
-    @Shadow
-    public abstract boolean isOpenWaterFishing();
-
     @ModifyExpressionValue(
         method = "retrieve",
         at = @At(
@@ -66,9 +62,9 @@ public abstract class CustomFishFishingMixin extends Projectile {
         assert level instanceof ServerLevel;
 
         FishingContext context; {
-            boolean isOpenWater = this.isOpenWaterFishing();
             BlockPos position = this.blockPosition();
             Block medium = level.getBlockState(position).getBlock();
+            int medium_depth = FishingContext.discoverDepthOfMedium(level, position);
 
             Item rod = (rodStack == null ? Items.FISHING_ROD : rodStack.getItem() );
 
@@ -78,21 +74,9 @@ public abstract class CustomFishFishingMixin extends Projectile {
             float luck = caster.getLuck() + (float)this.luck + accessories.getLuck();
 
             context = new FishingContext(
-                medium, rod, luck, accessories, climate, isOpenWater
+                medium, medium_depth, rod, luck, accessories, climate, openWater
             );
         }
-
-        //TODO: resolve
-        caster.sendSystemMessage(
-            Component.literal(
-                "TODO: integrate whole context."
-            )
-        );
-        caster.sendSystemMessage(
-            Component.literal(
-                "This context: " + context.toString()
-            )
-        );
 
         //get Catch
         ItemStack caught = Fishing.getCatch( context, level.getRandom() );

@@ -71,6 +71,7 @@ public class MenusHelper {
         // Lore
         setLevelAndBiomeLore(environment, context);
         setBlockLore( medium, context.medium() );
+        setDepthLore( medium, 0, context.medium_depth() );
         setClimateLore( climate, context.environment() );
         setItemLore( rod, context.rod() );
         setAccessoriesLore( accessories, context.accessories() );
@@ -110,6 +111,15 @@ public class MenusHelper {
             itemStack,
             Component.translatable(
                 block.getDescriptionId()
+            ).withStyle(DEFAULT_STYLE)
+        );
+    }
+    private static void setDepthLore(ItemStack itemStack, int minimum, int maximum) {
+        appendLore(
+            itemStack,
+            Component.translatable(
+                "solace_fishing.probabilities_menu.depth_range",
+                minimum, maximum
             ).withStyle(DEFAULT_STYLE)
         );
     }

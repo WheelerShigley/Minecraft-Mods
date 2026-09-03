@@ -19,7 +19,7 @@ public class NormalDistribution extends Distribution {
     // For this Normal-Distribution, return its value at some input, x
     private static final double NORMAL_CONSTANT = 1.0/ sqrt(2.0*Math.PI);
     @Override
-    public double get(double x) {
+    public double getZValue(double x) {
         double product_accumulator = NORMAL_CONSTANT;
         product_accumulator /= standard_deviation;
 
@@ -29,6 +29,21 @@ public class NormalDistribution extends Distribution {
         product_accumulator *= Math.pow(Math.E, power);
 
         return product_accumulator;
+    }
+
+    @Override
+    public double getPercentile(double z_minimum, double z_maximum) {
+        double accumulator;
+
+        accumulator = Erf.erf(
+            (this.mean + z_maximum) / ( sqrt(2.0) * this.standard_deviation )
+        );
+        accumulator -= Erf.erf(
+            (this.mean + z_minimum) / ( sqrt(2.0) * this.standard_deviation )
+        );
+        accumulator /= (2.0 * this.standard_deviation);
+
+        return accumulator;
     }
 
     /* Cumulative-Density-Function (CDF) of the Probability-Distribution-Function (PDF),

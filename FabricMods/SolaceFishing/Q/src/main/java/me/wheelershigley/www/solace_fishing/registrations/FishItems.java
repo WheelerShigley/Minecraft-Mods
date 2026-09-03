@@ -5,6 +5,7 @@ import me.wheelershigley.www.solace_fishing.api.fishing.ClimatePreferencedItem;
 import me.wheelershigley.www.solace_fishing.api.fishing.FishItem;
 import me.wheelershigley.www.solace_fishing.api.statistics.Distribution;
 import me.wheelershigley.www.solace_fishing.api.statistics.NormalDistribution;
+import me.wheelershigley.www.solace_fishing.api.statistics.UniformDistribution;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -80,6 +81,7 @@ public class FishItems extends PolymerItemsRegister {
         return properties -> new FishItem(
             properties,
             lengthDistribution,
+            new UniformDistribution(0.5),
             new ClimatePreferencedItem(
                 () -> new ItemStack(item),
                 preferences == null ? ClimatePreference.DEFAULT_PREFERENCE : preferences,

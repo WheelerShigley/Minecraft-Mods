@@ -1,5 +1,6 @@
 package me.wheelershigley.www.solace_fishing.api.fishing;
 
+import me.wheelershigley.www.solace_fishing.helpers.MathsHelper;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,5 +58,18 @@ public class ClimatePreferencedItem {
             this.preference.clone(),
             this.area_multiplier
         );
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder
+            .append("ClimatePreferencedItem{ ")
+            .append( MathsHelper.percentageRound(area_multiplier) ).append("% ")
+            .append( this.datumSupplier.get().toString() )
+            .append(" at ").append( this.preference.toString() )
+            .append(" }")
+        ;
+        return stringBuilder.toString();
     }
 }

@@ -111,9 +111,9 @@ public class Fishing {
     //end TODO
 
     public static ClimatePreferencedSampleSpace getLocalSampleSpace(FishingContext context) {
-        ClimatePreferencedSampleSpace localAnimals   = (ClimatePreferencedSampleSpace)marineAnimalsSampleSpace.getSortedSubSpace(context);
-        ClimatePreferencedSampleSpace localTrashes   = (ClimatePreferencedSampleSpace)        trashSampleSpace.getSortedSubSpace(context);
-        ClimatePreferencedSampleSpace localTreasures = (ClimatePreferencedSampleSpace)     treasureSampleSpace.getSortedSubSpace(context);
+        ClimatePreferencedSampleSpace localAnimals   = marineAnimalsSampleSpace.getSortedSubSpace(context);
+        ClimatePreferencedSampleSpace localTrashes   =         trashSampleSpace.getSortedSubSpace(context);
+        ClimatePreferencedSampleSpace localTreasures =      treasureSampleSpace.getSortedSubSpace(context);
 
         Map<ResultCategory, Double> intendedWeights = context.accessories().getCategoryWeightRatios( context.isOpenWater() );
         localAnimals.normalize(   intendedWeights.get(ResultCategory.Catch   ) );

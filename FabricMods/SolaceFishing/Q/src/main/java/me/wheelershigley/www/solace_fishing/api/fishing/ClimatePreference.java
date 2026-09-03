@@ -69,12 +69,12 @@ public class ClimatePreference {
     public double getAverageWeightAt(ClimateData locationData) {
         double accumulator = 0.0;
 
-        accumulator +=     temperaturePreference.get( locationData.getTemperature()     );
-        accumulator +=        humidityPreference.get( locationData.getHumidity()        );
-        accumulator += continentalnessPreference.get( locationData.getContinentalness() );
-        accumulator +=         erosionPreference.get( locationData.getErosion()         );
-        accumulator +=           depthPreference.get( locationData.getHeight()           );
-        accumulator +=       weirdnessPreference.get( locationData.getWeirdness()       );
+        accumulator +=     temperaturePreference.getZValue( locationData.getTemperature()     );
+        accumulator +=        humidityPreference.getZValue( locationData.getHumidity()        );
+        accumulator += continentalnessPreference.getZValue( locationData.getContinentalness() );
+        accumulator +=         erosionPreference.getZValue( locationData.getErosion()         );
+        accumulator +=           depthPreference.getZValue( locationData.getHeight()           );
+        accumulator +=       weirdnessPreference.getZValue( locationData.getWeirdness()       );
 
         return accumulator/6.0;
     }

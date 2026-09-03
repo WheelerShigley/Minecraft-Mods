@@ -50,6 +50,7 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
             hook.remove(Entity.RemovalReason.DISCARDED);
 
             Block medium = level.getBlockState(position).getBlock();
+            int medium_depth = FishingContext.discoverDepthOfMedium(level, position);
             RodAccessories accessories = LoreRenderedRodAccessoryComponent.get(rod, level);
 
             float luck = player.getLuck() + (float)getLuckOfRod(level, rod);
@@ -60,7 +61,7 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
             ClimateData environment = ClimateData.sample(level, position);
 
             subContext = new FishingContext(
-                medium, rod.getItem(), luck, accessories, environment, isOpenWater
+                medium, medium_depth, rod.getItem(), luck, accessories, environment, isOpenWater
             );
         }
 
@@ -68,6 +69,7 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
             .getLocalSampleSpace(subContext)
             .getSortedSubSpace(subContext)
             .getCleaned()
+            .withLuck(subContext)
             .getSamples()
         ;
 

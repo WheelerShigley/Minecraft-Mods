@@ -7,16 +7,19 @@ import org.jetbrains.annotations.Nullable;
 
 public class FishItem extends Item {
     private final Distribution lengthDistribution;
+    private final Distribution depthPreference;
     public final ClimatePreferencedItem preferences;
 
     public FishItem(
         Item.Properties properties,
         @Nullable Distribution lengthDistribution,
+        @Nullable Distribution depthPreference,
         ClimatePreferencedItem climatePreference
     ) {
         super(properties);
 
         this.lengthDistribution = lengthDistribution;
+        this.depthPreference = depthPreference;
         this.preferences = climatePreference;
     }
 
@@ -25,7 +28,15 @@ public class FishItem extends Item {
             return null;
         }
 
-        return lengthDistribution.get( random.nextDouble() );
+        return lengthDistribution.getZValue( random.nextDouble() );
+    }
+
+    public @Nullable Double getLikelihoodAtDepth(double minimum_depth, double maximum_depth) {
+        if(depthPreference == null) {
+            return null;
+        }
+
+        return depthPreference.getPercentile(minimum_depth, maximum_depth);
     }
 
     public double matchPreference(ClimateData climate) {
