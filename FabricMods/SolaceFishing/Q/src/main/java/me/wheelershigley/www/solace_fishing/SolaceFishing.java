@@ -10,11 +10,6 @@ import net.fabricmc.api.ModInitializer;
 public class SolaceFishing implements ModInitializer {
     public static final String MOD_ID = "solace_fishing";
 
-    /* KNOWN BUGS
-     * Enchanted Treasure Items don't appear Enchanted in the Probabilities-Menu (PDA)
-     * Caught Enchanted-Books are sometimes unenchanted
-     */
-
     @Override
     public void onInitialize() {
         FishItems.initialize();

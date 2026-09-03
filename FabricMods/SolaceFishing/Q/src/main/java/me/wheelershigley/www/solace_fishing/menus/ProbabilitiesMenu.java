@@ -128,7 +128,12 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
         double probability,
         @Nullable Double pickiness
     ) {
-        ItemStack itemStack = ItemsHelper.getMenuItem(sourceStack.getItem(), false, null);
+        boolean appears_enchanted = sourceStack.getOrDefault(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false) || sourceStack.isEnchanted();
+        ItemStack itemStack = ItemsHelper.getMenuItem(
+            sourceStack.getItem(),
+            appears_enchanted,
+            null
+        );
 
         Rarity rarity = Rarity.COMMON;
         if(pickiness != null) {
