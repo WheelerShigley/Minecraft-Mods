@@ -59,7 +59,7 @@ public class LoreRenderedLengthComponent extends LoreRenderedComponent<Double> {
         tag.remove(CUSTOM_DATA_TAG);
         List<Component> newLore = new ArrayList<>();
         for(Component line : lore) {
-            if( !componentIsTranslationOfLength(line) ) {
+            if( componentIsTranslationOfLength(line) ) {
                 continue;
             }
             newLore.add(line);

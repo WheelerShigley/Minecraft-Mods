@@ -13,7 +13,6 @@ public class SolaceFishing implements ModInitializer {
     /* KNOWN BUGS
      * Enchanted Treasure Items don't appear Enchanted in the Probabilities-Menu (PDA)
      * Caught Enchanted-Books are sometimes unenchanted
-     * Length is applied twice (Hooked Fish)
      */
 
     @Override
