@@ -40,7 +40,7 @@ public class MendAccessoriesMixin {
         }
 
         // If the accessory consumed all XP:
-        RodAccessories accessories = LoreRenderedRodAccessoryComponent.get(rod, player.level() );
+        RodAccessories accessories = RodAccessories.of(rod, player.level() );
         if(accessories == null) {
             return amount;
         }

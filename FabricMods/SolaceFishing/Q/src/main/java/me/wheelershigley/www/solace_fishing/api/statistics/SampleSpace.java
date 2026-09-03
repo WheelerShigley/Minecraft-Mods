@@ -11,6 +11,7 @@ public abstract class SampleSpace<T, R> {
     private final LinkedHashSet<T> samples = new LinkedHashSet<>();
 
     public SampleSpace() {}
+    @SafeVarargs
     public SampleSpace(T ...sample) {
         Collections.addAll(samples, sample);
     }

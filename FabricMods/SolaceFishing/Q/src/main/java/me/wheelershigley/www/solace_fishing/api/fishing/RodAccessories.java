@@ -2,12 +2,15 @@ package me.wheelershigley.www.solace_fishing.api.fishing;
 
 import me.wheelershigley.www.solace_fishing.Constants;
 import me.wheelershigley.www.solace_fishing.api.ResultCategory;
-import me.wheelershigley.www.solace_fishing.implementations.AccessoryItem;
 import me.wheelershigley.www.solace_fishing.implementations.Bobber;
 import me.wheelershigley.www.solace_fishing.implementations.Hook;
 import me.wheelershigley.www.solace_fishing.implementations.Line;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
@@ -17,11 +20,15 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+
+import static me.wheelershigley.www.solace_fishing.Constants.*;
+import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingRod;
 
 public class RodAccessories {
     ItemStack hook, line, bobber;
@@ -33,7 +40,55 @@ public class RodAccessories {
         this.bobber = bobber;
     }
 
-    private List<ItemStack> getAccessories() {
+    public static RodAccessories of(ItemStack itemStack, Level level) {
+        if(  !isFishingRod( itemStack.getItem() )  ) {
+            return null;
+        }
+
+        Map<String, ItemStack> storedItems = getAccessories(itemStack, level.registryAccess() );
+        ItemStack
+            stored_hook   = storedItems.getOrDefault(HOOK_TAG,   ItemStack.EMPTY),
+            stored_line   = storedItems.getOrDefault(LINE_TAG,   ItemStack.EMPTY),
+            stored_bobber = storedItems.getOrDefault(BOBBER_TAG, ItemStack.EMPTY)
+        ;
+
+        return new RodAccessories(stored_hook, stored_line, stored_bobber);
+    }
+
+    @Unique
+    private static Map<String, ItemStack> getAccessories(ItemStack itemStack, RegistryAccess registryAccess) {
+        Map<String, ItemStack> accessories = new HashMap<>();
+
+        CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
+        if(customData == null) {
+            return accessories;
+        }
+
+        CompoundTag tag = customData.copyTag();
+        if( !tag.contains(CUSTOM_DATA_TAG) ) {
+            return accessories;
+        }
+
+        CompoundTag accessoriesTag = tag.getCompoundOrEmpty(CUSTOM_DATA_TAG);
+        for( String key : accessoriesTag.keySet() ) {
+            Tag current = accessoriesTag.get(key);
+
+            ItemStack.CODEC
+                .parse(
+                    registryAccess.createSerializationContext(NbtOps.INSTANCE),
+                    current
+                )
+                .result()
+                .ifPresent(
+                    stack -> accessories.put(key, stack)
+                )
+            ;
+        }
+
+        return accessories;
+    }
+
+    public List<ItemStack> getAccessories() {
         return List.of( getHook(), getBobber(), getLine() );
     }
 

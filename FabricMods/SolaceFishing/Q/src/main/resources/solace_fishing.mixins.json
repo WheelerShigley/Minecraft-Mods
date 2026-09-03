@@ -9,7 +9,8 @@
     "BobbleValidityFixerMixin",
     "CustomFishFishingMixin",
     "FishingRodAccessoriesMixin",
-    "MendAccessoriesMixin"
+    "MendAccessoriesMixin",
+    "RodBreakAccessoriesDropMixin"
   ],
   "injectors": {
     "defaultRequire": 1

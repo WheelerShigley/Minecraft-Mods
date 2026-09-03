@@ -24,69 +24,14 @@ import org.spongepowered.asm.mixin.Unique;
 
 import java.util.*;
 
-import static me.wheelershigley.www.solace_fishing.helpers.MetaFishingHelper.isFishingRod;
+import static me.wheelershigley.www.solace_fishing.Constants.*;
 
 public class LoreRenderedRodAccessoryComponent extends LoreRenderedComponent<RodAccessories> {
-    private static final String
-        CUSTOM_DATA_TAG = "accessories",
-        HOOK_TAG = "hook",
-        LINE_TAG = "line",
-        BOBBER_TAG = "bobber"
-    ;
     private final Level level;
 
     public LoreRenderedRodAccessoryComponent(RodAccessories customComponent, Level level) {
         super(customComponent);
         this.level = level;
-    }
-
-    //@Override
-    public static RodAccessories get(ItemStack itemStack, Level level) {
-        if(  !isFishingRod( itemStack.getItem() )  ) {
-            return null;
-        }
-
-        Map<String, ItemStack> storedItems = getAccessories(itemStack, level.registryAccess() );
-        ItemStack
-            stored_hook   = storedItems.getOrDefault(HOOK_TAG,   ItemStack.EMPTY),
-            stored_line   = storedItems.getOrDefault(LINE_TAG,   ItemStack.EMPTY),
-            stored_bobber = storedItems.getOrDefault(BOBBER_TAG, ItemStack.EMPTY)
-        ;
-
-        return new RodAccessories(stored_hook, stored_line, stored_bobber);
-    }
-
-    @Unique
-    public static Map<String, ItemStack> getAccessories(ItemStack itemStack, RegistryAccess registryAccess) {
-        Map<String, ItemStack> accessories = new HashMap<>();
-
-        CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
-        if(customData == null) {
-            return accessories;
-        }
-
-        CompoundTag tag = customData.copyTag();
-        if( !tag.contains(CUSTOM_DATA_TAG) ) {
-            return accessories;
-        }
-
-        CompoundTag accessoriesTag = tag.getCompoundOrEmpty(CUSTOM_DATA_TAG);
-        for( String key : accessoriesTag.keySet() ) {
-            Tag current = accessoriesTag.get(key);
-
-            ItemStack.CODEC
-                .parse(
-                    registryAccess.createSerializationContext(NbtOps.INSTANCE),
-                    current
-                )
-                .result()
-                .ifPresent(
-                    stack -> accessories.put(key, stack)
-                )
-            ;
-        }
-
-        return accessories;
     }
 
     @Override

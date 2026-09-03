@@ -51,7 +51,7 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
 
             Block medium = level.getBlockState(position).getBlock();
             int medium_depth = FishingContext.discoverDepthOfMedium(level, position);
-            RodAccessories accessories = LoreRenderedRodAccessoryComponent.get(rod, level);
+            RodAccessories accessories = RodAccessories.of(rod, level);
 
             float luck = player.getLuck() + (float)getLuckOfRod(level, rod);
             if(accessories != null) {

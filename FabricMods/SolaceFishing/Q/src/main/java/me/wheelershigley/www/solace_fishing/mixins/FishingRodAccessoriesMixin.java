@@ -54,7 +54,7 @@ public class FishingRodAccessoriesMixin {
             potentialAccessory = self;
         }
 
-        RodAccessories accessories = LoreRenderedRodAccessoryComponent.get(rod, player.level() );
+        RodAccessories accessories = RodAccessories.of(rod, player.level() );
         LoreRenderedRodAccessoryComponent componentRenderer = new LoreRenderedRodAccessoryComponent(accessories, player.level() );
         if(accessories == null) {
             return;
@@ -129,7 +129,7 @@ public class FishingRodAccessoriesMixin {
             return;
         }
 
-        RodAccessories accessories = LoreRenderedRodAccessoryComponent.get(self, player.level() );
+        RodAccessories accessories = RodAccessories.of(self, player.level() );
         LoreRenderedRodAccessoryComponent componentRenderer = new LoreRenderedRodAccessoryComponent(accessories, player.level() );
         if (accessories == null) {
             return;
