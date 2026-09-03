@@ -6,7 +6,9 @@
     "solace_fishing:bell_bobber",
     "solace_fishing:lucky_bobber",
     "solace_fishing:rubber_duck_bobber",
-    "solace_fishing:yellow_line",
-    "solace_fishing:green_line"
+    "solace_fishing:surface_line",
+    "solace_fishing:center_line",
+    "solace_fishing:floor_line",
+    "solace_fishing:double_line"
   ]
 }

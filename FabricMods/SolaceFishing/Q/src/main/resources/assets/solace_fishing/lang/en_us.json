@@ -19,8 +19,10 @@
 
   "item.solace_fishing.magenta_hook": "§dMagenta§r Hook",
   "item.solace_fishing.cyan_hook": "§3Cyan§r Hook",
-  "item.solace_fishing.yellow_line": "§eYellow§r Line",
-  "item.solace_fishing.green_line": "§aGreen§r Line",
+  "item.solace_fishing.surface_line": "Surface Line",
+  "item.solace_fishing.center_line": "Center Line",
+  "item.solace_fishing.floor_line": "Floor Line",
+  "item.solace_fishing.double_line": "Double Line",
   "item.solace_fishing.basic_bobber": "§cBasic§r Bobber",
   "item.solace_fishing.bell_bobber": "§6Bell§r Bobber",
   "item.solace_fishing.lucky_bobber": "§6Lucky§r Bobber",

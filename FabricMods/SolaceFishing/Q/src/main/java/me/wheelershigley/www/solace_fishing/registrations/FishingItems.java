@@ -15,19 +15,45 @@ public class FishingItems extends PolymerItemsRegister {
     //TODO: remove dummy accessories
     public static Item MAGENTA_HOOK;
     public static Item CYAN_HOOK;
-    public static Item GREEN_LINE;
-    public static Item YELLOW_LINE;
+    public static Item SURFACE_LINE;
+    public static Item CENTER_LINE;
+    public static Item FLOOR_LINE;
+    public static Item DOUBLE_LINE;
     public static Item BASIC_BOBBER;
     public static Item BELL_BOBBER;
     public static Item LUCKY_BOBBER;
     public static Item RUBBER_DUCK_BOBBER;
 
-    private final static CustomData rubberDuckCustomData; static {
-        CompoundTag customDataTag = new CompoundTag();
-        customDataTag.putDouble(TRASH_MULTIPLIER_TAG, 2.0);
-        customDataTag.putDouble(TREASURE_MULTIPLIER_TAG, 0.9);
-        customDataTag.putDouble(CATCH_MULTIPLIER_TAG, 0.9);
-        rubberDuckCustomData = CustomData.of(customDataTag);
+    private static final CustomData
+        RUBBER_DUCK_BOBBER_CUSTOM_DATA,
+        SURFACE_LINE_CUSTOM_DATA,
+        CENTER_LINE_CUSTOM_DATA,
+        FLOOR_LINE_CUSTOM_DATA,
+        DOUBLE_LINE_CUSTOM_DATA
+    ;
+    static {
+        CompoundTag rubberDuckTag = new CompoundTag();
+        rubberDuckTag.putDouble(TRASH_MULTIPLIER_TAG, 2.0);
+        rubberDuckTag.putDouble(TREASURE_MULTIPLIER_TAG, 0.9);
+        rubberDuckTag.putDouble(CATCH_MULTIPLIER_TAG, 0.9);
+        RUBBER_DUCK_BOBBER_CUSTOM_DATA = CustomData.of(rubberDuckTag);
+
+        CompoundTag surfaceTag = new CompoundTag();
+        surfaceTag.putDouble(DEPTH_MINIMUM_PERCENTAGE, 2.0/3.0);
+        SURFACE_LINE_CUSTOM_DATA = CustomData.of(surfaceTag);
+
+        CompoundTag centerTag = new CompoundTag();
+        centerTag.putDouble(DEPTH_MINIMUM_PERCENTAGE, 1.0/3.0);
+        centerTag.putDouble(DEPTH_MAXIMUM_PERCENTAGE, 2.0/3.0);
+        CENTER_LINE_CUSTOM_DATA = CustomData.of(centerTag);
+
+        CompoundTag floorTag = new CompoundTag();
+        floorTag.putDouble(DEPTH_MAXIMUM_PERCENTAGE, 1.0/3.0);
+        FLOOR_LINE_CUSTOM_DATA = CustomData.of(floorTag);
+
+        CompoundTag doubleTag = new CompoundTag();
+        doubleTag.putDouble(DEPTH_MAXIMUM_PERCENTAGE, 2.0);
+        DOUBLE_LINE_CUSTOM_DATA = CustomData.of(doubleTag);
     }
 
     public static void initialize() {
@@ -54,14 +80,24 @@ public class FishingItems extends PolymerItemsRegister {
             Hook::new
         );
 
-        GREEN_LINE = register(
-            "green_line",
-            Line.DEFAULT_PROPERTIES,
+        SURFACE_LINE = register(
+            "surface_line",
+            Line.DEFAULT_PROPERTIES.component(DataComponents.CUSTOM_DATA, SURFACE_LINE_CUSTOM_DATA),
             Line::new
         );
-        YELLOW_LINE = register(
-            "yellow_line",
-            Line.DEFAULT_PROPERTIES,
+        CENTER_LINE = register(
+            "center_line",
+            Line.DEFAULT_PROPERTIES.component(DataComponents.CUSTOM_DATA, CENTER_LINE_CUSTOM_DATA),
+            Line::new
+        );
+        FLOOR_LINE = register(
+            "floor_line",
+            Line.DEFAULT_PROPERTIES.component(DataComponents.CUSTOM_DATA, FLOOR_LINE_CUSTOM_DATA),
+            Line::new
+        );
+        DOUBLE_LINE = register(
+            "double_line",
+            Line.DEFAULT_PROPERTIES.component(DataComponents.CUSTOM_DATA, DOUBLE_LINE_CUSTOM_DATA),
             Line::new
         );
 
@@ -90,10 +126,7 @@ public class FishingItems extends PolymerItemsRegister {
         );
         RUBBER_DUCK_BOBBER = register(
             "rubber_duck_bobber",
-            Bobber
-                .DEFAULT_PROPERTIES
-                .component(DataComponents.CUSTOM_DATA, rubberDuckCustomData)
-            ,
+            Bobber.DEFAULT_PROPERTIES.component(DataComponents.CUSTOM_DATA, RUBBER_DUCK_BOBBER_CUSTOM_DATA),
             Bobber::new
         );
     }

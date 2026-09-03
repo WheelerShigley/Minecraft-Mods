@@ -16,9 +16,9 @@ public record FishingContext(
     boolean isOpenWater
 ) {
     public static int discoverDepthOfMedium(Level level, BlockPos position) {
-        int accumulator = 0;
-
         final Block MEDIUM = level.getBlockState(position).getBlock();
+
+        int accumulator = 0;
         while(
             level.getBlockState(position).getBlock().equals(MEDIUM)
             && level.getMinY() < position.getY() && position.getY() < level.getMaxY()
@@ -26,7 +26,6 @@ public record FishingContext(
             position = position.below();
             accumulator++;
         }
-
         return accumulator;
     }
 
