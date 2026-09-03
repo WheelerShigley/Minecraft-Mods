@@ -2,6 +2,7 @@ package me.wheelershigley.www.solace_fishing.api.fishing;
 
 import me.wheelershigley.www.solace_fishing.Constants;
 import me.wheelershigley.www.solace_fishing.api.ResultCategory;
+import me.wheelershigley.www.solace_fishing.implementations.AccessoryItem;
 import me.wheelershigley.www.solace_fishing.implementations.Bobber;
 import me.wheelershigley.www.solace_fishing.implementations.Hook;
 import me.wheelershigley.www.solace_fishing.implementations.Line;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -29,6 +31,10 @@ public class RodAccessories {
         this.hook = hook;
         this.line = line;
         this.bobber = bobber;
+    }
+
+    private List<ItemStack> getAccessories() {
+        return List.of( getHook(), getBobber(), getLine() );
     }
 
     public ItemStack attemptSwap(ItemStack itemStack) {
@@ -77,17 +83,17 @@ public class RodAccessories {
 
         if( !this.getHook().isEmpty() ) {
             returnStack = this.getHook();
-            this.removeHook();
+            this.hook = ItemStack.EMPTY;
             return returnStack;
         }
         if( !this.getBobber().isEmpty() ) {
             returnStack = this.getBobber();
-            this.removeBobber();
+            this.bobber = ItemStack.EMPTY;
             return returnStack;
         }
         if( !this.getLine().isEmpty() ) {
             returnStack = this.getLine();
-            this.removeLine();
+            this.line = ItemStack.EMPTY;
             return returnStack;
         }
 
@@ -101,21 +107,15 @@ public class RodAccessories {
         }
     };
     public void damage(ServerLevel level, ServerPlayer player) {
-        if( this.getHook().isDamageableItem() ) {
-            this.hook.hurtAndBreak(1, level, player, onBreak);
-        }
-        if( this.getBobber().isDamageableItem() ) {
-            this.bobber.hurtAndBreak(1, level, player, onBreak);
-        }
-        if( this.getLine().isDamageableItem() ) {
-            this.line.hurtAndBreak(1, level, player, onBreak);
+        for(ItemStack accessory : getAccessories() ) {
+            if( accessory.isDamageableItem() ) {
+                accessory.hurtAndBreak(1, level, player, onBreak);
+            }
         }
     }
     public int mend(int experience, Level level) {
         int repair_amount = 0;
-
-        ItemStack[] items = new ItemStack[]{this.hook, this.line, this.bobber};
-        for(ItemStack item : items) {
+        for(ItemStack item : getAccessories() ) {
             if( item.isDamageableItem() && hasMending(item, level) ) {
                 repair_amount = Math.min(experience, item.getDamageValue() );
                 item.setDamageValue( item.getDamageValue() - repair_amount );
@@ -125,17 +125,16 @@ public class RodAccessories {
                 }
             }
         }
-
         return experience;
     }
     private static boolean hasMending(ItemStack itemStack, Level level) {
         return 0 < EnchantmentHelper.getItemEnchantmentLevel(
-                level
-                    .registryAccess()
-                    .lookupOrThrow(Registries.ENCHANTMENT)
-                    .getOrThrow(Enchantments.MENDING)
-                ,
-                itemStack
+            level
+                .registryAccess()
+                .lookupOrThrow(Registries.ENCHANTMENT)
+                .getOrThrow(Enchantments.MENDING)
+            ,
+            itemStack
         );
     }
 
@@ -182,23 +181,46 @@ public class RodAccessories {
 
     public int getLuck() {
         int accumulator = 0;
-
-        if( !this.getLine().isEmpty() ) {
-            accumulator += getLuck( this.getLine() );
+        for(ItemStack accessory : getAccessories() ) {
+            if( !accessory.isEmpty() ) {
+                accumulator += getLuck(accessory);
+            }
         }
-        if( !this.getBobber().isEmpty() ) {
-            accumulator += getLuck( this.getBobber() );
-        }
-        if( !this.getHook().isEmpty() ) {
-            accumulator += getLuck( this.getHook() );
-        }
-
         return accumulator;
     }
+    public double getMinimumDepthPercentage() {
+        double accumulator = 0.0;
+        for(ItemStack accessory : getAccessories() ) {
+            if( !accessory.isEmpty() ) {
+                double current = getMinimumDepthPercentage(accessory);
+                accumulator = accumulator == 0.0 ? current : accumulator * current;
+            }
+        }
+        return accumulator;
+    }
+    public double getMaximumDepthPercentage() {
+        double accumulator = 1.0;
+        for(ItemStack accessory : getAccessories() ) {
+            if( !accessory.isEmpty() ) {
+                accumulator *= getMaximumDepthPercentage(accessory);
+            }
+        }
+        return accumulator;
+    }
+
     private int getLuck(ItemStack itemStack) {
         CustomData customData = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
-        return customData.copyTag().getInt(Constants.LUCK_TAG).orElse(0);
+        return customData.copyTag().getIntOr(Constants.LUCK_TAG, 0);
     }
+    private double getMinimumDepthPercentage(ItemStack itemStack) {
+        CustomData customData = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        return customData.copyTag().getDoubleOr(Constants.DEPTH_MINIMUM_PERCENTAGE, 0.0);
+    }
+    private double getMaximumDepthPercentage(ItemStack itemStack) {
+        CustomData customData = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        return customData.copyTag().getDoubleOr(Constants.DEPTH_MAXIMUM_PERCENTAGE, 1.0);
+    }
+
 
     public Map<ResultCategory, Double> getCategoryWeightRatios(final boolean isInOpenWater) {
         Map<ResultCategory, Double> weightRatios = getDefaultWeightRatios(isInOpenWater);
@@ -279,16 +301,6 @@ public class RodAccessories {
         defaultWeightRatios.put(ResultCategory.Trash,    trash_weight   );
 
         return defaultWeightRatios;
-    }
-
-    public void removeHook() {
-        this.hook = ItemStack.EMPTY;
-    }
-    public void removeLine() {
-        this.line = ItemStack.EMPTY;
-    }
-    public void removeBobber() {
-        this.bobber = ItemStack.EMPTY;
     }
 
     public String toString() {

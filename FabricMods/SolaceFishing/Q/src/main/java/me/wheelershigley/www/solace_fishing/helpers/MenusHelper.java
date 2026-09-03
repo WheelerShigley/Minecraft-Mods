@@ -71,7 +71,11 @@ public class MenusHelper {
         // Lore
         setLevelAndBiomeLore(environment, context);
         setBlockLore( medium, context.medium() );
-        setDepthLore( medium, 0, context.medium_depth() );
+
+        double minimum_depth = context.accessories().getMinimumDepthPercentage() * context.medium_depth();
+        double maximum_depth = context.accessories().getMaximumDepthPercentage() * context.medium_depth();
+        setDepthLore(medium, minimum_depth, maximum_depth);
+
         setClimateLore( climate, context.environment() );
         setItemLore( rod, context.rod() );
         setAccessoriesLore( accessories, context.accessories() );
@@ -114,7 +118,9 @@ public class MenusHelper {
             ).withStyle(DEFAULT_STYLE)
         );
     }
-    private static void setDepthLore(ItemStack itemStack, int minimum, int maximum) {
+    private static void setDepthLore(ItemStack itemStack, double minimum, double maximum) {
+        minimum = MathsHelper.percentageRound(minimum);
+        maximum = MathsHelper.percentageRound(maximum);
         appendLore(
             itemStack,
             Component.translatable(

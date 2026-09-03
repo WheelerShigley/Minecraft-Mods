@@ -97,6 +97,9 @@ public class ClimatePreferencedSampleSpace extends SampleSpace<ClimatePreference
     }
 
     private ClimatePreferencedSampleSpace subSpace(FishingContext context) {
+        double minimum_depth_percentage = context.accessories().getMinimumDepthPercentage();
+        double maximum_depth_percentage = context.accessories().getMaximumDepthPercentage();
+
         Set<ClimatePreferencedItem> items = new HashSet<>();
         for( ClimatePreferencedItem sample : this.getSamples() ) {
             if(  sample.isInBounds( context.environment() )  ) {
@@ -105,7 +108,10 @@ public class ClimatePreferencedSampleSpace extends SampleSpace<ClimatePreference
 
                 FishItem animalItem = MetaFishingHelper.getFishItem( adjustedSample.getItem() );
                 if(animalItem != null) {
-                    Double likelihood = animalItem.getLikelihoodAtDepth( 0, context.medium_depth() );
+                    Double likelihood = animalItem.getLikelihoodAtDepth(
+                        context.medium_depth() * minimum_depth_percentage,
+                        context.medium_depth() * maximum_depth_percentage
+                    );
                     if(likelihood != null) {
                         adjusted_area *= likelihood;
                     }

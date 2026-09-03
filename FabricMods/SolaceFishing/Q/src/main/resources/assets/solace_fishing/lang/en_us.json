@@ -56,7 +56,7 @@
 
   "solace_fishing.probabilities_menu.title": "Probabilities",
   "solace_fishing.probabilities_menu.empty": "Nothing here.",
-  "solace_fishing.probabilities_menu.depth_range": "Depth: %d-%d",
+  "solace_fishing.probabilities_menu.depth_range": "Depth: %.2fm - %.2fm",
 
   "item.solace_fishing.angelfish": "Angelfish",
   "item.solace_fishing.yellowfin_tuna": "Yellowfin Tuna",
