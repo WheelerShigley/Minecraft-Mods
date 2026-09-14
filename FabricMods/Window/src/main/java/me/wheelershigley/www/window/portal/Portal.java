@@ -284,7 +284,7 @@ public class Portal {
         // check that the frame is valid
         BlockPos frameDatum = corner.relative(plane.getFirst(), 1).relative(plane.getSecond(), 1);
         Block current;
-        for(int i = 1; i < innerBounds.x; i++) {
+        for(int i = 1; i <= innerBounds.x; i++) {
             current = level.getBlockState( frameDatum.relative(plane.getFirst(), -i) ).getBlock();
             if( !current.equals(frameMaterial) ) {
                 return false;
@@ -296,7 +296,7 @@ public class Portal {
                 return false;
             }
         }
-        for(int j = 1; j < innerBounds.y; j++) {
+        for(int j = 1; j <= innerBounds.y; j++) {
             current = level.getBlockState( frameDatum.relative(plane.getSecond(), -j) ).getBlock();
             if( !current.equals(frameMaterial) ) {
                 return false;
