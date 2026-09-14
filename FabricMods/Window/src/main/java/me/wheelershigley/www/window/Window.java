@@ -13,8 +13,6 @@ public class Window implements ModInitializer {
 
     /* TODO
      * Ignition-Block can always be placed in places that would create a portal
-     * Add warning for duplicates in definition
-     * Add "add" commandlet for links [command]
      *
      * Add non-creation option (portal on other side does not generate)
      * RTP portals

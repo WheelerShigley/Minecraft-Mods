@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.wheelershigley.www.window.WindowConfig;
+import me.wheelershigley.www.window.api.LinkType;
 import me.wheelershigley.www.window.api.PortalDefinition;
 import me.wheelershigley.www.window.portal.Portal;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -23,6 +24,8 @@ import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.portal.TeleportTransition;
+
+import java.util.Locale;
 
 public class WindowCommands {
     public static void registerCommand() {
@@ -104,6 +107,21 @@ public class WindowCommands {
                                             }
                                         )
                                         .executes(WindowCommands::link)
+                                        .then(
+                                            Commands.argument(
+                                                "type",
+                                                StringArgumentType.word()
+                                            ).suggests(
+                                                (_context, _builder) -> {
+                                                    for (LinkType type : LinkType.values()) {
+                                                        _builder.suggest(
+                                                            type.name().toLowerCase(Locale.ROOT)
+                                                        );
+                                                    }
+                                                    return _builder.buildFuture();
+                                                }
+                                            ).executes(WindowCommands::link)
+                                        )
                                 )
                             )
                         )
@@ -117,14 +135,22 @@ public class WindowCommands {
         Block material = inputMaterial.getState().getBlock();
         BlockInput inputIgniter = BlockStateArgument.getBlock(context, "igniter");
         Block igniter = inputIgniter.getState().getBlock();
+
         ServerLevel fromLevel = DimensionArgument.getDimension(context, "from_level");
         ServerLevel   tolevel = DimensionArgument.getDimension(context, "to_level");
 
+        LinkType type = LinkType.valueOf(
+            StringArgumentType.getString(context, "type").toUpperCase(Locale.ROOT)
+        );
         DyeColor color = DyeColor.valueOf(
             StringArgumentType.getString(context, "color").toUpperCase()
         );
 
-        PortalDefinition potentialDefinition = new PortalDefinition(material, igniter, fromLevel.dimension(), tolevel.dimension(), color);
+        PortalDefinition potentialDefinition = new PortalDefinition(
+            material, igniter,
+            fromLevel.dimension(), tolevel.dimension(),
+            type, color
+        );
         //Prevent Duplicates
         for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
             if( definition.equals(potentialDefinition) ) {

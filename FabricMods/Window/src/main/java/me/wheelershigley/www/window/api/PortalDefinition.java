@@ -14,6 +14,7 @@ public record PortalDefinition(
     Block ignitionMaterial,
     ResourceKey<Level> fromDimension,
     ResourceKey<Level>   toDimension,
+    LinkType type,
     DyeColor color
 ) {
     public static final Codec<PortalDefinition> CODEC = RecordCodecBuilder.create(
@@ -38,6 +39,11 @@ public record PortalDefinition(
                 .forGetter(PortalDefinition::toDimension)
             ,
 
+            LinkType.CODEC
+                .fieldOf("type")
+                .forGetter(PortalDefinition::type)
+            ,
+
             DyeColor.CODEC
                 .fieldOf("color")
                 .forGetter(PortalDefinition::color)
@@ -53,11 +59,14 @@ public record PortalDefinition(
             && other.toDimension.equals(fromDimension)
         );
 
+        boolean type_overlaps = type.overlaps(other.type) || other.type.overlaps(type);
+
         //color is not considered in equality
         return
-            hasSameDimensions
+               hasSameDimensions
             && other.ignitionMaterial.equals(ignitionMaterial)
             && other.frameMaterial.equals(frameMaterial)
+            && type_overlaps
         ;
     }
 
@@ -67,9 +76,9 @@ public record PortalDefinition(
             BuiltInRegistries.BLOCK.getKey(frameMaterial) +
             " + " +
             BuiltInRegistries.BLOCK.getKey(ignitionMaterial) +
-            ":\n" +
+            " =\n" +
             fromDimension.identifier() +
-            " <=> " +
+            " " + type + " " +
             toDimension.identifier() +
             " (" +
             color.getSerializedName() +

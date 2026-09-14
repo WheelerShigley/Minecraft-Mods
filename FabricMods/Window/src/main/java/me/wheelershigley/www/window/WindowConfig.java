@@ -6,7 +6,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.wheelershigley.www.window.api.PortalDefinition;
+import me.wheelershigley.www.window.portal.PortalBlock;
+import me.wheelershigley.www.window.portal.PortalBlockEntity;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -71,6 +78,28 @@ public class WindowConfig {
         } catch(Exception exception) {
             throw new RuntimeException("Failed to save Window config.", exception);
         }
+    }
+
+    public @Nullable PortalDefinition getDefinition(PortalBlockEntity portalBlockEntity) {
+        Block frameMaterial = portalBlockEntity.getFrame();
+        Block ignitionMaterial = portalBlockEntity.getIgniter();
+        if(portalBlockEntity.getLevel() == null) {
+            return null;
+        }
+        ResourceKey<Level> fromDimension = portalBlockEntity.getLevel().dimension();
+        DyeColor color = ( (PortalBlock)portalBlockEntity.getBlockState().getBlock() ).COLOR;
+
+        for(PortalDefinition definition : this.definitions) {
+            if(
+                definition.frameMaterial().equals(frameMaterial)
+                && definition.ignitionMaterial().equals(ignitionMaterial)
+                && definition.fromDimension().equals(fromDimension)
+                && definition.color().equals(color)
+            ) {
+                return definition;
+            }
+        }
+        return null;
     }
 
     @Override

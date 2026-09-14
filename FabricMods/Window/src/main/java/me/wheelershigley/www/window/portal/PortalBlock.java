@@ -2,6 +2,7 @@ package me.wheelershigley.www.window.portal;
 
 import com.mojang.serialization.MapCodec;
 import eu.pb4.polymer.core.api.block.PolymerBlock;
+import me.wheelershigley.www.window.WindowConfig;
 import me.wheelershigley.www.window.api.PortalDefinition;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;
@@ -69,11 +70,25 @@ public class PortalBlock extends BaseEntityBlock implements Portal, PolymerBlock
         final Entity entity, final InsideBlockEffectApplier effectApplier,
         final boolean isPrecise
     ) {
-        if(entity instanceof ServerPlayer serverPlayer) {
-            serverPlayer.sendSystemMessage(
-                Component.literal("inPortal")
-            );
+        if( !(entity instanceof ServerPlayer serverPlayer) ) {
+            return;
         }
+
+        PortalBlockEntity portalBlockEntity = (PortalBlockEntity)level.getBlockEntity(pos);
+        if(portalBlockEntity == null) {
+            return;
+        }
+        PortalDefinition definition = WindowConfig.INSTANCE.getDefinition(portalBlockEntity);
+        if(definition == null) {
+            return;
+        }
+
+        serverPlayer.sendSystemMessage(
+            Component.literal(
+                definition.toString()
+            )
+        );
+
         if( entity.canUsePortal(false) ) {
             entity.setAsInsidePortal(this, pos);
         }
