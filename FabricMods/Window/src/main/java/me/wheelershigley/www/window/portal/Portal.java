@@ -317,6 +317,11 @@ public class Portal {
                     .relative(plane.getSecond(), -j)
                 ;
                 level.setBlock(position, portalBlockState, Block.UPDATE_CLIENTS);
+                PortalBlockEntity portalBlockEntity = (PortalBlockEntity)level.getBlockEntity(position);
+                if(portalBlockEntity != null) {
+                    portalBlockEntity.setFrame(frameMaterial);
+                    portalBlockEntity.setIgniter(ignitionMaterial);
+                }
             }
         }
         return true;

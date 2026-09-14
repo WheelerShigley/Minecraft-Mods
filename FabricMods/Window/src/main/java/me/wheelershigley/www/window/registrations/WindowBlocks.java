@@ -8,6 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import java.util.HashMap;
@@ -83,6 +84,7 @@ public class WindowBlocks implements ModInitializer {
         Block block = new PortalBlock(
             BlockBehaviour.Properties.of()
                 .setId(key)
+                .sound(SoundType.GLASS)
                 .noOcclusion()
                 .noCollision()
             ,

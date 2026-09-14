@@ -2,6 +2,7 @@ package me.wheelershigley.www.window.portal;
 
 import com.mojang.serialization.MapCodec;
 import eu.pb4.polymer.core.api.block.PolymerBlock;
+import me.wheelershigley.www.window.api.PortalDefinition;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,9 +14,7 @@ import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.Portal;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -25,11 +24,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.portal.TeleportTransition;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static me.wheelershigley.www.window.portal.PortalBlockEntity.getBlockEntityType;
@@ -114,6 +116,50 @@ public class PortalBlock extends BaseEntityBlock implements Portal, PolymerBlock
         final CollisionContext context
     ) {
         return SHAPES.get( state.getValue(AXIS) );
+    }
+
+    @Override
+    protected void neighborChanged(
+        final BlockState state, final Level level, final BlockPos pos,
+        final Block block, final @Nullable Orientation orientation,
+        final boolean movedByPiston
+    ) {
+        if( !isValid(state, pos, level) ) {
+            level.destroyBlock(pos, false);
+        }
+    }
+    private boolean isValid(BlockState state, BlockPos position, Level level) {
+        List<Direction> checkDirections = new ArrayList<>(); {
+            Direction.Axis axis = state.getValue(AXIS);
+            if(axis == Direction.Axis.X || axis == Direction.Axis.Y) {
+                checkDirections.add(Direction.NORTH);
+                checkDirections.add(Direction.SOUTH);
+            }
+            if(axis == Direction.Axis.X || axis == Direction.Axis.Z) {
+                checkDirections.add(Direction.UP);
+                checkDirections.add(Direction.DOWN);
+            }
+            if(axis == Direction.Axis.Y || axis == Direction.Axis.Z) {
+                checkDirections.add(Direction.EAST);
+                checkDirections.add(Direction.WEST);
+            }
+        }
+
+        for(Direction direction : checkDirections) {
+            Block self = this.defaultBlockState().getBlock();
+
+            PortalBlockEntity blockEntity = (PortalBlockEntity)level.getBlockEntity(position);
+            if(blockEntity == null) {
+                return false;
+            }
+            Block material = blockEntity.getFrame();
+
+            Block other =  level.getBlockState( position.relative(direction) ).getBlock();
+            if( !other.equals(self) && !other.equals(material) ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     static {

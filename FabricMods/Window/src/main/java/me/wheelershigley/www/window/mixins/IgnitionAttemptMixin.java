@@ -33,9 +33,7 @@ public abstract class IgnitionAttemptMixin {
         BlockPos pos, BlockState blockState, int updateFlags,
         CallbackInfoReturnable<Boolean> cir
     ) {
-        Set<Block> frameMaterials = new HashSet<>();
-        DyeColor color = null;
-        boolean ignition = false;
+        Set<PortalDefinition> validDefinitions = new HashSet<>();
         for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
             if(
                 definition.ignitionMaterial().equals( blockState.getBlock() )
@@ -44,31 +42,20 @@ public abstract class IgnitionAttemptMixin {
                     || this.dimension == definition.toDimension()
                 )
             ) {
-                ignition = true;
-                frameMaterials.add( definition.frameMaterial() );
-
-                //only one valid portal-color per definition
-                if(color != null) {
-                    return;
-                }
-                color = definition.color();
+                validDefinitions.add(definition);
             }
-        }
-        if(!ignition) {
-            return;
         }
 
         // Attempt Ignition
-        boolean worked = false;
-        for(Block material : frameMaterials) {
-             worked = Portal.attemptPortal(
+        for(PortalDefinition definition : validDefinitions) {
+            boolean worked = Portal.attemptPortal(
                 (Level)(Object)this, pos,
-                material, blockState.getBlock(),
-                color
+                definition.frameMaterial(), definition.ignitionMaterial(),
+                definition.color()
             );
-             if(worked) {
-                 return;
-             }
+            if(worked) {
+                return;
+            }
         }
     }
 }

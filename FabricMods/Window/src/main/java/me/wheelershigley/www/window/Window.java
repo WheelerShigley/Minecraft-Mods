@@ -11,6 +11,17 @@ public class Window implements ModInitializer {
         return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 
+    /* TODO
+     * Ignition-Block can always be placed in places that would create a portal
+     * Ignition-Block in internal-area of portal still ignites it
+     * There can be gaps in the portal-frame, this should be fixed
+     * Add warning for duplicates in definition
+     * Add "add" commandlet for links [command]
+     *
+     * Add non-creation option (portal on other side does not generate)
+     * RTP portals
+     * Single-Destination Portals?
+     */
     @Override
     public void onInitialize() {
         LazyStateGen.generate();
