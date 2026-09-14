@@ -1,9 +1,11 @@
 package me.wheelershigley.www.window.mixins;
 
+import com.mojang.math.Axis;
 import me.wheelershigley.www.window.WindowConfig;
 import me.wheelershigley.www.window.api.PortalDefinition;
 import me.wheelershigley.www.window.portal.Portal;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
@@ -24,6 +26,9 @@ public abstract class IgnitionAttemptMixin {
     @Shadow
     @Final
     private ResourceKey<Level> dimension;
+
+    @Shadow
+    public abstract BlockState getBlockState(BlockPos pos);
 
     @Inject(
         method = "setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z",
@@ -48,13 +53,29 @@ public abstract class IgnitionAttemptMixin {
 
         // Attempt Ignition
         for(PortalDefinition definition : validDefinitions) {
-            boolean worked = Portal.attemptPortal(
-                (Level)(Object)this, pos,
-                definition.frameMaterial(), definition.ignitionMaterial(),
-                definition.color()
-            );
-            if(worked) {
-                return;
+            /* Go to an edge, then attempt */
+            BlockPos position;
+            for( Direction direction : Direction.values() ) {
+                position = pos;
+                Block nextBlock = this.getBlockState(pos).getBlock();
+                while( nextBlock == Blocks.AIR || nextBlock == definition.ignitionMaterial() ) {
+                    position = position.relative(direction);
+                    nextBlock = this.getBlockState(position).getBlock();
+                }
+                if( nextBlock == definition.frameMaterial() ) {
+                    position = position.relative( direction.getOpposite() );
+                } else {
+                    continue;
+                }
+
+                boolean worked = Portal.attemptPortal(
+                    (Level)(Object)this, position,
+                    definition.frameMaterial(), definition.ignitionMaterial(),
+                    definition.color()
+                );
+                if(worked) {
+                    return;
+                }
             }
         }
     }
