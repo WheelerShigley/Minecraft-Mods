@@ -1,6 +1,8 @@
 package me.wheelershigley.www.window.portal;
 
 import me.wheelershigley.www.window.api.CustomPoiTypes;
+import me.wheelershigley.www.window.api.PortalDefinition;
+import me.wheelershigley.www.window.registrations.WindowBlockEntities;
 import me.wheelershigley.www.window.registrations.WindowBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,12 +15,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.levelgen.Heightmap;
 
+import java.io.DataInput;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
@@ -61,10 +65,9 @@ public class PortalForcer {
     }
 
     public Optional<BlockUtil.FoundRectangle> createPortal(
-        final BlockPos origin, final BlockState frameState,
-        final Direction.Axis portalAxis
+        final BlockPos origin, final PortalDefinition definition
     ) {
-        Direction direction = Direction.get(Direction.AxisDirection.POSITIVE, portalAxis);
+        Direction direction = Direction.Axis.Z.getNegative();
         double closestFullDistanceSqr = -1.0;
         BlockPos closestFullPosition = null;
         double closestPartialDistanceSqr = -1.0;
@@ -134,11 +137,12 @@ public class PortalForcer {
             closestFullPosition = worldBorder.clampToBounds(closestFullPosition);
             Direction clockWise = direction.getClockWise();
 
+
             // PLATFORM
             for(int box = -1; box < 2; ++box) {
                 for(int width = 0; width < 2; ++width) {
                     for(int height = -1; height < 3; ++height) {
-                        BlockState blockState = height < 0 ? frameState : Blocks.AIR.defaultBlockState();
+                        BlockState blockState = height < 0 ? definition.frameMaterial().defaultBlockState() : Blocks.AIR.defaultBlockState();
                         mutable.setWithOffset(closestFullPosition, width * direction.getStepX() + box * clockWise.getStepX(), height, width * direction.getStepZ() + box * clockWise.getStepZ());
                         this.level.setBlockAndUpdate(mutable, blockState);
                     }
@@ -151,7 +155,11 @@ public class PortalForcer {
             for(int height = -1; height < 4; ++height) {
                 if (width == -1 || width == 2 || height == -1 || height == 3) {
                     mutable.setWithOffset(closestFullPosition, width * direction.getStepX(), height, width * direction.getStepZ());
-                    this.level.setBlock(mutable, frameState, 3);
+                    this.level.setBlock(
+                        mutable,
+                        definition.frameMaterial().defaultBlockState(),
+                    3
+                    );
                 }
             }
         }
@@ -162,8 +170,11 @@ public class PortalForcer {
             .getOrThrow(CustomPoiTypes.CUSTOM_PORTAL)
         ;
         PoiManager poiManager = this.level.getPoiManager();
-        //TODO: set blockState material
-        BlockState portalBlockState = WindowBlocks.WHITE_PORTAL.defaultBlockState().setValue(PortalBlock.AXIS, portalAxis);
+        Block portalBlock = WindowBlocks.coloredPortals.get( definition.color() );
+
+        Direction.Axis portalAxis = ( direction.getStepX() < direction.getStepZ() ) ? Direction.Axis.Z : Direction.Axis.X;
+        BlockState portalBlockState = portalBlock.defaultBlockState().setValue(PortalBlock.AXIS, portalAxis);
+
         for(int width = 0; width < 2; ++width) {
             for(int height = 0; height < 3; ++height) {
                 mutable.setWithOffset(closestFullPosition, width * direction.getStepX(), height, width * direction.getStepZ());

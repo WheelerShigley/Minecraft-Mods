@@ -89,6 +89,16 @@ public class PortalBlock extends BaseEntityBlock implements Portal, PolymerBlock
             )
         );
 
+        if(level.getServer() == null) {
+            return;
+        }
+
+        TeleportTransition transition = CustomPortal.getTransition(serverPlayer, definition);
+        if(transition == null) {
+            return;
+        }
+        serverPlayer.teleport(transition);
+
         if( entity.canUsePortal(false) ) {
             entity.setAsInsidePortal(this, pos);
         }

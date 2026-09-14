@@ -1,13 +1,11 @@
 package me.wheelershigley.www.window.mixins;
 
-import com.mojang.math.Axis;
 import me.wheelershigley.www.window.WindowConfig;
 import me.wheelershigley.www.window.api.PortalDefinition;
-import me.wheelershigley.www.window.portal.Portal;
+import me.wheelershigley.www.window.portal.CustomPortal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -76,7 +74,7 @@ public abstract class IgnitionAttemptMixin {
                     continue;
                 }
 
-                boolean worked = Portal.attemptPortal(
+                boolean worked = CustomPortal.attemptPortal(
                     (Level)(Object)this, position,
                     definition.frameMaterial(), definition.ignitionMaterial(),
                     definition.color()

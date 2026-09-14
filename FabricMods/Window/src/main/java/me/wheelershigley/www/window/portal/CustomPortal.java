@@ -1,6 +1,7 @@
 package me.wheelershigley.www.window.portal;
 
 import com.mojang.datafixers.util.Pair;
+import me.wheelershigley.www.window.api.PortalDefinition;
 import me.wheelershigley.www.window.registrations.WindowBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,17 +22,64 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class Portal {
+public class CustomPortal {
     public static final int MIN_WIDTH = 2;
 
-    public static TeleportTransition getTransition(ServerPlayer player, ServerLevel toDimension) {
+    public static @Nullable TeleportTransition getTransition(
+            ServerPlayer player, ServerLevel level
+    ) {
+        if( level == null
+            || player.level().equals(level)
+        ){
+            return null;
+        }
+
+        BlockPos exitPortalPos = getExitLocation(player, level, false, null);
+        if(exitPortalPos == null) {
+            return null;
+        }
+
+        return new TeleportTransition(
+            level,
+            new Vec3( exitPortalPos.getX(), exitPortalPos.getY(), exitPortalPos.getZ() ),
+            player.getDeltaMovement(),
+            player.getYRot(),
+            player.getXRot(),
+            TeleportTransition.PLAY_PORTAL_SOUND
+        );
+    }
+    public static @Nullable TeleportTransition getTransition(
+        ServerPlayer player, PortalDefinition definition
+    ) {
+        ServerLevel toDimension = player.level().getServer().getLevel( definition.toDimension() );
         if(    toDimension == null
             || player.level().equals(toDimension)
         ){
             return null;
         }
-        BlockState frameState = getFrameBlock(toDimension);
 
+        BlockPos exitPortalPos = getExitLocation(player, toDimension, false, definition);
+        if(exitPortalPos == null) {
+            exitPortalPos = getExitLocation(player, toDimension, true, definition);
+        }
+        if(exitPortalPos == null) {
+            return null;
+        }
+        Vec3 newPosition = new Vec3( exitPortalPos.getX(), exitPortalPos.getY(), exitPortalPos.getZ() );
+
+        return new TeleportTransition(
+            toDimension,
+            newPosition,
+            player.getDeltaMovement(),
+            player.getYRot(),
+            player.getXRot(),
+            TeleportTransition.PLAY_PORTAL_SOUND
+        );
+    }
+    private static @Nullable BlockPos getExitLocation(
+        ServerPlayer player, ServerLevel toDimension,
+        boolean forcePortal, @Nullable PortalDefinition definition
+    ) {
         double teleportationScale = DimensionType.getTeleportationScale(
             player.level().dimensionType(),
             toDimension.dimensionType()
@@ -44,46 +92,24 @@ public class Portal {
         );
 
         PortalForcer customPortalForcer = new PortalForcer(toDimension);
-        Optional<BlockPos> exitPortalPos = customPortalForcer.findClosestPortalPosition(
+        if(forcePortal && definition != null) {
+            Optional<BlockUtil.FoundRectangle> createdExit = customPortalForcer.createPortal(
+                approximateExitPos,
+                definition
+            );
+
+            if( createdExit.isEmpty() ) {
+                return null;
+            }
+        }
+
+        Optional<BlockPos> potentialPosition = customPortalForcer.findClosestPortalPosition(
             approximateExitPos,
             teleportationScale,
             toDimension.getWorldBorder()
         );
 
-        BlockPos exitPosition;
-        if( exitPortalPos.isPresent() ) {
-            exitPosition = exitPortalPos.get();
-        } else {
-             Optional<BlockUtil.FoundRectangle> createdExit = customPortalForcer.createPortal(
-                 approximateExitPos,
-                 frameState,
-                 Direction.Axis.X
-             );
-
-            if( createdExit.isEmpty() ) {
-                return null;
-            }
-
-            Optional<BlockPos> potentialExit = customPortalForcer.findClosestPortalPosition(
-                approximateExitPos,
-                teleportationScale,
-                toDimension.getWorldBorder()
-            );
-            if( potentialExit.isEmpty() ) {
-                return null;
-            }
-            exitPosition = potentialExit.get();
-        }
-        Vec3 newPosition = new Vec3( exitPosition.getX(), exitPosition.getY(), exitPosition.getZ() );
-
-        return new TeleportTransition(
-            toDimension,
-            newPosition,
-            player.getDeltaMovement(),
-            player.getYRot(),
-            player.getXRot(),
-            TeleportTransition.PLAY_PORTAL_SOUND
-        );
+        return potentialPosition.orElse(null);
     }
 
     //TODO
