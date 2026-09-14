@@ -11,6 +11,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.portal.PortalShape;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -55,10 +56,17 @@ public abstract class IgnitionAttemptMixin {
         for(PortalDefinition definition : validDefinitions) {
             /* Go to an edge, then attempt */
             BlockPos position;
+            int accumulator;
             for( Direction direction : Direction.values() ) {
+                accumulator = 0;
                 position = pos;
                 Block nextBlock = this.getBlockState(pos).getBlock();
-                while( nextBlock == Blocks.AIR || nextBlock == definition.ignitionMaterial() ) {
+                while(
+                    accumulator++ <= PortalShape.MAX_WIDTH && (
+                        nextBlock == Blocks.AIR
+                        || nextBlock == definition.ignitionMaterial()
+                    )
+                ) {
                     position = position.relative(direction);
                     nextBlock = this.getBlockState(position).getBlock();
                 }
