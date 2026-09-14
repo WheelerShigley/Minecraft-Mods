@@ -13,7 +13,6 @@ public class Window implements ModInitializer {
 
     /* TODO
      * Ignition-Block can always be placed in places that would create a portal
-     * There can be gaps in the portal-frame, this should be fixed
      * Add warning for duplicates in definition
      * Add "add" commandlet for links [command]
      *

@@ -2,5 +2,6 @@
   "block.window.portal": "Custom Portal",
 
   "command.window.link_title": "Material-to-Dimension Links:",
-  "command.window.empty": "None"
+  "command.window.empty": "None",
+  "command.window.duplicate_link": "Link Not Added: Duplicate Entry."
 }

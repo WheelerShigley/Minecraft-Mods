@@ -85,32 +85,30 @@ public class WindowCommands {
         return Commands.literal(name)
             .requires(WindowCommands::getWindowsCommandPermission)
             .then(
-                Commands.literal("list")
-                    .executes(WindowCommands::linksList)
+                Commands.literal("list").executes(WindowCommands::linksList)
             )
             .then(
-                Commands.argument("material", BlockStateArgument.block(context) )
-                    .then(
-                        Commands.argument("igniter", BlockStateArgument.block(context) )
-                            .then(
-                                Commands.argument("from_level", DimensionArgument.dimension() )
-                                    .then(
-                                        Commands.argument("to_level", DimensionArgument.dimension() )
-                                            .then(
-                                                Commands.argument("color", StringArgumentType.word() )
-                                                    .suggests(
-                                                        (_context, _builder) -> {
-                                                            for( DyeColor color : DyeColor.values() ) {
-                                                                _builder.suggest( color.getName() );
-                                                            }
-                                                            return _builder.buildFuture();
-                                                        }
-                                                    )
-                                                    .executes(WindowCommands::link)
-                                            )
-                                    )
+                Commands.literal("add").then(
+                    Commands.argument("material", BlockStateArgument.block(context) ).then(
+                        Commands.argument("igniter", BlockStateArgument.block(context) ).then(
+                            Commands.argument("from_level", DimensionArgument.dimension() ).then(
+                                Commands.argument("to_level", DimensionArgument.dimension() ).then(
+                                    Commands
+                                        .argument("color", StringArgumentType.word() )
+                                        .suggests(
+                                            (_context, _builder) -> {
+                                                for( DyeColor color : DyeColor.values() ) {
+                                                    _builder.suggest( color.getName() );
+                                                }
+                                                return _builder.buildFuture();
+                                            }
+                                        )
+                                        .executes(WindowCommands::link)
+                                )
                             )
+                        )
                     )
+                )
             )
         ;
     }
@@ -126,9 +124,18 @@ public class WindowCommands {
             StringArgumentType.getString(context, "color").toUpperCase()
         );
 
-        WindowConfig.INSTANCE.definitions.add(
-            new PortalDefinition(material, igniter, fromLevel.dimension(), tolevel.dimension(), color)
-        );
+        PortalDefinition potentialDefinition = new PortalDefinition(material, igniter, fromLevel.dimension(), tolevel.dimension(), color);
+        //Prevent Duplicates
+        for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
+            if( definition.equals(potentialDefinition) ) {
+                context.getSource().sendFailure(
+                    Component.translatable("command.window.duplicate_link")
+                );
+                return -1;
+            }
+        }
+
+        WindowConfig.INSTANCE.definitions.add(potentialDefinition);
         WindowPersistentConfigurations.save();
         return 0;
     }

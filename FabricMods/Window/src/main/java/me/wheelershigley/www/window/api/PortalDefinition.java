@@ -44,6 +44,23 @@ public record PortalDefinition(
         ).apply(instance, PortalDefinition::new)
     );
 
+    public boolean equals(PortalDefinition other) {
+        boolean hasSameDimensions = (
+            other.fromDimension.equals(fromDimension)
+            && other.toDimension.equals(toDimension)
+        ) || (
+            other.fromDimension.equals(toDimension)
+            && other.toDimension.equals(fromDimension)
+        );
+
+        //color is not considered in equality
+        return
+            hasSameDimensions
+            && other.ignitionMaterial.equals(ignitionMaterial)
+            && other.frameMaterial.equals(frameMaterial)
+        ;
+    }
+
     @Override
     public String toString() {
         return
