@@ -180,6 +180,14 @@ public class PortalForcer {
                 mutable.setWithOffset(closestFullPosition, width * direction.getStepX(), height, width * direction.getStepZ());
                 this.level.setBlock(mutable, portalBlockState, 18);
                 poiManager.add(mutable.immutable(), poiType);
+
+                BlockPos position = new BlockPos( mutable.getX(), mutable.getY(), mutable.getZ() );
+                PortalBlockEntity portalBlockEntity = (PortalBlockEntity)level.getBlockEntity(position);
+                if(portalBlockEntity == null) {
+                    continue;
+                }
+                portalBlockEntity.setFrame( definition.frameMaterial() );
+                portalBlockEntity.setIgniter( definition.ignitionMaterial() );
             }
         }
 

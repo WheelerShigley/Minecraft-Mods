@@ -51,7 +51,19 @@ public class CustomPortal {
     public static @Nullable TeleportTransition getTransition(
         ServerPlayer player, PortalDefinition definition
     ) {
+        if( player.isOnPortalCooldown() ) {
+            return null;
+        }
+
+        ServerLevel fromDimension = player.level().getServer().getLevel( definition.fromDimension() );
         ServerLevel toDimension = player.level().getServer().getLevel( definition.toDimension() );
+        if( player.level().equals(toDimension) ) {
+            //Swap
+            ServerLevel temporary = toDimension;
+            toDimension = fromDimension;
+            fromDimension = temporary;
+        }
+
         if(    toDimension == null
             || player.level().equals(toDimension)
         ){
@@ -67,6 +79,7 @@ public class CustomPortal {
         }
         Vec3 newPosition = new Vec3( exitPortalPos.getX(), exitPortalPos.getY(), exitPortalPos.getZ() );
 
+        player.setPortalCooldown();
         return new TeleportTransition(
             toDimension,
             newPosition,
@@ -110,11 +123,6 @@ public class CustomPortal {
         );
 
         return potentialPosition.orElse(null);
-    }
-
-    //TODO
-    private static @Nullable BlockState getFrameBlock(ServerLevel toDimension) {
-        return Blocks.STONE.defaultBlockState();
     }
 
     public static boolean attemptPortal(

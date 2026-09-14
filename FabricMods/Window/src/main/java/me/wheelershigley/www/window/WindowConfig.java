@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import me.wheelershigley.www.window.api.LinkType;
 import me.wheelershigley.www.window.api.PortalDefinition;
 import me.wheelershigley.www.window.portal.PortalBlock;
 import me.wheelershigley.www.window.portal.PortalBlockEntity;
@@ -90,13 +91,20 @@ public class WindowConfig {
         DyeColor color = ( (PortalBlock)portalBlockEntity.getBlockState().getBlock() ).COLOR;
 
         for(PortalDefinition definition : this.definitions) {
-            if(
-                definition.frameMaterial().equals(frameMaterial)
+            if(    definition.frameMaterial().equals(frameMaterial)
                 && definition.ignitionMaterial().equals(ignitionMaterial)
-                && definition.fromDimension().equals(fromDimension)
                 && definition.color().equals(color)
             ) {
-                return definition;
+                boolean bi_directional = definition.type().equals(LinkType.BIDIRECTIONAL);
+                if(
+                    definition.fromDimension().equals(fromDimension)
+                    || (
+                        bi_directional
+                        && definition.toDimension().equals(fromDimension)
+                    )
+                ) {
+                    return definition;
+                }
             }
         }
         return null;
