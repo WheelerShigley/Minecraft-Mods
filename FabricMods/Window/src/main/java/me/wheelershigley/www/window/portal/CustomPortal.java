@@ -1,14 +1,20 @@
 package me.wheelershigley.www.window.portal;
 
 import com.mojang.datafixers.util.Pair;
+import me.wheelershigley.www.window.api.CustomPoiTypes;
+import me.wheelershigley.www.window.api.LevelHelper;
 import me.wheelershigley.www.window.api.LinkType;
 import me.wheelershigley.www.window.api.PortalDefinition;
 import me.wheelershigley.www.window.registrations.WindowBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.BlockUtil;
+import net.minecraft.world.entity.ai.village.poi.PoiManager;
+import net.minecraft.world.entity.ai.village.poi.PoiRecord;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -93,25 +99,38 @@ public class CustomPortal {
         ServerPlayer player, ServerLevel toDimension,
         boolean forcePortal, @Nullable PortalDefinition definition
     ) {
+        if(definition == null) {
+            return null;
+        }
+
         double teleportationScale = DimensionType.getTeleportationScale(
             player.level().dimensionType(),
             toDimension.dimensionType()
         );
 
-        BlockPos approximateExitPos = toDimension.getWorldBorder().clampToBounds(
-            player.getX() * teleportationScale,
-            player.getY(),
-            player.getZ() * teleportationScale
-        );
+        if(definition.type() == null) {
+            return null;
+        }
+        BlockPos approximateExitPos;
+        if( definition.type().equals(LinkType.MONODIRECTIONAL_RTP) ) {
+            approximateExitPos = LevelHelper.getSafeRTPLocation(toDimension);
+        } else {
+            approximateExitPos = toDimension.getWorldBorder().clampToBounds(
+                player.getX() * teleportationScale,
+                player.getY(),
+                player.getZ() * teleportationScale
+            );
+        }
 
-        BlockPos position = BlockPos.findClosestMatch(
+        BlockPos position = findClosestPortalPosition(
             approximateExitPos,
-            32,
-            16,
-            pos -> toDimension.getBlockState(pos).getBlock() instanceof PortalBlock
+            definition,
+            definition.color(),
+            (int)(16*teleportationScale + 16),
+            toDimension
         ).orElse(null);
 
-        if(position == null && forcePortal && definition != null) {
+        if(position == null && forcePortal) {
             PortalForcer customPortalForcer = new PortalForcer(toDimension);
             Optional<BlockUtil.FoundRectangle> createdExit = customPortalForcer.createPortal(
                 approximateExitPos,
@@ -129,7 +148,7 @@ public class CustomPortal {
         }
 
         /* Get Lowest Block in Portal */
-        if(definition == null || definition.color() == null) {
+        if(definition.color() == null) {
             return null;
         }
         Block coloredPortalBlock = WindowBlocks.coloredPortals.get( definition.color() ).defaultBlockState().getBlock();
@@ -139,6 +158,56 @@ public class CustomPortal {
             currentBlock = toDimension.getBlockState(position).getBlock();
         }
         return position.above();
+    }
+
+    public static Optional<BlockPos> findClosestPortalPosition(
+        final BlockPos approximateExitPos,
+        final PortalDefinition definition,
+        final DyeColor color,
+        final int radius,
+        final ServerLevel level
+    ) {
+        PoiManager poiManager = level.getPoiManager();
+
+        poiManager.ensureLoadedAndValid(
+            level,
+            approximateExitPos,
+            radius
+        );
+
+        ResourceKey<PoiType> POIType = CustomPoiTypes.portalPOIs.get(color);
+        return poiManager
+            .getInSquare(
+                type -> type.is(POIType),
+                approximateExitPos,
+                radius,
+                PoiManager.Occupancy.ANY
+            )
+            .map(PoiRecord::getPos)
+            .filter(level.getWorldBorder()::isWithinBounds)
+            .filter(
+                (pos) -> {
+                    BlockState state = level.getBlockState(pos);
+                    PortalBlockEntity portalBlockEntity = (PortalBlockEntity)level.getBlockEntity(pos);
+
+                    if(    !(state.getBlock() instanceof PortalBlock portalBlock)
+                        || !(portalBlockEntity instanceof PortalBlockEntity)
+                        || portalBlock.COLOR != color
+                    ) {
+                        return false;
+                    }
+
+                    return definition.frameMaterial().equals(    portalBlockEntity.getFrame()   )
+                        && definition.ignitionMaterial().equals( portalBlockEntity.getIgniter() )
+                    ;
+                }
+            )
+            .min(
+                Comparator.comparingDouble(
+                    pos -> pos.distSqr(approximateExitPos)
+                )
+            )
+        ;
     }
 
     public static boolean attemptPortal(

@@ -41,8 +41,8 @@ public class WindowBlockEntities {
             getWindowIdentifier(path),
             FabricBlockEntityTypeBuilder.create(
                 (pos, state) -> {
-                    DyeColor color = ( (PortalBlock)state.getBlock() ).COLOR;
-                    return new PortalBlockEntity(pos, state, color);
+                    PortalBlock datum = (PortalBlock)state.getBlock();
+                    return new PortalBlockEntity(pos, state, datum.COLOR);
                 },
                 block
             ).build()

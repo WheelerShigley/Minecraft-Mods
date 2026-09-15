@@ -1,10 +1,12 @@
 package me.wheelershigley.www.window.mixins;
 
+import me.wheelershigley.www.window.api.CustomPoiTypes;
 import me.wheelershigley.www.window.registrations.WindowBlocks;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Set;
 
-import static me.wheelershigley.www.window.api.CustomPoiTypes.CUSTOM_PORTAL;
+import static me.wheelershigley.www.window.api.CustomPoiTypes.*;
 
 @Mixin(PoiTypes.class)
 public class CustomPortalPOIMixin {
@@ -35,7 +37,14 @@ public class CustomPortalPOIMixin {
         at = @At("TAIL")
     )
     private static void bootstrap(Registry<PoiType> registry, CallbackInfoReturnable<PoiType> cir) {
-        //TODO: consider all custom portals
-        register(registry, CUSTOM_PORTAL, getBlockStates(WindowBlocks.WHITE_PORTAL), 0, 1);
+        for(DyeColor color : DyeColor.values()) {
+            register(
+                registry,
+                CustomPoiTypes.portalPOIs.get(color),
+                getBlockStates( WindowBlocks.coloredPortals.get(color) ),
+                0,
+                1
+            );
+        }
     }
 }

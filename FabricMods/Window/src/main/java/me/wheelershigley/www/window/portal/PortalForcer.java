@@ -12,6 +12,7 @@ import net.minecraft.util.BlockUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -130,7 +131,7 @@ public class PortalForcer {
         // PORTAL
         Holder<PoiType> poiType = this.level.registryAccess()
             .lookupOrThrow(Registries.POINT_OF_INTEREST_TYPE)
-            .getOrThrow(CustomPoiTypes.CUSTOM_PORTAL)
+            .getOrThrow(  CustomPoiTypes.portalPOIs.get( definition.color() )  )
         ;
         PoiManager poiManager = this.level.getPoiManager();
         Block portalBlock = WindowBlocks.coloredPortals.get( definition.color() );
