@@ -31,13 +31,22 @@ public enum LinkType {
         };
     }
 
-    @Override
-    public String toString() {
+    public String toOperator() {
         return switch(this) {
             case BIDIRECTIONAL -> "⇄";
             case MONODIRECTIONAL -> "⥤";
             case MONODIRECTIONAL_RTP -> "⥤*";
             case SINGLE -> "⇌";
+        };
+    }
+
+    @Override
+    public String toString() {
+        return switch(this) {
+            case BIDIRECTIONAL -> "Bi-Directional";
+            case MONODIRECTIONAL -> "Mono-Directional";
+            case MONODIRECTIONAL_RTP -> "Mono-Directional-RTP";
+            case SINGLE -> "Single";
         };
     }
 }

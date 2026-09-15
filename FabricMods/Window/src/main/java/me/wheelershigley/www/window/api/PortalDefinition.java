@@ -54,10 +54,13 @@ public record PortalDefinition(
         boolean hasSameDimensions = (
             other.fromDimension.equals(fromDimension)
             && other.toDimension.equals(toDimension)
-        ) || (
-            other.fromDimension.equals(toDimension)
-            && other.toDimension.equals(fromDimension)
         );
+        if( this.type.equals(LinkType.BIDIRECTIONAL) ) {
+            hasSameDimensions = hasSameDimensions || (
+                other.fromDimension.equals(toDimension)
+                && other.toDimension.equals(fromDimension)
+            );
+        }
 
         boolean type_overlaps = type.overlaps(other.type) || other.type.overlaps(type);
 
@@ -78,7 +81,7 @@ public record PortalDefinition(
             BuiltInRegistries.BLOCK.getKey(ignitionMaterial) +
             " =\n" +
             fromDimension.identifier() +
-            " " + type + " " +
+            " " + type.toOperator() + " " +
             toDimension.identifier() +
             " (" +
             color.getSerializedName() +
