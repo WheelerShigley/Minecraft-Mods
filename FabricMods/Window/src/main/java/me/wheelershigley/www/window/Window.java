@@ -12,6 +12,7 @@ public class Window implements ModInitializer {
     }
 
     /* TODO
+     * Portals over-generate
      * Ignition-Block can always be placed in places that would create a portal
      *
      * Add non-creation option (portal on other side does not generate)

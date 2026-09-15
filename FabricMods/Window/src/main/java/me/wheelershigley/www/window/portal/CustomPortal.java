@@ -1,6 +1,7 @@
 package me.wheelershigley.www.window.portal;
 
 import com.mojang.datafixers.util.Pair;
+import me.wheelershigley.www.window.api.LinkType;
 import me.wheelershigley.www.window.api.PortalDefinition;
 import me.wheelershigley.www.window.registrations.WindowBlocks;
 import net.minecraft.core.BlockPos;
@@ -51,13 +52,12 @@ public class CustomPortal {
     public static @Nullable TeleportTransition getTransition(
         ServerPlayer player, PortalDefinition definition
     ) {
-        if( player.isOnPortalCooldown() ) {
-            return null;
-        }
-
         ServerLevel fromDimension = player.level().getServer().getLevel( definition.fromDimension() );
         ServerLevel toDimension = player.level().getServer().getLevel( definition.toDimension() );
-        if( player.level().equals(toDimension) ) {
+        if(
+            definition.type().equals(LinkType.BIDIRECTIONAL)
+            && player.level().equals(toDimension)
+        ) {
             //Swap
             ServerLevel temporary = toDimension;
             toDimension = fromDimension;
@@ -104,8 +104,15 @@ public class CustomPortal {
             player.getZ() * teleportationScale
         );
 
-        PortalForcer customPortalForcer = new PortalForcer(toDimension);
-        if(forcePortal && definition != null) {
+        BlockPos position = BlockPos.findClosestMatch(
+            approximateExitPos,
+            32,
+            16,
+            pos -> toDimension.getBlockState(pos).getBlock() instanceof PortalBlock
+        ).orElse(null);
+
+        if(position == null && forcePortal && definition != null) {
+            PortalForcer customPortalForcer = new PortalForcer(toDimension);
             Optional<BlockUtil.FoundRectangle> createdExit = customPortalForcer.createPortal(
                 approximateExitPos,
                 definition
@@ -113,16 +120,25 @@ public class CustomPortal {
 
             if( createdExit.isEmpty() ) {
                 return null;
+            } else {
+                position = createdExit.get().minCorner;
             }
         }
+        if(position == null) {
+            return null;
+        }
 
-        Optional<BlockPos> potentialPosition = customPortalForcer.findClosestPortalPosition(
-            approximateExitPos,
-            teleportationScale,
-            toDimension.getWorldBorder()
-        );
-
-        return potentialPosition.orElse(null);
+        /* Get Lowest Block in Portal */
+        if(definition == null || definition.color() == null) {
+            return null;
+        }
+        Block coloredPortalBlock = WindowBlocks.coloredPortals.get( definition.color() ).defaultBlockState().getBlock();
+        Block currentBlock = coloredPortalBlock;
+        while( currentBlock.equals(coloredPortalBlock) ) {
+            position = position.below();
+            currentBlock = toDimension.getBlockState(position).getBlock();
+        }
+        return position.above();
     }
 
     public static boolean attemptPortal(

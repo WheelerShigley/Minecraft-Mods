@@ -2,66 +2,29 @@ package me.wheelershigley.www.window.portal;
 
 import me.wheelershigley.www.window.api.CustomPoiTypes;
 import me.wheelershigley.www.window.api.PortalDefinition;
-import me.wheelershigley.www.window.registrations.WindowBlockEntities;
 import me.wheelershigley.www.window.registrations.WindowBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.BlockUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
-import net.minecraft.world.entity.ai.village.poi.PoiRecord;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.levelgen.Heightmap;
 
-import java.io.DataInput;
-import java.util.Comparator;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class PortalForcer {
 
     private final ServerLevel level;
     public PortalForcer(final ServerLevel level) {
         this.level = level;
-    }
-
-    public Optional<BlockPos> findClosestPortalPosition(
-        final BlockPos approximateExitPos, final double ratio,
-        final WorldBorder worldBorder
-    ) {
-        PoiManager poiManager = this.level.getPoiManager();
-        int radius = (int)(16.0/ratio);
-        poiManager.ensureLoadedAndValid(this.level, approximateExitPos, radius);
-        Stream<BlockPos> checker = poiManager.getInSquare(
-            (type) -> type.is(CustomPoiTypes.CUSTOM_PORTAL),
-            approximateExitPos,
-            radius,
-            PoiManager.Occupancy.ANY
-        ).map(PoiRecord::getPos);
-        Objects.requireNonNull(worldBorder);
-
-        return checker
-            .filter(worldBorder::isWithinBounds)
-            .filter(
-                (pos) -> this.level.getBlockState(pos).hasProperty(BlockStateProperties.AXIS)
-            )
-            .min(
-                Comparator.comparingDouble(
-                    (BlockPos p) -> p.distSqr(approximateExitPos)
-                )
-                .thenComparingInt(Vec3i::getY)
-            )
-        ;
     }
 
     public Optional<BlockUtil.FoundRectangle> createPortal(

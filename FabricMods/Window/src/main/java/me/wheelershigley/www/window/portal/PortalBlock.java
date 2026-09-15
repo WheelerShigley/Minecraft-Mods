@@ -70,38 +70,11 @@ public class PortalBlock extends BaseEntityBlock implements Portal, PolymerBlock
         final Entity entity, final InsideBlockEffectApplier effectApplier,
         final boolean isPrecise
     ) {
-        if( !(entity instanceof ServerPlayer serverPlayer) ) {
+        if( !(entity instanceof ServerPlayer) ) {
             return;
         }
 
-        PortalBlockEntity portalBlockEntity = (PortalBlockEntity)level.getBlockEntity(pos);
-        if(portalBlockEntity == null) {
-            return;
-        }
-        PortalDefinition definition = WindowConfig.INSTANCE.getDefinition(portalBlockEntity);
-        if(definition == null) {
-            return;
-        }
-
-        serverPlayer.sendSystemMessage(
-            Component.literal(
-                definition.toString()
-            )
-        );
-
-        if(level.getServer() == null) {
-            return;
-        }
-
-        TeleportTransition transition = CustomPortal.getTransition(serverPlayer, definition);
-        if(transition == null) {
-            return;
-        }
-        serverPlayer.teleport(transition);
-
-        if( entity.canUsePortal(false) ) {
-            entity.setAsInsidePortal(this, pos);
-        }
+        entity.setAsInsidePortal(this, pos);
     }
 
     @Override
@@ -127,13 +100,21 @@ public class PortalBlock extends BaseEntityBlock implements Portal, PolymerBlock
         @NonNull Entity entity,
         @NonNull BlockPos portalEntryPos
     ) {
-        if(entity instanceof ServerPlayer serverPlayer) {
-            serverPlayer.sendSystemMessage(
-                Component.literal("TODO")
-            );
+        if( !(entity instanceof ServerPlayer serverPlayer) ) {
+            return null;
         }
 
-        return null;
+        PortalBlockEntity portalBlockEntity = (PortalBlockEntity)currentLevel.getBlockEntity(portalEntryPos);
+        if(portalBlockEntity == null) {
+            return null;
+        }
+
+        PortalDefinition definition = WindowConfig.INSTANCE.getDefinition(portalBlockEntity);
+        if(definition == null) {
+            return null;
+        }
+
+        return CustomPortal.getTransition(serverPlayer, definition);
     }
 
     protected VoxelShape getShape(
