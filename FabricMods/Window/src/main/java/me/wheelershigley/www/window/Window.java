@@ -14,16 +14,17 @@ public class Window implements ModInitializer {
     /* TODO
      * More responces to player
      * Add scale to definition.toString (not part of definition)
-     * Reverse command
      * Ignition-Block can always be placed in places that would create a portal
      *
      * Add non-creation option (portal on other side does not generate)
-     * Single-Destination Portals?
+     * Reverse command
      *
      * Break-Particles
      * Break-Sound
      * Portal Shatters when not defined (attempted to go through, but is not possible)
      * Gamerule for shatterings
+     *
+     * Single-Destination Portals?
      */
     @Override
     public void onInitialize() {
