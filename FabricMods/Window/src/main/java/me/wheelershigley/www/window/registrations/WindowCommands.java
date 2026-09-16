@@ -15,7 +15,6 @@ import me.wheelershigley.www.window.api.PortalDefinition;
 import me.wheelershigley.www.window.portal.CustomPortal;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandBuildContext;
-import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.DimensionArgument;
@@ -125,12 +124,12 @@ public class WindowCommands {
     }
     private static RequiredArgumentBuilder<CommandSourceStack, ?> addCommandlet(CommandBuildContext context) {
         return
-            materialArgument(context, false).then(
-                igniterArgument(context, false).then(
-                    fromLevelArgument(context, false).then(
-                        toLevelArgument(context,  false).then(
-                            colorArgument(context, false).then(
-                                typeArgument(context, false).executes(WindowCommands::link)
+            typeArgument(context, false).then(
+                materialArgument(context, false).then(
+                    igniterArgument(context, false).then(
+                        fromLevelArgument(context, false).then(
+                            toLevelArgument(context,  false).then(
+                                colorArgument(context, false).executes(WindowCommands::link)
                             )
                         )
                     )
@@ -140,11 +139,11 @@ public class WindowCommands {
     }
     private static RequiredArgumentBuilder<CommandSourceStack, ?> removeCommandlet(CommandBuildContext context) {
         return
-            materialArgument(context, true).then(
-                igniterArgument(context, true).then(
-                    fromLevelArgument(context, true).then(
-                        toLevelArgument(context, true).then(
-                            typeArgument(context, true).executes(WindowCommands::remove)
+            typeArgument(context, true).then(
+                materialArgument(context, true).then(
+                    igniterArgument(context, true).then(
+                        fromLevelArgument(context, true).then(
+                            toLevelArgument(context, true).executes(WindowCommands::remove)
                         )
                     )
                 )
@@ -167,9 +166,33 @@ public class WindowCommands {
         return command;
     }
 
+    private static final SuggestionProvider<CommandSourceStack> LIMITED_TYPE_PROVIDER =
+        (_context, _builder) -> {
+            for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
+                _builder.suggest(
+                    definition.type().name().toLowerCase(Locale.ROOT)
+                );
+            }
+            return _builder.buildFuture();
+        }
+    ;
+    private static final SuggestionProvider<CommandSourceStack> UNLIMITED_TYPE_PROVIDER =
+        (_context, _builder) -> {
+            for( LinkType type : LinkType.values() ) {
+                _builder.suggest(
+                    type.name().toLowerCase(Locale.ROOT)
+                );
+            }
+            return _builder.buildFuture();
+        }
+    ;
     private static final SuggestionProvider<CommandSourceStack> LIMITED_MATERIAL_PROVIDER =
         (_context, _builder) -> {
+            String type_string = getPriorArgument(_context, LINK_TYPE, String.class).toLowerCase(Locale.ROOT);
             for (PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
+                if( !definition.type().name().toLowerCase(Locale.ROOT).equals(type_string) ) {
+                    continue;
+                }
                 _builder.suggest(
                     BuiltInRegistries.BLOCK.wrapAsHolder(definition.frameMaterial()).getRegisteredName()
                 );
@@ -179,9 +202,12 @@ public class WindowCommands {
     ;
     private static final SuggestionProvider<CommandSourceStack> LIMITED_IGNITER_PROVIDER =
         (_context, _builder) -> {
+            String type_string = getPriorArgument(_context, LINK_TYPE, String.class).toLowerCase(Locale.ROOT);
             Block material = getPriorArgument(_context, FRAME_MATERIAL, BlockInput.class).getState().getBlock();
             for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
-                if( !definition.frameMaterial().equals(material) ) {
+                if(    !definition.type().name().toLowerCase(Locale.ROOT).equals(type_string)
+                    || !definition.frameMaterial().equals(material)
+                ) {
                     continue;
                 }
                 _builder.suggest(
@@ -193,11 +219,12 @@ public class WindowCommands {
     ;
     private static final SuggestionProvider<CommandSourceStack> LIMITED_FROM_LEVEL_PROVIDER =
         (_context, _builder) -> {
+            String type_string = getPriorArgument(_context, LINK_TYPE, String.class).toLowerCase(Locale.ROOT);
             Block frameMaterial = getPriorArgument(_context, FRAME_MATERIAL, BlockInput.class).getState().getBlock();
             Block ignitionMaterial = getPriorArgument(_context, IGNITER_MATERIAL, BlockInput.class).getState().getBlock();
             for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
-                if(
-                       !definition.frameMaterial().equals(frameMaterial)
+                if(    !definition.type().name().toLowerCase(Locale.ROOT).equals(type_string)
+                    || !definition.frameMaterial().equals(frameMaterial)
                     || !definition.ignitionMaterial().equals(ignitionMaterial)
                 ) {
                     continue;
@@ -211,13 +238,14 @@ public class WindowCommands {
     ;
     private static final SuggestionProvider<CommandSourceStack> LIMITED_TO_LEVEL_PROVIDER =
         (_context, _builder) -> {
+            String type_string = getPriorArgument(_context, LINK_TYPE, String.class).toLowerCase(Locale.ROOT);
             Block frameMaterial = getPriorArgument(_context, FRAME_MATERIAL, BlockInput.class).getState().getBlock();
             Block ignitionMaterial = getPriorArgument(_context, IGNITER_MATERIAL, BlockInput.class).getState().getBlock();
             Identifier fromLevel = getPriorArgument(_context, FROM_LEVEL_IDENTIFIER, Identifier.class);
 
             for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
-                if(
-                       !definition.frameMaterial().equals(frameMaterial)
+                if(    !definition.type().name().toLowerCase(Locale.ROOT).equals(type_string)
+                    || !definition.frameMaterial().equals(frameMaterial)
                     || !definition.ignitionMaterial().equals(ignitionMaterial)
                     || !definition.fromDimension().identifier().equals(fromLevel)
                 ) {
@@ -230,54 +258,19 @@ public class WindowCommands {
             return _builder.buildFuture();
         }
     ;
-    private static final SuggestionProvider<CommandSourceStack> LIMITED_TYPE_PROVIDER =
-        (_context, _builder) -> {
-            Block frameMaterial = getPriorArgument(_context, FRAME_MATERIAL, BlockInput.class).getState().getBlock();
-            Block ignitionMaterial = getPriorArgument(_context, IGNITER_MATERIAL, BlockInput.class).getState().getBlock();
-            Identifier fromLevel = getPriorArgument(_context, FROM_LEVEL_IDENTIFIER, Identifier.class);
-            Identifier toLevel = getPriorArgument(_context, TO_LEVEL_IDENTIFIER, Identifier.class);
-            for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
-                if(
-                       !definition.frameMaterial().equals(frameMaterial)
-                    || !definition.ignitionMaterial().equals(ignitionMaterial)
-                    || !definition.fromDimension().identifier().equals(fromLevel)
-                    || !definition.toDimension().identifier().equals(toLevel)
-                ) {
-                    continue;
-                }
-                _builder.suggest(
-                    definition.type().name().toLowerCase(Locale.ROOT)
-                );
-            }
-            return _builder.buildFuture();
-        }
-    ;
-    private static final SuggestionProvider<CommandSourceStack> UNLIMITED_TYPE_PROVIDER =
-        (_context, _builder) -> {
-            for( LinkType type : LinkType.values() ) {
-                _builder.suggest(
-                        type.name().toLowerCase(Locale.ROOT)
-                );
-            }
-            return _builder.buildFuture();
-        }
-    ;
     private static final SuggestionProvider<CommandSourceStack> LIMITED_COLOR_PROVIDER =
         (_context, _builder) -> {
+            String type_string = getPriorArgument(_context, LINK_TYPE, String.class).toLowerCase(Locale.ROOT);
             Block frameMaterial = getPriorArgument(_context, FRAME_MATERIAL, BlockInput.class).getState().getBlock();
             Block ignitionMaterial = getPriorArgument(_context, IGNITER_MATERIAL, BlockInput.class).getState().getBlock();
             Identifier fromLevel = getPriorArgument(_context, FROM_LEVEL_IDENTIFIER, Identifier.class);
             Identifier toLevel = getPriorArgument(_context, TO_LEVEL_IDENTIFIER, Identifier.class);
-            LinkType type = LinkType.valueOf(
-                StringArgumentType.getString(_context, LINK_TYPE).toUpperCase(Locale.ROOT)
-            );
             for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
-                if(
-                       !definition.frameMaterial().equals(frameMaterial)
+                if(    !definition.type().name().toLowerCase(Locale.ROOT).equals(type_string)
+                    || !definition.frameMaterial().equals(frameMaterial)
                     || !definition.ignitionMaterial().equals(ignitionMaterial)
                     || !definition.fromDimension().identifier().equals(fromLevel)
                     || !definition.toDimension().identifier().equals(toLevel)
-                    || !definition.type().equals(type)
                 ) {
                     continue;
                 }
@@ -393,6 +386,15 @@ public class WindowCommands {
             }
         }
 
+        context.getSource().sendSuccess(
+            new Supplier<Component>() {
+                @Override
+                public Component get() {
+                    return Component.translatable("command.window.link_success");
+                }
+            },
+            false
+        );
         WindowConfig.INSTANCE.definitions.add(potentialDefinition);
         WindowPersistentConfigurations.save();
         return 0;

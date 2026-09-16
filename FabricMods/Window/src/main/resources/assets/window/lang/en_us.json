@@ -3,6 +3,7 @@
 
   "command.window.link_title": "Material-to-Dimension Links:",
   "command.window.empty": "None",
+  "command.window.link_success": "Added Link.",
   "command.window.duplicate_link": "Link Not Added: Duplicate Entry.",
   "command.window.removal_success": "Removed Link.",
   "command.window.removal_failure": "Failed to remove Link."
