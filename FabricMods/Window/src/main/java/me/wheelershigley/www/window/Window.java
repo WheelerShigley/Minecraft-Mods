@@ -12,7 +12,6 @@ public class Window implements ModInitializer {
     }
 
     /* TODO
-     * More responces to player
      * Add scale to definition.toString (not part of definition)
      * Ignition-Block can always be placed in places that would create a portal
      *

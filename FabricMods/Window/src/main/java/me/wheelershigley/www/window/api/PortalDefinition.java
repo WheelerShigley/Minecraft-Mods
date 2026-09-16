@@ -14,6 +14,7 @@ public record PortalDefinition(
     Block ignitionMaterial,
     ResourceKey<Level> fromDimension,
     ResourceKey<Level>   toDimension,
+    double scale,
     LinkType type,
     DyeColor color
 ) {
@@ -37,6 +38,11 @@ public record PortalDefinition(
             ResourceKey.codec(Registries.DIMENSION)
                 .fieldOf("to_dimension")
                 .forGetter(PortalDefinition::toDimension)
+            ,
+
+            Codec.DOUBLE
+                .fieldOf("scale")
+                .forGetter(PortalDefinition::scale)
             ,
 
             LinkType.CODEC
@@ -64,7 +70,7 @@ public record PortalDefinition(
 
         boolean type_overlaps = type.overlaps(other.type) || other.type.overlaps(type);
 
-        //color is not considered in equality
+        //color and scale are not considered in equality
         return
                hasSameDimensions
             && other.ignitionMaterial.equals(ignitionMaterial)
@@ -82,7 +88,7 @@ public record PortalDefinition(
             " =\n" +
             fromDimension.identifier() +
             " " + type.toOperator() + " " +
-            toDimension.identifier() +
+            scale + " * " + toDimension.identifier() +
             " (" +
             color.getSerializedName() +
             ")"

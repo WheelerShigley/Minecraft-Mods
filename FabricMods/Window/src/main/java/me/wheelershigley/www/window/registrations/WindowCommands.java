@@ -1,6 +1,7 @@
 package me.wheelershigley.www.window.registrations;
 
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -54,6 +55,7 @@ public class WindowCommands {
         IGNITER_MATERIAL = "igniter_material",
         FROM_LEVEL_IDENTIFIER = "from_level_identifier",
         TO_LEVEL_IDENTIFIER = "to_level_identifier",
+        SCALE = "scale",
         COLOR = "color",
         LINK_TYPE = "link_type"
     ;
@@ -129,7 +131,9 @@ public class WindowCommands {
                     igniterArgument(context, false).then(
                         fromLevelArgument(context, false).then(
                             toLevelArgument(context,  false).then(
-                                colorArgument(context, false).executes(WindowCommands::link)
+                                scaleArgument(context, false).then(
+                                    colorArgument(context, false).executes(WindowCommands::link)
+                                )
                             )
                         )
                     )
@@ -258,6 +262,36 @@ public class WindowCommands {
             return _builder.buildFuture();
         }
     ;
+    private static final SuggestionProvider<CommandSourceStack> LIMITED_SCALE_PROVIDER =
+        (_context, _builder) -> {
+            String type_string = getPriorArgument(_context, LINK_TYPE, String.class).toLowerCase(Locale.ROOT);
+            Block frameMaterial = getPriorArgument(_context, FRAME_MATERIAL, BlockInput.class).getState().getBlock();
+            Block ignitionMaterial = getPriorArgument(_context, IGNITER_MATERIAL, BlockInput.class).getState().getBlock();
+            Identifier fromLevel = getPriorArgument(_context, FROM_LEVEL_IDENTIFIER, Identifier.class);
+            Identifier toLevel = getPriorArgument(_context, TO_LEVEL_IDENTIFIER, Identifier.class);
+
+            for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
+                if(    !definition.type().name().toLowerCase(Locale.ROOT).equals(type_string)
+                    || !definition.frameMaterial().equals(frameMaterial)
+                    || !definition.ignitionMaterial().equals(ignitionMaterial)
+                    || !definition.fromDimension().identifier().equals(fromLevel)
+                    || !definition.toDimension().identifier().equals(toLevel)
+                ) {
+                    continue;
+                }
+                _builder.suggest(
+                    Double.toString( definition.scale() )
+                );
+            }
+            return _builder.buildFuture();
+        }
+    ;
+    private static final SuggestionProvider<CommandSourceStack> UNLIMITED_SCALE_PROVIDER =
+        (_context, _builder) -> {
+            _builder.suggest( Double.toString(1.0) );
+            return _builder.buildFuture();
+        }
+    ;
     private static final SuggestionProvider<CommandSourceStack> LIMITED_COLOR_PROVIDER =
         (_context, _builder) -> {
             String type_string = getPriorArgument(_context, LINK_TYPE, String.class).toLowerCase(Locale.ROOT);
@@ -265,12 +299,14 @@ public class WindowCommands {
             Block ignitionMaterial = getPriorArgument(_context, IGNITER_MATERIAL, BlockInput.class).getState().getBlock();
             Identifier fromLevel = getPriorArgument(_context, FROM_LEVEL_IDENTIFIER, Identifier.class);
             Identifier toLevel = getPriorArgument(_context, TO_LEVEL_IDENTIFIER, Identifier.class);
+            Double scale = getPriorArgument(_context, SCALE, Double.class);
             for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
                 if(    !definition.type().name().toLowerCase(Locale.ROOT).equals(type_string)
                     || !definition.frameMaterial().equals(frameMaterial)
                     || !definition.ignitionMaterial().equals(ignitionMaterial)
                     || !definition.fromDimension().identifier().equals(fromLevel)
                     || !definition.toDimension().identifier().equals(toLevel)
+                    || definition.scale() != scale
                 ) {
                     continue;
                 }
@@ -309,6 +345,12 @@ public class WindowCommands {
         CommandBuildContext context, boolean definition_limited
     ) {
         return argument(TO_LEVEL_IDENTIFIER, DimensionArgument.dimension(), LIMITED_TO_LEVEL_PROVIDER, definition_limited);
+    }
+    private static RequiredArgumentBuilder<CommandSourceStack, ?> scaleArgument(
+            CommandBuildContext context, boolean definition_limited
+    ) {
+        SuggestionProvider<CommandSourceStack> provider = definition_limited ? LIMITED_SCALE_PROVIDER : UNLIMITED_SCALE_PROVIDER;
+        return argument(SCALE, DoubleArgumentType.doubleArg(), provider, true);
     }
     private static RequiredArgumentBuilder<CommandSourceStack, ?> colorArgument(
         CommandBuildContext context, boolean definition_limited
@@ -363,6 +405,7 @@ public class WindowCommands {
 
         ServerLevel fromLevel = DimensionArgument.getDimension(context, FROM_LEVEL_IDENTIFIER);
         ServerLevel   tolevel = DimensionArgument.getDimension(context, TO_LEVEL_IDENTIFIER);
+        double scale          = DoubleArgumentType.getDouble(context, SCALE);
 
         LinkType type = LinkType.valueOf(
             StringArgumentType.getString(context, LINK_TYPE).toUpperCase(Locale.ROOT)
@@ -373,7 +416,7 @@ public class WindowCommands {
 
         PortalDefinition potentialDefinition = new PortalDefinition(
             material, igniter,
-            fromLevel.dimension(), tolevel.dimension(),
+            fromLevel.dimension(), tolevel.dimension(), scale,
             type, color
         );
         //Prevent Duplicates
@@ -424,7 +467,7 @@ public class WindowCommands {
 
         PortalDefinition commandPortalDefinition = new PortalDefinition(
             frameMaterial, ignitionMaterial,
-            fromLevel, tolevel,
+            fromLevel, tolevel, 1.0,
             type, null
         );
 

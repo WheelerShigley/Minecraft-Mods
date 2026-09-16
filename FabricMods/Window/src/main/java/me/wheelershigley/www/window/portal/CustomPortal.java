@@ -103,10 +103,10 @@ public class CustomPortal {
             return null;
         }
 
-        double teleportationScale = DimensionType.getTeleportationScale(
-            player.level().dimensionType(),
-            toDimension.dimensionType()
-        );
+        double teleportationScale = definition.scale();
+        if(  definition.fromDimension().equals( toDimension.dimension() )  ) {
+            teleportationScale = 1.0/teleportationScale;
+        }
 
         if(definition.type() == null) {
             return null;
