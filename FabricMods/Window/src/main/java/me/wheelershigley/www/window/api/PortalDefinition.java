@@ -16,7 +16,8 @@ public record PortalDefinition(
     ResourceKey<Level>   toDimension,
     double scale,
     LinkType type,
-    DyeColor color
+    DyeColor color,
+    boolean generates
 ) {
     public static final Codec<PortalDefinition> CODEC = RecordCodecBuilder.create(
         instance -> instance.group(
@@ -24,35 +25,33 @@ public record PortalDefinition(
                 .fieldOf("frame_material")
                 .forGetter(PortalDefinition::frameMaterial)
             ,
-
             BuiltInRegistries.BLOCK.byNameCodec()
                 .fieldOf("ignition_material")
                 .forGetter(PortalDefinition::ignitionMaterial)
             ,
-
             ResourceKey.codec(Registries.DIMENSION)
                 .fieldOf("from_dimension")
                 .forGetter(PortalDefinition::fromDimension)
             ,
-
             ResourceKey.codec(Registries.DIMENSION)
                 .fieldOf("to_dimension")
                 .forGetter(PortalDefinition::toDimension)
             ,
-
             Codec.DOUBLE
                 .fieldOf("scale")
                 .forGetter(PortalDefinition::scale)
             ,
-
             LinkType.CODEC
                 .fieldOf("type")
                 .forGetter(PortalDefinition::type)
             ,
-
             DyeColor.CODEC
                 .fieldOf("color")
                 .forGetter(PortalDefinition::color)
+            ,
+            Codec.BOOL
+                .fieldOf("generates")
+                .forGetter(PortalDefinition::generates)
         ).apply(instance, PortalDefinition::new)
     );
 
@@ -70,7 +69,7 @@ public record PortalDefinition(
 
         boolean type_overlaps = type.overlaps(other.type) || other.type.overlaps(type);
 
-        //color and scale are not considered in equality
+        //color, scale, and generation are not considered in equality
         return
                hasSameDimensions
             && other.ignitionMaterial.equals(ignitionMaterial)
@@ -91,7 +90,8 @@ public record PortalDefinition(
             scale + " * " + toDimension.identifier() +
             " (" +
             color.getSerializedName() +
-            ")"
+            ")\n" +
+            "[portal does " + (!this.generates ? "not " : "") + "generate]"
         ;
     }
 }

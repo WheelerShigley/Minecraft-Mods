@@ -1,6 +1,7 @@
 package me.wheelershigley.www.window.registrations;
 
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -57,7 +58,8 @@ public class WindowCommands {
         TO_LEVEL_IDENTIFIER = "to_level_identifier",
         SCALE = "scale",
         COLOR = "color",
-        LINK_TYPE = "link_type"
+        LINK_TYPE = "link_type",
+        GENERATE = "generate"
     ;
 
     public static void registerCommand() {
@@ -133,6 +135,9 @@ public class WindowCommands {
                             toLevelArgument(context,  false).then(
                                 scaleArgument(context, false).then(
                                     colorArgument(context, false).executes(WindowCommands::link)
+                                        .then(
+                                            generateArgument(context, false).executes(WindowCommands::link)
+                                        )
                                 )
                             )
                         )
@@ -325,6 +330,13 @@ public class WindowCommands {
             return _builder.buildFuture();
         }
     ;
+    private static final SuggestionProvider<CommandSourceStack> UNLIMITED_GENERATE_PROVIDER =
+        (_context, _builder) -> {
+            _builder.suggest( Boolean.toString(true) );
+            _builder.suggest( Boolean.toString(false) );
+            return _builder.buildFuture();
+        }
+    ;
 
     private static RequiredArgumentBuilder<CommandSourceStack, ?> materialArgument(
         CommandBuildContext context, boolean definition_limited
@@ -363,6 +375,11 @@ public class WindowCommands {
     ) {
         SuggestionProvider<CommandSourceStack> provider = definition_limited ? LIMITED_TYPE_PROVIDER : UNLIMITED_TYPE_PROVIDER;
         return argument(LINK_TYPE, StringArgumentType.word(), provider, true);
+    }
+    private static ArgumentBuilder<CommandSourceStack, ?> generateArgument(
+        CommandBuildContext context, boolean definition_limited
+    ) {
+        return argument(GENERATE, BoolArgumentType.bool(), UNLIMITED_GENERATE_PROVIDER, true);
     }
 
     private static <T> T getPriorArgument(
@@ -410,14 +427,21 @@ public class WindowCommands {
         LinkType type = LinkType.valueOf(
             StringArgumentType.getString(context, LINK_TYPE).toUpperCase(Locale.ROOT)
         );
-        DyeColor color = DyeColor.valueOf(
-            StringArgumentType.getString(context, COLOR).toUpperCase()
+        DyeColor color = DyeColor.CODEC.byName(
+            StringArgumentType.getString(context, COLOR).toLowerCase(Locale.ROOT)
         );
+        boolean generates;
+        try {
+            generates = BoolArgumentType.getBool(context, GENERATE);
+        } catch(IllegalArgumentException exception) {
+            generates = true;
+        }
+
 
         PortalDefinition potentialDefinition = new PortalDefinition(
             material, igniter,
             fromLevel.dimension(), tolevel.dimension(), scale,
-            type, color
+            type, color, generates
         );
         //Prevent Duplicates
         for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {
@@ -468,7 +492,7 @@ public class WindowCommands {
         PortalDefinition commandPortalDefinition = new PortalDefinition(
             frameMaterial, ignitionMaterial,
             fromLevel, tolevel, 1.0,
-            type, null
+            type, null, true
         );
 
         for(PortalDefinition definition : WindowConfig.INSTANCE.definitions) {

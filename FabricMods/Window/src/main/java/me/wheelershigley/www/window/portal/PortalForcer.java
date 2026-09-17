@@ -114,44 +114,46 @@ public class PortalForcer {
             }
         }
 
-        // FRAME
-        for(int width = -1; width < 3; ++width) {
-            for(int height = -1; height < 4; ++height) {
-                if (width == -1 || width == 2 || height == -1 || height == 3) {
-                    mutable.setWithOffset(closestFullPosition, width * direction.getStepX(), height, width * direction.getStepZ());
-                    this.level.setBlock(
-                        mutable,
-                        definition.frameMaterial().defaultBlockState(),
-                    3
-                    );
+        // PORTAL
+        if( definition.generates() ) {
+            // FRAME
+            for(int width = -1; width < 3; ++width) {
+                for(int height = -1; height < 4; ++height) {
+                    if(width == -1 || width == 2 || height == -1 || height == 3) {
+                        mutable.setWithOffset(closestFullPosition, width * direction.getStepX(), height, width * direction.getStepZ());
+                        this.level.setBlock(
+                            mutable,
+                            definition.frameMaterial().defaultBlockState(),
+                            3
+                        );
+                    }
                 }
             }
-        }
 
-        // PORTAL
-        Holder<PoiType> poiType = this.level.registryAccess()
-            .lookupOrThrow(Registries.POINT_OF_INTEREST_TYPE)
-            .getOrThrow(  CustomPoiTypes.portalPOIs.get( definition.color() )  )
-        ;
-        PoiManager poiManager = this.level.getPoiManager();
-        Block portalBlock = WindowBlocks.coloredPortals.get( definition.color() );
+            Holder<PoiType> poiType = this.level.registryAccess()
+                .lookupOrThrow(Registries.POINT_OF_INTEREST_TYPE)
+                .getOrThrow(  CustomPoiTypes.portalPOIs.get( definition.color() )  )
+            ;
+            PoiManager poiManager = this.level.getPoiManager();
+            Block portalBlock = WindowBlocks.coloredPortals.get( definition.color() );
 
-        Direction.Axis portalAxis = ( direction.getStepX() < direction.getStepZ() ) ? Direction.Axis.Z : Direction.Axis.X;
-        BlockState portalBlockState = portalBlock.defaultBlockState().setValue(PortalBlock.AXIS, portalAxis);
+            Direction.Axis portalAxis = ( direction.getStepX() < direction.getStepZ() ) ? Direction.Axis.Z : Direction.Axis.X;
+            BlockState portalBlockState = portalBlock.defaultBlockState().setValue(PortalBlock.AXIS, portalAxis);
 
-        for(int width = 0; width < 2; ++width) {
-            for(int height = 0; height < 3; ++height) {
-                mutable.setWithOffset(closestFullPosition, width * direction.getStepX(), height, width * direction.getStepZ());
-                this.level.setBlock(mutable, portalBlockState, 18);
-                poiManager.add(mutable.immutable(), poiType);
+            for(int width = 0; width < 2; ++width) {
+                for(int height = 0; height < 3; ++height) {
+                    mutable.setWithOffset(closestFullPosition, width * direction.getStepX(), height, width * direction.getStepZ());
+                    this.level.setBlock(mutable, portalBlockState, 18);
+                    poiManager.add(mutable.immutable(), poiType);
 
-                BlockPos position = new BlockPos( mutable.getX(), mutable.getY(), mutable.getZ() );
-                PortalBlockEntity portalBlockEntity = (PortalBlockEntity)level.getBlockEntity(position);
-                if(portalBlockEntity == null) {
-                    continue;
+                    BlockPos position = new BlockPos( mutable.getX(), mutable.getY(), mutable.getZ() );
+                    PortalBlockEntity portalBlockEntity = (PortalBlockEntity)level.getBlockEntity(position);
+                    if(portalBlockEntity == null) {
+                        continue;
+                    }
+                    portalBlockEntity.setFrame( definition.frameMaterial() );
+                    portalBlockEntity.setIgniter( definition.ignitionMaterial() );
                 }
-                portalBlockEntity.setFrame( definition.frameMaterial() );
-                portalBlockEntity.setIgniter( definition.ignitionMaterial() );
             }
         }
 

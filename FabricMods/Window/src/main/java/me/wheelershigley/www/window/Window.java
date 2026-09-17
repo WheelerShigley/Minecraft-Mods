@@ -12,18 +12,20 @@ public class Window implements ModInitializer {
     }
 
     /* TODO
-     * Add scale to definition.toString (not part of definition)
-     * Ignition-Block can always be placed in places that would create a portal
-     *
-     * Add non-creation option (portal on other side does not generate)
      * Reverse command
+     * Alter-scale command(?)
      *
      * Break-Particles
      * Break-Sound
      * Portal Shatters when not defined (attempted to go through, but is not possible)
      * Gamerule for shatterings
      *
+     * Fantasy Dependency inclusion
+     * window dimension create ...
+     * window dimension remove ...
+     *
      * Single-Destination Portals?
+     * Ignition-Block can always be placed in places that would create a portal
      */
     @Override
     public void onInitialize() {
