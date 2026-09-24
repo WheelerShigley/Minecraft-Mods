@@ -14,7 +14,6 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.wheelershigley.www.window.WindowConfig;
 import me.wheelershigley.www.window.api.LinkType;
 import me.wheelershigley.www.window.api.PortalDefinition;
-import me.wheelershigley.www.window.portal.CustomPortal;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -34,9 +33,12 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.portal.TeleportTransition;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Locale;
 import java.util.function.Supplier;
+
+import static net.minecraft.world.level.portal.TeleportTransition.PLAY_PORTAL_SOUND;
 
 public class WindowCommands {
     private static final String[]
@@ -81,8 +83,6 @@ public class WindowCommands {
         );
     }
 
-    /* Sub-commands */
-
     private static LiteralCommandNode<CommandSourceStack> getWindowCommand(CommandBuildContext context) {
         LiteralArgumentBuilder<CommandSourceStack> command = Commands
             .literal(COMMAND_ROOT[0])
@@ -99,15 +99,18 @@ public class WindowCommands {
         return command.build();
     }
 
+    /* Sub-commands */
+
     private static ArgumentBuilder<CommandSourceStack, ?> tpCommandlet(String name) {
         return Commands.literal(name)
             .then(
                 Commands
                     .argument(PLAYER, EntityArgument.player() )
                     .then(
-                        Commands.argument(LEVEL, DimensionArgument.dimension() )
+                        Commands
+                            .argument(LEVEL, DimensionArgument.dimension() )
+                            .executes(WindowCommands::teleport)
                     )
-                    .executes(WindowCommands::teleport)
             )
         ;
     }
@@ -408,10 +411,15 @@ public class WindowCommands {
         ServerPlayer player = EntityArgument.getPlayer(context, PLAYER);
         ServerLevel serverLevel = DimensionArgument.getDimension(context, LEVEL);
 
-        TeleportTransition transition = CustomPortal.getTransition(player, serverLevel);
-        if(transition == null) {
-            return -1;
+        if( player.level().equals(serverLevel) ) {
+            return 0;
         }
+
+        TeleportTransition transition = new TeleportTransition(
+            serverLevel,
+            player.position(), Vec3.ZERO, 0, 0,
+            PLAY_PORTAL_SOUND
+        );
         player.teleport(transition);
         return 0;
     }
@@ -463,7 +471,7 @@ public class WindowCommands {
             false
         );
         WindowConfig.INSTANCE.definitions.add(potentialDefinition);
-        WindowPersistentConfigurations.save();
+        WindowPersistentConfigurations.save( context.getSource().getServer() );
         return 0;
     }
     private static int linksList(CommandContext<CommandSourceStack> context) {

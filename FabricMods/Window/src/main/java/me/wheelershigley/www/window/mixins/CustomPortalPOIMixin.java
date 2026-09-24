@@ -17,8 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Set;
 
-import static me.wheelershigley.www.window.api.CustomPoiTypes.*;
-
 @Mixin(PoiTypes.class)
 public class CustomPortalPOIMixin {
 

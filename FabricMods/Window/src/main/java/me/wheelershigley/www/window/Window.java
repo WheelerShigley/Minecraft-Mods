@@ -12,18 +12,13 @@ public class Window implements ModInitializer {
     }
 
     /* TODO
-     * Reverse command
-     * Alter-scale command(?)
+     * LevelHelper::getSafeRTPLocation
      *
      * Break-Particles
      * Break-Sound
+     *
      * Portal Shatters when not defined (attempted to go through, but is not possible)
      * Gamerule for shatterings
-     *
-     * Fantasy Dependency inclusion
-     * window dimension create ...
-     * window dimension remove ...
-     *
      * Single-Destination Portals?
      * Ignition-Block can always be placed in places that would create a portal
      */

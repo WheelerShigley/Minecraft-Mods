@@ -5,8 +5,7 @@ import com.mojang.serialization.Codec;
 public enum LinkType {
     BIDIRECTIONAL,       // to <-> from
     MONODIRECTIONAL,     // to  -> from
-    MONODIRECTIONAL_RTP, // to -> rtp(from)
-    SINGLE;              // to -> specific_location
+    MONODIRECTIONAL_RTP; // to -> rtp(from)
 
     public static final Codec<LinkType> CODEC =
         Codec.STRING.xmap(
@@ -23,10 +22,6 @@ public enum LinkType {
             case MONODIRECTIONAL, MONODIRECTIONAL_RTP ->
                 other == MONODIRECTIONAL
                 || other == MONODIRECTIONAL_RTP
-                || other == SINGLE
-            ;
-            case SINGLE ->
-                other == SINGLE
             ;
         };
     }
@@ -36,7 +31,6 @@ public enum LinkType {
             case BIDIRECTIONAL -> "⇄";
             case MONODIRECTIONAL -> "⥤";
             case MONODIRECTIONAL_RTP -> "⥤*";
-            case SINGLE -> "⇌";
         };
     }
 
@@ -46,7 +40,6 @@ public enum LinkType {
             case BIDIRECTIONAL -> "Bi-Directional";
             case MONODIRECTIONAL -> "Mono-Directional";
             case MONODIRECTIONAL_RTP -> "Mono-Directional-RTP";
-            case SINGLE -> "Single";
         };
     }
 }
