@@ -12,8 +12,6 @@ public class Window implements ModInitializer {
     }
 
     /* TODO
-     * LevelHelper::getSafeRTPLocation
-     *
      * Break-Particles
      * Break-Sound
      *

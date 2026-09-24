@@ -31,6 +31,7 @@ import java.util.*;
 public class CustomPortal {
     public static final int MIN_WIDTH = 2;
 
+    @Deprecated
     public static @Nullable TeleportTransition getTransition(
             ServerPlayer player, ServerLevel level
     ) {
@@ -82,7 +83,11 @@ public class CustomPortal {
         if(exitPortalPos == null) {
             return null;
         }
-        Vec3 newPosition = new Vec3( exitPortalPos.getX(), exitPortalPos.getY(), exitPortalPos.getZ() );
+        Vec3 newPosition = new Vec3(
+            exitPortalPos.getX() + 0.5,
+            exitPortalPos.getY() + 0.0,
+            exitPortalPos.getZ() + 0.5
+        );
 
         player.setPortalCooldown();
         return new TeleportTransition(
@@ -156,6 +161,7 @@ public class CustomPortal {
             position = position.below();
             currentBlock = toDimension.getBlockState(position).getBlock();
         }
+
         return position.above();
     }
 
