@@ -45,6 +45,7 @@ public abstract class IgnitionAttemptMixin {
                     this.dimension == definition.fromDimension()
                     || this.dimension == definition.toDimension()
                 )
+                && definition.isValidFrom(this.dimension)
             ) {
                 validDefinitions.add(definition);
             }

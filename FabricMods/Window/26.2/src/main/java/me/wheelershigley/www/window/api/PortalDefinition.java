@@ -78,6 +78,19 @@ public record PortalDefinition(
         ;
     }
 
+    public boolean isValidFrom(ResourceKey<Level> currentDimension) {
+        if( this.fromDimension.equals(currentDimension) ) {
+            return true;
+        }
+        if(
+            this.type.equals(LinkType.BIDIRECTIONAL)
+            && this.toDimension.equals(currentDimension)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return
