@@ -57,7 +57,10 @@ public class PortalBlock extends BaseEntityBlock implements Portal, PolymerBlock
 
     @Override
     public BlockState getPolymerBlockState(BlockState state, @Nullable PacketContext context) {
-        return Blocks.AIR.defaultBlockState();
+        return Blocks.LIGHT
+            .defaultBlockState()
+            .setValue(BlockStateProperties.LEVEL, 11)
+        ;
     }
 
     protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
