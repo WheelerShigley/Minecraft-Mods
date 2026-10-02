@@ -43,9 +43,12 @@ public class PortalBlockEntity extends BlockEntity {
         }
         Direction.Axis axis = getBlockState().getValue(BlockStateProperties.AXIS);
 
-        PortalBlock block = (PortalBlock)level.getBlockState( this.getBlockPos() ).getBlock();
+        Block blockState = level.getBlockState( this.getBlockPos() ).getBlock();
+        if( !(blockState instanceof PortalBlock portalBlock) ) {
+            return;
+        }
         holder.addElement(
-            getPaneDisplay(block.COLOR, axis)
+            getPaneDisplay(portalBlock.COLOR, axis)
         );
 
         InteractionElement interactable = getPortalInteraction(this, axis);
@@ -55,7 +58,7 @@ public class PortalBlockEntity extends BlockEntity {
     }
 
     public static BlockEntityType<PortalBlockEntity> getBlockEntityType(DyeColor color) {
-        return switch (color) {
+        return switch(color) {
             case WHITE ->       WindowBlockEntities.WHITE_PORTAL;
             case LIGHT_GRAY ->  WindowBlockEntities.LIGHT_GRAY_PORTAL;
             case GRAY ->        WindowBlockEntities.GRAY_PORTAL;
