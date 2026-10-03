@@ -2,7 +2,6 @@ package me.wheelershigley.www.window.registrations;
 
 import me.wheelershigley.www.window.BlockItemIds;
 import me.wheelershigley.www.window.portal.PortalBlock;
-import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -10,35 +9,15 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static net.minecraft.world.item.DyeColor.*;
 
-public class WindowBlocks implements ModInitializer {
+public class WindowBlocks {
     public static void staticInitialize() {}
-
-    @Override
-    public void onInitialize() {
-        // Force Initializations
-        WHITE_PORTAL.getClass();
-        LIGHT_GRAY_PORTAL.getClass();
-        GRAY_PORTAL.getClass();
-        BLACK_PORTAL.getClass();
-        BROWN_PORTAL.getClass();
-        RED_PORTAL.getClass();
-        ORANGE_PORTAL.getClass();
-        YELLOW_PORTAL.getClass();
-        LIME_PORTAL.getClass();
-        GREEN_PORTAL.getClass();
-        CYAN_PORTAL.getClass();
-        LIGHT_BLUE_PORTAL.getClass();
-        BLUE_PORTAL.getClass();
-        PURPLE_PORTAL.getClass();
-        MAGENTA_PORTAL.getClass();
-        PINK_PORTAL.getClass();
-    }
 
     public static final Block
         WHITE_PORTAL        = registerPortal(BlockItemIds.WHITE_PORTAL,         WHITE       ),
@@ -90,6 +69,14 @@ public class WindowBlocks implements ModInitializer {
             ,
             color
         );
-        return Registry.register(BuiltInRegistries.BLOCK, key, block);
+
+        Block registeredBlock = Registry.register(
+            BuiltInRegistries.BLOCK, key, block
+        );
+        for( BlockState state : block.getStateDefinition().getPossibleStates() ) {
+            Block.BLOCK_STATE_REGISTRY.add(state);
+        }
+
+        return registeredBlock;
     }
 }
