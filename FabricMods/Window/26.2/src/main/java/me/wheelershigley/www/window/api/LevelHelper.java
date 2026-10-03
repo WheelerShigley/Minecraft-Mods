@@ -1,6 +1,7 @@
 package me.wheelershigley.www.window.api;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -8,6 +9,7 @@ import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class LevelHelper {
@@ -28,12 +30,15 @@ public class LevelHelper {
     );
 
     public static BlockPos getSafeRTPLocation(Level level) {
-        BlockPos position = getRandomSurfacePosition(level);
+        BlockPos position = null;
 
         int attempt_count = 0;
         while(
-            attempt_count < MAXIMUM_ATTEMPT_COUNT
-            && isPotentiallyDangerous(position, level)
+            position == null
+            || (
+                attempt_count < MAXIMUM_ATTEMPT_COUNT
+                && isPotentiallyDangerous(position, level)
+            )
         ) {
             position = getRandomSurfacePosition(level);
             attempt_count++;
@@ -56,8 +61,11 @@ public class LevelHelper {
                 border.getMaxZ() - border.getMinZ()
             )
         );
-        int y_position = level.getHeight(Heightmap.Types.WORLD_SURFACE, x_position, z_position);
 
+        Integer y_position = getSurfaceHeight(level, x_position, z_position);
+        if(y_position == null) {
+            return null;
+        }
         return new BlockPos(x_position, y_position, z_position);
     }
     private static boolean isPotentiallyDangerous(BlockPos position, Level level) {
@@ -75,5 +83,22 @@ public class LevelHelper {
                 state -> DANGEROUS_BLOCKS.contains( state.getBlock() )
             )
         ;
+    }
+
+    private static Integer getSurfaceHeight(
+        Level level,
+        int x, int z
+    ) {
+        Block block;
+        for(int y = level.getMaxY(); level.getMinY() <= y; y--) {
+            BlockPos position = new BlockPos(x, y, z);
+            block = level.getBlockState(position).getBlock();
+            if(
+                block.defaultBlockState().isCollisionShapeFullBlock(level, position)
+            ) {
+                return y;
+            }
+        }
+        return null;
     }
 }
