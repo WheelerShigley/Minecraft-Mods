@@ -1,20 +1,18 @@
 package me.wheelershigley.www.window.api;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.border.WorldBorder;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class LevelHelper {
     public static final int MAXIMUM_ATTEMPT_COUNT = 1024;
     private static final Set<Block> DANGEROUS_BLOCKS = Set.of(
+        Blocks.WATER,
         Blocks.LAVA,
         Blocks.LAVA_CAULDRON,
         Blocks.FIRE,
@@ -95,6 +93,7 @@ public class LevelHelper {
             block = level.getBlockState(position).getBlock();
             if(
                 block.defaultBlockState().isCollisionShapeFullBlock(level, position)
+                || !level.getFluidState(position).isEmpty()
             ) {
                 return y;
             }
