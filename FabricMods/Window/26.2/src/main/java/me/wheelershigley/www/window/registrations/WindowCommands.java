@@ -452,9 +452,9 @@ public class WindowCommands {
 
         BlockPos _position = LevelHelper.getSafeRTPLocation(serverLevel);
         Vec3 position = new Vec3(
-            _position.getX(),
-            _position.getY(),
-            _position.getZ()
+            _position.getX() + 0.5,
+            _position.getY() + 1.0,
+            _position.getZ() + 0.5
         );
         TeleportTransition transition = new TeleportTransition(
             serverLevel,
