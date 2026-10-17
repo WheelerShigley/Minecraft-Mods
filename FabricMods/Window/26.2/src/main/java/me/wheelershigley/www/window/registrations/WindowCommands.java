@@ -12,6 +12,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.wheelershigley.www.window.WindowConfig;
+import me.wheelershigley.www.window.api.LevelHelper;
 import me.wheelershigley.www.window.api.LinkType;
 import me.wheelershigley.www.window.api.PortalDefinition;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -22,6 +23,7 @@ import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.blocks.BlockInput;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -42,8 +44,9 @@ import static net.minecraft.world.level.portal.TeleportTransition.PLAY_PORTAL_SO
 
 public class WindowCommands {
     private static final String[]
-        COMMAND_ROOT = {"window","win","mw"},
+        COMMAND_ROOT = {"window","win"},
         TELEPORT = {"teleport","tp","goto"},
+        RANDOM_TELEPORT = {"rtp","randomteleport"},
         LINK = {"link"}
     ;
     private static final String
@@ -90,7 +93,10 @@ public class WindowCommands {
         ;
 
         for(String commandlet : TELEPORT) {
-            command = command.then( tpCommandlet(commandlet) );
+            command = command.then( teleportCommandlet(commandlet) );
+        }
+        for(String commandlet : RANDOM_TELEPORT) {
+            command = command.then( randomTeleportCommandlet(commandlet) );
         }
         for(String commandlet : LINK) {
             command = command.then( linkCommandlet(commandlet, context) );
@@ -101,7 +107,7 @@ public class WindowCommands {
 
     /* Sub-commands */
 
-    private static ArgumentBuilder<CommandSourceStack, ?> tpCommandlet(String name) {
+    private static ArgumentBuilder<CommandSourceStack, ?> teleportCommandlet(String name) {
         return Commands.literal(name)
             .then(
                 Commands
@@ -114,6 +120,21 @@ public class WindowCommands {
             )
         ;
     }
+
+    private static ArgumentBuilder<CommandSourceStack, ?> randomTeleportCommandlet(String name) {
+        return Commands.literal(name)
+            .then(
+                Commands
+                    .argument(PLAYER, EntityArgument.player() )
+                    .then(
+                        Commands
+                            .argument(LEVEL, DimensionArgument.dimension() )
+                            .executes(WindowCommands::randomTeleport)
+                    )
+            )
+        ;
+    }
+
 
     private static ArgumentBuilder<CommandSourceStack, ?> linkCommandlet(String name, CommandBuildContext context) {
         return Commands.literal(name)
@@ -418,6 +439,26 @@ public class WindowCommands {
         TeleportTransition transition = new TeleportTransition(
             serverLevel,
             player.position(), Vec3.ZERO, 0, 0,
+            PLAY_PORTAL_SOUND
+        );
+        player.teleport(transition);
+        return 0;
+    }
+
+
+    private static int randomTeleport(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = EntityArgument.getPlayer(context, PLAYER);
+        ServerLevel serverLevel = DimensionArgument.getDimension(context, LEVEL);
+
+        BlockPos _position = LevelHelper.getSafeRTPLocation(serverLevel);
+        Vec3 position = new Vec3(
+            _position.getX(),
+            _position.getY(),
+            _position.getZ()
+        );
+        TeleportTransition transition = new TeleportTransition(
+            serverLevel,
+            position, Vec3.ZERO, 0, 0,
             PLAY_PORTAL_SOUND
         );
         player.teleport(transition);
