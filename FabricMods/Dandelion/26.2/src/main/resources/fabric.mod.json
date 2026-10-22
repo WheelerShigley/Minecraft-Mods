@@ -3,20 +3,15 @@
   "id": "dandelion",
   "version": "${version}",
   "name": "Dandelion",
-  "description": "x",
-  "authors": [],
-  "contact": {},
-  "license": "MIT",
+  "description": "",
+  "authors": ["Wheeler-Shigley"],
   "icon": "assets/dandelion/icon.png",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
     "main": [
       "me.wheelershigley.www.dandelion.Dandelion"
     ]
   },
-  "mixins": [
-    "dandelion.mixins.json"
-  ],
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
