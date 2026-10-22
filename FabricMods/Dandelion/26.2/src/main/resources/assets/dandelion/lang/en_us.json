@@ -1,3 +1,5 @@
 {
-  "item.dandelion.menu": "Menu"
+  "item.dandelion.menu": "Menu",
+
+  "dandelion.welcome": "%1$s has joined for the First time!"
 }
