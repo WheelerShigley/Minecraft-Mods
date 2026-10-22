@@ -1,10 +1,12 @@
 package me.wheelershigley.www.window.api;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.border.WorldBorder;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.phys.AABB;
 
 import java.util.Set;
@@ -92,12 +94,27 @@ public class LevelHelper {
             BlockPos position = new BlockPos(x, y, z);
             block = level.getBlockState(position).getBlock();
             if(
-                block.defaultBlockState().isCollisionShapeFullBlock(level, position)
-                || !level.getFluidState(position).isEmpty()
+                (
+                       isAir( level, position.above()         )
+                    && isAir( level, position.above().above() )
+                ) && (
+                        block.defaultBlockState().isCollisionShapeFullBlock(level, position)
+                    || !level.getFluidState(position).isEmpty()
+                )
             ) {
                 return y;
             }
         }
         return null;
+    }
+    private static boolean isAir(Level level, BlockPos position) {
+        ChunkGenerator generator = ( (ServerChunkCache)level.getChunkSource() ).getGenerator();
+        int minY = generator.getMinY();
+        int maxY = minY + generator.getGenDepth();
+
+        if( maxY < position.getY() ) {
+            return false;
+        }
+        return level.getBlockState(position).isAir();
     }
 }
