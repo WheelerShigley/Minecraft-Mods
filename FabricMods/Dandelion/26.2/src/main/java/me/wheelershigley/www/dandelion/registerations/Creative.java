@@ -21,6 +21,9 @@ public class Creative {
                     creativeTab.accept(ModItems.BLUE_BOOK_ICON);
                     creativeTab.accept(ModItems.DISCORD_ICON);
                     creativeTab.accept(ModItems.DANDELION_ICON);
+                    creativeTab.accept(ModItems.STORE_ICON);
+                    creativeTab.accept(ModItems.WIKI_ICON);
+                    creativeTab.accept(ModItems.NETHERITE_TEMPLATE_ICON);
 
                     creativeTab.accept(ModItems.WHITE_PORTAL_ICON);
                     creativeTab.accept(ModItems.CYAN_PORTAL_ICON);
@@ -31,10 +34,6 @@ public class Creative {
                     creativeTab.accept(ModItems.LIGHT_BLUE_RESOURCE_PORTAL_ICON);
                     creativeTab.accept(ModItems.END_PORTAL_ICON);
                     creativeTab.accept(ModItems.END_RESOURCE_PORTAL_ICON);
-
-                    creativeTab.accept(ModItems.STORE_ICON);
-                    creativeTab.accept(ModItems.WIKI_ICON);
-                    creativeTab.accept(ModItems.NETHERITE_TEMPLATE_ICON);
                 }
             )
         ;

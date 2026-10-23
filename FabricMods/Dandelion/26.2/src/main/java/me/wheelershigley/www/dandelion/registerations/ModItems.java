@@ -1,5 +1,6 @@
 package me.wheelershigley.www.dandelion.registerations;
 
+import me.wheelershigley.www.dandelion.item.Icon;
 import me.wheelershigley.www.dandelion.item.Menu;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -12,22 +13,22 @@ public class ModItems {
     public static final Item
         MENU                             = register(ModItemIds.MENU, Menu::new, Menu.PROPERTIES),
 
-        BLUE_BOOK_ICON                   = register( ModItemIds.BLUE_BOOK_ICON,                  Item::new, new Item.Properties() ),
-        DISCORD_ICON                     = register( ModItemIds.DISCORD_ICON,                    Item::new, new Item.Properties() ),
-        DANDELION_ICON                   = register( ModItemIds.DANDELION_ICON,                  Item::new, new Item.Properties() ),
-        STORE_ICON                       = register( ModItemIds.STORE_ICON,                      Item::new, new Item.Properties() ),
-        WIKI_ICON                        = register( ModItemIds.WIKI_ICON,                       Item::new, new Item.Properties() ),
-        NETHERITE_TEMPLATE_ICON          = register( ModItemIds.NETHERITE_TEMPLATE_ICON,         Item::new, new Item.Properties() ),
+        BLUE_BOOK_ICON                   = register(ModItemIds.BLUE_BOOK_ICON,                  Icon::new, Icon.PROPERTIES),
+        DISCORD_ICON                     = register(ModItemIds.DISCORD_ICON,                    Icon::new, Icon.PROPERTIES),
+        DANDELION_ICON                   = register(ModItemIds.DANDELION_ICON,                  Icon::new, Icon.PROPERTIES),
+        STORE_ICON                       = register(ModItemIds.STORE_ICON,                      Icon::new, Icon.PROPERTIES),
+        WIKI_ICON                        = register(ModItemIds.WIKI_ICON,                       Icon::new, Icon.PROPERTIES),
+        NETHERITE_TEMPLATE_ICON          = register(ModItemIds.NETHERITE_TEMPLATE_ICON,         Icon::new, Icon.PROPERTIES),
 
-        WHITE_PORTAL_ICON                = register( ModItemIds.WHITE_PORTAL_ICON,               Item::new, new Item.Properties() ),
-        CYAN_PORTAL_ICON                 = register( ModItemIds.CYAN_PORTAL_ICON,                Item::new, new Item.Properties() ),
-        RED_PORTAL_ICON                  = register( ModItemIds.RED_PORTAL_ICON,                 Item::new, new Item.Properties() ),
-        PURPLE_PORTAL_ICON               = register( ModItemIds.PURPLE_PORTAL_ICON,              Item::new, new Item.Properties() ),
-        PURPLE_RESOURCE_PORTAL_ICON      = register( ModItemIds.PURPLE_RESOURCE_PORTAL_ICON,     Item::new, new Item.Properties() ),
-        LIGHT_BLUE_PORTAL_ICON           = register( ModItemIds.LIGHT_BLUE_PORTAL_ICON,          Item::new, new Item.Properties() ),
-        END_PORTAL_ICON                  = register( ModItemIds.END_PORTAL_ICON,                 Item::new, new Item.Properties() ),
-        LIGHT_BLUE_RESOURCE_PORTAL_ICON  = register( ModItemIds.LIGHT_BLUE_RESOURCE_PORTAL_ICON, Item::new, new Item.Properties() ),
-        END_RESOURCE_PORTAL_ICON         = register( ModItemIds.END_RESOURCE_PORTAL_ICON,        Item::new, new Item.Properties() )
+        WHITE_PORTAL_ICON                = register(ModItemIds.WHITE_PORTAL_ICON,               Icon::new, Icon.PROPERTIES),
+        CYAN_PORTAL_ICON                 = register(ModItemIds.CYAN_PORTAL_ICON,                Icon::new, Icon.PROPERTIES),
+        RED_PORTAL_ICON                  = register(ModItemIds.RED_PORTAL_ICON,                 Icon::new, Icon.PROPERTIES),
+        PURPLE_PORTAL_ICON               = register(ModItemIds.PURPLE_PORTAL_ICON,              Icon::new, Icon.PROPERTIES),
+        PURPLE_RESOURCE_PORTAL_ICON      = register(ModItemIds.PURPLE_RESOURCE_PORTAL_ICON,     Icon::new, Icon.PROPERTIES),
+        LIGHT_BLUE_PORTAL_ICON           = register(ModItemIds.LIGHT_BLUE_PORTAL_ICON,          Icon::new, Icon.PROPERTIES),
+        END_PORTAL_ICON                  = register(ModItemIds.END_PORTAL_ICON,                 Icon::new, Icon.PROPERTIES),
+        LIGHT_BLUE_RESOURCE_PORTAL_ICON  = register(ModItemIds.LIGHT_BLUE_RESOURCE_PORTAL_ICON, Icon::new, Icon.PROPERTIES),
+        END_RESOURCE_PORTAL_ICON         = register(ModItemIds.END_RESOURCE_PORTAL_ICON,        Icon::new, Icon.PROPERTIES)
     ;
 
 
