@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dandelion:item/icon/light_blue_portal",
+    "layer1": "minecraft:item/copper_pickaxe"
+  }
+}

@@ -1,5 +1,22 @@
 {
   "item.dandelion.menu": "Menu",
 
+  "item.dandelion.blue_book_icon": "Blue Book Icon",
+  "item.dandelion.dandelion_icon": "Dandelion Icon",
+  "item.dandelion.discord_icon": "Discord Icon",
+  "item.dandelion.store_icon": "Store Icon",
+  "item.dandelion.wiki_icon": "Wiki Icon",
+  "item.dandelion.netherite_template_icon": "Netherite Template Icon",
+
+  "item.dandelion.white_portal_icon": "White Portal Icon",
+  "item.dandelion.cyan_portal_icon": "Cyan Portal Icon",
+  "item.dandelion.red_portal_icon": "Red Portal Icon",
+  "item.dandelion.purple_portal_icon": "Purple Portal Icon",
+  "item.dandelion.purple_resource_portal_icon": "Purple Resource Portal Icon",
+  "item.dandelion.light_blue_portal_icon": "Light Blue Portal Icon",
+  "item.dandelion.light_blue_resource_portal_icon": "Light Blue Resource Portal Icon",
+  "item.dandelion.end_portal_icon": "End Portal Icon",
+  "item.dandelion.end_resource_portal_icon": "End Resource Portal Icon",
+
   "dandelion.welcome": "%1$s has joined for the First time!"
 }

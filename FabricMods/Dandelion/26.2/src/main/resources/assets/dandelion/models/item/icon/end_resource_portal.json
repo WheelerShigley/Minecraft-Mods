@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dandelion:item/icon/end_portal",
+    "layer1": "minecraft:item/iron_pickaxe"
+  }
+}
