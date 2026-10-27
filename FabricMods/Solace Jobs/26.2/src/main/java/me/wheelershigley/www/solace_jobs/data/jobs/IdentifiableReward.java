@@ -4,6 +4,6 @@ import me.wheelershigley.www.solace_jobs.data.ActionReward;
 import net.minecraft.resources.Identifier;
 
 public record IdentifiableReward(
-    IdentifiableSource<Identifier> source,
+    IdentifiableSource<Identifier> action,
     ActionReward reward
 ) {}

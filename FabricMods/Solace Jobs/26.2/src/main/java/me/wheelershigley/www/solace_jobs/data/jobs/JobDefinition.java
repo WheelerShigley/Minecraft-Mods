@@ -24,7 +24,7 @@ public class JobDefinition {
 
     public boolean addReward(IdentifiableReward identified_reward) {
         for(IdentifiableReward rewarded_action : rewarded_actions) {
-            if( rewarded_action.source().contains(identified_reward.source().identifier) ) {
+            if( rewarded_action.action().contains(identified_reward.action().IDENTIFIER) ) {
                 return false;
             }
         }
@@ -35,14 +35,14 @@ public class JobDefinition {
     public void removeReward(Identifier sourceIdentifier) {
         rewarded_actions.removeIf(
             (rewarded_action) -> {
-                return rewarded_action.source().contains(sourceIdentifier);
+                return rewarded_action.action().contains(sourceIdentifier);
             }
         );
     }
 
     public @Nullable ActionReward getFirstReward(Identifier potentialSource) {
         for(IdentifiableReward rewarded_action : rewarded_actions) {
-            if( rewarded_action.source().contains(potentialSource) ) {
+            if( rewarded_action.action().contains(potentialSource) ) {
                 return rewarded_action.reward();
             }
         }

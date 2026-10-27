@@ -1,30 +1,51 @@
 package me.wheelershigley.www.solace_jobs.data.jobs;
 
+import me.wheelershigley.www.solace_jobs.data.ActionType;
 import net.minecraft.resources.Identifier;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class IdentifiableSource<T> {
-    public final Identifier identifier;
-    public final SourceType type;
-    Set<T> sources;
+    public final Identifier IDENTIFIER;
+    public SourceType sourceType = SourceType.Singles;
+    public ActionType actionType = ActionType.BREAK;
+    public Set<T> sources = new HashSet<>();
 
     public IdentifiableSource(
         Identifier identifier,
-        SourceType type
+        Set<T> sources
     ) {
-        this.identifier = identifier;
-        this.type = type;
-        this.sources = new HashSet<>();
+        this.IDENTIFIER = identifier;
+        this.sources = sources;
     }
     public IdentifiableSource(
         Identifier identifier,
-        SourceType type,
+        ActionType actionType,
         Set<T> sources
     ) {
-        this.identifier = identifier;
-        this.type = type;
+        this.IDENTIFIER = identifier;
+        this.actionType = actionType;
+        this.sources = sources;
+    }
+    public IdentifiableSource(
+        Identifier identifier,
+        SourceType sourceType,
+        Set<T> sources
+    ) {
+        this.IDENTIFIER = identifier;
+        this.sourceType = sourceType;
+        this.sources = sources;
+    }
+    public IdentifiableSource(
+        Identifier identifier,
+        ActionType actionType,
+        SourceType sourceType,
+        Set<T> sources
+    ) {
+        this.IDENTIFIER = identifier;
+        this.actionType = actionType;
+        this.sourceType = sourceType;
         this.sources = sources;
     }
 

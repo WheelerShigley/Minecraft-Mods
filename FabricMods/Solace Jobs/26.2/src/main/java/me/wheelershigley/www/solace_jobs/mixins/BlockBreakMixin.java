@@ -12,6 +12,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,9 +39,18 @@ public class BlockBreakMixin {
         if( !(player instanceof ServerPlayer serverPlayer) ) {
             return;
         }
-        Identifier identifier = BuiltInRegistries.BLOCK.getKey( (Block)(Object)this );
 
-        Set<JobDefinition> jobs = JobsCodec.DATA.getJobs(ActionType.BREAK);
+        Block block = (Block)(Object)this;
+        //If it's a plant, it must be fully-grown to be counted
+        if(
+            block instanceof CropBlock cropBlock
+            && !cropBlock.isMaxAge( level.getBlockState(pos) )
+        ) {
+            return;
+        }
+
+        Identifier identifier = BuiltInRegistries.BLOCK.getKey(block);
+        Set<JobDefinition> jobs = JobsCodec.DATA.getJobs(identifier);
         for(JobDefinition job : jobs) {
             ActionReward reward = job.getFirstReward(identifier);
             if(reward == null) {

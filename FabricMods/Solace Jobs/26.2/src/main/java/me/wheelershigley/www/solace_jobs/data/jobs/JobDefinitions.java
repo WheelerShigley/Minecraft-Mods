@@ -1,44 +1,51 @@
 package me.wheelershigley.www.solace_jobs.data.jobs;
 
-import me.wheelershigley.www.solace_jobs.data.ActionType;
 import me.wheelershigley.www.solace_jobs.data.Savable;
+import net.minecraft.resources.Identifier;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-public class JobDefinitions implements Savable< Map<ActionType, JobDefinition> > {
-    private Map<ActionType, JobDefinition> jobs = new HashMap<>();
+public class JobDefinitions implements Savable< Set<JobDefinition> > {
+    private Set<JobDefinition> jobs = new HashSet<>();
 
     public JobDefinitions() {}
-    public JobDefinitions(HashMap<ActionType, JobDefinition> jobs) {
+    public JobDefinitions(Set<JobDefinition> jobs) {
         this.jobs = jobs;
     }
 
-    public void addType(ActionType type, JobDefinition definition) {
-        jobs.put(type, definition);
+    public void addType(JobDefinition definition) {
+        jobs.add(definition);
     }
-    public void removeType(ActionType type) {
-        jobs.remove(type);
-    }
-
-    public Set<JobDefinition> getJobs(ActionType actionType) {
-        Set<JobDefinition> jobsWithActionType = new HashSet<>();
-        for( Map.Entry<ActionType, JobDefinition> entry : jobs.entrySet() ) {
-            jobsWithActionType.add( entry.getValue() );
+    public void removeType(Identifier jobIdentifier) {
+        for(JobDefinition job : jobs) {
+            if( job.identifier.equals(jobIdentifier) ) {
+                jobs.remove(job);
+                return;
+            }
         }
-        return jobsWithActionType;
     }
 
-    @Override
-    public Map<ActionType, JobDefinition> getData() {
+    public Set<JobDefinition> getJobs(Identifier target) {
+        Set<JobDefinition> jobs = new HashSet<>();
+        for(JobDefinition job : this.jobs) {
+            for(IdentifiableReward reward : job.rewarded_actions) {
+                if( reward.action().contains(target) ) {
+                    jobs.add(job);
+                }
+            }
+        }
         return jobs;
     }
 
     @Override
-    public void setData(Map<ActionType, JobDefinition> data) {
+    public Set<JobDefinition> getData() {
+        return jobs;
+    }
+
+    @Override
+    public void setData(Set<JobDefinition> data) {
         jobs.clear();
-        jobs.putAll(data);
+        jobs.addAll(data);
     }
 }
