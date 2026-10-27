@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "solace_jobs",
+  "version": "${version}",
+  "name": "Solace Jobs",
+  "description": "Dandelion's Jobs",
+  "authors": ["Wheeler-Shigley"],
+  "license": "MIT",
+  "icon": "assets/solace_jobs/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.www.solace_jobs.SolaceJobs"
+    ]
+  },
+  "mixins": [
+    "solace_jobs.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
