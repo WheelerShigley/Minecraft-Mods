@@ -52,7 +52,7 @@ public class BlockBreakMixin {
         Identifier identifier = BuiltInRegistries.BLOCK.getKey(block);
         Set<JobDefinition> jobs = JobsCodec.DATA.getJobs(identifier);
         for(JobDefinition job : jobs) {
-            ActionReward reward = job.getFirstReward(identifier);
+            ActionReward reward = job.getFirstReward(identifier, ActionType.BREAK);
             if(reward == null) {
                 continue;
             }

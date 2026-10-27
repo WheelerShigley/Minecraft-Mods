@@ -49,7 +49,10 @@ public class IdentifiableSource<T> {
         this.sources = sources;
     }
 
-    public boolean contains(T potentialSource) {
+    public boolean contains(T potentialSource, ActionType actionType) {
+        if( this.actionType != actionType ) {
+            return false;
+        }
         return sources.contains(potentialSource);
     }
 

@@ -30,7 +30,7 @@ public class JobDefinitions implements Savable< Set<JobDefinition> > {
         Set<JobDefinition> jobs = new HashSet<>();
         for(JobDefinition job : this.jobs) {
             for(IdentifiableReward reward : job.rewarded_actions) {
-                if( reward.action().contains(target) ) {
+                if( reward.action().contains(target, reward.action().actionType) ) {
                     jobs.add(job);
                 }
             }

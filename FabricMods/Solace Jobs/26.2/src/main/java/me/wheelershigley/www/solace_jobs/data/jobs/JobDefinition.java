@@ -1,6 +1,7 @@
 package me.wheelershigley.www.solace_jobs.data.jobs;
 
 import me.wheelershigley.www.solace_jobs.data.ActionReward;
+import me.wheelershigley.www.solace_jobs.data.ActionType;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +25,10 @@ public class JobDefinition {
 
     public boolean addReward(IdentifiableReward identified_reward) {
         for(IdentifiableReward rewarded_action : rewarded_actions) {
-            if( rewarded_action.action().contains(identified_reward.action().IDENTIFIER) ) {
+            if( rewarded_action.action().contains(
+                identified_reward.action().IDENTIFIER,
+                identified_reward.action().actionType
+            ) ) {
                 return false;
             }
         }
@@ -35,17 +39,25 @@ public class JobDefinition {
     public void removeReward(Identifier sourceIdentifier) {
         rewarded_actions.removeIf(
             (rewarded_action) -> {
-                return rewarded_action.action().contains(sourceIdentifier);
+                return rewarded_action.action().contains(
+                    sourceIdentifier,
+                    rewarded_action.action().actionType
+                );
             }
         );
     }
 
-    public @Nullable ActionReward getFirstReward(Identifier potentialSource) {
+    public @Nullable ActionReward getFirstReward(Identifier potentialSource, ActionType actionType) {
         for(IdentifiableReward rewarded_action : rewarded_actions) {
-            if( rewarded_action.action().contains(potentialSource) ) {
+            if(rewarded_action.action().contains(potentialSource, actionType) ) {
                 return rewarded_action.reward();
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return identifier.toString();
     }
 }

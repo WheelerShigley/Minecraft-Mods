@@ -4,7 +4,10 @@
   "package": "me.wheelershigley.www.solace_jobs.mixins",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "BlockBreakMixin"
+    "BlockBreakMixin",
+    "BlockBrushMixin",
+    "KillMixin",
+    "ShearMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -2,8 +2,11 @@ package me.wheelershigley.www.solace_jobs.data.jobs;
 
 import me.wheelershigley.www.solace_jobs.SolaceJobs;
 import me.wheelershigley.www.solace_jobs.data.ActionReward;
+import me.wheelershigley.www.solace_jobs.data.ActionType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -192,25 +195,75 @@ public class DefaultJobs {
         );
     }
 
+    public static final JobDefinition FARMER; static {
+        FARMER = new JobDefinition(
+            SolaceJobs.solaceJobsIdentifier("herbalism")
+        );
+
+        FARMER.addReward(
+            getIdentifiedBreakReward(
+                "harvest",
+                Set.of(
+                    Blocks.WHEAT, Blocks.CARROTS, Blocks.POTATOES, Blocks.BEETROOTS,
+                    Blocks.PUMPKIN, Blocks.MELON,
+                    Blocks.SUGAR_CANE, Blocks.CACTUS
+                ),
+                0.2, 0.15, 0.03
+            )
+        );
+        FARMER.addReward(
+            getIdentifiedBreakReward(
+                "disinfection",
+                Set.of(
+                    EntityTypes.MOOSHROOM
+                ),
+                ActionType.SHEAR,
+                2.2, 0.8, 0.18
+            )
+        );
+    }
+
     private static IdentifiableReward getIdentifiedBreakReward(
         String name,
-        Set<Block> blocks,
+        Set<Object> set,
         double experience, double job_experience, double currency
     ) {
         return new IdentifiableReward(
             new IdentifiableSource<>(
                 SolaceJobs.solaceJobsIdentifier(name),
-                getBlockIdentifiers(blocks)
+                getIdentifiers(set)
             ),
             new ActionReward(experience, job_experience, currency)
         );
     }
-    private static Set<Identifier> getBlockIdentifiers(Set<Block> blocks) {
+    private static IdentifiableReward getIdentifiedBreakReward(
+            String name,
+            Set<Object> set,
+            ActionType actionType,
+            double experience, double job_experience, double currency
+    ) {
+        return new IdentifiableReward(
+            new IdentifiableSource<>(
+                SolaceJobs.solaceJobsIdentifier(name),
+                actionType,
+                getIdentifiers(set)
+            ),
+            new ActionReward(experience, job_experience, currency)
+        );
+    }
+    private static Set<Identifier> getIdentifiers(Set<Object> set) {
         Set<Identifier> result = new HashSet<>();
-        for(Block block : blocks) {
-            result.add(
-                BuiltInRegistries.BLOCK.getKey(block)
-            );
+        for(Object element : set) {
+            if(element instanceof Block) {
+                result.add(
+                    BuiltInRegistries.BLOCK.getKey( (Block)element )
+                );
+            }
+            if(element instanceof EntityType<?>) {
+                result.add(
+                    BuiltInRegistries.ENTITY_TYPE.getKey( (EntityType<?>)element )
+                );
+            }
         }
         return result;
     }
