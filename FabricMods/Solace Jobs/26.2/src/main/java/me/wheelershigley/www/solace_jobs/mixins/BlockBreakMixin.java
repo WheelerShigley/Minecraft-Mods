@@ -1,5 +1,6 @@
 package me.wheelershigley.www.solace_jobs.mixins;
 
+//import com.daqem.grieflogger.block.BlockHandler;
 import me.wheelershigley.www.solace_jobs.data.ActionReward;
 import me.wheelershigley.www.solace_jobs.data.ActionType;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
@@ -12,7 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,7 +27,7 @@ import java.util.Set;
 public class BlockBreakMixin {
     @Inject(
         method = "playerDestroy",
-        at = @At("TAIL")
+        at = @At("HEAD")
     )
     public void playerDestroy(
         Level level,
@@ -44,7 +44,7 @@ public class BlockBreakMixin {
         //If it's a plant, it must be fully-grown to be counted
         if(
             block instanceof CropBlock cropBlock
-            && !cropBlock.isMaxAge( level.getBlockState(pos) )
+            && !cropBlock.isMaxAge(state)
         ) {
             return;
         }

@@ -197,7 +197,7 @@ public class DefaultJobs {
 
     public static final JobDefinition FARMER; static {
         FARMER = new JobDefinition(
-            SolaceJobs.solaceJobsIdentifier("herbalism")
+            SolaceJobs.solaceJobsIdentifier("farmer")
         );
 
         FARMER.addReward(
@@ -212,7 +212,7 @@ public class DefaultJobs {
             )
         );
         FARMER.addReward(
-            getIdentifiedBreakReward(
+            getIdentifiedReward(
                 "disinfection",
                 Set.of(
                     EntityTypes.MOOSHROOM
@@ -236,7 +236,7 @@ public class DefaultJobs {
             new ActionReward(experience, job_experience, currency)
         );
     }
-    private static IdentifiableReward getIdentifiedBreakReward(
+    private static IdentifiableReward getIdentifiedReward(
             String name,
             Set<Object> set,
             ActionType actionType,
