@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -34,6 +35,10 @@ public interface Codec< T extends Savable<D>, D > {
             .registerTypeAdapter(
                 Identifier.class,
                 new IdentifierTypeAdapter()
+            )
+            .registerTypeHierarchyAdapter(
+                Item.class,
+                new ItemTypeAdapter()
             )
             .create()
         ;

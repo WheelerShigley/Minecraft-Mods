@@ -1,5 +1,6 @@
 package me.wheelershigley.www.solace_jobs;
 
+import me.wheelershigley.www.solace_jobs.commands.JobsCommand;
 import me.wheelershigley.www.solace_jobs.events.Events;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.Identifier;
@@ -14,7 +15,9 @@ public class SolaceJobs implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info(MOD_ID + " " + VERSION + " has started!");
+
         Events.register();
+        JobsCommand.registerCommand();
     }
 
     public static Identifier solaceJobsIdentifier(String value) {
