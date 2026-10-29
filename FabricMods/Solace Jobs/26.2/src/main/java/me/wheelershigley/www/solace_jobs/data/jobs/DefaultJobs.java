@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -18,7 +19,9 @@ import static me.wheelershigley.www.solace_jobs.SolaceJobs.solaceJobsIdentifier;
 public class DefaultJobs {
     public static final JobDefinition EXCAVATOR; static {
         EXCAVATOR = new JobDefinition(
-            solaceJobsIdentifier("excavator")
+            solaceJobsIdentifier("excavator"),
+            Items.DIAMOND_SHOVEL, Items.WOODEN_SHOVEL,
+            new HashSet<>()
         );
 
         EXCAVATOR.addReward(
@@ -67,7 +70,9 @@ public class DefaultJobs {
 
     public static final JobDefinition MINER; static {
         MINER = new JobDefinition(
-            solaceJobsIdentifier("miner")
+            solaceJobsIdentifier("miner"),
+            Items.DIAMOND_PICKAXE, Items.WOODEN_PICKAXE,
+            new HashSet<>()
         );
 
         MINER.addReward(
@@ -179,7 +184,9 @@ public class DefaultJobs {
 
     public static final JobDefinition LUMBERJACK; static {
         LUMBERJACK = new JobDefinition(
-            SolaceJobs.solaceJobsIdentifier("lumberjack")
+            SolaceJobs.solaceJobsIdentifier("lumberjack"),
+            Items.DIAMOND_AXE, Items.WOODEN_AXE,
+            new HashSet<>()
         );
 
         LUMBERJACK.addReward(
@@ -197,7 +204,9 @@ public class DefaultJobs {
 
     public static final JobDefinition FARMER; static {
         FARMER = new JobDefinition(
-            SolaceJobs.solaceJobsIdentifier("farmer")
+            SolaceJobs.solaceJobsIdentifier("farmer"),
+            Items.DIAMOND_HOE, Items.WOODEN_HOE,
+            new HashSet<>()
         );
 
         FARMER.addReward(

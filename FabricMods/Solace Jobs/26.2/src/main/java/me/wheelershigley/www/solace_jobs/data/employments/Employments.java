@@ -16,24 +16,46 @@ public class Employments implements Savable< HashMap< UUID, Set<Identifier> > > 
         this.employments = employments;
     }
 
-    public boolean join(UUID playerIdentifier, Identifier employmentIdentifier) {
-        Set<Identifier> employments = this.employments.getOrDefault(
+    public static boolean join(
+        Employments data,
+        UUID playerIdentifier, Identifier employmentIdentifier
+    ) {
+        Set<Identifier> employments = data.employments.getOrDefault(
             playerIdentifier,
             new HashSet<>()
         );
         //TODO: check join limits and react
         employments.add(employmentIdentifier);
-        this.employments.put(playerIdentifier, employments);
+        data.employments.put(playerIdentifier, employments);
         return true;
     }
 
-    public void leave(UUID playerIdentifier, Identifier employmentIdentifier) {
-        Set<Identifier> employments = this.employments.getOrDefault(
+    public static void leave(
+        Employments data,
+        UUID playerIdentifier, Identifier employmentIdentifier
+    ) {
+        Set<Identifier> employments = data.employments.getOrDefault(
             playerIdentifier,
             new HashSet<>()
         );
         employments.remove(employmentIdentifier);
-        this.employments.put(playerIdentifier, employments);
+        data.employments.put(playerIdentifier, employments);
+    }
+
+    public static boolean attemptToggle(
+        Employments data,
+        UUID playerIdentifier, Identifier employmentIdentifier
+    ) {
+        Set<Identifier> employments = data.employments.getOrDefault(
+            playerIdentifier,
+            new HashSet<>()
+        );
+        if( employments.contains(employmentIdentifier) ) {
+            leave(data, playerIdentifier, employmentIdentifier);
+            return true;
+        } else {
+            return join(data, playerIdentifier, employmentIdentifier);
+        }
     }
 
     @Override
