@@ -12,6 +12,18 @@ public class SolaceJobs implements ModInitializer {
     public static final String VERSION = "1.0.0";
     public static final Logger LOGGER = LogManager.getLogger();
 
+    /* TODO
+     * fishing
+     * hunter
+     * archer
+     * limits (permission integrations)
+     * configurations into a folder
+     * permissions-based multiplier(s)
+     * mod-configurations, like provider:currency
+     * global multiplier
+     * dummy items (icons)
+     */
+
     @Override
     public void onInitialize() {
         LOGGER.info(MOD_ID + " " + VERSION + " has started!");

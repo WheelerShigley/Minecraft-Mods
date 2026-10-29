@@ -5,6 +5,7 @@ import eu.pb4.common.economy.api.EconomyAccount;
 import eu.pb4.common.economy.api.EconomyCurrency;
 import eu.pb4.common.economy.api.EconomyProvider;
 import me.wheelershigley.www.solace_jobs.SolaceJobs;
+import me.wheelershigley.www.solace_jobs.data.employments.EmploymentsCodec;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
 import me.wheelershigley.www.solace_jobs.data.players.JobsPlayerData;
 import me.wheelershigley.www.solace_jobs.data.players.PlayersJobsDataCodec;
@@ -15,6 +16,7 @@ import net.minecraft.util.RandomSource;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 
 public record ActionReward(
@@ -32,6 +34,14 @@ public record ActionReward(
         JobDefinition job,
         RandomSource random
     ) {
+        boolean isInJob = EmploymentsCodec.INSTANCE.getInstanceData()
+            .employments.getOrDefault( player.getUUID(), new HashSet<>() )
+            .contains(job.identifier)
+        ;
+        if(!isInJob) {
+            return;
+        }
+
         giveExperience(player, random);
         giveJobExperience(player, job);
         giveCurrency(player);
@@ -119,7 +129,7 @@ public record ActionReward(
         }
 
         double experience = playerData.experiences().getOrDefault(job.identifier, 0.0);
-        experience += this.experience;
+        experience += this.job_experience;
         playerData.experiences().put(job.identifier, experience);
     }
 

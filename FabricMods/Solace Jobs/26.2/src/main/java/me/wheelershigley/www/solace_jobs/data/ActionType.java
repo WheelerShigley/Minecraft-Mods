@@ -4,5 +4,6 @@ public enum ActionType {
     BREAK,
     BRUSH,
     SHEAR,
-    KILL
+    KILL,
+    FISH
 }

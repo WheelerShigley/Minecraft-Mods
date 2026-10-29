@@ -4,7 +4,12 @@ import me.wheelershigley.www.solace_jobs.data.ActionReward;
 import me.wheelershigley.www.solace_jobs.data.employments.EmploymentsCodec;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobsCodec;
 import me.wheelershigley.www.solace_jobs.data.players.PlayersJobsDataCodec;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.*;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FishingHook;
 
 public class Events {
     public static void register() {

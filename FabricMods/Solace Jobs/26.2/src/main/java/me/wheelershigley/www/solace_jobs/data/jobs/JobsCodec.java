@@ -33,10 +33,11 @@ public class JobsCodec implements Codec< JobDefinitions, Set<JobDefinition> > {
     public JobDefinitions getDefaultCodec() {
         JobDefinitions jobs = new JobDefinitions();
 
-        jobs.addType(DefaultJobs.EXCAVATOR);
         jobs.addType(DefaultJobs.MINER);
+        jobs.addType(DefaultJobs.EXCAVATOR);
         jobs.addType(DefaultJobs.LUMBERJACK);
         jobs.addType(DefaultJobs.FARMER);
+        jobs.addType(DefaultJobs.FISHER);
 
         return jobs;
     }

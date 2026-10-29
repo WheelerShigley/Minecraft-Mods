@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -232,6 +233,25 @@ public class DefaultJobs {
         );
     }
 
+    public static final JobDefinition FISHER; static {
+        FISHER = new JobDefinition(
+            solaceJobsIdentifier("fisher"),
+            Items.BREEZE_ROD, Items.STICK,
+            new HashSet<>()
+        );
+
+        FISHER.addReward(
+            getIdentifiedReward(
+                "fishes",
+                Set.of(
+                    Items.COD, Items.SALMON, Items.PUFFERFISH, Items.TROPICAL_FISH
+                ),
+                ActionType.FISH,
+                0, 0.12, 0.05
+            )
+        );
+    }
+
     private static IdentifiableReward getIdentifiedBreakReward(
         String name,
         Set<Object> set,
@@ -266,6 +286,11 @@ public class DefaultJobs {
             if(element instanceof Block) {
                 result.add(
                     BuiltInRegistries.BLOCK.getKey( (Block)element )
+                );
+            }
+            if(element instanceof Item) {
+                result.add(
+                    BuiltInRegistries.ITEM.getKey( (Item)element )
                 );
             }
             if(element instanceof EntityType<?>) {
