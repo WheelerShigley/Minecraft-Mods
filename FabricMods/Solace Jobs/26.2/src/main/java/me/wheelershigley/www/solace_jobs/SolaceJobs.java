@@ -13,9 +13,8 @@ public class SolaceJobs implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger();
 
     /* TODO
-     * hunter + farmer additions
      * grief-logger integration (break-block exploit prevention)
-     * limits (permission integrations)
+     * job-count limit(s) (permission integrations)
      * configurations into a folder
      * permissions-based multiplier(s)
      * mod-configurations, like provider:currency
@@ -23,6 +22,9 @@ public class SolaceJobs implements ModInitializer {
      * dummy items (icons)
      * income updates (on some frequency)
      * update-frequency configuration
+     * levels
+     * level rewards(?)
+     * level-exponent configuration
      * CLI commands join/leave
      * toggle/join/leave permissions check(s)
      * CLI commands for configurations (optional?)

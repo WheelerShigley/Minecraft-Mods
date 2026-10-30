@@ -234,8 +234,13 @@ public class DefaultJobs {
 
         Set<Object> farmlikeAnimals = Set.of(
             EntityTypes.COW, EntityTypes.CHICKEN, EntityTypes.PIG, EntityTypes.MOOSHROOM,
-            EntityTypes.HORSE, EntityTypes.FOX, EntityTypes.ARMADILLO,
-            EntityTypes.TURTLE, EntityTypes.AXOLOTL
+            EntityTypes.HORSE, EntityTypes.MULE, EntityTypes.DONKEY, EntityTypes.CAMEL,
+            EntityTypes.LLAMA, EntityTypes.TRADER_LLAMA, EntityTypes.GOAT,
+            EntityTypes.WOLF, EntityTypes.CAT, EntityTypes.OCELOT,
+            EntityTypes.PANDA, EntityTypes.POLAR_BEAR,
+            EntityTypes.RABBIT, EntityTypes.FOX, EntityTypes.ARMADILLO, EntityTypes.SNIFFER,
+            EntityTypes.TURTLE, EntityTypes.AXOLOTL, EntityTypes.FROG, EntityTypes.TADPOLE,
+            EntityTypes.STRIDER
         );
         FARMER.addReward(
             getIdentifiedReward(
@@ -266,10 +271,97 @@ public class DefaultJobs {
             getIdentifiedReward(
                 "fishes",
                 Set.of(
-                    Items.COD, Items.SALMON, Items.PUFFERFISH, Items.TROPICAL_FISH
+                    Items.COD, Items.SALMON, Items.PUFFERFISH, Items.TROPICAL_FISH,
+                    Items.NAUTILUS_SHELL
                 ),
                 ActionType.FISH,
                 0, 0.12, 0.05
+            )
+        );
+        FISHER.addReward(
+            getIdentifiedReward(
+                "manual",
+                Set.of(
+                    EntityTypes.COD, EntityTypes.SALMON, EntityTypes.PUFFERFISH, EntityTypes.TROPICAL_FISH,
+                    EntityTypes.DOLPHIN, EntityTypes.SQUID, EntityTypes.GLOW_SQUID,
+                    EntityTypes.NAUTILUS, EntityTypes.ZOMBIE_NAUTILUS
+                ),
+                ActionType.KILL,
+                0, 0.06, 0.025
+            )
+        );
+        FISHER.addReward(
+            getIdentifiedReward(
+                "defense",
+                Set.of(
+                    EntityTypes.GUARDIAN, EntityTypes.ELDER_GUARDIAN,
+                    EntityTypes.DROWNED
+                ),
+                ActionType.KILL,
+                0, 0.01, 0.005
+            )
+        );
+    }
+
+    public static final JobDefinition HUNTER; static {
+        HUNTER = new JobDefinition(
+            solaceJobsIdentifier("hunter"),
+            Items.DIAMOND_SWORD, Items.WOODEN_SWORD,
+            new HashSet<>()
+        );
+
+        HUNTER.addReward(
+            getIdentifiedReward(
+                "common",
+                Set.of(
+                    EntityTypes.ZOMBIE, EntityTypes.ZOMBIE_VILLAGER, EntityTypes.ZOMBIE_HORSE,
+                    EntityTypes.HUSK, EntityTypes.CAMEL_HUSK, EntityTypes.PARCHED,
+                    EntityTypes.SKELETON, EntityTypes.BOGGED, EntityTypes.STRAY, EntityTypes.SKELETON_HORSE,
+                    EntityTypes.SPIDER, EntityTypes.CAVE_SPIDER, EntityTypes.SILVERFISH,
+                    EntityTypes.SLIME, EntityTypes.SULFUR_CUBE, EntityTypes.MAGMA_CUBE,
+                    EntityTypes.CREEPER, EntityTypes.PHANTOM,
+                    EntityTypes.BLAZE, EntityTypes.BREEZE,
+                    EntityTypes.GHAST, EntityTypes.HOGLIN, EntityTypes.ZOGLIN,
+                    EntityTypes.PIGLIN, EntityTypes.PIGLIN_BRUTE, EntityTypes.ZOMBIFIED_PIGLIN,
+                    EntityTypes.WITHER_SKELETON,
+                    EntityTypes.ENDERMAN, EntityTypes.ENDERMITE, EntityTypes.SHULKER
+                ),
+                ActionType.KILL,
+                0, 0.02, 0.005
+            )
+        );
+        HUNTER.addReward(
+            getIdentifiedReward(
+                "golem",
+                Set.of(
+                    EntityTypes.COPPER_GOLEM, EntityTypes.IRON_GOLEM, EntityTypes.SNOW_GOLEM,
+                    EntityTypes.VILLAGER, EntityTypes.WANDERING_TRADER,
+                    EntityTypes.ALLAY, EntityTypes.HAPPY_GHAST
+                ),
+                ActionType.KILL,
+                0, 0.005, 0
+            )
+        );
+        HUNTER.addReward(
+            getIdentifiedReward(
+                "raid",
+                Set.of(
+                    EntityTypes.WITCH,
+                    EntityTypes.EVOKER, EntityTypes.PILLAGER,
+                    EntityTypes.RAVAGER, EntityTypes.VEX, EntityTypes.VINDICATOR
+                ),
+                ActionType.KILL,
+                0, 0.03, 0.05
+            )
+        );
+        HUNTER.addReward(
+            getIdentifiedReward(
+                "boss",
+                Set.of(
+                    EntityTypes.WARDEN, EntityTypes.WITHER, EntityTypes.ENDER_DRAGON
+                ),
+                ActionType.KILL,
+                7, 0.1, 0.2
             )
         );
     }
