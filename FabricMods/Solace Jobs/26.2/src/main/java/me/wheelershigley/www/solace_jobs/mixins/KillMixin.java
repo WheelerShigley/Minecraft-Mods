@@ -31,9 +31,7 @@ public class KillMixin {
             return;
         }
 
-        Entity entity = (Entity)(Object)this;
-
-        Identifier identifier = BuiltInRegistries.ENTITY_TYPE.getKey( entity.getType() );
+        Identifier identifier = BuiltInRegistries.ENTITY_TYPE.getKey( victim.getType() );
         Set<JobDefinition> jobs = JobsCodec.DATA.getJobs(identifier);
         for(JobDefinition job : jobs) {
             ActionReward reward = job.getFirstReward(identifier, ActionType.KILL);

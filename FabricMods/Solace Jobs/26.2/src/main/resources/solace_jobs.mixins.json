@@ -6,6 +6,7 @@
   "mixins": [
     "BlockBreakMixin",
     "BlockBrushMixin",
+    "BreedMixin",
     "FishingMixin",
     "KillMixin",
     "ShearMixin"

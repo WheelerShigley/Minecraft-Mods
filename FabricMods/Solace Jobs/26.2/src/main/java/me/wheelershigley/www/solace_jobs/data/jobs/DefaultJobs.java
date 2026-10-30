@@ -231,6 +231,28 @@ public class DefaultJobs {
                 2.2, 0.8, 0.18
             )
         );
+
+        Set<Object> farmlikeAnimals = Set.of(
+            EntityTypes.COW, EntityTypes.CHICKEN, EntityTypes.PIG, EntityTypes.MOOSHROOM,
+            EntityTypes.HORSE, EntityTypes.FOX, EntityTypes.ARMADILLO,
+            EntityTypes.TURTLE, EntityTypes.AXOLOTL
+        );
+        FARMER.addReward(
+            getIdentifiedReward(
+                "husbandry",
+                farmlikeAnimals,
+                ActionType.BREED,
+                0, 0.2, 0.05
+            )
+        );
+        FARMER.addReward(
+            getIdentifiedReward(
+                "butchery",
+                farmlikeAnimals,
+                ActionType.KILL,
+                0, 0.02, 0.08
+            )
+        );
     }
 
     public static final JobDefinition FISHER; static {
