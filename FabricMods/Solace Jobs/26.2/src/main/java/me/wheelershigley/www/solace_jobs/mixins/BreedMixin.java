@@ -1,14 +1,11 @@
 package me.wheelershigley.www.solace_jobs.mixins;
 
-import me.wheelershigley.www.solace_jobs.data.ActionReward;
-import me.wheelershigley.www.solace_jobs.data.ActionType;
-import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
-import me.wheelershigley.www.solace_jobs.data.jobs.JobsCodec;
+import me.wheelershigley.www.solace_jobs.rewards.ActionType;
+import me.wheelershigley.www.solace_jobs.rewards.RewardsHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Animal;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Mixin(Animal.class)
@@ -52,14 +48,12 @@ public class BreedMixin {
 
         Animal animal = (Animal)(Object)this;
 
-        Identifier identifier = BuiltInRegistries.ENTITY_TYPE.getKey( animal.getType() );
-        Set<JobDefinition> jobs = JobsCodec.DATA.getJobs(identifier);
-        for(JobDefinition job : jobs) {
-            ActionReward reward = job.getFirstReward(identifier, ActionType.BREED);
-            if(reward == null) {
-                continue;
-            }
-            reward.give( cause.get(), job, animal.level().getRandom() );
-        }
+        Identifier targetIdentifier = BuiltInRegistries.ENTITY_TYPE.getKey( animal.getType() );
+        RewardsHelper.attemptReward(
+            cause.get(),
+            targetIdentifier,
+            ActionType.BREED,
+            cause.get().level().getRandom()
+        );
     }
 }

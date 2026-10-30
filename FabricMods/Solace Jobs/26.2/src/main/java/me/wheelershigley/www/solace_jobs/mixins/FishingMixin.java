@@ -1,10 +1,8 @@
 package me.wheelershigley.www.solace_jobs.mixins;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import me.wheelershigley.www.solace_jobs.data.ActionReward;
-import me.wheelershigley.www.solace_jobs.data.ActionType;
-import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
-import me.wheelershigley.www.solace_jobs.data.jobs.JobsCodec;
+import me.wheelershigley.www.solace_jobs.rewards.ActionType;
+import me.wheelershigley.www.solace_jobs.rewards.RewardsHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
-import java.util.Set;
 
 @Mixin(FishingHook.class)
 public abstract class FishingMixin {
@@ -40,15 +37,14 @@ public abstract class FishingMixin {
         }
 
         for(ItemStack item : items) {
-            Identifier identifier = BuiltInRegistries.ITEM.getKey( item.getItem() );
-            Set<JobDefinition> jobs = JobsCodec.DATA.getJobs(identifier);
-            for(JobDefinition job : jobs) {
-                ActionReward reward = job.getFirstReward(identifier, ActionType.FISH);
-                if(reward == null) {
-                    continue;
-                }
-                reward.give( serverPlayer, job, serverPlayer.level().getRandom() );
-            }
+            Identifier targetIdentifier = BuiltInRegistries.ITEM.getKey( item.getItem() );
+            RewardsHelper.attemptReward(
+                serverPlayer,
+                targetIdentifier,
+                ActionType.FISH,
+                serverPlayer.level().getRandom()
+            );
         }
+
     }
 }

@@ -1,9 +1,7 @@
 package me.wheelershigley.www.solace_jobs.mixins;
 
-import me.wheelershigley.www.solace_jobs.data.ActionReward;
-import me.wheelershigley.www.solace_jobs.data.ActionType;
-import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
-import me.wheelershigley.www.solace_jobs.data.jobs.JobsCodec;
+import me.wheelershigley.www.solace_jobs.rewards.ActionType;
+import me.wheelershigley.www.solace_jobs.rewards.RewardsHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,7 +9,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Shearable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -21,8 +18,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Set;
 
 @Mixin(Entity.class)
 public class ShearMixin {
@@ -47,20 +42,18 @@ public class ShearMixin {
             return;
         }
 
-        LivingEntity livingEntity = ( (Mob)(Object)this ).asLivingEntity();
+        LivingEntity livingEntity = ( (Entity)(Object)this ).asLivingEntity();
         if(livingEntity == null) {
             return;
         }
 
-        Identifier identifier = BuiltInRegistries.ENTITY_TYPE.getKey( livingEntity.getType() );
-        Set<JobDefinition> jobs = JobsCodec.DATA.getJobs(identifier);
-        for(JobDefinition job : jobs) {
-            ActionReward reward = job.getFirstReward(identifier, ActionType.SHEAR);
-            if(reward == null) {
-                continue;
-            }
-            reward.give( serverPlayer, job, serverPlayer.level().getRandom() );
-        }
+        Identifier targetIdentifier = BuiltInRegistries.ENTITY_TYPE.getKey( livingEntity.getType() );
+        RewardsHelper.attemptReward(
+            serverPlayer,
+            targetIdentifier,
+            ActionType.SHEAR,
+            serverPlayer.level().getRandom()
+        );
     }
 
     private boolean isShearing(

@@ -1,9 +1,10 @@
 package me.wheelershigley.www.solace_jobs.mixins;
 
-import me.wheelershigley.www.solace_jobs.data.ActionReward;
-import me.wheelershigley.www.solace_jobs.data.ActionType;
+import me.wheelershigley.www.solace_jobs.rewards.ActionReward;
+import me.wheelershigley.www.solace_jobs.rewards.ActionType;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobsCodec;
+import me.wheelershigley.www.solace_jobs.rewards.RewardsHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -39,14 +40,12 @@ public class BlockBrushMixin {
 
         Block block = ( (BlockEntity)(Object)this ).getBlockState().getBlock();
 
-        Identifier identifier = BuiltInRegistries.BLOCK.getKey(block);
-        Set<JobDefinition> jobs = JobsCodec.DATA.getJobs(identifier);
-        for(JobDefinition job : jobs) {
-            ActionReward reward = job.getFirstReward(identifier, ActionType.BRUSH);
-            if(reward == null) {
-                continue;
-            }
-            reward.give( serverPlayer, job, level.getRandom() );
-        }
+        Identifier targetIdentifier = BuiltInRegistries.BLOCK.getKey(block);
+        RewardsHelper.attemptReward(
+            serverPlayer,
+            targetIdentifier,
+            ActionType.BRUSH,
+            serverPlayer.level().getRandom()
+        );
     }
 }
