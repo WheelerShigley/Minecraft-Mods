@@ -1,9 +1,6 @@
 package me.wheelershigley.www.solace_jobs.mixins;
 
-import me.wheelershigley.www.solace_jobs.rewards.ActionReward;
 import me.wheelershigley.www.solace_jobs.rewards.ActionType;
-import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
-import me.wheelershigley.www.solace_jobs.data.jobs.JobsCodec;
 import me.wheelershigley.www.solace_jobs.rewards.RewardsHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;

@@ -1,6 +1,5 @@
 package me.wheelershigley.www.solace_jobs.data;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.wheelershigley.www.solace_jobs.SolaceJobs;
