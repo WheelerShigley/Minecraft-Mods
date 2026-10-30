@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_jobs.data;
+package me.wheelershigley.www.solace_jobs.rewards;
 
 public enum ActionType {
     BREAK,

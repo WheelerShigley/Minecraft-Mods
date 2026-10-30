@@ -1,8 +1,8 @@
 package me.wheelershigley.www.solace_jobs.data.jobs;
 
 import me.wheelershigley.www.solace_jobs.SolaceJobs;
-import me.wheelershigley.www.solace_jobs.data.ActionReward;
-import me.wheelershigley.www.solace_jobs.data.ActionType;
+import me.wheelershigley.www.solace_jobs.rewards.ActionReward;
+import me.wheelershigley.www.solace_jobs.rewards.ActionType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;

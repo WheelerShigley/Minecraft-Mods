@@ -19,9 +19,8 @@ public class ConfigurationsCodec implements Codec<Configurations, Configuration>
             new Configuration(
                 "savs_common_economy",
                 "dollar",
-                1.0,
-                1.0,
-                1.0,
+                true, 1200,
+                1.0, 1.0, 1.0,
                 Math.sqrt(2.0)
             )
         );

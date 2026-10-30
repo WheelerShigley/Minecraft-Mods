@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_jobs.data;
+package me.wheelershigley.www.solace_jobs.rewards;
 
 import eu.pb4.common.economy.api.CommonEconomy;
 import eu.pb4.common.economy.api.EconomyAccount;
@@ -10,6 +10,7 @@ import me.wheelershigley.www.solace_jobs.data.employments.EmploymentsCodec;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
 import me.wheelershigley.www.solace_jobs.data.players.JobsPlayerData;
 import me.wheelershigley.www.solace_jobs.data.players.PlayersJobsDataCodec;
+import me.wheelershigley.www.solace_jobs.data.statements.Statements;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,7 +46,7 @@ public record ActionReward(
 
         giveExperience(player, random);
         giveJobExperience(player, job);
-        giveCurrency(player);
+        giveCurrency(player, job);
     }
 
     public static void initialize(MinecraftServer server) {
@@ -134,7 +135,7 @@ public record ActionReward(
         playerData.experiences().put(job.identifier, experience);
     }
 
-    private void giveCurrency(ServerPlayer player) {
+    private void giveCurrency(ServerPlayer player, JobDefinition job) {
         if(economyProvider == null || economyCurrency == null) {
             return;
         }
@@ -153,6 +154,11 @@ public record ActionReward(
         long actual_payment = (long)(100*payment);
         if(actual_payment != 0) {
             account.increaseBalance(actual_payment);
+            Statements.INSTANCE.add(
+                player.getUUID(),
+                job.identifier,
+                ( (double)(actual_payment)/100.0 )
+            );
         }
 
         payment %= 0.01;

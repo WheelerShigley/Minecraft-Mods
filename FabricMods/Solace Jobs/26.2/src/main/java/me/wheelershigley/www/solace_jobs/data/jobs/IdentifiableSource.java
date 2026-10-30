@@ -1,6 +1,6 @@
 package me.wheelershigley.www.solace_jobs.data.jobs;
 
-import me.wheelershigley.www.solace_jobs.data.ActionType;
+import me.wheelershigley.www.solace_jobs.rewards.ActionType;
 import net.minecraft.resources.Identifier;
 
 import java.util.HashSet;
