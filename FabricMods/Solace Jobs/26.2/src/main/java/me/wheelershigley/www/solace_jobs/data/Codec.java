@@ -3,6 +3,7 @@ package me.wheelershigley.www.solace_jobs.data;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import me.wheelershigley.www.solace_jobs.SolaceJobs;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
@@ -22,11 +23,9 @@ public interface Codec< T extends Savable<D>, D > {
 
     String getConfigName();
     default Path getDataPath() {
-        return FabricLoader
-            .getInstance()
-            .getConfigDir()
-            .resolve( getConfigName() )
-        ;
+        Path configDir = FabricLoader.getInstance().getConfigDir();
+        Path jobsConfigDir = configDir.resolve(SolaceJobs.MOD_ID);
+        return jobsConfigDir.resolve( getConfigName() );
     }
 
     default Gson getGson() {
