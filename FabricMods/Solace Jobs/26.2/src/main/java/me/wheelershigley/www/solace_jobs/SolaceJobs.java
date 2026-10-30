@@ -12,27 +12,33 @@ public class SolaceJobs implements ModInitializer {
     public static final String VERSION = "1.0.0";
     public static final Logger LOGGER = LogManager.getLogger();
 
-    /* TODO
-     * grief-logger integration (break-block exploit prevention)
-     * job-count limit(s) (permission integrations)
-     * configurations into a folder
-     * permissions-based multiplier(s)
-     * mod-configurations, like provider:currency
-     * global multiplier
-     * dummy items (icons)
+    /* # TODO
+     * ## Solace Jobs
      * income updates (on some frequency)
      * update-frequency configuration
-     * levels
+     *
+     * levels (exponential)
      * level rewards(?)
-     * level-exponent configuration
+     *
      * CLI commands join/leave
      * toggle/join/leave permissions check(s)
      * CLI commands for configurations (optional?)
+     *
+     * ## GRIEF LOGGER
+     * add grief-logger as dependency
+     * grief-logger integration (break-block exploit prevention)
+     *
+     * ## Permissions
+     * job-count limit(s) (permission integrations)
+     * permissions-based multiplier(s)
+     *
+     * ## Polymer
+     * dummy items (icons)
      */
 
     @Override
     public void onInitialize() {
-        LOGGER.info(MOD_ID + " " + VERSION + " has started!");
+        LOGGER.info("SolaceJobs-" + VERSION + " has started!");
 
         Events.register();
         JobsCommand.registerCommand();

@@ -1,6 +1,7 @@
 package me.wheelershigley.www.solace_jobs.events;
 
 import me.wheelershigley.www.solace_jobs.data.ActionReward;
+import me.wheelershigley.www.solace_jobs.data.config.ConfigurationsCodec;
 import me.wheelershigley.www.solace_jobs.data.employments.EmploymentsCodec;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobsCodec;
 import me.wheelershigley.www.solace_jobs.data.players.PlayersJobsDataCodec;
@@ -20,6 +21,7 @@ public class Events {
         ServerLifecycleEvents.SERVER_STOPPING.register(
             (server) -> {
                 JobsCodec.INSTANCE.save();
+                ConfigurationsCodec.INSTANCE.save();
                 PlayersJobsDataCodec.INSTANCE.save();
                 EmploymentsCodec.INSTANCE.save();
             }
@@ -27,8 +29,15 @@ public class Events {
         ServerLifecycleEvents.AFTER_SAVE.register(
             (server, flush, force) -> {
                 JobsCodec.INSTANCE.save();
+                ConfigurationsCodec.INSTANCE.save();
                 PlayersJobsDataCodec.INSTANCE.save();
                 EmploymentsCodec.INSTANCE.save();
+            }
+        );
+
+        ServerLifecycleEvents.START_DATA_PACK_RELOAD.register(
+            (server, resource_manager) -> {
+                ConfigurationsCodec.reload();
             }
         );
     }

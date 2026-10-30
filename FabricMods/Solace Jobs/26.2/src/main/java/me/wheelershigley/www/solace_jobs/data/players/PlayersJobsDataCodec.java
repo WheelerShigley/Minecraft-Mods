@@ -27,7 +27,7 @@ public class PlayersJobsDataCodec implements Codec< PlayersJobsPlayerData, HashM
 
     @Override
     public String getConfigName() {
-        return "solace_jobs_data.json";
+        return "data.json";
     }
 
     @Override

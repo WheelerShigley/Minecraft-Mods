@@ -5,6 +5,7 @@ import eu.pb4.common.economy.api.EconomyAccount;
 import eu.pb4.common.economy.api.EconomyCurrency;
 import eu.pb4.common.economy.api.EconomyProvider;
 import me.wheelershigley.www.solace_jobs.SolaceJobs;
+import me.wheelershigley.www.solace_jobs.data.config.ConfigurationsCodec;
 import me.wheelershigley.www.solace_jobs.data.employments.EmploymentsCodec;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
 import me.wheelershigley.www.solace_jobs.data.players.JobsPlayerData;
@@ -48,11 +49,8 @@ public record ActionReward(
     }
 
     public static void initialize(MinecraftServer server) {
-        //TODO *Configure* provider-id
-        final String provider_name = "savs_common_economy";
-        //TODO: *configure* currency-name
-        final String currency_name = "dollar";
-
+        final String provider_name = ConfigurationsCodec.INSTANCE.getInstanceData().getData().economyProviderName();
+        final String currency_name = ConfigurationsCodec.INSTANCE.getInstanceData().getData().economyCurrencyName();
         final Identifier currencyIdentifier = Identifier.fromNamespaceAndPath(provider_name, currency_name);
 
         /* Provider */ {
@@ -63,7 +61,7 @@ public record ActionReward(
                 errorBuilder
                     .append("\r\n")
                     .append("Economy-Provider, \"").append(provider_name).append("\" not found!\r\n")
-                    .append("The following providers were found:\r\n")
+                    .append("The following provider(s) were found:\r\n")
                 ;
 
                 Collection<EconomyProvider> providers = CommonEconomy.providers();
@@ -86,7 +84,7 @@ public record ActionReward(
                 errorBuilder
                     .append("\r\n")
                     .append("Economy-Currency, \"").append(currencyIdentifier).append("\" not found!\r\n")
-                    .append("The following currencies were found:\r\n")
+                    .append("The following currency/currencies were found:\r\n")
                 ;
 
                 Collection<EconomyCurrency> economyCurrencies = CommonEconomy.getCurrencies(server);
@@ -104,18 +102,20 @@ public record ActionReward(
     }
 
     private void giveExperience(ServerPlayer player, RandomSource random) {
-        int amount = (int)experience;
+        double amount = (
+            this.experience * ConfigurationsCodec.INSTANCE.getInstanceData().getData().global_experience_multiplier()
+        );
 
         //any remainder will sometimes be added: to, on average, approximate that amount
-        double remainder = experience%1;
+        double remainder = (experience % 1.0);
         if(
             0 < remainder
             && random.nextDouble() <= remainder
         ) {
-            amount++;
+            amount += 1.0;
         }
 
-        player.giveExperiencePoints(amount);
+        player.giveExperiencePoints( (int)amount );
     }
 
     private void giveJobExperience(
@@ -129,7 +129,8 @@ public record ActionReward(
         }
 
         double experience = playerData.experiences().getOrDefault(job.identifier, 0.0);
-        experience += this.job_experience;
+        experience += this.job_experience * ConfigurationsCodec.INSTANCE.getInstanceData().getData().global_job_experience_multiplier();
+
         playerData.experiences().put(job.identifier, experience);
     }
 
@@ -137,7 +138,8 @@ public record ActionReward(
         if(economyProvider == null || economyCurrency == null) {
             return;
         }
-        double payment = unpaidAmounts.getOrDefault(player.getUUID(), 0.0) + this.currency;
+        double payment = unpaidAmounts.getOrDefault(player.getUUID(), 0.0);
+        payment += this.currency * ConfigurationsCodec.INSTANCE.getInstanceData().getData().global_earnings_multiplier();
 
         EconomyAccount account = economyProvider.getAccount(
             player,

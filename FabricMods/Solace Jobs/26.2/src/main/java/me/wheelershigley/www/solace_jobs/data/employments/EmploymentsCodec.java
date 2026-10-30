@@ -35,6 +35,6 @@ public class EmploymentsCodec implements Codec<Employments, HashMap< UUID, Set<I
 
     @Override
     public String getConfigName() {
-        return "solace_jobs_employments.json";
+        return "employments.json";
     }
 }

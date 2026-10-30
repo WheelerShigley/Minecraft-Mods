@@ -26,7 +26,7 @@ public class JobsCodec implements Codec< JobDefinitions, Set<JobDefinition> > {
 
     @Override
     public String getConfigName() {
-        return "solace_jobs_definitions.json";
+        return "jobs.json";
     }
 
     @Override
