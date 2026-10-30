@@ -1,6 +1,8 @@
 package me.wheelershigley.www.solace_jobs.mixins;
 
-//TODO import com.daqem.grieflogger.block.BlockHandler;
+import com.daqem.grieflogger.database.service.Services;
+import com.daqem.grieflogger.model.Operation;
+import com.daqem.grieflogger.model.history.IHistory;
 import me.wheelershigley.www.solace_jobs.rewards.ActionType;
 import me.wheelershigley.www.solace_jobs.rewards.RewardsHelper;
 import net.minecraft.core.BlockPos;
@@ -18,6 +20,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.List;
 
 @Mixin(Block.class)
 public class BlockBreakMixin {
@@ -45,6 +49,14 @@ public class BlockBreakMixin {
             return;
         }
 
+        List<IHistory> history = Services.BLOCK.getBlockHistory(
+            serverPlayer.level(),
+            pos
+        );
+        if( wasPlacedByPlacer(history) ) {
+            return;
+        }
+
         Identifier targetIdentifier = BuiltInRegistries.BLOCK.getKey(block);
         RewardsHelper.attemptReward(
             serverPlayer,
@@ -52,5 +64,17 @@ public class BlockBreakMixin {
             ActionType.BREAK,
             serverPlayer.level().getRandom()
         );
+    }
+
+    private static boolean wasPlacedByPlacer(List<IHistory> history) {
+        // This is an imperfect check, please refer to
+        // https://github.com/DAQEM/GriefLogger/issues/190
+        // for details
+        for(IHistory historyItem : history) {
+            if( historyItem.getAction().getOperation().equals(Operation.ADD) ) {
+                return true;
+            }
+        }
+        return false;
     }
 }

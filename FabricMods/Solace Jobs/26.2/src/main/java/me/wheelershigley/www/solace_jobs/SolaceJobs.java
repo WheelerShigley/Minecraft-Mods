@@ -22,16 +22,9 @@ public class SolaceJobs implements ModInitializer {
      * toggle/join/leave permissions check(s)
      * CLI commands for configurations (optional?)
      *
-     * ## GRIEF LOGGER
-     * add grief-logger as dependency
-     * grief-logger integration (break-block exploit prevention)
-     *
      * ## Permissions
      * job-count limit(s) (permission integrations)
      * permissions-based multiplier(s)
-     *
-     * ## Polymer
-     * dummy items (icons)
      */
 
     @Override

@@ -12,7 +12,21 @@ base {
 
 
 repositories {
-    maven { url "https://maven.nucleoid.xyz/" }
+    maven {
+        name = "Nucleoid"
+        url = "https://maven.nucleoid.xyz"
+        content {
+            includeGroup "eu.pb4"
+            includeGroup "xyz.nucleoid"
+        }
+    }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 dependencies {
@@ -28,7 +42,7 @@ dependencies {
     implementation "eu.pb4:polymer-resource-pack:${project.polymer_resource_pack_version}"
 
     // Grief Logger
-    // TODO
+    implementation "maven.modrinth:${project.grieflogger}:${project.grieflogger_version}"
 }
 
 processResources {
