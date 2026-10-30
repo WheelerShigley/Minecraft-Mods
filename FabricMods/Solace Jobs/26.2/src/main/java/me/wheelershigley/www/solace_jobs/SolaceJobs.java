@@ -1,5 +1,6 @@
 package me.wheelershigley.www.solace_jobs;
 
+import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import me.wheelershigley.www.solace_jobs.commands.JobsCommand;
 import me.wheelershigley.www.solace_jobs.events.Events;
 import net.fabricmc.api.ModInitializer;
@@ -9,14 +10,11 @@ import org.apache.logging.log4j.Logger;
 
 public class SolaceJobs implements ModInitializer {
     public static final String MOD_ID = "solace_jobs";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1.0.0+26.2";
     public static final Logger LOGGER = LogManager.getLogger();
 
     /* # TODO
      * ## Solace Jobs
-     * income updates (on some frequency)
-     * update-frequency configuration
-     *
      * levels (exponential)
      * level rewards(?)
      *
@@ -42,6 +40,9 @@ public class SolaceJobs implements ModInitializer {
 
         Events.register();
         JobsCommand.registerCommand();
+
+        PolymerResourcePackUtils.addModAssets(MOD_ID);
+        PolymerResourcePackUtils.markAsRequired();
     }
 
     public static Identifier solaceJobsIdentifier(String value) {
