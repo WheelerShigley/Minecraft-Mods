@@ -51,8 +51,7 @@ public class ShearMixin {
         RewardsHelper.attemptReward(
             serverPlayer,
             targetIdentifier,
-            ActionType.SHEAR,
-            serverPlayer.level().getRandom()
+            ActionType.SHEAR
         );
     }
 

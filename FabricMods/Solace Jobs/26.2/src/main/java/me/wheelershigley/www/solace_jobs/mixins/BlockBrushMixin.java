@@ -41,8 +41,7 @@ public class BlockBrushMixin {
         RewardsHelper.attemptReward(
             serverPlayer,
             targetIdentifier,
-            ActionType.BRUSH,
-            serverPlayer.level().getRandom()
+            ActionType.BRUSH
         );
     }
 }

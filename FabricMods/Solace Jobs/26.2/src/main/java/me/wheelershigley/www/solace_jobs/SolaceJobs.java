@@ -15,8 +15,10 @@ public class SolaceJobs implements ModInitializer {
 
     /* # TODO
      * ## Solace Jobs
-     * levels (exponential)
-     * level rewards(?)
+     * level passive-abilities
+     * Tool-Abilities (active abilities)
+     * Level-Up Notifications
+     * Jobs-Menu Items-Lore for {Level | experience} and {ability}
      *
      * CLI commands join/leave
      * toggle/join/leave permissions check(s)

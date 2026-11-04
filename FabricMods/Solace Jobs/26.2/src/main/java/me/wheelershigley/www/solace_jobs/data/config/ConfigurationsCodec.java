@@ -21,7 +21,8 @@ public class ConfigurationsCodec implements Codec<Configurations, Configuration>
                 "dollar",
                 true, 1200,
                 1.0, 1.0, 1.0,
-                Math.sqrt(2.0)
+                100.0,
+                50
             )
         );
     }

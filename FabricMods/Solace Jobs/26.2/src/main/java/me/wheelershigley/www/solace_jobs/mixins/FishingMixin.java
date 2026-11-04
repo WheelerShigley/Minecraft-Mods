@@ -41,8 +41,7 @@ public abstract class FishingMixin {
             RewardsHelper.attemptReward(
                 serverPlayer,
                 targetIdentifier,
-                ActionType.FISH,
-                serverPlayer.level().getRandom()
+                ActionType.FISH
             );
         }
 

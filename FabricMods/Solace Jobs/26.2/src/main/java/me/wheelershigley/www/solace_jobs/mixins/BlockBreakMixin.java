@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -61,11 +62,11 @@ public class BlockBreakMixin {
         RewardsHelper.attemptReward(
             serverPlayer,
             targetIdentifier,
-            ActionType.BREAK,
-            serverPlayer.level().getRandom()
+            ActionType.BREAK
         );
     }
 
+    @Unique
     private static boolean wasPlacedByPlacer(List<IHistory> history) {
         // This is an imperfect check, please refer to
         // https://github.com/DAQEM/GriefLogger/issues/190

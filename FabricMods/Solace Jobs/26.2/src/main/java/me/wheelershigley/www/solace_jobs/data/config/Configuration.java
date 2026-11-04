@@ -8,5 +8,6 @@ public record Configuration(
     double global_experience_multiplier,
     double global_job_experience_multiplier,
     double global_earnings_multiplier,
-    double level_exponent
+    double level_multiplier,
+    int job_experience_bar_duration_ticks
 ) {}

@@ -31,8 +31,7 @@ public class KillMixin {
         RewardsHelper.attemptReward(
             serverPlayer,
             targetIdentifier,
-            ActionType.KILL,
-            serverPlayer.level().getRandom()
+            ActionType.KILL
         );
 
     }

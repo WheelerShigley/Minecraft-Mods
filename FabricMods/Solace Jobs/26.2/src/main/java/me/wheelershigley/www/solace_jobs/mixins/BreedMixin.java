@@ -52,8 +52,7 @@ public class BreedMixin {
         RewardsHelper.attemptReward(
             cause.get(),
             targetIdentifier,
-            ActionType.BREED,
-            cause.get().level().getRandom()
+            ActionType.BREED
         );
     }
 }
