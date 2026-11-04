@@ -2,7 +2,7 @@ package me.wheelershigley.www.solace_jobs.rewards;
 
 import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobsCodec;
-import me.wheelershigley.www.solace_jobs.level.LevelHelper;
+import me.wheelershigley.www.solace_jobs.level.LevelBarHandler;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -21,7 +21,7 @@ public class RewardsHelper {
                 continue;
             }
             reward.give(serverPlayer, job, serverPlayer.getRandom());
-            LevelHelper.notifyJobLevel(
+            LevelBarHandler.notifyJobLevel(
                 serverPlayer,
                 job.identifier,
                 serverPlayer.level().getServer()

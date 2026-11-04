@@ -2,6 +2,7 @@ package me.wheelershigley.www.solace_jobs.events;
 
 import me.wheelershigley.www.solace_jobs.data.config.Configuration;
 import me.wheelershigley.www.solace_jobs.data.statements.Statements;
+import me.wheelershigley.www.solace_jobs.level.LevelBarHandler;
 import me.wheelershigley.www.solace_jobs.level.LevelHelper;
 import me.wheelershigley.www.solace_jobs.rewards.ActionReward;
 import me.wheelershigley.www.solace_jobs.data.config.ConfigurationsCodec;
@@ -58,6 +59,6 @@ public class Events {
         );
 
         // Job-Progress Boss-Bars
-        ServerTickEvents.END_SERVER_TICK.register(LevelHelper::tickBossBars);
+        ServerTickEvents.END_SERVER_TICK.register(LevelBarHandler::tickBossBars);
     }
 }
