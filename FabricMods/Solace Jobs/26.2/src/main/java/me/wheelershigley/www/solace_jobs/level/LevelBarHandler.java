@@ -1,6 +1,7 @@
 package me.wheelershigley.www.solace_jobs.level;
 
 import me.wheelershigley.www.solace_jobs.data.config.ConfigurationsCodec;
+import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
 import me.wheelershigley.www.solace_jobs.data.players.JobsPlayerData;
 import me.wheelershigley.www.solace_jobs.data.players.PlayersJobsDataCodec;
 import net.minecraft.network.chat.Component;
@@ -41,11 +42,11 @@ public class LevelBarHandler {
 
     public static void notifyJobLevel(
         ServerPlayer serverPlayer,
-        Identifier jobIdentifier,
+        JobDefinition job,
         MinecraftServer server
     ) {
         JobsPlayerData data = PlayersJobsDataCodec.INSTANCE.getInstanceData().getData().get( serverPlayer.getUUID() );
-        Double total_experience = data.experiences().getOrDefault( jobIdentifier, 0.0 );
+        Double total_experience = data.experiences().getOrDefault( job.identifier, 0.0 );
         if(total_experience == null) {
             total_experience = 0.0;
         }
@@ -54,7 +55,7 @@ public class LevelBarHandler {
         double percentage = percentageToNextLevel(total_experience);
 
         Component name = Component.translatable(
-            jobIdentifier.getNamespace() + ".job." + jobIdentifier.getPath()
+            job.getTranslationKey()
         ).append(" ").append(
             Component.translatable(
                 "solace_jobs.boss_bar.level",

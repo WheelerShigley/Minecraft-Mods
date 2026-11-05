@@ -1,9 +1,12 @@
 package me.wheelershigley.www.solace_jobs.data.jobs;
 
 import me.wheelershigley.www.solace_jobs.data.Savable;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class JobDefinitions implements Savable< Set<JobDefinition> > {
@@ -24,6 +27,19 @@ public class JobDefinitions implements Savable< Set<JobDefinition> > {
                 return;
             }
         }
+    }
+
+    public @Nullable JobDefinition getJob(Identifier jobIdentifier) {
+        Iterator<JobDefinition> jobsIterator = jobs.iterator();
+
+        JobDefinition job = null;
+        while( jobsIterator.hasNext() ) {
+            job = jobsIterator.next();
+            if( job.identifier.equals(jobIdentifier) ) {
+                return job;
+            }
+        }
+        return null;
     }
 
     public Set<JobDefinition> getJobs(Identifier target) {

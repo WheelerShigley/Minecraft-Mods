@@ -44,15 +44,10 @@ public class LevelHelper {
         JobDefinition job,
         int level
     ) {
-        String jobTranslationIdentifier =
-            job.identifier.getNamespace() +
-            ".job." +
-            job.identifier.getPath()
-        ;
         serverPlayer.sendSystemMessage(
             Component.translatable(
                 "solace_jobs.level_up",
-                Component.translatable(jobTranslationIdentifier),
+                Component.translatable( job.getTranslationKey() ),
                 level
             )
         );

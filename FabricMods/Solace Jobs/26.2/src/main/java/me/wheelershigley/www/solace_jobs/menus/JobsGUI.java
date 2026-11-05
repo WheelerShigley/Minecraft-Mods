@@ -63,9 +63,6 @@ public class JobsGUI extends ImmutableSimpleGUI {
         JobDefinition job,
         int slot
     ) {
-        String translationKey =
-            job.identifier.getNamespace() + ".job." + job.identifier.getPath()
-        ;
         AtomicBoolean isPlayerInJob = new AtomicBoolean(
             EmploymentsCodec.INSTANCE
                 .getInstanceData()
@@ -92,7 +89,7 @@ public class JobsGUI extends ImmutableSimpleGUI {
                 getMenuItem(
                     isPlayerInJob.get() ? job.IN_ITEM : job.OUT_ITEM,
                     false,
-                    translationKey
+                    job.getTranslationKey()
                 ),
                 toggle[0]
             );
@@ -103,7 +100,7 @@ public class JobsGUI extends ImmutableSimpleGUI {
             getMenuItem(
                 isPlayerInJob.get() ? job.IN_ITEM : job.OUT_ITEM,
                 false,
-                translationKey
+                job.getTranslationKey()
             ),
             toggle[0]
         );

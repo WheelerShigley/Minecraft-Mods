@@ -1,5 +1,7 @@
 package me.wheelershigley.www.solace_jobs.data.statements;
 
+import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
+import me.wheelershigley.www.solace_jobs.data.jobs.JobsCodec;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -47,9 +49,18 @@ public class Statement {
     }
 
     public List<Component> popAsTextComponents() {
-        HashMap<Identifier, Double> incomesCopy = new HashMap<>(incomes);
+        HashMap<JobDefinition, Double> incomesCopy = new HashMap<>();
+        for( Map.Entry<Identifier, Double> income : incomes.entrySet() ) {
+            JobDefinition job = JobsCodec.INSTANCE.getInstanceData().getJob( income.getKey() );
+            if(job == null) {
+                continue;
+            }
+            incomesCopy.put( job, income.getValue() );
+        }
+
+
         double sum = 0.0;
-        for( Map.Entry<Identifier, Double> income : incomesCopy.entrySet() ) {
+        for( Map.Entry<JobDefinition, Double> income : incomesCopy.entrySet() ) {
             sum += income.getValue();
         }
 
@@ -76,12 +87,12 @@ public class Statement {
             incomeStatement.add(
                 Component.translatable("solace_jobs.income_statement.seperator")
             );
-            for( Map.Entry<Identifier, Double> income : incomesCopy.entrySet() ) {
+            for( Map.Entry<JobDefinition, Double> income : incomesCopy.entrySet() ) {
                 incomeStatement.add(
                     Component.translatable(
                         "solace_jobs.income_statement.line",
                         Component.translatable(
-                            income.getKey().getNamespace() + ".job." + income.getKey().getPath()
+                            income.getKey().getTranslationKey()
                         ).setStyle(
                             Style.EMPTY.withColor(TextColor.GRAY)
                         ),
@@ -95,7 +106,7 @@ public class Statement {
                 );
             }
             incomeStatement.add(
-                Component.translatable("solace_jobs.income_statement.seperator")
+                Component.translatable("solace_jobs.income_statement.separator")
             );
             if(1 < incomesCopy.size() ) {
                 incomeStatement.add(

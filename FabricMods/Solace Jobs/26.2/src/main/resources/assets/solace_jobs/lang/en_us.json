@@ -11,7 +11,8 @@
   "solace_jobs.income_statement.header":    "§aIncomes §7during the last §f%1$s:%2$s§7.",
   "solace_jobs.income_statement.line":      "    %1$s = %2$s",
   "solace_jobs.income_statement.total":     "    §7Total = %1$s",
-  "solace_jobs.income_statement.seperator": "§m§7–––––––––––––––––––",
+  "solace_jobs.income_statement.separator": "§m§7–––––––––––––––––––",
+
   "solace_jobs.boss_bar.level": "%1$s ➝ %2$s",
   "solace_jobs.level_up": "§a%1$s §7has reached §alevel %2$s§7!"
 }

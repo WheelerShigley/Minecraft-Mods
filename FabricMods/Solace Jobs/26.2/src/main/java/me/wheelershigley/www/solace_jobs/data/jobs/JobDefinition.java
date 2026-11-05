@@ -37,6 +37,10 @@ public class JobDefinition {
         this.rewarded_actions.addAll(rewarded_actions);
     }
 
+    public String getTranslationKey() {
+        return this.identifier.getNamespace() + ".job." + this.identifier.getPath();
+    }
+
     public boolean addReward(IdentifiableReward identified_reward) {
         for(IdentifiableReward rewarded_action : rewarded_actions) {
             if( rewarded_action.action().contains(
