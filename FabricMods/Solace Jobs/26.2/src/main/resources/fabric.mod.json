@@ -21,5 +21,8 @@
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
     "grieflogger": ">=21.1.7"
+  },
+  "suggests": {
+    "luckperms": "*"
   }
 }

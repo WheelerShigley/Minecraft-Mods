@@ -22,7 +22,6 @@ public class SolaceJobs implements ModInitializer {
      * CLI commands for configurations (optional?)
      *
      * ## Permissions
-     * job-count limit(s) (permission integrations)
      * permissions-based multiplier(s)
      */
 
