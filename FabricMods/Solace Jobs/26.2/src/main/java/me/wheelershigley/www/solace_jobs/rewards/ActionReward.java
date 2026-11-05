@@ -11,6 +11,7 @@ import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
 import me.wheelershigley.www.solace_jobs.data.players.JobsPlayerData;
 import me.wheelershigley.www.solace_jobs.data.players.PlayersJobsDataCodec;
 import me.wheelershigley.www.solace_jobs.data.statements.Statements;
+import me.wheelershigley.www.solace_jobs.level.LevelHelper;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -130,7 +131,14 @@ public record ActionReward(
         }
 
         double experience = playerData.experiences().getOrDefault(job.identifier, 0.0);
+        int previous_level = (int)LevelHelper.experienceToLevel(experience);
+
         experience += this.job_experience * ConfigurationsCodec.INSTANCE.getInstanceData().getData().global_job_experience_multiplier();
+        int current_level = (int)LevelHelper.experienceToLevel(experience);
+
+        if(previous_level != current_level) {
+            LevelHelper.notifyPlayerOfLevel(player, job, current_level);
+        }
 
         playerData.experiences().put(job.identifier, experience);
     }

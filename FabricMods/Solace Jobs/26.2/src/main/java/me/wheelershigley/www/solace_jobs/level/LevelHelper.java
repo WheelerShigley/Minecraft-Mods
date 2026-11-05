@@ -1,18 +1,10 @@
 package me.wheelershigley.www.solace_jobs.level;
 
 import me.wheelershigley.www.solace_jobs.data.config.ConfigurationsCodec;
-import me.wheelershigley.www.solace_jobs.data.players.JobsPlayerData;
-import me.wheelershigley.www.solace_jobs.data.players.PlayersJobsDataCodec;
+import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.protocol.game.ClientboundBossEventPacket;
-import net.minecraft.resources.Identifier;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.BossEvent;
-
-import java.time.Instant;
-import java.util.*;
+import org.intellij.lang.annotations.Identifier;
 
 public class LevelHelper {
     public static double experienceToLevel(final double EXPERIENCE) {
@@ -44,6 +36,25 @@ public class LevelHelper {
         return Math.clamp(
             levelExperience / requiredExperienceToNextLevel,
             0.0, 1.0
+        );
+    }
+
+    public static void notifyPlayerOfLevel(
+        ServerPlayer serverPlayer,
+        JobDefinition job,
+        int level
+    ) {
+        String jobTranslationIdentifier =
+            job.identifier.getNamespace() +
+            ".job." +
+            job.identifier.getPath()
+        ;
+        serverPlayer.sendSystemMessage(
+            Component.translatable(
+                "solace_jobs.level_up",
+                Component.translatable(jobTranslationIdentifier),
+                level
+            )
         );
     }
 }
