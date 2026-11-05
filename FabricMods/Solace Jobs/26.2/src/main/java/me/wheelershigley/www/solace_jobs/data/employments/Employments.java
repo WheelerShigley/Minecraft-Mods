@@ -1,7 +1,11 @@
 package me.wheelershigley.www.solace_jobs.data.employments;
 
 import me.wheelershigley.www.solace_jobs.data.Savable;
+import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
+import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinitions;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,43 +22,72 @@ public class Employments implements Savable< HashMap< UUID, Set<Identifier> > > 
 
     public static boolean join(
         Employments data,
-        UUID playerIdentifier, Identifier employmentIdentifier
+        ServerPlayer serverPlayer,
+        JobDefinition job
     ) {
+        UUID playerIdentifier = serverPlayer.getUUID();
         Set<Identifier> employments = data.employments.getOrDefault(
             playerIdentifier,
             new HashSet<>()
         );
+        if( employments.contains(job.identifier) ) {
+           return false;
+        }
+
         //TODO: check join limits and react
-        employments.add(employmentIdentifier);
+
+        serverPlayer.sendSystemMessage(
+            Component.translatable(
+                "solace_jobs.join_job",
+                Component.translatable( job.getTranslationKey() )
+            )
+        );
+
+        employments.add(job.identifier);
         data.employments.put(playerIdentifier, employments);
         return true;
     }
 
     public static void leave(
         Employments data,
-        UUID playerIdentifier, Identifier employmentIdentifier
+        ServerPlayer serverPlayer,
+        JobDefinition job
     ) {
+        UUID playerIdentifier = serverPlayer.getUUID();
         Set<Identifier> employments = data.employments.getOrDefault(
             playerIdentifier,
             new HashSet<>()
         );
-        employments.remove(employmentIdentifier);
+        if( !employments.contains(job.identifier) ) {
+            return;
+        }
+
+        serverPlayer.sendSystemMessage(
+            Component.translatable(
+                "solace_jobs.leave_job",
+                Component.translatable( job.getTranslationKey() )
+            )
+        );
+
+        employments.remove(job.identifier);
         data.employments.put(playerIdentifier, employments);
     }
 
     public static boolean attemptToggle(
         Employments data,
-        UUID playerIdentifier, Identifier employmentIdentifier
+        ServerPlayer serverPlayer,
+        JobDefinition job
     ) {
+        UUID playerIdentifier = serverPlayer.getUUID();
         Set<Identifier> employments = data.employments.getOrDefault(
             playerIdentifier,
             new HashSet<>()
         );
-        if( employments.contains(employmentIdentifier) ) {
-            leave(data, playerIdentifier, employmentIdentifier);
+        if( employments.contains(job.identifier) ) {
+            leave(data, serverPlayer, job);
             return true;
         } else {
-            return join(data, playerIdentifier, employmentIdentifier);
+            return join(data, serverPlayer, job);
         }
     }
 

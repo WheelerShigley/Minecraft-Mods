@@ -74,8 +74,8 @@ public class JobsGUI extends ImmutableSimpleGUI {
         toggle[0] = (index, type, action, gui) -> {
             Employments.attemptToggle(
                 EmploymentsCodec.INSTANCE.getInstanceData(),
-                player.getUUID(),
-                job.identifier
+                player,
+                job
             );
 
             isPlayerInJob.set(

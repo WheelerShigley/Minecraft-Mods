@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 public class SolaceJobs implements ModInitializer {
     public static final String MOD_ID = "solace_jobs";
-    public static final String VERSION = "1.0.0+26.2";
+    public static final String VERSION = "0.6.0+26.2";
     public static final Logger LOGGER = LogManager.getLogger();
 
     /* # TODO
@@ -19,8 +19,6 @@ public class SolaceJobs implements ModInitializer {
      * Tool-Abilities (active abilities)
      * Jobs-Menu Items-Lore for {Level | experience} and {ability}
      *
-     * CLI commands join/leave
-     * toggle/join/leave permissions check(s)
      * CLI commands for configurations (optional?)
      *
      * ## Permissions

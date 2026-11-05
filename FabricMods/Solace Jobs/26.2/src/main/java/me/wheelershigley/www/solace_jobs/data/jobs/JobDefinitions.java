@@ -1,7 +1,6 @@
 package me.wheelershigley.www.solace_jobs.data.jobs;
 
 import me.wheelershigley.www.solace_jobs.data.Savable;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,8 +40,11 @@ public class JobDefinitions implements Savable< Set<JobDefinition> > {
         }
         return null;
     }
+    public Set<JobDefinition> getJobs() {
+        return this.jobs;
+    }
 
-    public Set<JobDefinition> getJobs(Identifier target) {
+    public Set<JobDefinition> getJobsFor(Identifier target) {
         Set<JobDefinition> jobs = new HashSet<>();
         for(JobDefinition job : this.jobs) {
             for(IdentifiableReward reward : job.rewarded_actions) {

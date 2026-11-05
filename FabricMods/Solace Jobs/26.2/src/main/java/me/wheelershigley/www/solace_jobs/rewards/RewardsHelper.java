@@ -14,7 +14,7 @@ public class RewardsHelper {
         Identifier targetIdentifier,
         ActionType actionType
     ) {
-        Set<JobDefinition> jobs = JobsCodec.DATA.getJobs(targetIdentifier);
+        Set<JobDefinition> jobs = JobsCodec.DATA.getJobsFor(targetIdentifier);
         for(JobDefinition job : jobs) {
             ActionReward reward = job.getFirstReward(targetIdentifier, actionType);
             if(reward == null) {
