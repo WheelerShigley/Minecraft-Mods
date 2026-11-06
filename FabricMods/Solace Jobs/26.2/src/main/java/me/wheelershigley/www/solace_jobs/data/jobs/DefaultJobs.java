@@ -29,14 +29,14 @@ public class DefaultJobs {
             getIdentifiedBreakReward(
                 "grasses",
                 Set.of(Blocks.GRASS_BLOCK, Blocks.MYCELIUM, Blocks.PODZOL),
-                0.02, 1.5, 0.0025
+                0.02, 0.16, 0.0016
             )
         );
         EXCAVATOR.addReward(
             getIdentifiedBreakReward(
                 "dirts",
                 Set.of(Blocks.DIRT, Blocks.DIRT_PATH, Blocks.COARSE_DIRT, Blocks.ROOTED_DIRT, Blocks.FARMLAND),
-                0.01, 1, 0.002
+                0.01, 0.25, 0.00264
             )
         );
         EXCAVATOR.addReward(
@@ -50,7 +50,7 @@ public class DefaultJobs {
             getIdentifiedBreakReward(
                 "sands",
                 Set.of(Blocks.SAND, Blocks.RED_SAND, Blocks.GRAVEL),
-                0.01, 5, 0.001
+                0.01, 5, 0.00245
             )
         );
         EXCAVATOR.addReward(
@@ -198,7 +198,7 @@ public class DefaultJobs {
                     Blocks.DARK_OAK_LOG, Blocks.ACACIA_LOG,
                     Blocks.MANGROVE_LOG, Blocks.CHERRY_LOG, Blocks.PALE_OAK_LOG
                 ),
-                0.002, 5, 0.02
+                0.004, 1.3, 0.013
             )
         );
     }
@@ -215,10 +215,16 @@ public class DefaultJobs {
                 "harvest",
                 Set.of(
                     Blocks.WHEAT, Blocks.CARROTS, Blocks.POTATOES, Blocks.BEETROOTS,
-                    Blocks.PUMPKIN, Blocks.MELON,
                     Blocks.SUGAR_CANE, Blocks.CACTUS
                 ),
-                0.2, 9, 0.03
+                0.2, 9, 0.01
+            )
+        );
+        FARMER.addReward(
+            getIdentifiedBreakReward(
+                "stemmed_harvest",
+                Set.of(Blocks.PUMPKIN, Blocks.MELON),
+                0.2, 4, 0.004
             )
         );
         FARMER.addReward(
@@ -228,12 +234,12 @@ public class DefaultJobs {
                     EntityTypes.MOOSHROOM
                 ),
                 ActionType.SHEAR,
-                2.2, 80, 0.18
+                2.2, 26.7, 2.6666
             )
         );
 
         Set<Object> farmlikeAnimals = Set.of(
-            EntityTypes.COW, EntityTypes.CHICKEN, EntityTypes.PIG, EntityTypes.MOOSHROOM,
+            EntityTypes.COW, EntityTypes.SHEEP, EntityTypes.CHICKEN, EntityTypes.PIG, EntityTypes.MOOSHROOM,
             EntityTypes.HORSE, EntityTypes.MULE, EntityTypes.DONKEY, EntityTypes.CAMEL,
             EntityTypes.LLAMA, EntityTypes.TRADER_LLAMA, EntityTypes.GOAT,
             EntityTypes.WOLF, EntityTypes.CAT, EntityTypes.OCELOT,
@@ -255,7 +261,7 @@ public class DefaultJobs {
                 "butchery",
                 farmlikeAnimals,
                 ActionType.KILL,
-                0, 2, 0.08
+                0, 8, 0.088
             )
         );
     }
@@ -275,7 +281,7 @@ public class DefaultJobs {
                     Items.NAUTILUS_SHELL
                 ),
                 ActionType.FISH,
-                0, 12, 0.05
+                0, 2.4, 0.023
             )
         );
         FISHER.addReward(
@@ -287,7 +293,7 @@ public class DefaultJobs {
                     EntityTypes.NAUTILUS, EntityTypes.ZOMBIE_NAUTILUS
                 ),
                 ActionType.KILL,
-                0, 6, 0.025
+                0, 6, 0.088
             )
         );
         FISHER.addReward(
@@ -298,7 +304,7 @@ public class DefaultJobs {
                     EntityTypes.DROWNED
                 ),
                 ActionType.KILL,
-                0, 1, 0.005
+                0, 0.2, 0.005
             )
         );
     }
@@ -327,7 +333,7 @@ public class DefaultJobs {
                     EntityTypes.ENDERMAN, EntityTypes.ENDERMITE, EntityTypes.SHULKER
                 ),
                 ActionType.KILL,
-                0, 2, 0.005
+                0, 7.4, 0.008
             )
         );
         HUNTER.addReward(

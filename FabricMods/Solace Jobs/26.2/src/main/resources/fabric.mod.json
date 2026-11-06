@@ -20,7 +20,7 @@
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
-    "grieflogger": ">=21.1.7"
+    "grieflogger": "*"
   },
   "suggests": {
     "luckperms": "*"
