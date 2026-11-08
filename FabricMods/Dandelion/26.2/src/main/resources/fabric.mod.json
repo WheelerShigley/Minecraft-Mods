@@ -3,7 +3,6 @@
   "id": "dandelion",
   "version": "${version}",
   "name": "Dandelion",
-  "description": "",
   "authors": ["Wheeler-Shigley"],
   "icon": "assets/dandelion/icon.png",
   "environment": "*",

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "dandelion:item/icon/white_portal"
+    "layer0": "dandelion:item/icon/portal/end_portal"
   }
 }

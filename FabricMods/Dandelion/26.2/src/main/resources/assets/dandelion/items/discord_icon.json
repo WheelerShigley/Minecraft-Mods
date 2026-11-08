@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "dandelion:item/icon/discord"
+    "model": "dandelion:item/icon/media/discord"
   }
 }

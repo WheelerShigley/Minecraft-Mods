@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "dandelion:item/icon/store"
+    "model": "dandelion:item/icon/media/store"
   }
 }
