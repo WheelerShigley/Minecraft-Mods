@@ -1,4 +1,4 @@
-plugins {
+    plugins {
     id 'net.fabricmc.fabric-loom' version '1.19.3'
     id 'maven-publish'
 }
@@ -43,6 +43,9 @@ dependencies {
 
     // Grief Logger
     implementation "maven.modrinth:${project.grieflogger}:${project.grieflogger_version}"
+
+    // Luck Perms
+    implementation "maven.modrinth:${project.luckperms}:${project.luckperms_version}"
 }
 
 processResources {
