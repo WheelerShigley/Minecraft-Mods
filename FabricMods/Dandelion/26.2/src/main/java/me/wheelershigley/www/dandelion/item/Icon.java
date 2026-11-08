@@ -4,7 +4,7 @@ import eu.pb4.polymer.core.api.item.SimplePolymerItem;
 import net.minecraft.world.item.Item;
 
 public class Icon extends SimplePolymerItem {
-    public static final Item.Properties PROPERTIES = new Item.Properties();
+    public static final Item.Properties PROPERTIES = new Item.Properties().stacksTo(1);
 
     public Icon(Properties settings) {
         super(settings);
