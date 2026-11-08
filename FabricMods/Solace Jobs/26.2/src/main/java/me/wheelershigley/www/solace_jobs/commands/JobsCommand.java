@@ -1,11 +1,9 @@
 package me.wheelershigley.www.solace_jobs.commands;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import me.wheelershigley.www.solace_jobs.data.employments.Employments;
 import me.wheelershigley.www.solace_jobs.data.employments.EmploymentsCodec;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
-import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinitions;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobsCodec;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobsSuggestionProvider;
 import me.wheelershigley.www.solace_jobs.menus.JobsGUI;
@@ -16,10 +14,8 @@ import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.Set;
-
 public class JobsCommand {
-    public static void registerCommand() {
+    public static void register() {
         CommandRegistrationCallback.EVENT.register(
             (dispatcher, registryAccess, environment) -> {
                 dispatcher

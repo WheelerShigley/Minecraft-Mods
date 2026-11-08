@@ -1,12 +1,8 @@
 package me.wheelershigley.www.solace_jobs.data.employments;
 
+import me.wheelershigley.www.solace_jobs.LuckPermsHelper;
 import me.wheelershigley.www.solace_jobs.data.Savable;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
-import net.luckperms.api.model.user.User;
-import net.luckperms.api.query.QueryMode;
-import net.luckperms.api.query.QueryOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,7 +34,7 @@ public class Employments implements Savable< HashMap< UUID, Set<Identifier> > > 
         }
 
         // Jobs Limit(s)
-        final int MAXIMUM = getMaximumJobPermission(serverPlayer);
+        final int MAXIMUM = LuckPermsHelper.getMaximumPermission(serverPlayer, "solace_jobs.jobs_limit.");
         if( MAXIMUM <= employments.size() ) {
             serverPlayer.sendSystemMessage(
                 Component.translatable("solace_jobs.join_job.limited")
@@ -56,42 +52,6 @@ public class Employments implements Savable< HashMap< UUID, Set<Identifier> > > 
         employments.add(job.identifier);
         data.employments.put(playerIdentifier, employments);
         return true;
-    }
-    private static int getMaximumJobPermission(ServerPlayer serverPlayer) {
-        LuckPerms luckPerms = LuckPermsProvider.get();
-        User user = luckPerms.getUserManager().getUser( serverPlayer.getUUID() );
-        if(user == null) {
-            return 1;
-        }
-
-        final String PREFIX = "solace_jobs.jobs_limit.";
-        return user.getCachedData()
-            .getPermissionData(
-                QueryOptions.builder(QueryMode.CONTEXTUAL).build()
-            )
-            .getPermissionMap()
-            .entrySet()
-            .stream()
-            .filter(Map.Entry::getValue)
-            .map(Map.Entry::getKey)
-            .filter(
-                permission -> permission.startsWith(PREFIX)
-            )
-            .map(
-                permission -> permission.substring( PREFIX.length() )
-            )
-            .mapToInt(
-                value -> {
-                    try {
-                        return Integer.parseInt(value);
-                    } catch(NumberFormatException exception) {
-                        return 0;
-                    }
-                }
-            )
-            .max()
-            .orElse(0)
-        ;
     }
 
     public static void leave(

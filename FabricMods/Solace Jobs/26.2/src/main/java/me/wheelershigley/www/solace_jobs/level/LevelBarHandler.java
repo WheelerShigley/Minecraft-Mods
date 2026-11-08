@@ -51,7 +51,7 @@ public class LevelBarHandler {
             total_experience = 0.0;
         }
 
-        int level = (int)experienceToLevel(total_experience);
+        int level = experienceToLevel(total_experience);
         double percentage = percentageToNextLevel(total_experience);
 
         Component name = Component.translatable(
