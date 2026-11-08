@@ -373,7 +373,24 @@ public class DefaultJobs {
         );
     }
 
-    //TODO: Archeologist
+    public static final JobDefinition ARCHEOLOGIST; static {
+        ARCHEOLOGIST = new JobDefinition(
+            solaceJobsIdentifier("archeologist"),
+            Items.BONE, Items.STICK,
+            new LinkedHashSet<>()
+        );
+
+        ARCHEOLOGIST.addReward(
+            getIdentifiedReward(
+                "brushables",
+                Set.of(
+                    Blocks.SUSPICIOUS_GRAVEL, Blocks.SUSPICIOUS_SAND
+                ),
+                ActionType.BRUSH,
+                1.2, 6, 0.07
+            )
+        );
+    }
 
     private static IdentifiableReward getIdentifiedBreakReward(
         String name,

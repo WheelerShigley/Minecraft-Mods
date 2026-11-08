@@ -1,12 +1,14 @@
 {
-  "solace_jobs.job.excavator":  "Excavator",
-  "solace_jobs.job.farmer":     "Farmer",
-  "solace_jobs.job.fisher":     "Fisher",
-  "solace_jobs.job.hunter":     "Hunter",
-  "solace_jobs.job.lumberjack": "Lumberjack",
-  "solace_jobs.job.miner":      "Miner",
+  "solace_jobs.job.hunter":       "Hunter",
+  "solace_jobs.job.miner":        "Miner",
+  "solace_jobs.job.lumberjack":   "Lumberjack",
+  "solace_jobs.job.excavator":    "Excavator",
+  "solace_jobs.job.farmer":       "Farmer",
+  "solace_jobs.job.fisher":       "Fisher",
+  "solace_jobs.job.archeologist": "Archeologist",
 
   "solace_jobs.currency.display": "§a%1$s§6✿",
+  "solace_jobs.menu.jobs": "Jobs",
 
   "solace_jobs.income_statement.header":    "§aIncomes §7during the last §f%1$s:%2$s§7.",
   "solace_jobs.income_statement.line":      "    %1$s = %2$s",

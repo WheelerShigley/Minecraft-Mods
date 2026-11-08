@@ -39,7 +39,7 @@ public class JobsCodec implements Codec< JobDefinitions, Set<JobDefinition> > {
         jobs.addType(DefaultJobs.EXCAVATOR);
         jobs.addType(DefaultJobs.FARMER);
         jobs.addType(DefaultJobs.FISHER);
-        //TODO: Archeologist
+        jobs.addType(DefaultJobs.ARCHEOLOGIST);
 
         return jobs;
     }
