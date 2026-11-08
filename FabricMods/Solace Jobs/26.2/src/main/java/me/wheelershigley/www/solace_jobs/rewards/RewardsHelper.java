@@ -21,11 +21,6 @@ public class RewardsHelper {
                 continue;
             }
             reward.give(serverPlayer, job, serverPlayer.getRandom());
-            LevelBarHandler.notifyJobLevel(
-                serverPlayer,
-                job,
-                serverPlayer.level().getServer()
-            );
             return true;
         }
         return false;

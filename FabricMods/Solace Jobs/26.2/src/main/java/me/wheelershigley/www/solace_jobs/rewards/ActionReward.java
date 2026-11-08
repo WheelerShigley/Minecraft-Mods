@@ -11,16 +11,14 @@ import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
 import me.wheelershigley.www.solace_jobs.data.players.JobsPlayerData;
 import me.wheelershigley.www.solace_jobs.data.players.PlayersJobsDataCodec;
 import me.wheelershigley.www.solace_jobs.data.statements.Statements;
+import me.wheelershigley.www.solace_jobs.level.LevelBarHandler;
 import me.wheelershigley.www.solace_jobs.level.LevelHelper;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 
 public record ActionReward(
     double experience,
@@ -124,6 +122,11 @@ public record ActionReward(
         ServerPlayer player,
         JobDefinition job
     ) {
+        Set<Identifier> activeJobIdentifiersForPlayer = EmploymentsCodec.INSTANCE.getInstanceData().employments.getOrDefault( player.getUUID(), new HashSet<>() );
+        if( !activeJobIdentifiersForPlayer.contains(job.identifier) ) {
+            return;
+        }
+
         JobsPlayerData playerData = PlayersJobsDataCodec.DATA.get( player.getUUID() );
         if(playerData == null) {
             playerData = new JobsPlayerData( new HashMap<>() );
@@ -135,12 +138,17 @@ public record ActionReward(
 
         experience += this.job_experience * ConfigurationsCodec.INSTANCE.getInstanceData().getData().global_job_experience_multiplier();
         int current_level = (int)LevelHelper.experienceToLevel(experience);
+        playerData.experiences().put(job.identifier, experience);
 
+        // Notify Player of Changes
+        LevelBarHandler.notifyJobLevel(
+            player,
+            job,
+            player.level().getServer()
+        );
         if(previous_level != current_level) {
             LevelHelper.notifyPlayerOfLevel(player, job, current_level);
         }
-
-        playerData.experiences().put(job.identifier, experience);
     }
 
     private void giveCurrency(ServerPlayer player, JobDefinition job) {
