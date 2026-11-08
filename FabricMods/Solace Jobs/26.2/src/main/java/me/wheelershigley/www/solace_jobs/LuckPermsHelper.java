@@ -9,6 +9,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Map;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
 
 public class LuckPermsHelper {
     public static boolean hasPermission(CommandSourceStack source, final String PERMISSION) {
@@ -43,11 +45,11 @@ public class LuckPermsHelper {
     }
 
 
-    public static int getMaximumPermission(ServerPlayer serverPlayer, final String PREFIX) {
+    public static OptionalInt getMaximumIntegerPermission(ServerPlayer serverPlayer, final String PREFIX) {
         LuckPerms luckPerms = LuckPermsProvider.get();
         User user = luckPerms.getUserManager().getUser( serverPlayer.getUUID() );
         if(user == null) {
-            return 1;
+            return OptionalInt.of(0);
         }
 
         return user.getCachedData()
@@ -75,7 +77,40 @@ public class LuckPermsHelper {
                 }
             )
             .max()
-            .orElse(0)
+        ;
+    }
+    public static OptionalDouble getMaximumDoublePermission(ServerPlayer serverPlayer, final String PREFIX) {
+        LuckPerms luckPerms = LuckPermsProvider.get();
+        User user = luckPerms.getUserManager().getUser( serverPlayer.getUUID() );
+        if(user == null) {
+            return OptionalDouble.of(1.0);
+        }
+
+        return user.getCachedData()
+            .getPermissionData(
+                QueryOptions.builder(QueryMode.CONTEXTUAL).build()
+            )
+            .getPermissionMap()
+            .entrySet()
+            .stream()
+            .filter(Map.Entry::getValue)
+            .map(Map.Entry::getKey)
+            .filter(
+                permission -> permission.startsWith(PREFIX)
+            )
+            .map(
+                permission -> permission.substring( PREFIX.length() )
+            )
+            .mapToDouble(
+                value -> {
+                    try {
+                        return Double.parseDouble(value);
+                    } catch(NumberFormatException exception) {
+                        return 0;
+                    }
+                }
+            )
+            .max()
         ;
     }
 }

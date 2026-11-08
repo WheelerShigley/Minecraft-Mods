@@ -15,13 +15,9 @@ public class SolaceJobs implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger();
 
     /* # TODO
-     * ## Solace Jobs
      * level passive-abilities
      * Tool-Abilities (active abilities)
      * Jobs-Menu Items-Lore for {Level | experience} and {ability}
-     *
-     * ## Permissions
-     * permissions-based multiplier(s)
      */
 
     @Override

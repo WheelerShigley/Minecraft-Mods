@@ -4,6 +4,7 @@ import eu.pb4.common.economy.api.CommonEconomy;
 import eu.pb4.common.economy.api.EconomyAccount;
 import eu.pb4.common.economy.api.EconomyCurrency;
 import eu.pb4.common.economy.api.EconomyProvider;
+import me.wheelershigley.www.solace_jobs.LuckPermsHelper;
 import me.wheelershigley.www.solace_jobs.SolaceJobs;
 import me.wheelershigley.www.solace_jobs.data.config.ConfigurationsCodec;
 import me.wheelershigley.www.solace_jobs.data.employments.EmploymentsCodec;
@@ -102,8 +103,11 @@ public record ActionReward(
     }
 
     private void giveExperience(ServerPlayer player, RandomSource random) {
+        final double maximumPermission = LuckPermsHelper.getMaximumDoublePermission(player, "solace_jobs.experience_multiplier.").orElse(1.0);
         double amount = (
-            this.experience * ConfigurationsCodec.INSTANCE.getInstanceData().getData().global_experience_multiplier()
+            this.experience
+            * ConfigurationsCodec.INSTANCE.getInstanceData().getData().global_experience_multiplier()
+            * maximumPermission
         );
 
         //any remainder will sometimes be added: to, on average, approximate that amount
@@ -134,10 +138,15 @@ public record ActionReward(
         }
 
         double experience = playerData.experiences().getOrDefault(job.identifier, 0.0);
-        int previous_level = (int)LevelHelper.experienceToLevel(experience);
+        int previous_level = LevelHelper.experienceToLevel(experience);
 
-        experience += this.job_experience * ConfigurationsCodec.INSTANCE.getInstanceData().getData().global_job_experience_multiplier();
-        int current_level = (int)LevelHelper.experienceToLevel(experience);
+        final double maximumPermission = LuckPermsHelper.getMaximumDoublePermission(player, "solace_jobs.job_experience_multiplier.").orElse(1.0);
+        experience +=
+            this.job_experience
+            * ConfigurationsCodec.INSTANCE.getInstanceData().getData().global_job_experience_multiplier()
+            * maximumPermission
+        ;
+        int current_level = LevelHelper.experienceToLevel(experience);
         playerData.experiences().put(job.identifier, experience);
 
         // Notify Player of Changes
@@ -156,7 +165,12 @@ public record ActionReward(
             return;
         }
         double payment = unpaidAmounts.getOrDefault(player.getUUID(), 0.0);
-        payment += this.currency * ConfigurationsCodec.INSTANCE.getInstanceData().getData().global_earnings_multiplier();
+
+        final double maximumPermission = LuckPermsHelper.getMaximumDoublePermission(player, "solace_jobs.currency_multiplier.").orElse(1.0);
+        payment += this.currency
+            * ConfigurationsCodec.INSTANCE.getInstanceData().getData().global_earnings_multiplier()
+            * maximumPermission
+        ;
 
         EconomyAccount account = economyProvider.getAccount(
             player,

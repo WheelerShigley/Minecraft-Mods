@@ -34,7 +34,8 @@ public class Employments implements Savable< HashMap< UUID, Set<Identifier> > > 
         }
 
         // Jobs Limit(s)
-        final int MAXIMUM = LuckPermsHelper.getMaximumPermission(serverPlayer, "solace_jobs.jobs_limit.");
+        final OptionalInt maximumPermission = LuckPermsHelper.getMaximumIntegerPermission(serverPlayer, "solace_jobs.jobs_limit.");
+        final int MAXIMUM = maximumPermission.orElse(0);
         if( MAXIMUM <= employments.size() ) {
             serverPlayer.sendSystemMessage(
                 Component.translatable("solace_jobs.join_job.limited")
