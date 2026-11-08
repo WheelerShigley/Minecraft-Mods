@@ -25,6 +25,21 @@ public class Creative {
                     creativeTab.accept(ModItems.WIKI_ICON);
                     creativeTab.accept(ModItems.NETHERITE_TEMPLATE_ICON);
 
+                    creativeTab.accept(ModItems.RED_SWORD_ICON);
+                    creativeTab.accept(ModItems.GREEN_SWORD_ICON);
+                    creativeTab.accept(ModItems.RED_PICKAXE_ICON);
+                    creativeTab.accept(ModItems.GREEN_PICKAXE_ICON);
+                    creativeTab.accept(ModItems.RED_SHOVEL_ICON);
+                    creativeTab.accept(ModItems.GREEN_SHOVEL_ICON);
+                    creativeTab.accept(ModItems.RED_AXE_ICON);
+                    creativeTab.accept(ModItems.GREEN_AXE_ICON);
+                    creativeTab.accept(ModItems.RED_HOE_ICON);
+                    creativeTab.accept(ModItems.GREEN_HOE_ICON);
+                    creativeTab.accept(ModItems.RED_FISHING_ROD_ICON);
+                    creativeTab.accept(ModItems.GREEN_FISHING_ROD_ICON);
+                    creativeTab.accept(ModItems.RED_BRUSH_ICON);
+                    creativeTab.accept(ModItems.GREEN_BRUSH_ICON);
+
                     creativeTab.accept(ModItems.WHITE_PORTAL_ICON);
                     creativeTab.accept(ModItems.CYAN_PORTAL_ICON);
                     creativeTab.accept(ModItems.RED_PORTAL_ICON);
