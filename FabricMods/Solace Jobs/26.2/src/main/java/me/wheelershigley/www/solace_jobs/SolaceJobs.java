@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 
 public class SolaceJobs implements ModInitializer {
     public static final String MOD_ID = "solace_jobs";
-    public static final String VERSION = "0.6.0+26.2";
     public static final Logger LOGGER = LogManager.getLogger();
 
     /* # TODO
@@ -22,8 +21,6 @@ public class SolaceJobs implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LOGGER.info("SolaceJobs-" + VERSION + " has started!");
-
         Events.register();
         SolaceJobsCommand.register();
         JobsCommand.register();

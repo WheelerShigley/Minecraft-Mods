@@ -13,58 +13,71 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static me.wheelershigley.www.solace_jobs.SolaceJobs.solaceJobsIdentifier;
 
 public class DefaultJobs {
-    public static final JobDefinition EXCAVATOR; static {
-        EXCAVATOR = new JobDefinition(
-            solaceJobsIdentifier("excavator"),
-            Items.DIAMOND_SHOVEL, Items.WOODEN_SHOVEL,
-            new HashSet<>()
+    public static final JobDefinition HUNTER; static {
+        HUNTER = new JobDefinition(
+            solaceJobsIdentifier("hunter"),
+            Items.DIAMOND_SWORD, Items.WOODEN_SWORD,
+            new LinkedHashSet<>()
         );
 
-        EXCAVATOR.addReward(
-            getIdentifiedBreakReward(
-                "grasses",
-                Set.of(Blocks.GRASS_BLOCK, Blocks.MYCELIUM, Blocks.PODZOL),
-                0.02, 0.16, 0.0016
+        HUNTER.addReward(
+            getIdentifiedReward(
+                "common",
+                Set.of(
+                    EntityTypes.ZOMBIE, EntityTypes.ZOMBIE_VILLAGER, EntityTypes.ZOMBIE_HORSE,
+                    EntityTypes.HUSK, EntityTypes.CAMEL_HUSK, EntityTypes.PARCHED,
+                    EntityTypes.SKELETON, EntityTypes.BOGGED, EntityTypes.STRAY, EntityTypes.SKELETON_HORSE,
+                    EntityTypes.SPIDER, EntityTypes.CAVE_SPIDER, EntityTypes.SILVERFISH,
+                    EntityTypes.SLIME, EntityTypes.SULFUR_CUBE, EntityTypes.MAGMA_CUBE,
+                    EntityTypes.CREEPER, EntityTypes.PHANTOM,
+                    EntityTypes.BLAZE, EntityTypes.BREEZE,
+                    EntityTypes.GHAST, EntityTypes.HOGLIN, EntityTypes.ZOGLIN,
+                    EntityTypes.PIGLIN, EntityTypes.PIGLIN_BRUTE, EntityTypes.ZOMBIFIED_PIGLIN,
+                    EntityTypes.WITHER_SKELETON,
+                    EntityTypes.ENDERMAN, EntityTypes.ENDERMITE, EntityTypes.SHULKER
+                ),
+                ActionType.KILL,
+                0, 7.4, 0.008
             )
         );
-        EXCAVATOR.addReward(
-            getIdentifiedBreakReward(
-                "dirts",
-                Set.of(Blocks.DIRT, Blocks.DIRT_PATH, Blocks.COARSE_DIRT, Blocks.ROOTED_DIRT, Blocks.FARMLAND),
-                0.01, 0.25, 0.00264
+        HUNTER.addReward(
+            getIdentifiedReward(
+                "golem",
+                Set.of(
+                    EntityTypes.COPPER_GOLEM, EntityTypes.IRON_GOLEM, EntityTypes.SNOW_GOLEM,
+                    EntityTypes.VILLAGER, EntityTypes.WANDERING_TRADER,
+                    EntityTypes.ALLAY, EntityTypes.HAPPY_GHAST
+                ),
+                ActionType.KILL,
+                0, 0.5, 0
             )
         );
-        EXCAVATOR.addReward(
-            getIdentifiedBreakReward(
-                "clays",
-                Set.of(Blocks.CLAY, Blocks.MUD, Blocks.MUDDY_MANGROVE_ROOTS),
-                0.04, 2, 0.005
+        HUNTER.addReward(
+            getIdentifiedReward(
+                "raid",
+                Set.of(
+                    EntityTypes.WITCH,
+                    EntityTypes.EVOKER, EntityTypes.PILLAGER,
+                    EntityTypes.RAVAGER, EntityTypes.VEX, EntityTypes.VINDICATOR
+                ),
+                ActionType.KILL,
+                0, 3, 0.05
             )
         );
-        EXCAVATOR.addReward(
-            getIdentifiedBreakReward(
-                "sands",
-                Set.of(Blocks.SAND, Blocks.RED_SAND, Blocks.GRAVEL),
-                0.01, 5, 0.00245
-            )
-        );
-        EXCAVATOR.addReward(
-            getIdentifiedBreakReward(
-                "snow",
-                Set.of(Blocks.SNOW, Blocks.SNOW_BLOCK),
-                0.002, 0.2, 0.0001
-            )
-        );
-        EXCAVATOR.addReward(
-            getIdentifiedBreakReward(
-                "souls",
-                Set.of(Blocks.SOUL_SAND, Blocks.SOUL_SOIL),
-                0.1, 2.5, 0.0015
+        HUNTER.addReward(
+            getIdentifiedReward(
+                "boss",
+                Set.of(
+                    EntityTypes.WARDEN, EntityTypes.WITHER, EntityTypes.ENDER_DRAGON
+                ),
+                ActionType.KILL,
+                7, 140, 0.2
             )
         );
     }
@@ -73,7 +86,7 @@ public class DefaultJobs {
         MINER = new JobDefinition(
             solaceJobsIdentifier("miner"),
             Items.DIAMOND_PICKAXE, Items.WOODEN_PICKAXE,
-            new HashSet<>()
+            new LinkedHashSet<>()
         );
 
         MINER.addReward(
@@ -187,7 +200,7 @@ public class DefaultJobs {
         LUMBERJACK = new JobDefinition(
             SolaceJobs.solaceJobsIdentifier("lumberjack"),
             Items.DIAMOND_AXE, Items.WOODEN_AXE,
-            new HashSet<>()
+            new LinkedHashSet<>()
         );
 
         LUMBERJACK.addReward(
@@ -203,11 +216,62 @@ public class DefaultJobs {
         );
     }
 
+    public static final JobDefinition EXCAVATOR; static {
+        EXCAVATOR = new JobDefinition(
+            solaceJobsIdentifier("excavator"),
+            Items.DIAMOND_SHOVEL, Items.WOODEN_SHOVEL,
+            new LinkedHashSet<>()
+        );
+
+        EXCAVATOR.addReward(
+            getIdentifiedBreakReward(
+                "grasses",
+                Set.of(Blocks.GRASS_BLOCK, Blocks.MYCELIUM, Blocks.PODZOL),
+                0.02, 0.16, 0.0016
+            )
+        );
+        EXCAVATOR.addReward(
+            getIdentifiedBreakReward(
+                "dirts",
+                Set.of(Blocks.DIRT, Blocks.DIRT_PATH, Blocks.COARSE_DIRT, Blocks.ROOTED_DIRT, Blocks.FARMLAND),
+                0.01, 0.25, 0.00264
+            )
+        );
+        EXCAVATOR.addReward(
+            getIdentifiedBreakReward(
+                "clays",
+                Set.of(Blocks.CLAY, Blocks.MUD, Blocks.MUDDY_MANGROVE_ROOTS),
+                0.04, 2, 0.005
+            )
+        );
+        EXCAVATOR.addReward(
+            getIdentifiedBreakReward(
+                "sands",
+                Set.of(Blocks.SAND, Blocks.RED_SAND, Blocks.GRAVEL),
+                0.01, 5, 0.00245
+            )
+        );
+        EXCAVATOR.addReward(
+            getIdentifiedBreakReward(
+                "snow",
+                Set.of(Blocks.SNOW, Blocks.SNOW_BLOCK),
+                0.002, 0.2, 0.0001
+            )
+        );
+        EXCAVATOR.addReward(
+            getIdentifiedBreakReward(
+                "souls",
+                Set.of(Blocks.SOUL_SAND, Blocks.SOUL_SOIL),
+                0.1, 2.5, 0.0015
+            )
+        );
+    }
+
     public static final JobDefinition FARMER; static {
         FARMER = new JobDefinition(
             SolaceJobs.solaceJobsIdentifier("farmer"),
             Items.DIAMOND_HOE, Items.WOODEN_HOE,
-            new HashSet<>()
+            new LinkedHashSet<>()
         );
 
         FARMER.addReward(
@@ -270,7 +334,7 @@ public class DefaultJobs {
         FISHER = new JobDefinition(
             solaceJobsIdentifier("fisher"),
             Items.BREEZE_ROD, Items.STICK,
-            new HashSet<>()
+            new LinkedHashSet<>()
         );
 
         FISHER.addReward(
@@ -309,68 +373,7 @@ public class DefaultJobs {
         );
     }
 
-    public static final JobDefinition HUNTER; static {
-        HUNTER = new JobDefinition(
-            solaceJobsIdentifier("hunter"),
-            Items.DIAMOND_SWORD, Items.WOODEN_SWORD,
-            new HashSet<>()
-        );
-
-        HUNTER.addReward(
-            getIdentifiedReward(
-                "common",
-                Set.of(
-                    EntityTypes.ZOMBIE, EntityTypes.ZOMBIE_VILLAGER, EntityTypes.ZOMBIE_HORSE,
-                    EntityTypes.HUSK, EntityTypes.CAMEL_HUSK, EntityTypes.PARCHED,
-                    EntityTypes.SKELETON, EntityTypes.BOGGED, EntityTypes.STRAY, EntityTypes.SKELETON_HORSE,
-                    EntityTypes.SPIDER, EntityTypes.CAVE_SPIDER, EntityTypes.SILVERFISH,
-                    EntityTypes.SLIME, EntityTypes.SULFUR_CUBE, EntityTypes.MAGMA_CUBE,
-                    EntityTypes.CREEPER, EntityTypes.PHANTOM,
-                    EntityTypes.BLAZE, EntityTypes.BREEZE,
-                    EntityTypes.GHAST, EntityTypes.HOGLIN, EntityTypes.ZOGLIN,
-                    EntityTypes.PIGLIN, EntityTypes.PIGLIN_BRUTE, EntityTypes.ZOMBIFIED_PIGLIN,
-                    EntityTypes.WITHER_SKELETON,
-                    EntityTypes.ENDERMAN, EntityTypes.ENDERMITE, EntityTypes.SHULKER
-                ),
-                ActionType.KILL,
-                0, 7.4, 0.008
-            )
-        );
-        HUNTER.addReward(
-            getIdentifiedReward(
-                "golem",
-                Set.of(
-                    EntityTypes.COPPER_GOLEM, EntityTypes.IRON_GOLEM, EntityTypes.SNOW_GOLEM,
-                    EntityTypes.VILLAGER, EntityTypes.WANDERING_TRADER,
-                    EntityTypes.ALLAY, EntityTypes.HAPPY_GHAST
-                ),
-                ActionType.KILL,
-                0, 0.5, 0
-            )
-        );
-        HUNTER.addReward(
-            getIdentifiedReward(
-                "raid",
-                Set.of(
-                    EntityTypes.WITCH,
-                    EntityTypes.EVOKER, EntityTypes.PILLAGER,
-                    EntityTypes.RAVAGER, EntityTypes.VEX, EntityTypes.VINDICATOR
-                ),
-                ActionType.KILL,
-                0, 3, 0.05
-            )
-        );
-        HUNTER.addReward(
-            getIdentifiedReward(
-                "boss",
-                Set.of(
-                    EntityTypes.WARDEN, EntityTypes.WITHER, EntityTypes.ENDER_DRAGON
-                ),
-                ActionType.KILL,
-                7, 140, 0.2
-            )
-        );
-    }
+    //TODO: Archeologist
 
     private static IdentifiableReward getIdentifiedBreakReward(
         String name,

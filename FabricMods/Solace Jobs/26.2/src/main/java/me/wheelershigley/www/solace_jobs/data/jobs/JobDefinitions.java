@@ -6,10 +6,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class JobDefinitions implements Savable< Set<JobDefinition> > {
-    private Set<JobDefinition> jobs = new HashSet<>();
+    private Set<JobDefinition> jobs = new LinkedHashSet<>();
 
     public JobDefinitions() {}
     public JobDefinitions(Set<JobDefinition> jobs) {
@@ -45,7 +46,7 @@ public class JobDefinitions implements Savable< Set<JobDefinition> > {
     }
 
     public Set<JobDefinition> getJobsFor(Identifier target) {
-        Set<JobDefinition> jobs = new HashSet<>();
+        Set<JobDefinition> jobs = new LinkedHashSet<>();
         for(JobDefinition job : this.jobs) {
             for(IdentifiableReward reward : job.rewarded_actions) {
                 if( reward.action().contains(target, reward.action().actionType) ) {
