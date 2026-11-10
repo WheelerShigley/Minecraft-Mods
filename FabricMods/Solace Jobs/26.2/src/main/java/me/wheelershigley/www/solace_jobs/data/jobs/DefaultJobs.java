@@ -1,11 +1,11 @@
 package me.wheelershigley.www.solace_jobs.data.jobs;
 
-import me.wheelershigley.www.dandelion.registerations.ModItems;
 import me.wheelershigley.www.solace_jobs.IdentifierHelper;
+import me.wheelershigley.www.solace_jobs.compatibility.DandelionCompatibility;
+import me.wheelershigley.www.solace_jobs.compatibility.DandelionIcon;
 import me.wheelershigley.www.solace_jobs.compatibility.LootrCompatibility;
 import me.wheelershigley.www.solace_jobs.rewards.ActionReward;
 import me.wheelershigley.www.solace_jobs.rewards.ActionType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
@@ -22,13 +22,15 @@ import java.util.Set;
 import static me.wheelershigley.www.solace_jobs.IdentifierHelper.*;
 
 public class DefaultJobs {
+    private static final DandelionCompatibility DANDELION_COMPATIBILITY = new DandelionCompatibility();
+    private static final LootrCompatibility LOOTR_COMPATIBILITY = new LootrCompatibility();
+
     //TODO: fix items to be identifiers
     public static final JobDefinition HUNTER; static {
-        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         HUNTER = new JobDefinition(
             solaceJobsIdentifier("hunter"),
-            identifierOf(dandelionIsLoaded ? ModItems.GREEN_SWORD_ICON : Items.DIAMOND_SWORD),
-            identifierOf(dandelionIsLoaded ? ModItems.RED_SWORD_ICON   : Items.WOODEN_SWORD ),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.SWORD, true, Items.DIAMOND_SWORD) ),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.SWORD, false, Items.WOODEN_SWORD) ),
             new LinkedHashSet<>()
         );
 
@@ -89,11 +91,10 @@ public class DefaultJobs {
     }
 
     public static final JobDefinition MINER; static {
-        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         MINER = new JobDefinition(
             solaceJobsIdentifier("miner"),
-            identifierOf(dandelionIsLoaded ? ModItems.GREEN_PICKAXE_ICON : Items.DIAMOND_PICKAXE),
-            identifierOf(dandelionIsLoaded ? ModItems.RED_PICKAXE_ICON   : Items.WOODEN_PICKAXE ),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.PICKAXE, true, Items.DIAMOND_PICKAXE) ),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.PICKAXE, false, Items.WOODEN_PICKAXE) ),
             new LinkedHashSet<>()
         );
 
@@ -205,11 +206,10 @@ public class DefaultJobs {
     }
 
     public static final JobDefinition LUMBERJACK; static {
-        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         LUMBERJACK = new JobDefinition(
             solaceJobsIdentifier("lumberjack"),
-            identifierOf(dandelionIsLoaded ? ModItems.GREEN_AXE_ICON : Items.DIAMOND_AXE),
-            identifierOf(dandelionIsLoaded ? ModItems.RED_AXE_ICON   : Items.WOODEN_AXE ),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.AXE, true, Items.DIAMOND_AXE) ),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.AXE, false, Items.WOODEN_AXE) ),
             new LinkedHashSet<>()
         );
 
@@ -227,11 +227,10 @@ public class DefaultJobs {
     }
 
     public static final JobDefinition EXCAVATOR; static {
-        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         EXCAVATOR = new JobDefinition(
             solaceJobsIdentifier("excavator"),
-            identifierOf(dandelionIsLoaded ? ModItems.GREEN_SHOVEL_ICON : Items.DIAMOND_SHOVEL),
-            identifierOf(dandelionIsLoaded ? ModItems.RED_SHOVEL_ICON   : Items.WOODEN_SHOVEL ),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.SHOVEL, true, Items.DIAMOND_SHOVEL) ),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.SHOVEL, false, Items.WOODEN_SHOVEL) ),
             new LinkedHashSet<>()
         );
 
@@ -280,11 +279,10 @@ public class DefaultJobs {
     }
 
     public static final JobDefinition FARMER; static {
-        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         FARMER = new JobDefinition(
             solaceJobsIdentifier("farmer"),
-            identifierOf(dandelionIsLoaded ? ModItems.GREEN_HOE_ICON : Items.DIAMOND_HOE),
-            identifierOf(dandelionIsLoaded ? ModItems.RED_HOE_ICON   : Items.WOODEN_HOE ),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.HOE, true, Items.DIAMOND_HOE) ),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.HOE, false, Items.WOODEN_HOE) ),
             new LinkedHashSet<>()
         );
 
@@ -345,11 +343,10 @@ public class DefaultJobs {
     }
 
     public static final JobDefinition FISHER; static {
-        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         FISHER = new JobDefinition(
             solaceJobsIdentifier("fisher"),
-            identifierOf(dandelionIsLoaded ? ModItems.GREEN_FISHING_ROD_ICON : Items.BREEZE_ROD),
-            identifierOf(dandelionIsLoaded ? ModItems.RED_FISHING_ROD_ICON   : Items.STICK     ),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.FISHING_ROD, true, Items.BREEZE_ROD) ),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.FISHING_ROD, false, Items.STICK    ) ),
             new LinkedHashSet<>()
         );
 
@@ -390,11 +387,10 @@ public class DefaultJobs {
     }
 
     public static final JobDefinition ARCHEOLOGIST; static {
-        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         ARCHEOLOGIST = new JobDefinition(
             solaceJobsIdentifier("archeologist"),
-            identifierOf(dandelionIsLoaded ? ModItems.GREEN_BRUSH_ICON : Items.BONE ),
-            identifierOf(dandelionIsLoaded ? ModItems.RED_BRUSH_ICON   : Items.STICK),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.BRUSH, true, Items.BONE  ) ),
+            identifierOf( DANDELION_COMPATIBILITY.getOrDefault(DandelionIcon.BRUSH, false, Items.STICK) ),
             new LinkedHashSet<>()
         );
 
@@ -408,7 +404,7 @@ public class DefaultJobs {
                 1.2, 6, 0.07
             )
         );
-        LootrCompatibility.initialize();
+        LOOTR_COMPATIBILITY.addArcheologyReward();
     }
 
     private static IdentifiableReward getIdentifiedBreakReward(
