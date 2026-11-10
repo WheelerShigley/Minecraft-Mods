@@ -17,7 +17,6 @@ public class SolaceJobs implements ModInitializer {
      * Tool-Abilities (active abilities)
      * Jobs-Menu Items-Lore for {Level | experience} and {ability}
      *
-     * Archeologist: Lootr (optional)
      * Farmer:   Mooblooms (optional)
      */
 

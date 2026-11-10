@@ -16,16 +16,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Set;
-
 @Mixin(BrushableBlockEntity.class)
 public class BlockBrushMixin {
-
     @Inject(
         method = "brushingCompleted",
-        at = @At("TAIL")
+        at = @At("HEAD")
     )
-    private void brushingCompleted(
+    public void brush(
         ServerLevel level,
         LivingEntity user,
         ItemStack brush,

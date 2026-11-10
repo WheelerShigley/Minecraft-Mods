@@ -2,7 +2,7 @@ package me.wheelershigley.www.solace_jobs.data.jobs;
 
 import me.wheelershigley.www.dandelion.registerations.ModItems;
 import me.wheelershigley.www.solace_jobs.IdentifierHelper;
-import me.wheelershigley.www.solace_jobs.SolaceJobs;
+import me.wheelershigley.www.solace_jobs.compatibility.LootrCompatibility;
 import me.wheelershigley.www.solace_jobs.rewards.ActionReward;
 import me.wheelershigley.www.solace_jobs.rewards.ActionType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -408,6 +408,7 @@ public class DefaultJobs {
                 1.2, 6, 0.07
             )
         );
+        LootrCompatibility.initialize();
     }
 
     private static IdentifiableReward getIdentifiedBreakReward(
@@ -423,7 +424,7 @@ public class DefaultJobs {
             new ActionReward(experience, job_experience, currency)
         );
     }
-    private static IdentifiableReward getIdentifiedReward(
+    public static IdentifiableReward getIdentifiedReward(
             String name,
             Set<Object> set,
             ActionType actionType,

@@ -9,6 +9,7 @@
     "BreedMixin",
     "FishingMixin",
     "KillMixin",
+    "LootrBrushMixin",
     "ShearMixin"
   ],
   "injectors": {

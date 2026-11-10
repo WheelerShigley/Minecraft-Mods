@@ -20,10 +20,11 @@
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
-    "grieflogger": "*"
+    "grieflogger": "*",
+    "luckperms": "*"
   },
   "suggests": {
-    "luckperms": "*",
-    "dandelion": ">=1.3.0"
+    "dandelion": ">=1.3.0",
+    "lootr": "*"
   }
 }
