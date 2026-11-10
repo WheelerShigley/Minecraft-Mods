@@ -25,6 +25,7 @@
   },
   "suggests": {
     "dandelion": ">=1.3.0",
-    "lootr": "*"
+    "lootr": "*",
+    "friendsandfoes": ">=4.0.26"
   }
 }

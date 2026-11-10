@@ -3,6 +3,7 @@ package me.wheelershigley.www.solace_jobs.data.jobs;
 import me.wheelershigley.www.solace_jobs.IdentifierHelper;
 import me.wheelershigley.www.solace_jobs.compatibility.DandelionCompatibility;
 import me.wheelershigley.www.solace_jobs.compatibility.DandelionIcon;
+import me.wheelershigley.www.solace_jobs.compatibility.FriendsAndFoesCompatibility;
 import me.wheelershigley.www.solace_jobs.compatibility.LootrCompatibility;
 import me.wheelershigley.www.solace_jobs.rewards.ActionReward;
 import me.wheelershigley.www.solace_jobs.rewards.ActionType;
@@ -22,8 +23,9 @@ import java.util.Set;
 import static me.wheelershigley.www.solace_jobs.IdentifierHelper.*;
 
 public class DefaultJobs {
-    private static final DandelionCompatibility DANDELION_COMPATIBILITY = new DandelionCompatibility();
-    private static final LootrCompatibility LOOTR_COMPATIBILITY = new LootrCompatibility();
+    private static final DandelionCompatibility      DANDELION_COMPATIBILITY        = new DandelionCompatibility()     ;
+    private static final LootrCompatibility          LOOTR_COMPATIBILITY            = new LootrCompatibility()         ;
+    private static final FriendsAndFoesCompatibility FRIENDS_AND_FOES_COMPATIBILITY = new FriendsAndFoesCompatibility();
 
     //TODO: fix items to be identifiers
     public static final JobDefinition HUNTER; static {
@@ -313,6 +315,7 @@ public class DefaultJobs {
                 2.2, 26.7, 2.6666
             )
         );
+        FRIENDS_AND_FOES_COMPATIBILITY.addFarmerReward();
 
         Set<Object> farmlikeAnimals = Set.of(
             EntityTypes.COW, EntityTypes.SHEEP, EntityTypes.CHICKEN, EntityTypes.PIG, EntityTypes.MOOSHROOM,

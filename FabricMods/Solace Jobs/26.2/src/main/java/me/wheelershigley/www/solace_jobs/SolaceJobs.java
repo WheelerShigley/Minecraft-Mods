@@ -16,8 +16,6 @@ public class SolaceJobs implements ModInitializer {
      * level passive-abilities
      * Tool-Abilities (active abilities)
      * Jobs-Menu Items-Lore for {Level | experience} and {ability}
-     *
-     * Farmer:   Mooblooms (optional)
      */
 
     @Override

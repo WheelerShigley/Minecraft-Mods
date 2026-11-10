@@ -61,7 +61,9 @@ dependencies {
     // Lootr
     compileOnly "maven.modrinth:${project.lootr}:${project.lootr_version}"
 
-    // Friends-and-Foes: Mooblooms
+    // Friends-and-Foes
+    compileOnly "maven.modrinth:${project.friends_and_foes}:${project.friends_and_foes_version}"
+    compileOnly "maven.modrinth:${project.resourceful_lib}:${project.resourceful_lib_version}"
 }
 
 processResources {
