@@ -32,8 +32,8 @@ public class JobsGUI extends ImmutableSimpleGUI {
         //TODO: 9xX
         return MenuType.GENERIC_9x1;
     }
-    @Override
-    public void initializeMenu() {
+
+    private void refresh() {
         Set<JobDefinition> jobs = JobsCodec.INSTANCE.getInstanceData().getData();
         List<JobDefinition> jobList = new ArrayList<>(jobs);
         int slot_index = 0;
@@ -53,11 +53,15 @@ public class JobsGUI extends ImmutableSimpleGUI {
                 }
 
                 JobDefinition job = jobList.get(slot_index++);
-                setToggleableItemSlot(this, player, job, slot++);
+                setToggleableItemSlot(this, this.player, job, slot++);
             }
         }
     }
-    private static void setToggleableItemSlot(
+    @Override
+    public void initializeMenu() {
+        refresh();
+    }
+    private void setToggleableItemSlot(
         ImmutableSimpleGUI jobsGUI,
         ServerPlayer player,
         JobDefinition job,
@@ -84,17 +88,9 @@ public class JobsGUI extends ImmutableSimpleGUI {
                     .employments.getOrDefault( player.getUUID(), new HashSet<>() )
                     .contains(job.identifier)
             );
-            gui.setSlot(
-                index,
-                getMenuItem(
-                    isPlayerInJob.get() ? job.getInItem() : job.getOutItem(),
-                    false,
-                    job.getTranslationKey()
-                ),
-                toggle[0]
-            );
-        };
 
+            refresh();
+        };
         jobsGUI.setSlot(
             slot,
             getMenuItem(

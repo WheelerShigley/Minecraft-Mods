@@ -3,6 +3,7 @@ package me.wheelershigley.www.solace_jobs.data.employments;
 import me.wheelershigley.www.solace_jobs.LuckPermsHelper;
 import me.wheelershigley.www.solace_jobs.data.Savable;
 import me.wheelershigley.www.solace_jobs.data.jobs.JobDefinition;
+import me.wheelershigley.www.solace_jobs.data.jobs.JobsCodec;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,9 +34,19 @@ public class Employments implements Savable< HashMap< UUID, Set<Identifier> > > 
            return false;
         }
 
-        // Jobs Limit(s)
         final OptionalInt maximumPermission = LuckPermsHelper.getMaximumIntegerPermission(serverPlayer, "solace_jobs.jobs_limit.");
         final int MAXIMUM = maximumPermission.orElse(0);
+        // When one can only be in one job, trying to join another should leave the current one
+        if(MAXIMUM == 1) {
+            for(Identifier identifier : employments) {
+                JobDefinition employment = JobsCodec.INSTANCE.getInstanceData().getJob(identifier);
+                if(employment == null) {
+                    continue;
+                }
+                leave(data, serverPlayer, employment);
+            }
+        }
+        // Jobs Limit(s)
         if( MAXIMUM <= employments.size() ) {
             serverPlayer.sendSystemMessage(
                 Component.translatable("solace_jobs.join_job.limited")
@@ -43,15 +54,14 @@ public class Employments implements Savable< HashMap< UUID, Set<Identifier> > > 
             return false;
         }
 
+        employments.add(job.identifier);
+        data.employments.put(playerIdentifier, employments);
         serverPlayer.sendSystemMessage(
             Component.translatable(
                 "solace_jobs.join_job",
                 Component.translatable( job.getTranslationKey() )
             )
         );
-
-        employments.add(job.identifier);
-        data.employments.put(playerIdentifier, employments);
         return true;
     }
 

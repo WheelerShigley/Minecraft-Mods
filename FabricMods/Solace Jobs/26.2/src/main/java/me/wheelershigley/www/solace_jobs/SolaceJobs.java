@@ -5,7 +5,6 @@ import me.wheelershigley.www.solace_jobs.commands.JobsCommand;
 import me.wheelershigley.www.solace_jobs.commands.SolaceJobsCommand;
 import me.wheelershigley.www.solace_jobs.events.Events;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +17,6 @@ public class SolaceJobs implements ModInitializer {
      * Tool-Abilities (active abilities)
      * Jobs-Menu Items-Lore for {Level | experience} and {ability}
      *
-     * Dandelion - Automatic Default-Icons (optional)
      * Archeologist: Lootr (optional)
      * Farmer:   Mooblooms (optional)
      */
