@@ -85,7 +85,7 @@ public class Statement {
             );
 
             incomeStatement.add(
-                Component.translatable("solace_jobs.income_statement.seperator")
+                Component.translatable("solace_jobs.income_statement.separator")
             );
             for( Map.Entry<JobDefinition, Double> income : incomesCopy.entrySet() ) {
                 incomeStatement.add(
@@ -121,7 +121,7 @@ public class Statement {
                     )
                 );
                 incomeStatement.add(
-                    Component.translatable("solace_jobs.income_statement.seperator")
+                    Component.translatable("solace_jobs.income_statement.separator")
                 );
             }
         }
