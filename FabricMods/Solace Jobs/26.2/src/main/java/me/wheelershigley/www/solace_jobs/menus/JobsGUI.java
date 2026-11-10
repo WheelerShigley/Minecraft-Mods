@@ -24,7 +24,7 @@ public class JobsGUI extends ImmutableSimpleGUI {
 
     @Override
     public String getTranslationKey() {
-        return "solace_jobs.menus.jobs";
+        return "solace_jobs.menu.jobs";
     }
 
     @Override
@@ -87,7 +87,7 @@ public class JobsGUI extends ImmutableSimpleGUI {
             gui.setSlot(
                 index,
                 getMenuItem(
-                    isPlayerInJob.get() ? job.IN_ITEM : job.OUT_ITEM,
+                    isPlayerInJob.get() ? job.getInItem() : job.getOutItem(),
                     false,
                     job.getTranslationKey()
                 ),
@@ -98,7 +98,7 @@ public class JobsGUI extends ImmutableSimpleGUI {
         jobsGUI.setSlot(
             slot,
             getMenuItem(
-                isPlayerInJob.get() ? job.IN_ITEM : job.OUT_ITEM,
+                isPlayerInJob.get() ? job.getInItem() : job.getOutItem(),
                 false,
                 job.getTranslationKey()
             ),

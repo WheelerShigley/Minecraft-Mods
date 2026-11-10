@@ -1,8 +1,11 @@
 package me.wheelershigley.www.solace_jobs.data.jobs;
 
+import me.wheelershigley.www.dandelion.registerations.ModItems;
+import me.wheelershigley.www.solace_jobs.IdentifierHelper;
 import me.wheelershigley.www.solace_jobs.SolaceJobs;
 import me.wheelershigley.www.solace_jobs.rewards.ActionReward;
 import me.wheelershigley.www.solace_jobs.rewards.ActionType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
@@ -16,13 +19,16 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static me.wheelershigley.www.solace_jobs.SolaceJobs.solaceJobsIdentifier;
+import static me.wheelershigley.www.solace_jobs.IdentifierHelper.*;
 
 public class DefaultJobs {
+    //TODO: fix items to be identifiers
     public static final JobDefinition HUNTER; static {
+        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         HUNTER = new JobDefinition(
             solaceJobsIdentifier("hunter"),
-            Items.DIAMOND_SWORD, Items.WOODEN_SWORD,
+            identifierOf(dandelionIsLoaded ? ModItems.GREEN_SWORD_ICON : Items.DIAMOND_SWORD),
+            identifierOf(dandelionIsLoaded ? ModItems.RED_SWORD_ICON   : Items.WOODEN_SWORD ),
             new LinkedHashSet<>()
         );
 
@@ -83,9 +89,11 @@ public class DefaultJobs {
     }
 
     public static final JobDefinition MINER; static {
+        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         MINER = new JobDefinition(
             solaceJobsIdentifier("miner"),
-            Items.DIAMOND_PICKAXE, Items.WOODEN_PICKAXE,
+            identifierOf(dandelionIsLoaded ? ModItems.GREEN_PICKAXE_ICON : Items.DIAMOND_PICKAXE),
+            identifierOf(dandelionIsLoaded ? ModItems.RED_PICKAXE_ICON   : Items.WOODEN_PICKAXE ),
             new LinkedHashSet<>()
         );
 
@@ -197,9 +205,11 @@ public class DefaultJobs {
     }
 
     public static final JobDefinition LUMBERJACK; static {
+        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         LUMBERJACK = new JobDefinition(
-            SolaceJobs.solaceJobsIdentifier("lumberjack"),
-            Items.DIAMOND_AXE, Items.WOODEN_AXE,
+            solaceJobsIdentifier("lumberjack"),
+            identifierOf(dandelionIsLoaded ? ModItems.GREEN_AXE_ICON : Items.DIAMOND_AXE),
+            identifierOf(dandelionIsLoaded ? ModItems.RED_AXE_ICON   : Items.WOODEN_AXE ),
             new LinkedHashSet<>()
         );
 
@@ -217,9 +227,11 @@ public class DefaultJobs {
     }
 
     public static final JobDefinition EXCAVATOR; static {
+        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         EXCAVATOR = new JobDefinition(
             solaceJobsIdentifier("excavator"),
-            Items.DIAMOND_SHOVEL, Items.WOODEN_SHOVEL,
+            identifierOf(dandelionIsLoaded ? ModItems.GREEN_SHOVEL_ICON : Items.DIAMOND_SHOVEL),
+            identifierOf(dandelionIsLoaded ? ModItems.RED_SHOVEL_ICON   : Items.WOODEN_SHOVEL ),
             new LinkedHashSet<>()
         );
 
@@ -268,9 +280,11 @@ public class DefaultJobs {
     }
 
     public static final JobDefinition FARMER; static {
+        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         FARMER = new JobDefinition(
-            SolaceJobs.solaceJobsIdentifier("farmer"),
-            Items.DIAMOND_HOE, Items.WOODEN_HOE,
+            solaceJobsIdentifier("farmer"),
+            identifierOf(dandelionIsLoaded ? ModItems.GREEN_HOE_ICON : Items.DIAMOND_HOE),
+            identifierOf(dandelionIsLoaded ? ModItems.RED_HOE_ICON   : Items.WOODEN_HOE ),
             new LinkedHashSet<>()
         );
 
@@ -331,9 +345,11 @@ public class DefaultJobs {
     }
 
     public static final JobDefinition FISHER; static {
+        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         FISHER = new JobDefinition(
             solaceJobsIdentifier("fisher"),
-            Items.BREEZE_ROD, Items.STICK,
+            identifierOf(dandelionIsLoaded ? ModItems.GREEN_FISHING_ROD_ICON : Items.BREEZE_ROD),
+            identifierOf(dandelionIsLoaded ? ModItems.RED_FISHING_ROD_ICON   : Items.STICK     ),
             new LinkedHashSet<>()
         );
 
@@ -374,9 +390,11 @@ public class DefaultJobs {
     }
 
     public static final JobDefinition ARCHEOLOGIST; static {
+        boolean dandelionIsLoaded = FabricLoader.getInstance().isModLoaded("dandelion");
         ARCHEOLOGIST = new JobDefinition(
             solaceJobsIdentifier("archeologist"),
-            Items.BONE, Items.STICK,
+            identifierOf(dandelionIsLoaded ? ModItems.GREEN_BRUSH_ICON : Items.BONE ),
+            identifierOf(dandelionIsLoaded ? ModItems.RED_BRUSH_ICON   : Items.STICK),
             new LinkedHashSet<>()
         );
 
@@ -399,7 +417,7 @@ public class DefaultJobs {
     ) {
         return new IdentifiableReward(
             new IdentifiableSource<>(
-                SolaceJobs.solaceJobsIdentifier(name),
+                IdentifierHelper.solaceJobsIdentifier(name),
                 getIdentifiers(set)
             ),
             new ActionReward(experience, job_experience, currency)
@@ -413,7 +431,7 @@ public class DefaultJobs {
     ) {
         return new IdentifiableReward(
             new IdentifiableSource<>(
-                SolaceJobs.solaceJobsIdentifier(name),
+                IdentifierHelper.solaceJobsIdentifier(name),
                 actionType,
                 getIdentifiers(set)
             ),

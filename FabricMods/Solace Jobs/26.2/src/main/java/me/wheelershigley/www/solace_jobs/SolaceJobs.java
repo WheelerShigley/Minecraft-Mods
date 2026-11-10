@@ -18,6 +18,7 @@ public class SolaceJobs implements ModInitializer {
      * Tool-Abilities (active abilities)
      * Jobs-Menu Items-Lore for {Level | experience} and {ability}
      *
+     * Dandelion - Automatic Default-Icons (optional)
      * Archeologist: Lootr (optional)
      * Farmer:   Mooblooms (optional)
      */
@@ -30,9 +31,5 @@ public class SolaceJobs implements ModInitializer {
 
         PolymerResourcePackUtils.addModAssets(MOD_ID);
         PolymerResourcePackUtils.markAsRequired();
-    }
-
-    public static Identifier solaceJobsIdentifier(String value) {
-        return Identifier.fromNamespaceAndPath(MOD_ID, value);
     }
 }

@@ -16,8 +16,8 @@
   "solace_jobs.income_statement.separator": "§m§7–––––––––––––––––––",
 
   "solace_jobs.boss_bar.level": "%1$s ➝ %2$s",
-  "solace_jobs.level_up": "§a%1$s §7has reached §alevel %2$s§7!",
-  "solace_jobs.join_job": "Joined %1$s.",
-  "solace_jobs.leave_job": "Left %1$s.",
-  "solace_jobs.join_job.limited": "Already at maximum job-count: cannot join new job."
+  "solace_jobs.level_up": "Jobs: §a%1$s §7has reached §alevel %2$s§7!",
+  "solace_jobs.join_job": "Jobs: §aJoined %1$s.",
+  "solace_jobs.leave_job": "Jobs: §cLeft %1$s.",
+  "solace_jobs.join_job.limited": "Jobs: You're already at your maximum job-count: cannot join new job."
 }

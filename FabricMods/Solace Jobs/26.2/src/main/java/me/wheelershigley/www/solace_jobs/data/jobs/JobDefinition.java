@@ -1,7 +1,10 @@
 package me.wheelershigley.www.solace_jobs.data.jobs;
 
+import me.wheelershigley.www.solace_jobs.IdentifierHelper;
 import me.wheelershigley.www.solace_jobs.rewards.ActionReward;
 import me.wheelershigley.www.solace_jobs.rewards.ActionType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -12,8 +15,8 @@ import java.util.Set;
 
 public class JobDefinition {
     public final Identifier identifier;
-    public Item IN_ITEM  = Items.STAINED_GLASS_PANE.green();
-    public Item OUT_ITEM = Items.STAINED_GLASS_PANE.red();
+    public Identifier IN_ITEM_IDENTIFIER  = IdentifierHelper.identifierOf( Items.STAINED_GLASS_PANE.green() );
+    public Identifier OUT_ITEM_IDENTIFIER = IdentifierHelper.identifierOf( Items.STAINED_GLASS_PANE.red()   );
     public final Set<IdentifiableReward> rewarded_actions = new HashSet<>();
 
     public JobDefinition(Identifier identifier) {
@@ -28,12 +31,12 @@ public class JobDefinition {
     }
     public JobDefinition(
         Identifier identifier,
-        Item in_item, Item out_item,
+        Identifier in_item_identifier, Identifier out_item_identifier,
         Set<IdentifiableReward> rewarded_actions
     ) {
         this.identifier = identifier;
-        this.IN_ITEM = in_item;
-        this.OUT_ITEM = out_item;
+        this.IN_ITEM_IDENTIFIER = in_item_identifier;
+        this.OUT_ITEM_IDENTIFIER = out_item_identifier;
         this.rewarded_actions.addAll(rewarded_actions);
     }
 
@@ -72,6 +75,13 @@ public class JobDefinition {
             }
         }
         return null;
+    }
+
+    public Item getInItem() {
+        return IdentifierHelper.itemOf(IN_ITEM_IDENTIFIER);
+    }
+    public Item getOutItem() {
+        return IdentifierHelper.itemOf(OUT_ITEM_IDENTIFIER);
     }
 
     @Override

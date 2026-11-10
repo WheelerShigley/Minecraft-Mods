@@ -23,6 +23,7 @@
     "grieflogger": "*"
   },
   "suggests": {
-    "luckperms": "*"
+    "luckperms": "*",
+    "dandelion": ">=1.3.0"
   }
 }
