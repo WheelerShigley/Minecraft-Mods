@@ -1,5 +1,6 @@
 package me.wheelershigley.www.solace_crates;
 
+import me.wheelershigley.www.solace_crates.blocks.ModBlockEntities;
 import me.wheelershigley.www.solace_crates.blocks.ModBlocks;
 import me.wheelershigley.www.solace_crates.items.ModItems;
 import net.fabricmc.api.ModInitializer;
@@ -13,6 +14,7 @@ public class SolaceCrates implements ModInitializer {
     @Override
     public void onInitialize() {
         ModItems.initialize();
+        ModBlockEntities.initialize();
         ModBlocks.initialize();
 
         PolymerResourcePackUtils.addModAssets(MOD_ID);
