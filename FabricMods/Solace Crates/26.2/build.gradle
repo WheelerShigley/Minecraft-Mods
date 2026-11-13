@@ -11,6 +11,12 @@ base {
 }
 
 
+fabricApi {
+    configureDataGeneration {
+        client = true
+    }
+}
+
 repositories {
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
@@ -23,8 +29,8 @@ dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    
+        implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
 processResources {
@@ -65,7 +71,7 @@ java {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${project.archives_base_name}" }
+        rename { "${it}_${project.archives_base_name}"}
     }
 }
 
