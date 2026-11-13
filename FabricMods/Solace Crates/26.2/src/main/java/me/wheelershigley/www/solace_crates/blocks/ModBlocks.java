@@ -1,69 +1,62 @@
 package me.wheelershigley.www.solace_crates.blocks;
 
-import me.wheelershigley.www.solace_crates.SolaceCrates;
+import com.google.common.base.Function;
+import eu.pb4.polymer.core.api.item.PolymerBlockItem;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.references.BlockItemId;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-
-import java.util.function.Function;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 
 public class ModBlocks {
+    public static final Block CRATE = registerPolymerBlock(
+        ModBlockItemIds.CRATE,
+        CrateBlock::new,
+        CrateBlock.PROPERTIES
+    );
+
     public static void initialize() {
         registerCreateModeTabBlocks();
     }
 
-    public static final Block CRATE = registerBlock(
-        "crate",
-        (properties) -> {
-            return new Block( properties.sound(SoundType.VAULT) );
-        }
-    );
-
-    private static Item registerBlockItem(String name, Block block) {
-        Identifier identifier = SolaceCrates.id(name);
-        return Registry.register(
-            BuiltInRegistries.ITEM,
-            identifier,
-            new BlockItem(
-                block,
-                new Item.Properties().useBlockDescriptionPrefix().setId(
-                    ResourceKey.create(Registries.ITEM, identifier)
-                )
-            )
-        );
-    }
-
-    private static Block registerBlock(
-        String name,
-        Function<BlockBehaviour.Properties, Block> function
+    private static Block registerPolymerBlock(
+        BlockItemId id,
+        Function<BlockBehaviour.Properties, Block> blockFactory,
+        BlockBehaviour.Properties properties
     ) {
-        Identifier identifier = SolaceCrates.id(name);
-        ResourceKey<Block> resourceKey = ResourceKey.create(Registries.BLOCK, identifier);
-        Block block = function.apply(
-            BlockBehaviour.Properties.of().setId(resourceKey)
+        Block block = registerPolymerBlock(id.block(), blockFactory, properties);
+        BlockItem blockItem = new PolymerBlockItem(
+            block,
+            new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId( id.item() )
         );
+        Registry.register(BuiltInRegistries.ITEM, id.item(), blockItem);
 
-        registerBlockItem(name, block);
-
-        return Registry.register(
-            BuiltInRegistries.BLOCK,
-            identifier,
-            block
-        );
+        return block;
+    }
+    private static Block registerPolymerBlock(
+        ResourceKey<Block> id,
+        Function<BlockBehaviour.Properties, Block> blockFactory,
+        BlockBehaviour.Properties properties
+    ) {
+        Block block = blockFactory.apply( properties.setId(id) );
+        return Registry.register(BuiltInRegistries.BLOCK, id, block);
     }
 
     public static void registerCreateModeTabBlocks() {
         CreativeModeTabEvents
-            .modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS)
+            .modifyOutputEvent(CreativeModeTabs.OP_BLOCKS)
             .register(
                 (creativeTab) -> {
                     creativeTab.accept( ModBlocks.CRATE.asItem() );
