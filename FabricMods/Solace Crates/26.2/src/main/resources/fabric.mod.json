@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "solace_crates",
+  "version": "${version}",
+  "name": "Solace Crates",
+  "description": "x",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/solace_crates/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "me.wheelershigley.www.solace_crates.SolaceCrates"
+    ]
+  },
+  "mixins": [
+    "solace_crates.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
