@@ -7,10 +7,12 @@ import eu.pb4.polymer.blocks.api.PolymerBlockResourceUtils;
 import eu.pb4.polymer.blocks.api.PolymerTexturedBlock;
 import eu.pb4.polymer.core.api.block.SimplePolymerBlock;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
+import me.wheelershigley.www.solace_crates.menus.ProbabilitiesMenu;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -86,13 +88,16 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
         final BlockState state, final Level level, final BlockPos pos,
         final Player player, final InteractionHand hand, final BlockHitResult hitResult
     ) {
+        if( !(player instanceof ServerPlayer serverPlayer) ) {
+            return InteractionResult.PASS;
+        }
+
         if( player.isCrouching() ) {
-            player.sendSystemMessage(
-                Component.literal("TODO: Probabilities Menu")
-            );
+            ( new ProbabilitiesMenu(serverPlayer, null) ).open();
             return InteractionResult.SUCCESS;
         }
 
+        //TODO
         player.sendSystemMessage(
             Component.literal("TODO: key-use and/or rejection-message")
         );

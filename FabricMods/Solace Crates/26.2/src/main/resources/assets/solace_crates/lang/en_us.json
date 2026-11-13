@@ -1,3 +1,4 @@
 {
-  "block.solace_crates.crate": "Crate"
+  "block.solace_crates.crate": "Crate",
+  "solace_crates.crate.title": "Test Title"
 }

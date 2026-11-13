@@ -27,9 +27,10 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    implementation include("eu.pb4:polymer-core:${project.polymer_version}")
-    implementation include("eu.pb4:polymer-blocks:${project.polymer_version}")
-    implementation include("eu.pb4:polymer-resource-pack:${project.polymer_version}")
+    implementation "eu.pb4:polymer-core:${project.polymer_version}"
+    implementation "eu.pb4:polymer-blocks:${project.polymer_version}"
+    implementation "eu.pb4:sgui:${project.sgui_version}"
+    implementation "eu.pb4:polymer-resource-pack:${project.polymer_version}"
 }
 
 processResources {
@@ -40,8 +41,8 @@ processResources {
 
     filesMatching("fabric.mod.json") {
         expand "version": project.version,
-                "minecraft_version": project.minecraft_version,
-                "loader_version": project.loader_version
+        "minecraft_version": project.minecraft_version,
+        "loader_version": project.loader_version
     }
 }
 
