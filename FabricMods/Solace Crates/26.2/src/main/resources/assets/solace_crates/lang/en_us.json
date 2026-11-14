@@ -1,4 +1,5 @@
 {
   "block.solace_crates.crate": "Crate",
-  "solace_crates.crate.title": "Test Title"
+
+  "solace_crates.crate.unknown.name": "Unknown Crate"
 }

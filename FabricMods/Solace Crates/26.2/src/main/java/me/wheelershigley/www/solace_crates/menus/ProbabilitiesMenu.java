@@ -25,7 +25,6 @@ public class ProbabilitiesMenu extends ImmutableSimpleGui {
 
     @Override
     public String getTranslationKey() {
-        //TODO
         return "solace_crates.crate.title";
     }
 
