@@ -2,7 +2,7 @@ package me.wheelershigley.www.solace_crates;
 
 import me.wheelershigley.www.solace_crates.blocks.ModBlockEntities;
 import me.wheelershigley.www.solace_crates.blocks.ModBlocks;
-import me.wheelershigley.www.solace_crates.configurations.CrateLootTablesLocation;
+import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 import me.wheelershigley.www.solace_crates.events.ServerLifeCycleListeners;
 import me.wheelershigley.www.solace_crates.items.ModItems;
 import net.fabricmc.api.ModInitializer;
@@ -18,11 +18,16 @@ public class SolaceCrates implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        CrateRegistry.initialize();
+
         ModItems.initialize();
         ModBlockEntities.initialize();
         ModBlocks.initialize();
 
         ServerLifeCycleListeners.register();
+
+        //TODO: set-crate command
+        // /solace_crates set_crate X Y Z definition_identifier
 
         PolymerResourcePackUtils.addModAssets(MOD_ID);
         PolymerResourcePackUtils.markAsRequired();

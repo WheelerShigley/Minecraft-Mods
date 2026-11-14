@@ -1,13 +1,9 @@
 package me.wheelershigley.www.solace_crates.api;
 
 import me.wheelershigley.www.solace_crates.SolaceCrates;
-import me.wheelershigley.www.solace_crates.configurations.CrateLootTablesLocation;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.Holder;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.level.storage.loot.LootTable;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
@@ -17,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
-public interface ResourceLocation<T> {
+public interface ResourceLocation<T, D> {
     void initialize(MinecraftServer server);
     void reload(MinecraftServer server);
 
@@ -28,6 +24,7 @@ public interface ResourceLocation<T> {
     );
     com.mojang.serialization.Codec<T> getCodec();
 
+    D getData();
     default Path getDataPath() {
         return FabricLoader.getInstance()
             .getConfigDir()

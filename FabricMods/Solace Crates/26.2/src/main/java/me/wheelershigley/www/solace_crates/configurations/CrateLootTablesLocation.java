@@ -8,7 +8,6 @@ import me.wheelershigley.www.solace_crates.SolaceCrates;
 import me.wheelershigley.www.solace_crates.api.ResourceLocation;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +22,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class CrateLootTablesLocation implements ResourceLocation< Holder<LootTable> > {
+public class CrateLootTablesLocation implements ResourceLocation<
+    Holder<LootTable>,
+    Map< String, Holder<LootTable> >
+> {
     public static final CrateLootTablesLocation INSTANCE = new CrateLootTablesLocation();
     private final Map< String, Holder<LootTable> > DATA = new HashMap<>();
 
@@ -70,12 +72,18 @@ public class CrateLootTablesLocation implements ResourceLocation< Holder<LootTab
         if(result.get() == null) {
             return null;
         }
+        //TODO: when empty, create default (with "chests/trial_chambers/reward_ominous")
         return result.get();
     }
 
     @Override
     public Codec< Holder<LootTable> > getCodec() {
         return LootTable.CODEC;
+    }
+
+    @Override
+    public Map< String, Holder<LootTable> > getData() {
+        return this.DATA;
     }
 
     @Override
