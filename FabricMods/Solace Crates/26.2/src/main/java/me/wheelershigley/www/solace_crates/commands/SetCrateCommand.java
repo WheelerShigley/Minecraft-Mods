@@ -1,6 +1,7 @@
 package me.wheelershigley.www.solace_crates.commands;
 
 import com.mojang.brigadier.context.CommandContext;
+import me.wheelershigley.www.solace_crates.Permissions.PermissionsHelper;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
 import me.wheelershigley.www.solace_crates.blocks.CrateBlockEntity;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
@@ -10,12 +11,13 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
+import static me.wheelershigley.www.solace_crates.SolaceCrates.getTranslatedSolaceCrateComponent;
 
 public class SetCrateCommand {
     public static void register() {
@@ -37,7 +39,7 @@ public class SetCrateCommand {
                                         )
                                         .suggests( new CrateIdentifierSuggestionProvider() )
                                         .executes(SetCrateCommand::setCrate)
-                                        .requires(SetCrateCommand::hasCommandPermission)
+                                        .requires(PermissionsHelper::hasCommandPermission)
                                     )
                                 )
                         )
@@ -57,7 +59,7 @@ public class SetCrateCommand {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if( !(blockEntity instanceof CrateBlockEntity crateBlockEntity) ) {
             player.sendSystemMessage(
-                Component.translatable("solace_crates.command.set_crate.not_crate")
+                getTranslatedSolaceCrateComponent("solace_crates.command.set_crate.not_crate")
             );
             return 0;
         }
@@ -65,7 +67,7 @@ public class SetCrateCommand {
         Identifier crateIdentifier = IdentifierArgument.getId(context, "crate");
         if( !CrateRegistry.contains(crateIdentifier) ) {
             player.sendSystemMessage(
-                Component.translatable(
+                getTranslatedSolaceCrateComponent(
                     "solace_crates.command.set_crate.identifier_missing",
                     crateIdentifier.toString()
                 )
@@ -75,9 +77,5 @@ public class SetCrateCommand {
 
         crateBlockEntity.setCrateIdentifier(crateIdentifier);
         return 0;
-    }
-
-    private static boolean hasCommandPermission(CommandSourceStack source) {
-        return source.permissions().hasPermission(Permissions.COMMANDS_MODERATOR);
     }
 }

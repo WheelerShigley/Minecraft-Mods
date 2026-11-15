@@ -5,15 +5,22 @@ import eu.pb4.polymer.blocks.api.BlockModelType;
 import eu.pb4.polymer.blocks.api.PolymerBlockModel;
 import eu.pb4.polymer.blocks.api.PolymerBlockResourceUtils;
 import eu.pb4.polymer.blocks.api.PolymerTexturedBlock;
+import me.wheelershigley.www.solace_crates.Permissions.PermissionsHelper;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
+import me.wheelershigley.www.solace_crates.commands.SetCrateCommand;
+import me.wheelershigley.www.solace_crates.data.CrateDefinition;
+import me.wheelershigley.www.solace_crates.items.ItemsHelper;
 import me.wheelershigley.www.solace_crates.menus.ProbabilitiesMenu;
+import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -27,6 +34,11 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static me.wheelershigley.www.solace_crates.SolaceCrates.getTranslatedSolaceCrateComponent;
 
 public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock {
     public static final String NAME = "crate";
@@ -62,17 +74,6 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
         return new CrateBlockEntity(position, blockState);
     }
 
-    static {
-        PROPERTIES = BlockBehaviour.Properties.of()
-            .mapColor(MapColor.STONE)
-            .instrument(NoteBlockInstrument.BASEDRUM)
-            .strength(-1.0F, 3600000.0F)
-            .noLootTable()
-            .isValidSpawn(Blocks::never)
-            .sound(SoundType.VAULT)
-        ;
-    }
-
     @Override
     protected @NonNull InteractionResult useItemOn(
         final @NonNull ItemStack itemStack,
@@ -87,12 +88,33 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
             return InteractionResult.PASS;
         }
 
-        if( player.isCrouching() ) {
-            CrateBlockEntity crateBlockEntity = (CrateBlockEntity)level.getBlockEntity(pos);
-            if(crateBlockEntity == null) {
-                return InteractionResult.PASS;
-            }
+        CrateBlockEntity crateBlockEntity = (CrateBlockEntity)level.getBlockEntity(pos);
+        if(crateBlockEntity == null) {
+            return InteractionResult.FAIL;
+        }
 
+        if( crateBlockEntity.getCrateIdentifier().equals(CrateBlockEntity.DEFAULT_IDENTIFIER) ) {
+            boolean hasPermission = PermissionsHelper.hasCommandPermission(serverPlayer);
+            serverPlayer.sendSystemMessage(
+                getTranslatedSolaceCrateComponent(
+                    "solace_crates.message.crate_unset." + (hasPermission ? "allowed" : "disallowed")
+                )
+            );
+            return InteractionResult.SUCCESS_SERVER;
+        }
+
+        CrateDefinition crateDefinition = CrateRegistry.get( crateBlockEntity.getCrateIdentifier() );
+        if(crateDefinition == null) {
+            serverPlayer.sendSystemMessage(
+                getTranslatedSolaceCrateComponent(
+                    "solace_crates.message.definition_missing"
+                )
+            );
+            return InteractionResult.FAIL;
+        }
+        //TODO: index-list retrieval
+
+        if( serverPlayer.isCrouching() ) {
             ProbabilitiesMenu menu = new ProbabilitiesMenu(serverPlayer, null) {
                 @Override
                 public String getTranslationKey() {
@@ -104,10 +126,59 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
             return InteractionResult.SUCCESS;
         }
 
-        //TODO
+        final Item STANDARD_KEY = ItemsHelper.getItem( crateDefinition.STANDARD_KEY );
+        if( itemStack.getItem().equals(STANDARD_KEY) ) {
+            player.sendSystemMessage(
+                Component.literal("TODO: standard key usage")
+            );
+            return InteractionResult.SUCCESS_SERVER;
+        }
+
+        final Item PREMIUM_KEY  = ItemsHelper.getItem( crateDefinition.PREMIUM_KEY  );
+        if( itemStack.getItem().equals(PREMIUM_KEY) ) {
+            player.sendSystemMessage(
+                Component.literal("TODO: premium key usage")
+            );
+            return InteractionResult.SUCCESS_SERVER;
+        }
+
+        Component missingKeysMessage; {
+            List<Component> translations = new ArrayList<>();
+            if(STANDARD_KEY != null) {
+                translations.add(
+                    Component.translatable( STANDARD_KEY.getDescriptionId() )
+                );
+            }
+            if(PREMIUM_KEY  != null) {
+                translations.add(
+                    Component.translatable(  PREMIUM_KEY.getDescriptionId() )
+                );
+            }
+
+            String translationIndex = switch( translations.size() ) {
+                case 1 -> "single";
+                case 2 -> "double";
+                default -> "none";
+            };
+            missingKeysMessage = Component.translatable(
+                "solace_crates.message.key_missing." + translationIndex,
+                (Object[])translations.toArray( new Component[0] )
+            );
+        }
         player.sendSystemMessage(
-            Component.literal("TODO: key-use and/or rejection-message")
+            getTranslatedSolaceCrateComponent(missingKeysMessage)
         );
         return InteractionResult.SUCCESS;
+    }
+
+    static {
+        PROPERTIES = BlockBehaviour.Properties.of()
+            .mapColor(MapColor.STONE)
+            .instrument(NoteBlockInstrument.BASEDRUM)
+            .strength(-1.0F, 3600000.0F)
+            .noLootTable()
+            .isValidSpawn(Blocks::never)
+            .sound(SoundType.VAULT)
+        ;
     }
 }

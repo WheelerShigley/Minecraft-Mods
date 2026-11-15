@@ -12,7 +12,8 @@ import org.jspecify.annotations.NonNull;
 
 
 public class CrateBlockEntity extends BlockEntity {
-    private Identifier crateIdentifier;
+    public static final Identifier DEFAULT_IDENTIFIER = SolaceCrates.id("unset");
+    private Identifier crateIdentifier = DEFAULT_IDENTIFIER;
 
     public CrateBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CRATE_BLOCK_ENTITY, pos, state);
@@ -29,12 +30,8 @@ public class CrateBlockEntity extends BlockEntity {
     public Identifier getCrateIdentifier() {
         return crateIdentifier;
     }
-    private static final Identifier DEFAULT_IDENTIFIER = Identifier.withDefaultNamespace("");
     public String getIdentifiedTranslationKey() {
         Identifier identifier = getCrateIdentifier();
-        if( identifier.equals(DEFAULT_IDENTIFIER) ) {
-            return SolaceCrates.MOD_ID + ".crate.unknown.name";
-        }
         return
             identifier.getNamespace() +
             ".crate." +
