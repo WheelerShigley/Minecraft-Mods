@@ -1,11 +1,9 @@
-package me.wheelershigley.www.solace_crates.data;
+package me.wheelershigley.www.solace_crates.crate;
 
 import me.wheelershigley.www.solace_crates.configurations.CrateLootTablesLocation;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;

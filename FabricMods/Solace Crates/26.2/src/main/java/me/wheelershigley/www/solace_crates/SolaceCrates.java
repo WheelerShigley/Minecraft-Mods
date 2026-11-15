@@ -22,16 +22,19 @@ public class SolaceCrates implements ModInitializer {
      * "**" is required to meet 0.7.0 (functional alpha release)
      *
      * ## Prototyping
-     ** Automatic probabilities indexing
      ** Probabilities-Menu Probabilities Implementation
      ** Standard-Key Functionality
      ** Premium-Key Menu + Premium-Key Functionality
      *
      * ## Appearance
-     ** Player Configuration for current seed
-     ** Floating display of item (single)
-     * Floating display of items (multiple-rolls compatibility)
-     * item-displays have title above them (name)
+     ** Players Configuration for current seed (UUID -> #)
+     *
+     * Display Types
+     * ** Floating display of item (single?)
+     * ** Floating display of items (multiple items) {collect all resulting-ItemStacks together for this}
+     * * Random display
+     * * Configuration for which Type (in CrateDefinition)
+     * item-displays have titles above them (translated name)
      *
      * Facing Direction (crate directions)
      *

@@ -7,7 +7,7 @@ import eu.pb4.polymer.blocks.api.PolymerBlockResourceUtils;
 import eu.pb4.polymer.blocks.api.PolymerTexturedBlock;
 import me.wheelershigley.www.solace_crates.Permissions.PermissionsHelper;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
-import me.wheelershigley.www.solace_crates.data.CrateDefinition;
+import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
 import me.wheelershigley.www.solace_crates.loot.ItemStackListOddsTable;
 import me.wheelershigley.www.solace_crates.loot.LootHelper;

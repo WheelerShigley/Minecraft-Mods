@@ -1,6 +1,6 @@
 package me.wheelershigley.www.solace_crates.registry;
 
-import me.wheelershigley.www.solace_crates.data.CrateDefinition;
+import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
