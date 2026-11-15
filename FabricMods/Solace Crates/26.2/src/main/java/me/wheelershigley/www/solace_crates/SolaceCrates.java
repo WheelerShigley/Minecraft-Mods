@@ -2,6 +2,7 @@ package me.wheelershigley.www.solace_crates;
 
 import me.wheelershigley.www.solace_crates.blocks.ModBlockEntities;
 import me.wheelershigley.www.solace_crates.blocks.ModBlocks;
+import me.wheelershigley.www.solace_crates.commands.SetCrateCommand;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 import me.wheelershigley.www.solace_crates.events.ServerLifeCycleListeners;
 import me.wheelershigley.www.solace_crates.items.ModItems;
@@ -26,8 +27,7 @@ public class SolaceCrates implements ModInitializer {
 
         ServerLifeCycleListeners.register();
 
-        //TODO: set-crate command
-        // /solace_crates set_crate X Y Z definition_identifier
+        SetCrateCommand.register();
 
         PolymerResourcePackUtils.addModAssets(MOD_ID);
         PolymerResourcePackUtils.markAsRequired();

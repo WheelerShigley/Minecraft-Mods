@@ -1,5 +1,7 @@
 {
   "block.solace_crates.crate": "Crate",
 
-  "solace_crates.crate.unknown.name": "Unknown Crate"
+  "solace_crates.crate.unknown.name": "Unknown Crate",
+  "solace_crates.command.set_crate.not_crate": "Error: This block is not a Crate BlockEntity.",
+  "solace_crates.command.set_crate.identifier_missing": "Warning: \"%1$s\" is not registered to the crate-registry."
 }
