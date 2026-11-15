@@ -7,15 +7,16 @@ import eu.pb4.polymer.blocks.api.PolymerBlockResourceUtils;
 import eu.pb4.polymer.blocks.api.PolymerTexturedBlock;
 import me.wheelershigley.www.solace_crates.Permissions.PermissionsHelper;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
-import me.wheelershigley.www.solace_crates.commands.SetCrateCommand;
 import me.wheelershigley.www.solace_crates.data.CrateDefinition;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
+import me.wheelershigley.www.solace_crates.loot.ItemStackListOddsTable;
+import me.wheelershigley.www.solace_crates.loot.LootHelper;
+import me.wheelershigley.www.solace_crates.loot.LootTableEvaluator;
 import me.wheelershigley.www.solace_crates.menus.ProbabilitiesMenu;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -31,6 +32,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -112,9 +115,19 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
             );
             return InteractionResult.FAIL;
         }
-        //TODO: index-list retrieval
 
         if( serverPlayer.isCrouching() ) {
+            LootTable table = crateDefinition.getLootTable( serverPlayer.level().getServer() );
+            if(table == null) {
+                serverPlayer.sendSystemMessage(
+                    getTranslatedSolaceCrateComponent("solace_crates.messages.loottable_missing")
+                );
+                return InteractionResult.FAIL;
+            }
+            LootContext context = LootHelper.createLootContext(serverPlayer);
+            ItemStackListOddsTable odds = LootTableEvaluator.evaluate(table, context);
+            // TODO: use odds in ProbabilitiesMenu
+
             ProbabilitiesMenu menu = new ProbabilitiesMenu(serverPlayer, null) {
                 @Override
                 public String getTranslationKey() {

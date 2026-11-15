@@ -1,6 +1,8 @@
 package me.wheelershigley.www.solace_crates.data;
 
+import me.wheelershigley.www.solace_crates.configurations.CrateLootTablesLocation;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -37,11 +39,17 @@ public class CrateDefinition {
     }
 
     public @Nullable LootTable getLootTable(MinecraftServer server) {
-        return server
+        Holder<LootTable> moddedLootTableHolder = CrateLootTablesLocation.INSTANCE.getData().get( this.LOOTTABLE.getPath() );
+        return moddedLootTableHolder.value();
+
+        // TODO: vanilla compatibility (fallback)
+        /*
+        LootTable vanillaLootTable = server
             .reloadableRegistries()
             .getLootTable(
                 ResourceKey.create(Registries.LOOT_TABLE, this.LOOTTABLE)
             )
         ;
+         */
     }
 }

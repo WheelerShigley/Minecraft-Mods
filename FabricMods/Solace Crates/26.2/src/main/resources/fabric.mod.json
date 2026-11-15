@@ -11,6 +11,9 @@
   "icon": "assets/solace_crates/icon.png",
 
   "environment": "*",
+  "mixins": [
+    "solace_crates.mixins.json"
+  ],
   "entrypoints": {
     "main": [
       "me.wheelershigley.www.solace_crates.SolaceCrates"
