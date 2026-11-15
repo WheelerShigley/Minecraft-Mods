@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_crates.Permissions;
+package me.wheelershigley.www.solace_crates.permissions;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;

@@ -5,7 +5,6 @@ import me.wheelershigley.www.solace_crates.blocks.ModBlocks;
 import me.wheelershigley.www.solace_crates.commands.SetCrateCommand;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 import me.wheelershigley.www.solace_crates.events.ServerLifeCycleListeners;
-import me.wheelershigley.www.solace_crates.items.ModItems;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -37,6 +36,7 @@ public class SolaceCrates implements ModInitializer {
      * item-displays have titles above them (translated name)
      *
      * Facing Direction (crate directions)
+     * Fix Double-Messaging for unset/unknown/invalid crates
      *
      * ## User-friendliness
      * set crate-type with a menu
@@ -49,7 +49,6 @@ public class SolaceCrates implements ModInitializer {
     public void onInitialize() {
         CrateRegistry.initialize();
 
-        ModItems.initialize();
         ModBlockEntities.initialize();
         ModBlocks.initialize();
 
