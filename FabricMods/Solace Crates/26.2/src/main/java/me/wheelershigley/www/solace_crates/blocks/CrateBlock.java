@@ -14,10 +14,17 @@ import me.wheelershigley.www.solace_crates.loot.LootTableEvaluator;
 import me.wheelershigley.www.solace_crates.menus.ProbabilitiesMenu;
 import me.wheelershigley.www.solace_crates.permissions.PermissionsHelper;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -28,6 +35,9 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.vault.VaultConfig;
+import net.minecraft.world.level.block.entity.vault.VaultServerData;
+import net.minecraft.world.level.block.entity.vault.VaultSharedData;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -47,6 +57,7 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
     public static final String NAME = "crate";
     public static final BlockBehaviour.Properties PROPERTIES;
     private final BlockState STATE;
+    private long lastInsertFailTimestamp;
 
     public CrateBlock(Properties properties) {
         super(PROPERTIES);
@@ -75,6 +86,14 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
         @NonNull BlockState blockState
     ) {
         return new CrateBlockEntity(position, blockState);
+    }
+
+    void setLastInsertFailTimestamp(final long lastInsertFailTimestamp) {
+        this.lastInsertFailTimestamp = lastInsertFailTimestamp;
+    }
+
+    long getLastInsertFailTimestamp() {
+        return this.lastInsertFailTimestamp;
     }
 
     @Override
@@ -116,17 +135,18 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
             return InteractionResult.FAIL;
         }
 
-        if( serverPlayer.isCrouching() ) {
-            LootTable table = crateDefinition.getLootTable( serverPlayer.level().getServer() );
-            if(table == null) {
-                serverPlayer.sendSystemMessage(
-                    getTranslatedSolaceCrateComponent("solace_crates.messages.loottable_missing")
-                );
-                return InteractionResult.FAIL;
-            }
-            LootContext context = LootHelper.createLootContext(serverPlayer);
-            ItemStackListOddsTable odds = LootTableEvaluator.evaluate(table, context);
+        LootTable table = crateDefinition.getLootTable( serverPlayer.level().getServer() );
+        if(table == null) {
+            serverPlayer.sendSystemMessage(
+                getTranslatedSolaceCrateComponent("solace_crates.messages.loottable_missing")
+            );
+            return InteractionResult.FAIL;
+        }
+        // TODO: seeding
+        LootContext context = LootHelper.createLootContext(serverPlayer, 0);
 
+        if( serverPlayer.isCrouching() ) {
+            ItemStackListOddsTable odds = LootTableEvaluator.evaluate(table, context);
             ProbabilitiesMenu menu = new ProbabilitiesMenu(serverPlayer, odds, crateDefinition, null) {
                 @Override
                 public String getTranslationKey() {
@@ -138,14 +158,21 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
             return InteractionResult.SUCCESS;
         }
 
-        final Item STANDARD_KEY = ItemsHelper.getItem( crateDefinition.STANDARD_KEY );
-        if( itemStack.getItem().equals(STANDARD_KEY) ) {
-            player.sendSystemMessage(
-                Component.literal("TODO: standard key usage")
-            );
+        final boolean itemAccepted = CrateBlock.Server.tryInsertKey(
+            serverPlayer,
+            serverPlayer.getItemInHand( serverPlayer.getUsedItemHand() ),
+            serverPlayer.level(),
+            crateBlockEntity.getBlockPos(),
+            this,
+            crateDefinition,
+            table,
+            context
+        );
+        if(itemAccepted) {
             return InteractionResult.SUCCESS_SERVER;
         }
 
+        final Item STANDARD_KEY = ItemsHelper.getItem( crateDefinition.STANDARD_KEY );
         final Item PREMIUM_KEY  = ItemsHelper.getItem( crateDefinition.PREMIUM_KEY  );
         if( itemStack.getItem().equals(PREMIUM_KEY) ) {
             player.sendSystemMessage(
@@ -181,6 +208,62 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
             getTranslatedSolaceCrateComponent(missingKeysMessage)
         );
         return InteractionResult.SUCCESS;
+    }
+
+    // inspired by VaultBlock.Server
+    private class Server {
+        public static boolean tryInsertKey(
+            final ServerPlayer serverPlayer,
+            final ItemStack stackToInsert,
+            final ServerLevel serverLevel,
+            final BlockPos pos,
+            final CrateBlock crateBlock,
+            final CrateDefinition crateDefinition,
+            final LootTable lootTable,
+            final LootContext lootContext
+        ) {
+            if( !isValidToInsert(crateDefinition, stackToInsert.getItem() ) ) {
+                playInsertFailSound(serverLevel, crateBlock, pos, SoundEvents.VAULT_INSERT_ITEM_FAIL);
+                return false;
+            }
+
+            List<ItemStack> stacks = new ArrayList<>();
+            lootTable.getRandomItemsRaw(lootContext, stacks::add);
+            if( stacks.isEmpty() ) {
+                return false;
+            }
+
+            serverPlayer.awardStat(
+                Stats.ITEM_USED.get( stackToInsert.getItem() )
+            );
+            stackToInsert.consume( stackToInsert.getCount(), serverPlayer );
+            ItemsHelper.giveItemsToPlayer(serverPlayer, stacks);
+            return true;
+        }
+
+        private static boolean isValidToInsert(
+            CrateDefinition crateDefinition,
+            Item item
+        ) {
+            if(crateDefinition == null) {
+                return false;
+            }
+
+            Identifier itemIdentifier = ItemsHelper.getIdentifier(item);
+            return itemIdentifier.equals( crateDefinition.STANDARD_KEY );
+        }
+
+        private static void playInsertFailSound(
+            final ServerLevel serverLevel,
+            final CrateBlock crateBlock,
+            final BlockPos pos,
+            final SoundEvent sound
+        ) {
+            if( crateBlock.getLastInsertFailTimestamp() + 15L <= serverLevel.getGameTime() ) {
+                serverLevel.playSound(null, pos, sound, SoundSource.BLOCKS);
+                crateBlock.setLastInsertFailTimestamp( serverLevel.getGameTime() );
+            }
+        }
     }
 
     static {

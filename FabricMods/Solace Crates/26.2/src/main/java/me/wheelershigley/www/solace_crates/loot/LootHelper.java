@@ -9,7 +9,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import java.util.Optional;
 
 public class LootHelper {
-    public static LootContext createLootContext(ServerPlayer player) {
+    public static LootContext createLootContext(ServerPlayer player, long seed) {
         LootParams params = new LootParams.Builder( player.level() )
             .withParameter( LootContextParams.ORIGIN, player.position() )
             .withParameter( LootContextParams.THIS_ENTITY, player )
@@ -17,6 +17,6 @@ public class LootHelper {
             .create(LootContextParamSets.CHEST)
         ;
 
-        return new LootContext.Builder(params).create( Optional.empty() );
+        return new LootContext.Builder(params).withOptionalRandomSeed(seed).create( Optional.empty() );
     }
 }

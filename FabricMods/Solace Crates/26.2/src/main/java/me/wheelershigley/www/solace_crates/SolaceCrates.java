@@ -21,7 +21,6 @@ public class SolaceCrates implements ModInitializer {
      * "**" is required to meet 0.7.0 (functional alpha release)
      *
      * ## Prototyping
-     ** Standard-Key Functionality
      ** Premium-Key Menu + Premium-Key Functionality
      *
      * ## Appearance
