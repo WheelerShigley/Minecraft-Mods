@@ -1,6 +1,7 @@
 package me.wheelershigley.www.solace_crates.menus;
 
 import eu.pb4.sgui.api.gui.SimpleGui;
+import me.wheelershigley.www.solace_crates.loot.OddsTable;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.TypedDataComponent;
@@ -18,16 +19,17 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class ImmutableSimpleGui extends SimpleGui {
+public abstract class ImmutableSimpleGui< T extends OddsTable<?> > extends SimpleGui {
     public static final int ROW_LENGTH = 9;
 
-    private final ImmutableSimpleGui parent;
+    private final ImmutableSimpleGui<?> parent;
 
     public abstract String getTranslationKey();
     public abstract MenuType<?> getMenuType();
     public abstract void initializeMenu();
+    public abstract void initializeMenu(T oddsTable);
 
-    public ImmutableSimpleGui(ServerPlayer player, MenuType<?> menuType, ImmutableSimpleGui parent) {
+    public ImmutableSimpleGui(ServerPlayer player, MenuType<?> menuType, ImmutableSimpleGui<?> parent) {
         super(menuType, player, false);
         this.parent = parent;
 
@@ -68,8 +70,8 @@ public abstract class ImmutableSimpleGui extends SimpleGui {
     private static ItemStack getItemWithGlint(ItemStack item) {
         ItemStack copy = item.copy();
         copy.set(
-                DataComponents.ENCHANTMENT_GLINT_OVERRIDE,
-                true
+            DataComponents.ENCHANTMENT_GLINT_OVERRIDE,
+            true
         );
         return copy;
     }
@@ -91,31 +93,31 @@ public abstract class ImmutableSimpleGui extends SimpleGui {
     }
 
     public static ItemStack getMenuItem(
-            Item textureItem,
-            boolean enchantable,
-            @Nullable String translationKey
+        Item textureItem,
+        boolean enchantable,
+        @Nullable String translationKey
     ) {
         return getMenuItem(textureItem, null, enchantable, translationKey);
     }
     public static ItemStack getMenuItem(
-            Item textureItem,
-            @Nullable DataComponentMap components,
-            boolean enchantable,
-            @Nullable String translationKey
+        Item textureItem,
+        @Nullable DataComponentMap components,
+        boolean enchantable,
+        @Nullable String translationKey
     ) {
         Identifier textureIdentifier = BuiltInRegistries.ITEM.getKey(textureItem);
         return getMenuItem(
-                translationKey != null ? translationKey : textureItem.getDescriptionId(),
-                textureIdentifier,
-                components,
-                enchantable
+            translationKey != null ? translationKey : textureItem.getDescriptionId(),
+            textureIdentifier,
+            components,
+            enchantable
         );
     }
     public static ItemStack getMenuItem(
-            @Nullable String translationKey,
-            Identifier textureIdentifier,
-            @Nullable DataComponentMap components,
-            boolean enchantable
+        @Nullable String translationKey,
+        Identifier textureIdentifier,
+        @Nullable DataComponentMap components,
+        boolean enchantable
     ) {
         ItemStack itemStack = new ItemStack(Items.PAPER);
 
@@ -132,16 +134,16 @@ public abstract class ImmutableSimpleGui extends SimpleGui {
 
         if(translationKey != null) {
             itemStack.set(
-                    DataComponents.CUSTOM_NAME,
-                    Component.translatable(translationKey).withStyle( Style.EMPTY.withItalic(false) )
+                DataComponents.CUSTOM_NAME,
+                Component.translatable(translationKey).withStyle( Style.EMPTY.withItalic(false) )
             );
         }
 
         CompoundTag menuItemTag = new CompoundTag();
         menuItemTag.putBoolean("MenuItem", true);
         itemStack.set(
-                DataComponents.CUSTOM_DATA,
-                CustomData.of(menuItemTag)
+            DataComponents.CUSTOM_DATA,
+            CustomData.of(menuItemTag)
         );
 
         if(enchantable) {

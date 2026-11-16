@@ -14,8 +14,8 @@ public interface OddsTable<T> {
         getData().putAll(data);
     }
 
-    default void sort() {
-        Map<T, Double> sorted = getData().entrySet().stream()
+    default Map<T, Double> getSorted() {
+        return getData().entrySet().stream()
             .sorted( Map.Entry.<T, Double>comparingByValue().reversed() )
             .collect(
                 Collectors.toMap(
@@ -25,7 +25,9 @@ public interface OddsTable<T> {
                 )
             )
         ;
-
+    }
+    default void sort() {
+        Map<T, Double> sorted = getSorted();
         getData().clear();
         getData().putAll(sorted);
     }

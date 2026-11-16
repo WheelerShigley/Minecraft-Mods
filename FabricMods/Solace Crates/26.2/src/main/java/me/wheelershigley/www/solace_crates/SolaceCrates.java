@@ -21,12 +21,13 @@ public class SolaceCrates implements ModInitializer {
      * "**" is required to meet 0.7.0 (functional alpha release)
      *
      * ## Prototyping
-     ** Probabilities-Menu Probabilities Implementation
      ** Standard-Key Functionality
      ** Premium-Key Menu + Premium-Key Functionality
      *
      * ## Appearance
      ** Players Configuration for current seed (UUID -> #)
+     ** Store-Link in ProbabilitiesMenu
+     * Custom Icons
      *
      * Display Types
      * ** Floating display of item (single?)
@@ -43,6 +44,8 @@ public class SolaceCrates implements ModInitializer {
      *
      * item-component can set identifier (when placing)
      * automatically adding all registered crates to creative menu (with item-components)
+     *
+     * menu of probability menus {suggested}
      */
 
     @Override

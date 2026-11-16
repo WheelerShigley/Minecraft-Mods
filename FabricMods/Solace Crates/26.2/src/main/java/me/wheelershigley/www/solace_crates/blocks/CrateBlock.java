@@ -5,7 +5,6 @@ import eu.pb4.polymer.blocks.api.BlockModelType;
 import eu.pb4.polymer.blocks.api.PolymerBlockModel;
 import eu.pb4.polymer.blocks.api.PolymerBlockResourceUtils;
 import eu.pb4.polymer.blocks.api.PolymerTexturedBlock;
-import me.wheelershigley.www.solace_crates.permissions.PermissionsHelper;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
 import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
@@ -13,6 +12,7 @@ import me.wheelershigley.www.solace_crates.loot.ItemStackListOddsTable;
 import me.wheelershigley.www.solace_crates.loot.LootHelper;
 import me.wheelershigley.www.solace_crates.loot.LootTableEvaluator;
 import me.wheelershigley.www.solace_crates.menus.ProbabilitiesMenu;
+import me.wheelershigley.www.solace_crates.permissions.PermissionsHelper;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;
@@ -126,9 +126,8 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
             }
             LootContext context = LootHelper.createLootContext(serverPlayer);
             ItemStackListOddsTable odds = LootTableEvaluator.evaluate(table, context);
-            // TODO: use odds in ProbabilitiesMenu
 
-            ProbabilitiesMenu menu = new ProbabilitiesMenu(serverPlayer, null) {
+            ProbabilitiesMenu menu = new ProbabilitiesMenu(serverPlayer, odds, crateDefinition, null) {
                 @Override
                 public String getTranslationKey() {
                     return crateBlockEntity.getIdentifiedTranslationKey();

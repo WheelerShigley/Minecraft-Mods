@@ -1,0 +1,89 @@
+package me.wheelershigley.www.solace_crates.menus;
+
+import me.wheelershigley.www.solace_crates.loot.ItemStackListOddsTable;
+import me.wheelershigley.www.solace_crates.loot.OddsTable;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public abstract class BoundedImmutableSimpleGui<T extends OddsTable<?> > extends ImmutableSimpleGui<T> {
+    static final ItemStack FILLER;
+    static final int ROW_LENGTH = 9;
+    int PAGE_INDEX = 0;
+
+    final ItemStackListOddsTable ODDS_TABLE;
+
+    public BoundedImmutableSimpleGui(
+        @Nullable ServerPlayer player,
+        @NotNull ItemStackListOddsTable oddsTable,
+        @Nullable ImmutableSimpleGui<?> parent
+    ) {
+        ODDS_TABLE = oddsTable;
+
+        MenuType<?> menuType = getMinimumChestMenu(
+        2*ROW_LENGTH + Math.clamp(
+                oddsTable.getData().size(),
+                0, 4*ROW_LENGTH
+            )
+        );
+        super(player, menuType, parent);
+    }
+
+    @Override
+    public void initializeMenu() {
+        fillBounds();
+        setHeader();
+        setFooter();
+    }
+    public void initializeMenu(final int pageNumber) {
+        this.PAGE_INDEX = pageNumber;
+        initializeMenu();
+    }
+
+    public abstract void setHeader();
+    public abstract void setFooter();
+
+    int getPageCount() {
+        final int ENTRY_COUNT = ODDS_TABLE.getData().size();
+        final int BODY_LENGTH = 4*ROW_LENGTH;
+        return (int)Math.ceil(
+            (double)ENTRY_COUNT / (double)BODY_LENGTH
+        );
+    }
+    int getTotalLength() {
+        final int ENTRY_COUNT = ODDS_TABLE.getData().size();
+        final int BODY_LENGTH = 4*ROW_LENGTH;
+        return 2*ROW_LENGTH + Math.clamp(
+            ENTRY_COUNT - ( (long)(PAGE_INDEX) ) * BODY_LENGTH,
+            0, BODY_LENGTH
+        );
+    }
+
+    private void fillBounds() {
+        // Header
+        for(int index = 0; index < ROW_LENGTH; index++) {
+            this.setSlot(index, FILLER);
+        }
+
+        // Footer
+        final int FOOTER_POSITION = getTotalLength() - ROW_LENGTH;
+        for(int index = FOOTER_POSITION; index < FOOTER_POSITION + ROW_LENGTH; index++) {
+            this.setSlot(index, FILLER);
+        }
+    }
+
+    static {
+        ItemStack filler = new ItemStack( Items.STAINED_GLASS_PANE.lightGray() );
+        filler.set(
+            DataComponents.CUSTOM_NAME,
+            Component.literal(" ")
+        );
+        FILLER = filler;
+    }
+}

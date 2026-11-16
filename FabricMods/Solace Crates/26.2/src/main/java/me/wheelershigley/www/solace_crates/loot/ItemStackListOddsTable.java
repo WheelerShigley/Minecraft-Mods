@@ -5,9 +5,8 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ItemStackListOddsTable implements OddsTable< List<ItemStack> > {
     private final HashMap< List<ItemStack>, Double > DATA = new HashMap<>();
@@ -33,5 +32,25 @@ public class ItemStackListOddsTable implements OddsTable< List<ItemStack> > {
     @Override
     public HashMap< List<ItemStack>, Double > getData() {
         return DATA;
+    }
+
+    @Override
+    public Map< List<ItemStack>, Double> getSorted() {
+        return getData().entrySet().stream()
+            .sorted(
+                Map.Entry.<List<ItemStack>, Double>comparingByValue()
+                    .reversed()
+                    .thenComparing(
+                        entry -> entry.getKey().getFirst().getItem().getDescriptionId()
+                    )
+            )
+            .collect(
+                Collectors.toMap(
+                    Map.Entry::getKey,
+                    Map.Entry::getValue,
+                    (a, b) -> a, LinkedHashMap::new
+                )
+            )
+        ;
     }
 }
