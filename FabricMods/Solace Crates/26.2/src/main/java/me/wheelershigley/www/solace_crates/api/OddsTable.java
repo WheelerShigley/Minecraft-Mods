@@ -1,20 +1,20 @@
-package me.wheelershigley.www.solace_crates.loot;
+package me.wheelershigley.www.solace_crates.api;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public interface OddsTable<T> {
-    HashMap<T, Double> getData();
+public abstract class OddsTable<T> {
+    public abstract HashMap<T, Double> getData();
 
-    default void addOdd(final T key, final double value) {
+    public void addOdd(final T key, final double value) {
         getData().put(key, value);
     }
-    default void setOdds(Map<T, Double> data) {
+    public void setOdds(Map<T, Double> data) {
         getData().clear();
         getData().putAll(data);
     }
 
-    default Map<T, Double> getSorted() {
+    public Map<T, Double> getSorted() {
         return getData().entrySet().stream()
             .sorted( Map.Entry.<T, Double>comparingByValue().reversed() )
             .collect(
@@ -26,12 +26,12 @@ public interface OddsTable<T> {
             )
         ;
     }
-    default void sort() {
+    public void sort() {
         Map<T, Double> sorted = getSorted();
         getData().clear();
         getData().putAll(sorted);
     }
-    default void normalize() {
+    public void normalize() {
         double sum_weight = getData().values().stream()
             .mapToDouble(Double::doubleValue)
             .sum()

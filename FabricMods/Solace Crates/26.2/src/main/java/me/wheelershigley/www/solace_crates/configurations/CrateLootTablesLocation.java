@@ -5,7 +5,7 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
-import me.wheelershigley.www.solace_crates.api.ResourceLocation;
+import me.wheelershigley.www.solace_crates.api.data.ResourceLocation;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.MinecraftServer;

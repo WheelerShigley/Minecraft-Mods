@@ -22,21 +22,22 @@ public class SolaceCrates implements ModInitializer {
      *
      * ## Prototyping
      ** Premium-Key Menu + Premium-Key Functionality
+     ** Next Items (in-menu)
      *
      * ## Appearance
      ** Players Configuration for current seed (UUID -> #)
      ** Store-Link in ProbabilitiesMenu
+     * Fix Double-Messaging for unset/unknown/invalid crates
      * Custom Icons
      *
      * Display Types
-     * ** Floating display of item (single?)
-     * ** Floating display of items (multiple items) {collect all resulting-ItemStacks together for this}
+     * * Floating display of item (single?)
+     * * Floating display of items (multiple items) {collect all resulting-ItemStacks together for this}
      * * Random display
      * * Configuration for which Type (in CrateDefinition)
      * item-displays have titles above them (translated name)
      *
      * Facing Direction (crate directions)
-     * Fix Double-Messaging for unset/unknown/invalid crates
      *
      * ## User-friendliness
      * set crate-type with a menu

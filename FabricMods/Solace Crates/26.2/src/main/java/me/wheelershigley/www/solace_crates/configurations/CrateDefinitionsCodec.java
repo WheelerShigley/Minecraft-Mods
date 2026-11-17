@@ -2,7 +2,7 @@ package me.wheelershigley.www.solace_crates.configurations;
 
 import com.google.common.reflect.TypeToken;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
-import me.wheelershigley.www.solace_crates.api.Codec;
+import me.wheelershigley.www.solace_crates.api.data.Codec;
 import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
 import me.wheelershigley.www.solace_crates.crate.CrateDefinitions;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;

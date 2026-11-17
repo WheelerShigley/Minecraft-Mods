@@ -1,10 +1,8 @@
 package me.wheelershigley.www.solace_crates.menus;
 
-import me.wheelershigley.www.solace_crates.loot.ItemStackListOddsTable;
-import me.wheelershigley.www.solace_crates.loot.OddsTable;
+import me.wheelershigley.www.solace_crates.loot.ItemStackOddsTables;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
@@ -12,24 +10,26 @@ import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class BoundedImmutableSimpleGui<T extends OddsTable<?> > extends ImmutableSimpleGui<T> {
+import java.util.List;
+
+public abstract class WrappedImmutableSimpleGui extends ImmutableSimpleGui {
     static final ItemStack FILLER;
     static final int ROW_LENGTH = 9;
+    static final int BODY_LENGTH = 4*ROW_LENGTH;
     int PAGE_INDEX = 0;
 
-    final ItemStackListOddsTable ODDS_TABLE;
+    List<ItemStack> displayItems;
 
-    public BoundedImmutableSimpleGui(
+    public WrappedImmutableSimpleGui(
         @Nullable ServerPlayer player,
-        @NotNull ItemStackListOddsTable oddsTable,
-        @Nullable ImmutableSimpleGui<?> parent
+        @NotNull List<ItemStack> displayItems,
+        @Nullable ImmutableSimpleGui parent
     ) {
-        ODDS_TABLE = oddsTable;
-
+        this.displayItems = displayItems;
         MenuType<?> menuType = getMinimumChestMenu(
         2*ROW_LENGTH + Math.clamp(
-                oddsTable.getData().size(),
-                0, 4*ROW_LENGTH
+                displayItems.size(),
+                0, BODY_LENGTH
             )
         );
         super(player, menuType, parent);
@@ -39,6 +39,7 @@ public abstract class BoundedImmutableSimpleGui<T extends OddsTable<?> > extends
     public void initializeMenu() {
         fillBounds();
         setHeader();
+        setBody();
         setFooter();
     }
     public void initializeMenu(final int pageNumber) {
@@ -49,15 +50,28 @@ public abstract class BoundedImmutableSimpleGui<T extends OddsTable<?> > extends
     public abstract void setHeader();
     public abstract void setFooter();
 
+    public void setBody() {
+        final int STARTING_POSITION = PAGE_INDEX * BODY_LENGTH;
+        final int ENDING_POSITION = Math.min(
+            STARTING_POSITION + BODY_LENGTH,
+            displayItems.size()
+        );
+
+        int position = 1*ROW_LENGTH;
+        for(int index = STARTING_POSITION; index < ENDING_POSITION; index++) {
+            setSlot( position++, displayItems.get(index) );
+        }
+    }
+
     int getPageCount() {
-        final int ENTRY_COUNT = ODDS_TABLE.getData().size();
+        final int ENTRY_COUNT = displayItems.size();
         final int BODY_LENGTH = 4*ROW_LENGTH;
         return (int)Math.ceil(
             (double)ENTRY_COUNT / (double)BODY_LENGTH
         );
     }
     int getTotalLength() {
-        final int ENTRY_COUNT = ODDS_TABLE.getData().size();
+        final int ENTRY_COUNT = displayItems.size();
         final int BODY_LENGTH = 4*ROW_LENGTH;
         return 2*ROW_LENGTH + Math.clamp(
             ENTRY_COUNT - ( (long)(PAGE_INDEX) ) * BODY_LENGTH,

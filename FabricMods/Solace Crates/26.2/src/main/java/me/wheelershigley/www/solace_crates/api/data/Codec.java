@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_crates.api;
+package me.wheelershigley.www.solace_crates.api.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

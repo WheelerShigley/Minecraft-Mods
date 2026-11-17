@@ -19,6 +19,7 @@
   "solace_crates.menu.probabilities.pity":          "Pity",
   "solace_crates.menu.probabilities.previous_page": "Previous Page",
   "solace_crates.menu.probabilities.next_page":     "Next Page",
+  "solace_crates.oddstables.itemstack.lore.pool":   "Pool %1$s: %2$s",
 
   "solace_crates.crate.unset.name":   "§cUnset Crate",
   "solace_crates.crate.example.name": "§7Example Crate"

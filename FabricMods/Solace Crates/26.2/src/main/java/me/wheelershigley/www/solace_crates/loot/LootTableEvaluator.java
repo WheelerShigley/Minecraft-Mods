@@ -7,24 +7,31 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class LootTableEvaluator {
-    public static ItemStackListOddsTable evaluate(
+    public static ItemStackOddsTables evaluate(
         @NotNull LootTable table,
         @NotNull LootContext context
     ) {
         List<LootPool> pools = ( (LootTableAccessor)table ).solace_crates$getPools();
+        List<LootItemFunction> functions = ( (LootTableAccessor)table ).solace_crates$getFunctions();
 
-        List<LootPoolEntry> entries = new ArrayList<>();
+        functions.forEach(
+            func -> {
+            }
+        );
+
+        List< List<LootPoolEntry> > poolEntries = new LinkedList<>();
         for(LootPool pool : pools) {
-            // TODO: use rolls (?)
-            // int rolls = pool.rolls.getInt(context) + pool.bonusRolls.getInt(context);
-
+            List<LootPoolEntry> currentEntries = new ArrayList<>();
             boolean conditionsRun = runs(pool.conditions, context);
             if(!conditionsRun) {
                 continue;
@@ -35,11 +42,18 @@ public class LootTableEvaluator {
                 continue;
             }
             for(LootPoolEntryContainer entry : pool.entries) {
-                entry.expand(context, entries::add);
+                entry.expand(context, currentEntries::add);
             }
+            poolEntries.add(currentEntries);
         }
 
-        return new ItemStackListOddsTable(entries, context);
+        List<ItemStackOddsTable> oddsTables = new LinkedList<>();
+        for(List<LootPoolEntry> currentEntries : poolEntries) {
+            oddsTables.add(
+                new ItemStackOddsTable(currentEntries, context)
+            );
+        }
+        return new ItemStackOddsTables(oddsTables);
     }
 
     private static boolean runs(

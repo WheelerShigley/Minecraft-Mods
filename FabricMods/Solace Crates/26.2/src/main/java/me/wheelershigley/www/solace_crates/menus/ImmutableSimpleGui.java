@@ -1,7 +1,6 @@
 package me.wheelershigley.www.solace_crates.menus;
 
 import eu.pb4.sgui.api.gui.SimpleGui;
-import me.wheelershigley.www.solace_crates.loot.OddsTable;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.TypedDataComponent;
@@ -19,17 +18,16 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class ImmutableSimpleGui< T extends OddsTable<?> > extends SimpleGui {
+public abstract class ImmutableSimpleGui extends SimpleGui {
     public static final int ROW_LENGTH = 9;
 
-    private final ImmutableSimpleGui<?> parent;
+    private final ImmutableSimpleGui parent;
 
     public abstract String getTranslationKey();
     public abstract MenuType<?> getMenuType();
     public abstract void initializeMenu();
-    public abstract void initializeMenu(T oddsTable);
 
-    public ImmutableSimpleGui(ServerPlayer player, MenuType<?> menuType, ImmutableSimpleGui<?> parent) {
+    public ImmutableSimpleGui(ServerPlayer player, MenuType<?> menuType, ImmutableSimpleGui parent) {
         super(menuType, player, false);
         this.parent = parent;
 
@@ -57,7 +55,7 @@ public abstract class ImmutableSimpleGui< T extends OddsTable<?> > extends Simpl
         return MenuType.GENERIC_9x6;
     }
 
-    private static <T> void setComponent(
+    static <T> void setComponent(
         ItemStack itemStack,
         TypedDataComponent<T> component
     ) {
@@ -92,14 +90,14 @@ public abstract class ImmutableSimpleGui< T extends OddsTable<?> > extends Simpl
         return copy;
     }
 
-    public static ItemStack getMenuItem(
+    public ItemStack getMenuItem(
         Item textureItem,
         boolean enchantable,
         @Nullable String translationKey
     ) {
         return getMenuItem(textureItem, null, enchantable, translationKey);
     }
-    public static ItemStack getMenuItem(
+    public ItemStack getMenuItem(
         Item textureItem,
         @Nullable DataComponentMap components,
         boolean enchantable,
@@ -113,7 +111,7 @@ public abstract class ImmutableSimpleGui< T extends OddsTable<?> > extends Simpl
             enchantable
         );
     }
-    public static ItemStack getMenuItem(
+    public ItemStack getMenuItem(
         @Nullable String translationKey,
         Identifier textureIdentifier,
         @Nullable DataComponentMap components,
@@ -128,7 +126,7 @@ public abstract class ImmutableSimpleGui< T extends OddsTable<?> > extends Simpl
                     continue;
                 }
 
-                setComponent(itemStack, component);
+                this.setComponent(itemStack, component);
             }
         }
 

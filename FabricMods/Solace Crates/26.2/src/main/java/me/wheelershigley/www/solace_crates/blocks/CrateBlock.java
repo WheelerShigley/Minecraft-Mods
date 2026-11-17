@@ -8,13 +8,13 @@ import eu.pb4.polymer.blocks.api.PolymerTexturedBlock;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
 import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
-import me.wheelershigley.www.solace_crates.loot.ItemStackListOddsTable;
+import me.wheelershigley.www.solace_crates.loot.ItemStackOddsTables;
 import me.wheelershigley.www.solace_crates.loot.LootHelper;
 import me.wheelershigley.www.solace_crates.loot.LootTableEvaluator;
+import me.wheelershigley.www.solace_crates.api.OddsTables;
 import me.wheelershigley.www.solace_crates.menus.ProbabilitiesMenu;
 import me.wheelershigley.www.solace_crates.permissions.PermissionsHelper;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -35,9 +35,6 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.vault.VaultConfig;
-import net.minecraft.world.level.block.entity.vault.VaultServerData;
-import net.minecraft.world.level.block.entity.vault.VaultSharedData;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -146,7 +143,7 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
         LootContext context = LootHelper.createLootContext(serverPlayer, 0);
 
         if( serverPlayer.isCrouching() ) {
-            ItemStackListOddsTable odds = LootTableEvaluator.evaluate(table, context);
+            ItemStackOddsTables odds = LootTableEvaluator.evaluate(table, context);
             ProbabilitiesMenu menu = new ProbabilitiesMenu(serverPlayer, odds, crateDefinition, null) {
                 @Override
                 public String getTranslationKey() {
@@ -211,7 +208,7 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
     }
 
     // inspired by VaultBlock.Server
-    private class Server {
+    private static class Server {
         public static boolean tryInsertKey(
             final ServerPlayer serverPlayer,
             final ItemStack stackToInsert,

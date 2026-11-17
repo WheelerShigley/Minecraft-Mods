@@ -1,6 +1,6 @@
 package me.wheelershigley.www.solace_crates.crate;
 
-import me.wheelershigley.www.solace_crates.api.Savable;
+import me.wheelershigley.www.solace_crates.api.data.Savable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

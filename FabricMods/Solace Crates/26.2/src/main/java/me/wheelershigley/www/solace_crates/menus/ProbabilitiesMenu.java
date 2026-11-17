@@ -1,13 +1,14 @@
 package me.wheelershigley.www.solace_crates.menus;
 
-import com.mojang.datafixers.util.Pair;
 import eu.pb4.sgui.api.elements.GuiElement;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
+import me.wheelershigley.www.solace_crates.api.MathsHelper;
 import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
-import me.wheelershigley.www.solace_crates.loot.ItemStackListOddsTable;
+import me.wheelershigley.www.solace_crates.loot.ItemStackOddsTables;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -22,24 +23,28 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-public class ProbabilitiesMenu extends BoundedImmutableSimpleGui<ItemStackListOddsTable> {
+public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
     private int PAGE_INDEX = 0;
 
     public CrateDefinition crateDefinition;
+    private final List<ItemStack> displayItems;
 
     public ProbabilitiesMenu(
         @Nullable ServerPlayer player,
-        @NotNull ItemStackListOddsTable oddsTable,
+        @NotNull ItemStackOddsTables oddsTables,
         @Nullable CrateDefinition crateDefinition,
-        @Nullable ImmutableSimpleGui<?> parent
+        @Nullable ImmutableSimpleGui parent
     ) {
         this.crateDefinition = crateDefinition;
-        super(player, oddsTable, parent);
 
-        initializeMenu(oddsTable);
+        List<ItemStack> displayItems = sanitizeItems( oddsTables.getAllEntries() );
+        super(player, displayItems, parent);
+        this.displayItems = displayItems;
+
+        initializeMenu(PAGE_INDEX);
     }
 
     @Override
@@ -122,47 +127,13 @@ public class ProbabilitiesMenu extends BoundedImmutableSimpleGui<ItemStackListOd
     @Override
     public MenuType<?> getMenuType() {
         return getMinimumChestMenu(
-            18 + ODDS_TABLE.getData().size()
+            2*ROW_LENGTH + this.displayItems.size()
         );
-    }
-
-    @Override
-    public void initializeMenu(ItemStackListOddsTable oddsTable) {
-        final int ENTRY_COUNT = oddsTable.getData().size();
-        List<ItemStack>[] keys = new List[ENTRY_COUNT]; {
-            int index = 0;
-            Map< List<ItemStack>, Double > sortedTable = oddsTable.getSorted();
-            for(Map.Entry< List<ItemStack>, Double > entry : sortedTable.entrySet() ) {
-                keys[index++] = entry.getKey();
-            }
-        }
-
-        final int BODY_LENGTH = 4 * ROW_LENGTH;
-        final int ENTRY_POSITION = (int)(
-            ( (long)BODY_LENGTH ) * PAGE_INDEX
-        );
-        final int EXIT_POSITION = Math.min(
-            ENTRY_COUNT,
-            ENTRY_POSITION + BODY_LENGTH
-        );
-
-        int current_menu_position = 1*ROW_LENGTH;
-        for(int index = ENTRY_POSITION; index < EXIT_POSITION; index++) {
-            //TODO: Item Cycling (not just first)
-            ItemStack firstItem = keys[index].getFirst();
-            this.setSlot(
-                current_menu_position++,
-                getProbabilityMenuItem(
-                    firstItem, oddsTable.getData().getOrDefault( keys[index], 0.0 )
-                )
-            );
-        }
     }
 
     public void refresh() {
         clearBody();
         initializeMenu(this.PAGE_INDEX);
-        initializeMenu(this.ODDS_TABLE);
     }
 
     private void clearBody() {
@@ -171,74 +142,28 @@ public class ProbabilitiesMenu extends BoundedImmutableSimpleGui<ItemStackListOd
         }
     }
 
-    private static ItemStack getProbabilityMenuItem(
-        ItemStack sourceStack,
-        double probability
-    ) {
-        boolean appears_enchanted = sourceStack.getOrDefault(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false) || sourceStack.isEnchanted();
-        ItemStack itemStack = getMenuItem(
-            sourceStack.getItem(),
-            appears_enchanted,
-            null
-        );
-
-        List<Component> lines = new ArrayList<>();
-        lines.add(
-            Component.literal(
-                getHumanReadablePercentage(probability)
-            ).withStyle(
-                Style.EMPTY.withColor(TextColor.WHITE).withItalic(false)
-            )
-        );
-
-        ItemLore existingLore = sourceStack.getOrDefault(DataComponents.LORE, ItemLore.EMPTY);
-        lines.addAll( existingLore.lines() );
-
-        itemStack.set( DataComponents.LORE, new ItemLore(lines) );
-
-
-        return itemStack;
-    }
-
-    private static String getHumanReadablePercentage(double chance) {
-        Pair<Double, Integer> notatedChance = MathsHelper.notate(100.0*chance);
-
-        //force to be fixed-point
-        while( 0 < notatedChance.getSecond() ) {
-            notatedChance = new Pair<>(
-                10.0 * notatedChance.getFirst(),
-                notatedChance.getSecond() - 1
+    private static List<ItemStack> sanitizeItems(List<ItemStack> items) {
+        List<ItemStack> sanitizedItems = new LinkedList<>();
+        for(ItemStack item : items) {
+            ItemStack currentStack = new ItemStack(Items.PAPER);
+            currentStack.set(
+                DataComponents.ITEM_MODEL,
+                ItemsHelper.getIdentifier( item.getItem() )
             );
+
+            DataComponentMap components = item.getComponents();
+            for (TypedDataComponent<?> component : components) {
+                if (component.type() == DataComponents.ITEM_MODEL) {
+                    continue;
+                }
+
+                setComponent(currentStack, component);
+            }
+
+            sanitizedItems.add(currentStack);
         }
 
-        chance = MathsHelper.percentageRound( notatedChance.getFirst() );
-        int order = notatedChance.getSecond();
-        double remainder = MathsHelper.percentageRound(chance % 1);
-        chance = (int)chance;
-
-        //when rounded up, re-adjust
-        if(order < 0 && 10.0 <= chance) {
-            chance /= 10.0;
-            order += 1;
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        if(remainder == 0.0) {
-            stringBuilder.append(
-                Integer.toString( (int)chance )
-            );
-        } else {
-            stringBuilder.append(
-                MathsHelper.percentageRound(chance +remainder)
-            );
-        }
-
-        stringBuilder.append('%');
-        if(order < 0) {
-            stringBuilder.append('e').append(order);
-        }
-
-        return stringBuilder.toString();
+        return sanitizedItems;
     }
 
     private class CrateMetaItems {
@@ -275,7 +200,7 @@ public class ProbabilitiesMenu extends BoundedImmutableSimpleGui<ItemStackListOd
                     .build()
                 ;
             } else {
-                return BoundedImmutableSimpleGui.FILLER;
+                return WrappedImmutableSimpleGui.FILLER;
             }
 
             return getMenuItem(item, name_map, false, translationKey);
