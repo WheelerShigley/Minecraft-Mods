@@ -1,15 +1,16 @@
 package me.wheelershigley.www.solace_crates.loot;
 
-import me.wheelershigley.www.solace_crates.mixin.LootPoolAccessor;
-import me.wheelershigley.www.solace_crates.mixin.LootTableAccessor;
+import me.wheelershigley.www.solace_crates.mixin.*;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -22,13 +23,6 @@ public class LootTableEvaluator {
         @NotNull LootContext context
     ) {
         List<LootPool> pools = ( (LootTableAccessor)table ).solace_crates$getPools();
-        List<LootItemFunction> functions = ( (LootTableAccessor)table ).solace_crates$getFunctions();
-
-        functions.forEach(
-            func -> {
-            }
-        );
-
         List< List<LootPoolEntry> > poolEntries = new LinkedList<>();
         for(LootPool pool : pools) {
             List<LootPoolEntry> currentEntries = new ArrayList<>();
@@ -66,5 +60,25 @@ public class LootTableEvaluator {
             }
         }
         return true;
+    }
+
+    public static NumberProvider getProvider(LootPoolEntry entry) {
+        LootPoolSingletonContainer container = ( (EntryBaseAccessor)entry ).solace_crates$getContainer();
+
+        List<LootItemFunction> functions = (
+            (LootPoolSingletonContainerAccessor)container
+        ).solace_crates$getFunctions();
+
+        for(LootItemFunction function : functions) {
+            if( !(function instanceof SetItemCountFunction setItemCount) ) {
+                continue;
+            }
+
+            return(
+                (SetItemCountFunctionAccessor)setItemCount
+            ).solace_crates$getCount();
+        }
+
+        return null;
     }
 }

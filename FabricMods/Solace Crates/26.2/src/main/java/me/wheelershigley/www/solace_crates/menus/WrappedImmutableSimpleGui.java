@@ -1,6 +1,6 @@
 package me.wheelershigley.www.solace_crates.menus;
 
-import me.wheelershigley.www.solace_crates.loot.ItemStackOddsTables;
+import me.wheelershigley.www.solace_crates.api.EntryOutcome;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,17 +18,17 @@ public abstract class WrappedImmutableSimpleGui extends ImmutableSimpleGui {
     static final int BODY_LENGTH = 4*ROW_LENGTH;
     int PAGE_INDEX = 0;
 
-    List<ItemStack> displayItems;
+    List<EntryOutcome> displayOutcomes;
 
     public WrappedImmutableSimpleGui(
         @Nullable ServerPlayer player,
-        @NotNull List<ItemStack> displayItems,
+        @NotNull List<EntryOutcome> displayOutcomes,
         @Nullable ImmutableSimpleGui parent
     ) {
-        this.displayItems = displayItems;
+        this.displayOutcomes = displayOutcomes;
         MenuType<?> menuType = getMinimumChestMenu(
         2*ROW_LENGTH + Math.clamp(
-                displayItems.size(),
+                displayOutcomes.size(),
                 0, BODY_LENGTH
             )
         );
@@ -39,7 +39,7 @@ public abstract class WrappedImmutableSimpleGui extends ImmutableSimpleGui {
     public void initializeMenu() {
         fillBounds();
         setHeader();
-        setBody();
+        tickBody();
         setFooter();
     }
     public void initializeMenu(final int pageNumber) {
@@ -50,28 +50,28 @@ public abstract class WrappedImmutableSimpleGui extends ImmutableSimpleGui {
     public abstract void setHeader();
     public abstract void setFooter();
 
-    public void setBody() {
+    public void tickBody() {
         final int STARTING_POSITION = PAGE_INDEX * BODY_LENGTH;
         final int ENDING_POSITION = Math.min(
             STARTING_POSITION + BODY_LENGTH,
-            displayItems.size()
+            displayOutcomes.size()
         );
 
         int position = 1*ROW_LENGTH;
         for(int index = STARTING_POSITION; index < ENDING_POSITION; index++) {
-            setSlot( position++, displayItems.get(index) );
+            setSlot( position++, displayOutcomes.get(index).tick() );
         }
     }
 
     int getPageCount() {
-        final int ENTRY_COUNT = displayItems.size();
+        final int ENTRY_COUNT = displayOutcomes.size();
         final int BODY_LENGTH = 4*ROW_LENGTH;
         return (int)Math.ceil(
             (double)ENTRY_COUNT / (double)BODY_LENGTH
         );
     }
     int getTotalLength() {
-        final int ENTRY_COUNT = displayItems.size();
+        final int ENTRY_COUNT = displayOutcomes.size();
         final int BODY_LENGTH = 4*ROW_LENGTH;
         return 2*ROW_LENGTH + Math.clamp(
             ENTRY_COUNT - ( (long)(PAGE_INDEX) ) * BODY_LENGTH,

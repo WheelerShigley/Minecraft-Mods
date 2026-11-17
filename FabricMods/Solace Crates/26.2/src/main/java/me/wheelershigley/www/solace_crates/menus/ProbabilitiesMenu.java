@@ -2,10 +2,13 @@ package me.wheelershigley.www.solace_crates.menus;
 
 import eu.pb4.sgui.api.elements.GuiElement;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
-import me.wheelershigley.www.solace_crates.api.MathsHelper;
+import me.wheelershigley.www.solace_crates.api.EntryOutcome;
+import me.wheelershigley.www.solace_crates.blocks.CrateBlockEntity;
 import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
 import me.wheelershigley.www.solace_crates.loot.ItemStackOddsTables;
+import me.wheelershigley.www.solace_crates.loot.LootHelper;
+import me.wheelershigley.www.solace_crates.loot.LootTableEvaluator;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.TypedDataComponent;
@@ -14,37 +17,55 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import org.apache.logging.log4j.core.config.builder.api.ComponentBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static me.wheelershigley.www.solace_crates.SolaceCrates.getTranslatedSolaceCrateComponent;
+
 public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
-    private int PAGE_INDEX = 0;
+    private int page_index = 0;
+    private int tick = 0;
 
     public CrateDefinition crateDefinition;
-    private final List<ItemStack> displayItems;
+    private LootContext context;
+    private final List<EntryOutcome> displayOutcomes;
+    LinkedList<NumberProvider[]> poolNumberProviders;
 
     public ProbabilitiesMenu(
         @Nullable ServerPlayer player,
+        @NotNull LinkedList<NumberProvider[]> poolNumberProviders,
         @NotNull ItemStackOddsTables oddsTables,
+        @NotNull LootContext lootContext,
         @Nullable CrateDefinition crateDefinition,
         @Nullable ImmutableSimpleGui parent
     ) {
         this.crateDefinition = crateDefinition;
+        this.context = lootContext;
+        this.poolNumberProviders = poolNumberProviders;
 
-        List<ItemStack> displayItems = sanitizeItems( oddsTables.getAllEntries() );
-        super(player, displayItems, parent);
-        this.displayItems = displayItems;
+        List<EntryOutcome> displayOutcomes = sanitizeItems(
+            oddsTables.getAllEntries(lootContext),
+            lootContext
+        );
+        super(player, displayOutcomes, parent);
+        this.displayOutcomes = displayOutcomes;
 
-        initializeMenu(PAGE_INDEX);
+        initializeMenu(page_index);
     }
 
     @Override
@@ -66,9 +87,10 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
         }
 
         // TODO -(s)
-        setSlot( 4, menuItemsMaker.getNextItem()            );
-        setSlot( 7, menuItemsMaker.getPityItem()            );
-        setSlot( 8, menuItemsMaker.getStoreLinkItem()       );
+        setSlot( 4, menuItemsMaker.getNextItem()                        );
+        setSlot( 5, menuItemsMaker.getPoolInformationItem(this.context) );
+        setSlot( 7, menuItemsMaker.getPityItem()                        );
+        setSlot( 8, menuItemsMaker.getStoreLinkItem()                   );
     }
 
     @Override
@@ -77,20 +99,20 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
 
         final int PAGE_COUNT = getPageCount();
         final int FOOTER_POSITION; {
-            if(PAGE_INDEX != 0) {
+            if(page_index != 0) {
                 FOOTER_POSITION = 5*ROW_LENGTH;
             } else {
                 FOOTER_POSITION = getTotalLength() - ROW_LENGTH;
             }
         }
 
-        if(0 < PAGE_INDEX && PAGE_INDEX <= PAGE_COUNT-1) {
+        if(0 < page_index && page_index <= PAGE_COUNT-1) {
             GuiElement backArrow = GuiElementBuilder
                 .from(
                     menuItemsMaker.getBackArrowItem()
                 ).setCallback(
                     (_, _, _, _) -> {
-                        PAGE_INDEX--;
+                        page_index--;
                         refresh();
                     }
                 )
@@ -101,13 +123,13 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
             setSlot(FOOTER_POSITION + 0, FILLER);
         }
 
-        if(0 <= PAGE_INDEX && PAGE_INDEX < PAGE_COUNT-1) {
+        if(0 <= page_index && page_index < PAGE_COUNT-1) {
             GuiElement forwardArrow = GuiElementBuilder
                 .from(
                     menuItemsMaker.getForwardArrowItem()
                 ).setCallback(
                     (_, _, _, _) -> {
-                        PAGE_INDEX++;
+                        page_index++;
                         refresh();
                     }
                 )
@@ -127,13 +149,22 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
     @Override
     public MenuType<?> getMenuType() {
         return getMinimumChestMenu(
-            2*ROW_LENGTH + this.displayItems.size()
+            2*ROW_LENGTH + this.displayOutcomes.size()
         );
+    }
+
+    @Override
+    public void onTick() {
+        if(tick%20 == 0) {
+            tickBody();
+        }
+
+        tick++;
     }
 
     public void refresh() {
         clearBody();
-        initializeMenu(this.PAGE_INDEX);
+        initializeMenu(this.page_index);
     }
 
     private void clearBody() {
@@ -142,28 +173,112 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
         }
     }
 
-    private static List<ItemStack> sanitizeItems(List<ItemStack> items) {
-        List<ItemStack> sanitizedItems = new LinkedList<>();
-        for(ItemStack item : items) {
-            ItemStack currentStack = new ItemStack(Items.PAPER);
-            currentStack.set(
-                DataComponents.ITEM_MODEL,
-                ItemsHelper.getIdentifier( item.getItem() )
-            );
+    private static List<EntryOutcome> sanitizeItems(
+        @NotNull List<EntryOutcome> entries,
+        @NotNull LootContext lootContext
+    ) {
+        List<EntryOutcome> sanitizedEntries = new LinkedList<>();
+        for(EntryOutcome entry : entries) {
+            EntryOutcome.IntRange range = entry.getRange(lootContext);
 
-            DataComponentMap components = item.getComponents();
-            for (TypedDataComponent<?> component : components) {
-                if (component.type() == DataComponents.ITEM_MODEL) {
-                    continue;
-                }
-
-                setComponent(currentStack, component);
+            List<ItemStack> entryStacks = entry.getStacks();
+            List<ItemStack> sanitizedStacks = new LinkedList<>();
+            for(ItemStack stack : entryStacks) {
+                sanitizedStacks.add( sanitizeItem(stack, range) );
             }
 
-            sanitizedItems.add(currentStack);
+            EntryOutcome sanitizedEntry = new EntryOutcome(
+                entry.getEntry(),
+                entry.getNumberProvider(),
+                sanitizedStacks
+            );
+            sanitizedEntries.add(sanitizedEntry);
         }
 
-        return sanitizedItems;
+        return sanitizedEntries;
+    }
+    private static ItemStack sanitizeItem(
+        @NotNull final ItemStack datumStack,
+        @Nullable final EntryOutcome.IntRange range
+    ) {
+        ItemStack sanitizedStack = new ItemStack(Items.PAPER);
+        if( EntryOutcome.IntRange.isSimple(range, datumStack) ) {
+            sanitizedStack.setCount( datumStack.getCount() );
+        }
+
+        sanitizedStack.set(
+            DataComponents.ITEM_MODEL,
+            ItemsHelper.getIdentifier( datumStack.getItem() )
+        );
+
+        DataComponentMap components = datumStack.getComponents();
+        for (TypedDataComponent<?> component : components) {
+            if (component.type() == DataComponents.ITEM_MODEL) {
+                continue;
+            }
+
+            setComponent(sanitizedStack, component);
+        }
+
+        return sanitizedStack;
+    }
+
+    public static class Builder {
+        private LinkedList<NumberProvider[]> poolNumberProviders = new LinkedList<>();
+        CrateBlockEntity crateBlockEntity;
+
+        public Builder withLootPools(
+            @NotNull List<LootPool> pools
+        ) {
+            this.poolNumberProviders.clear();
+            for(LootPool pool : pools) {
+                List<NumberProvider> currentProviders = new LinkedList<>();
+                if(pool.rolls != null) {
+                    currentProviders.add(pool.rolls);
+                }
+                if(pool.bonusRolls != null) {
+                    currentProviders.add(pool.bonusRolls);
+                }
+
+                this.poolNumberProviders.add(
+                    currentProviders.toArray( new NumberProvider[0] )
+                );
+            }
+
+            return this;
+        }
+
+        public Builder ofCrateBlockEntity(
+            @Nullable CrateBlockEntity crateBlockEntity
+        ) {
+            this.crateBlockEntity = crateBlockEntity;
+            return this;
+        }
+
+        public ProbabilitiesMenu build(
+            @Nullable ServerPlayer player,
+            @NotNull ItemStackOddsTables oddsTables,
+            @NotNull LootContext lootContext,
+            @Nullable CrateDefinition crateDefinition
+        ) {
+            if(crateBlockEntity == null) {
+                return new ProbabilitiesMenu(player, poolNumberProviders, oddsTables, lootContext, crateDefinition, null);
+            } else {
+                return new ProbabilitiesMenu(
+                    player,
+                    poolNumberProviders,
+                    oddsTables,
+                    lootContext,
+                    crateDefinition,
+                    null
+                ) {
+                    @Override
+                    public String getTranslationKey() {
+                        return crateBlockEntity.getIdentifiedTranslationKey();
+                    }
+                };
+            }
+        }
     }
 
     private class CrateMetaItems {
@@ -239,6 +354,60 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
                 Items.PAPER,
                 false,
                 "solace_crates.menu.probabilities.next_item"
+            );
+        }
+        private static final Style ROLL_STYLE = Style.EMPTY.withColor(TextColor.GRAY).withItalic(false);
+        public ItemStack getPoolInformationItem(LootContext context) {
+            List<Component> poolRollsDescriptions = new LinkedList<>();
+            int pool_index = 1;
+            for(NumberProvider[] poolProviders : poolNumberProviders) {
+                Component currentLine = Component.empty();
+
+                int provider_index = 1;
+                for(NumberProvider poolProvider : poolProviders) {
+                    EntryOutcome.IntRange range = new EntryOutcome.IntRange(poolProvider, context);
+                    if( range.equals(EntryOutcome.IntRange.EMPTY) ) {
+                        continue;
+                    }
+
+                    if(1 < provider_index) {
+                        currentLine = currentLine.copy().append(
+                            Component.literal(", ")
+                        );
+                    }
+                    currentLine = currentLine.copy().append(
+                        range.toComponent()
+                    );
+                    provider_index++;
+                }
+                if( currentLine.getString().isEmpty() ) {
+                    currentLine = currentLine.copy().append(
+                        Component.literal("?")
+                    );
+                }
+
+                poolRollsDescriptions.add(
+                    Component.translatable(
+                        "solace_crates.menu.probabilities.rolls.pool",
+                        pool_index++,
+                        currentLine
+                    ).withStyle(ROLL_STYLE)
+                );
+            }
+
+            DataComponentMap poolInformationContainer = DataComponentMap.builder()
+                .set(
+                    DataComponents.LORE,
+                    new ItemLore(poolRollsDescriptions)
+                )
+                .build()
+            ;
+
+            return getMenuItem(
+                Items.REDSTONE,
+                poolInformationContainer,
+                false,
+                "solace_crates.menu.probabilities.rolls"
             );
         }
         // TODO

@@ -13,6 +13,7 @@ import me.wheelershigley.www.solace_crates.loot.LootHelper;
 import me.wheelershigley.www.solace_crates.loot.LootTableEvaluator;
 import me.wheelershigley.www.solace_crates.api.OddsTables;
 import me.wheelershigley.www.solace_crates.menus.ProbabilitiesMenu;
+import me.wheelershigley.www.solace_crates.mixin.LootTableAccessor;
 import me.wheelershigley.www.solace_crates.permissions.PermissionsHelper;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
@@ -40,6 +41,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.NonNull;
@@ -144,13 +146,15 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
 
         if( serverPlayer.isCrouching() ) {
             ItemStackOddsTables odds = LootTableEvaluator.evaluate(table, context);
-            ProbabilitiesMenu menu = new ProbabilitiesMenu(serverPlayer, odds, crateDefinition, null) {
-                @Override
-                public String getTranslationKey() {
-                    return crateBlockEntity.getIdentifiedTranslationKey();
-                }
-            };
+            List<LootPool> pools = ( (LootTableAccessor)table ).solace_crates$getPools();
 
+            ProbabilitiesMenu menu = new ProbabilitiesMenu.Builder()
+                .withLootPools(pools)
+                .ofCrateBlockEntity(crateBlockEntity)
+                .build(
+                    serverPlayer, odds, context, crateDefinition
+                )
+            ;
             menu.open();
             return InteractionResult.SUCCESS;
         }

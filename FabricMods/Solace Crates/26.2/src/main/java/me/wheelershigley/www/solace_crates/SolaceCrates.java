@@ -23,6 +23,7 @@ public class SolaceCrates implements ModInitializer {
      * ## Prototyping
      ** Premium-Key Menu + Premium-Key Functionality
      ** Next Items (in-menu)
+     * Opening Sound(s)
      *
      * ## Appearance
      ** Players Configuration for current seed (UUID -> #)

@@ -1,5 +1,6 @@
 package me.wheelershigley.www.solace_crates.loot;
 
+import me.wheelershigley.www.solace_crates.api.EntryOutcome;
 import me.wheelershigley.www.solace_crates.api.MathsHelper;
 import me.wheelershigley.www.solace_crates.api.OddsTables;
 import net.minecraft.ChatFormatting;
@@ -8,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class ItemStackOddsTables extends OddsTables< ItemStackOddsTable, ItemStack> {
+public class ItemStackOddsTables extends OddsTables<ItemStackOddsTable, EntryOutcome> {
     public ItemStackOddsTables(ItemStackOddsTable table) {
         super( List.of(table) );
     }
@@ -23,37 +25,57 @@ public class ItemStackOddsTables extends OddsTables< ItemStackOddsTable, ItemSta
         super(tables);
     }
 
+    private static final Style COUNT_STYLE = Style.EMPTY.withColor(ChatFormatting.GRAY).withItalic(false);
     @Override
-    public List<ItemStack> getAllEntries() {
-        List<ItemStack> stacks = new LinkedList<>();
+    public List<EntryOutcome> getAllEntries(LootContext context) {
+        List<EntryOutcome> entries = new LinkedList<>();
 
         int pool_count = this.getOddsTables().size();
         int pool = 1;
         for(ItemStackOddsTable table : this.getOddsTables() ) {
-            Map< List<ItemStack>, Double > weightMap = table.getSorted();
+            Map<EntryOutcome, Double> weightMap = table.getSorted();
             double sum_weight = weightMap.values().stream().reduce(0.0, Double::sum);
 
-            for( Map.Entry< List<ItemStack>, Double > entry : weightMap.entrySet() ) {
-                if( entry.getKey().isEmpty() ) {
+            for( Map.Entry<EntryOutcome, Double> entry : weightMap.entrySet() ) {
+                EntryOutcome key = entry.getKey();
+                List<ItemStack> entryItems = key.getStacks();
+                if( entryItems.isEmpty() ) {
                     continue;
                 }
 
-                ItemStack currentItem = entry.getKey().getFirst().copy();
-                //TODO: multi-item shuffling/lore
-                weighStack(
-                    currentItem,
-                    (1 < pool_count ? pool : null),
-                    entry.getValue() / sum_weight
+                List<ItemStack> taggedItems = new LinkedList<>();
+                for(ItemStack entryItem : entryItems) {
+                    ItemStack currentItem = entryItem.copy();
+
+                    EntryOutcome.IntRange range = key.getRange(context);
+                    if( !EntryOutcome.IntRange.isSimple(range, currentItem) ) {
+                        currentItem.set(
+                            DataComponents.LORE,
+                            ItemLore.EMPTY.withLineAdded( range.toComponent().copy().withStyle(COUNT_STYLE) )
+                        );
+                    }
+
+                    weighStack(
+                        currentItem,
+                        (1 < pool_count ? pool : null),
+                        entry.getValue() / sum_weight
+                    );
+
+                    taggedItems.add(currentItem);
+                }
+
+                entries.add(
+                    new EntryOutcome(
+                        key.getEntry(),
+                        key.getNumberProvider(),
+                        taggedItems
+                    )
                 );
-
-                //TODO: counts <------------
-
-                stacks.add(currentItem);
             }
 
             pool++;
         }
-        return stacks;
+        return entries;
     }
 
     private static final Style LORE_STYLE = Style.EMPTY.withColor(ChatFormatting.GRAY).withItalic(false);
@@ -62,18 +84,23 @@ public class ItemStackOddsTables extends OddsTables< ItemStackOddsTable, ItemSta
         final @Nullable Integer pool_number,
         final double percentage
     ) {
-        Component line;
+        ItemLore existingLore = stack.getOrDefault(DataComponents.LORE, ItemLore.EMPTY);
+        List<Component> lines = new LinkedList<>( existingLore.lines() );
+
         String readablePercentage = MathsHelper.getHumanReadablePercentage(percentage);
         if( pool_number != null ) {
-            line = Component.translatable(
+            lines.add(
+                Component.translatable(
                     "solace_crates.oddstables.itemstack.lore.pool",
                     pool_number,
                     readablePercentage
                 ).withStyle(LORE_STYLE)
-            ;
+            );
         } else {
-            line = Component.literal(readablePercentage);
+            lines.add(
+                Component.literal(readablePercentage)
+            );
         }
-        stack.set( DataComponents.LORE, ItemLore.EMPTY.withLineAdded(line) );
+        stack.set( DataComponents.LORE, new ItemLore(lines) );
     }
 }

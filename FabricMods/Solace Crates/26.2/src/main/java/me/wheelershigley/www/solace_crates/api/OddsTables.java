@@ -1,8 +1,10 @@
 package me.wheelershigley.www.solace_crates.api;
 
+import net.minecraft.world.level.storage.loot.LootContext;
+
 import java.util.List;
 
-public abstract class OddsTables<O extends OddsTable< List<T> >, T> {
+public abstract class OddsTables<O extends OddsTable<T>, T> {
     private final List<O> tables;
 
     public OddsTables(O table) {
@@ -16,11 +18,11 @@ public abstract class OddsTables<O extends OddsTable< List<T> >, T> {
         return tables;
     }
 
-    public abstract List<T> getAllEntries();
+    public abstract List<T> getAllEntries(LootContext lootContext);
 
     public int getTotalEntriesCount() {
         int accumulator = 0;
-        for(OddsTable< List<T> > table : tables) {
+        for(OddsTable<T> table : tables) {
             accumulator += table.getData().size();
         }
         return accumulator;

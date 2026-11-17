@@ -4,8 +4,11 @@
   "package": "me.wheelershigley.www.solace_crates.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "EntryBaseAccessor",
     "LootPoolAccessor",
-    "LootTableAccessor"
+    "LootPoolSingletonContainerAccessor",
+    "LootTableAccessor",
+    "SetItemCountFunctionAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

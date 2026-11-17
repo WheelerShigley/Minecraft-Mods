@@ -16,10 +16,17 @@
   "solace_crates.menu.probabilities.standard_key":  "Standard Key",
   "solace_crates.menu.probabilities.premium_key":   "Premium Key",
   "solace_crates.menu.probabilities.next_item":     "Next Item",
+  "solace_crates.menu.probabilities.rolls":         "Rolls",
+  "solace_crates.menu.probabilities.rolls.pool":    "Pool %1$s: %2$s",
   "solace_crates.menu.probabilities.pity":          "Pity",
   "solace_crates.menu.probabilities.previous_page": "Previous Page",
   "solace_crates.menu.probabilities.next_page":     "Next Page",
+  "solace_crates.intrange.counts":                  "×",
   "solace_crates.oddstables.itemstack.lore.pool":   "Pool %1$s: %2$s",
+
+  "solace_crates.rangetype.constant": "constant",
+  "solace_crates.rangetype.uniform":  "uniform",
+  "solace_crates.rangetype.binomial": "binomial",
 
   "solace_crates.crate.unset.name":   "§cUnset Crate",
   "solace_crates.crate.example.name": "§7Example Crate"
