@@ -1,7 +1,6 @@
 package me.wheelershigley.www.solace_crates.blocks;
 
 import eu.pb4.polymer.core.api.block.PolymerBlockUtils;
-import me.wheelershigley.www.solace_crates.SolaceCrates;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

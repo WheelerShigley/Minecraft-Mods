@@ -3,6 +3,7 @@ package me.wheelershigley.www.solace_crates;
 import me.wheelershigley.www.solace_crates.blocks.ModBlockEntities;
 import me.wheelershigley.www.solace_crates.blocks.ModBlocks;
 import me.wheelershigley.www.solace_crates.commands.SetCrateCommand;
+import me.wheelershigley.www.solace_crates.events.StartUpCreativeItems;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 import me.wheelershigley.www.solace_crates.events.ServerLifeCycleListeners;
 import net.fabricmc.api.ModInitializer;
@@ -43,10 +44,12 @@ public class SolaceCrates implements ModInitializer {
      * ## User-friendliness
      * set crate-type with a menu
      *
-     * item-component can set identifier (when placing)
-     * automatically adding all registered crates to creative menu (with item-components)
+     * item-component can set identifier (when placing) + creative-registration integration
      *
      * menu of probability menus {suggested}
+     *
+     * ## Bug Fixes
+     ** Crate-Definitions shouldn't always become default on-startup
      */
 
     @Override
@@ -55,6 +58,7 @@ public class SolaceCrates implements ModInitializer {
 
         ModBlockEntities.initialize();
         ModBlocks.initialize();
+        StartUpCreativeItems.register();
 
         ServerLifeCycleListeners.register();
 
