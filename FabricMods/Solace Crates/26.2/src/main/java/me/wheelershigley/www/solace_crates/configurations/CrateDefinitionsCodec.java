@@ -3,6 +3,7 @@ package me.wheelershigley.www.solace_crates.configurations;
 import com.google.common.reflect.TypeToken;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
 import me.wheelershigley.www.solace_crates.api.data.Codec;
+import me.wheelershigley.www.solace_crates.blocks.BlocksHelper;
 import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
 import me.wheelershigley.www.solace_crates.crate.CrateDefinitions;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
@@ -11,6 +12,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,6 +26,10 @@ public class CrateDefinitionsCodec implements Codec< CrateDefinitions, Set<Crate
     private static MinecraftServer server = null;
     public void initialize(MinecraftServer server) {
         CrateDefinitionsCodec.server = server;
+        reload();
+    }
+
+    public static void reload() {
         DATA = INSTANCE.load();
         synchronize();
     }
@@ -53,7 +59,7 @@ public class CrateDefinitionsCodec implements Codec< CrateDefinitions, Set<Crate
 
         final CrateDefinition EXAMPLE_DEFINITION = new CrateDefinition(
             SolaceCrates.id("example"),
-            SolaceCrates.id("crate"),
+            BlocksHelper.getIdentifier(Blocks.VAULT),
             EXAMPLE_IDENTIFIER,
             ItemsHelper.getIdentifier(Items.TRIAL_KEY),
             ItemsHelper.getIdentifier(Items.OMINOUS_TRIAL_KEY),
@@ -75,7 +81,7 @@ public class CrateDefinitionsCodec implements Codec< CrateDefinitions, Set<Crate
 
     @Override
     public Type getDataType() {
-        return new TypeToken< Set<CrateDefinitions> >() {}.getType();
+        return new TypeToken< Set<CrateDefinition> >() {}.getType();
     }
 
     @Override

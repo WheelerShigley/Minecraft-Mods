@@ -16,17 +16,17 @@ public class ModBlockEntities {
     }
 
     public static final BlockEntityType<CrateBlockEntity> CRATE_BLOCK_ENTITY = register(
-        CrateBlock.NAME,
+        CrateBlock.DEFAULT_BLOCK_IDENTIFIER.toString(),
         CrateBlockEntity::new,
         ModBlocks.CRATE
     );
 
     private static <T extends BlockEntity> BlockEntityType<T> register(
-        String name,
+        String identifierString,
         FabricBlockEntityTypeBuilder.Factory<? extends T> entityFactory,
         Block... blocks
     ) {
-        Identifier identifier = SolaceCrates.id(name);
+        Identifier identifier = Identifier.parse(identifierString);
         return Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
             identifier,

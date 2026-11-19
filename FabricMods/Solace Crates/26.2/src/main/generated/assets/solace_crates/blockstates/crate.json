@@ -1,7 +1,0 @@
-{
-  "variants": {
-    "": {
-      "model": "solace_crates:block/crate"
-    }
-  }
-}

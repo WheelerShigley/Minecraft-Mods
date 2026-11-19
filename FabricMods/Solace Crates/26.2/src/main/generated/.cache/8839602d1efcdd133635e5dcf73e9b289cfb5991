@@ -1,4 +1,4 @@
 // 26.2	-999999999-01-01T00:00:00	Solace Crates/Model Definitions
-845d50cfe1dc6b2462b99869268a508d4bd17238 assets/solace_crates/blockstates/crate.json
-2b7f231178e785662b1b22c15a4a13888d97f841 assets/solace_crates/items/crate.json
-ef172be44afa8e387458325b50cdaec82a5adb7d assets/solace_crates/models/block/crate.json
+9ddad9a32d4a440d2f44f860ff00797e41f2c802 assets/solace_crates/blockstates/unset_crate.json
+96a00a8118be41dffceccab504e74c15fd7d2d4b assets/solace_crates/items/unset_crate.json
+daa811237364c2bad84003bd476ae0afbf8c4868 assets/solace_crates/models/block/unset_crate.json

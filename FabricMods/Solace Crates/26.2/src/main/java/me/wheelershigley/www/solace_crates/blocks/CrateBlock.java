@@ -1,17 +1,16 @@
 package me.wheelershigley.www.solace_crates.blocks;
 
 import com.mojang.serialization.MapCodec;
-import eu.pb4.polymer.blocks.api.BlockModelType;
-import eu.pb4.polymer.blocks.api.PolymerBlockModel;
-import eu.pb4.polymer.blocks.api.PolymerBlockResourceUtils;
 import eu.pb4.polymer.blocks.api.PolymerTexturedBlock;
+import eu.pb4.polymer.virtualentity.api.BlockWithElementHolder;
+import eu.pb4.polymer.virtualentity.api.ElementHolder;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
 import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
+import me.wheelershigley.www.solace_crates.crate.CrateElementHolder;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
 import me.wheelershigley.www.solace_crates.loot.ItemStackOddsTables;
 import me.wheelershigley.www.solace_crates.loot.LootHelper;
 import me.wheelershigley.www.solace_crates.loot.LootTableEvaluator;
-import me.wheelershigley.www.solace_crates.api.OddsTables;
 import me.wheelershigley.www.solace_crates.menus.ProbabilitiesMenu;
 import me.wheelershigley.www.solace_crates.mixin.LootTableAccessor;
 import me.wheelershigley.www.solace_crates.permissions.PermissionsHelper;
@@ -52,21 +51,13 @@ import java.util.List;
 
 import static me.wheelershigley.www.solace_crates.SolaceCrates.getTranslatedSolaceCrateComponent;
 
-public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock {
-    public static final String NAME = "crate";
+public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock, BlockWithElementHolder {
+    public static final Identifier DEFAULT_BLOCK_IDENTIFIER = SolaceCrates.id("crate");
     public static final BlockBehaviour.Properties PROPERTIES;
-    private final BlockState STATE;
     private long lastInsertFailTimestamp;
 
     public CrateBlock(Properties properties) {
-        super(PROPERTIES);
-
-        STATE = PolymerBlockResourceUtils.requestBlock(
-            BlockModelType.FULL_BLOCK,
-            PolymerBlockModel.of(
-                SolaceCrates.id("block/" + NAME)
-            )
-        );
+        super(properties);
     }
 
     @Override
@@ -75,8 +66,17 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
     }
 
     @Override
-    public BlockState getPolymerBlockState(BlockState state, @Nullable PacketContext context) {
-        return this.STATE;
+    public @Nullable ElementHolder createElementHolder(
+        ServerLevel world,
+        BlockPos pos,
+        BlockState state
+    ) {
+        return new CrateElementHolder(world, pos);
+    }
+
+    @Override
+    public boolean tickElementHolder(ServerLevel world, BlockPos pos, BlockState state) {
+        return true;
     }
 
     @Override
@@ -211,6 +211,11 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
         return InteractionResult.SUCCESS;
     }
 
+    @Override
+    public BlockState getPolymerBlockState(BlockState state, @Nullable PacketContext context) {
+        return Blocks.BARRIER.defaultBlockState();
+    }
+
     // inspired by VaultBlock.Server
     private static class Server {
         public static boolean tryInsertKey(
@@ -269,6 +274,7 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock 
 
     static {
         PROPERTIES = BlockBehaviour.Properties.of()
+            .noOcclusion()
             .mapColor(MapColor.STONE)
             .instrument(NoteBlockInstrument.BASEDRUM)
             .strength(-1.0F, 3600000.0F)

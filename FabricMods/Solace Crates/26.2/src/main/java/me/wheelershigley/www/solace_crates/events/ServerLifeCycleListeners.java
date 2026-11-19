@@ -29,7 +29,7 @@ public class ServerLifeCycleListeners {
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(
             (server, resourceManager, success) -> {
                 if(success) {
-                    CrateDefinitionsCodec.INSTANCE.initialize(server);
+                    CrateDefinitionsCodec.reload();
                     CrateLootTablesLocation.INSTANCE.reload(server);
                 }
             }

@@ -1,5 +1,6 @@
 {
-  "block.solace_crates.crate": "Crate",
+  "block.solace_crates.crate":       "Crate",
+  "block.solace_crates.unset_crate": "Unset Crate",
 
   "solace_crates.messages.prefix": "§7<§l§bCrate§r§7> ",
   "solace_crates.command.set_crate.identifier_missing": "§aWarning§7: \"%1$s\" is not registered to the crate-registry.",
