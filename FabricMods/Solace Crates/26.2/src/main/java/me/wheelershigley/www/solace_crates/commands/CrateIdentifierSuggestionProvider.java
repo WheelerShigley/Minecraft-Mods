@@ -18,7 +18,7 @@ public class CrateIdentifierSuggestionProvider implements SuggestionProvider<Com
         SuggestionsBuilder builder
     ) throws CommandSyntaxException {
         for(CrateDefinition definition : CrateRegistry.values() ) {
-            builder.suggest( definition.IDENTIFIER.toString() );
+            builder.suggest( definition.IDENTIFIER().toString() );
         }
         return builder.buildFuture();
     }

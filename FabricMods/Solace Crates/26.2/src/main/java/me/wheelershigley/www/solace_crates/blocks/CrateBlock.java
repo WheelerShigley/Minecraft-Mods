@@ -173,8 +173,8 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
             return InteractionResult.SUCCESS_SERVER;
         }
 
-        final Item STANDARD_KEY = ItemsHelper.getItem( crateDefinition.STANDARD_KEY );
-        final Item PREMIUM_KEY  = ItemsHelper.getItem( crateDefinition.PREMIUM_KEY  );
+        final Item STANDARD_KEY = ItemsHelper.getItem(crateDefinition.STANDARD_KEY());
+        final Item PREMIUM_KEY  = ItemsHelper.getItem(crateDefinition.PREMIUM_KEY());
         if( itemStack.getItem().equals(PREMIUM_KEY) ) {
             player.sendSystemMessage(
                 Component.literal("TODO: premium key usage")
@@ -256,7 +256,7 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
             }
 
             Identifier itemIdentifier = ItemsHelper.getIdentifier(item);
-            return itemIdentifier.equals( crateDefinition.STANDARD_KEY );
+            return itemIdentifier.equals(crateDefinition.STANDARD_KEY());
         }
 
         private static void playInsertFailSound(

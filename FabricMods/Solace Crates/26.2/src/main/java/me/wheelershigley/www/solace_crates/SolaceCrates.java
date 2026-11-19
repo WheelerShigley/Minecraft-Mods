@@ -47,9 +47,6 @@ public class SolaceCrates implements ModInitializer {
      * item-component can set identifier (when placing) + creative-registration integration
      *
      * menu of probability menus {suggested}
-     *
-     * ## Bug Fixes
-     ** Crate-Definitions shouldn't always become default on-startup
      */
 
     @Override

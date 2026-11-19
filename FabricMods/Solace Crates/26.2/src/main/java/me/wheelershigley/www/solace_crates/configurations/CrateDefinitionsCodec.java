@@ -38,7 +38,7 @@ public class CrateDefinitionsCodec implements Codec< CrateDefinitions, Set<Crate
         CrateRegistry.clear();
         SolaceCrates.LOGGER.info("Synchronizing Crate-Definitions...");
         for( CrateDefinition definition : DATA.getData() ) {
-            SolaceCrates.LOGGER.info("Registered Crate \"{}\".", definition.IDENTIFIER);
+            SolaceCrates.LOGGER.info("Registered Crate \"{}\".", definition.IDENTIFIER());
             CrateRegistry.register(definition);
         }
     }

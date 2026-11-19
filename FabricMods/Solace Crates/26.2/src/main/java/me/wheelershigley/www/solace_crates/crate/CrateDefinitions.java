@@ -1,6 +1,7 @@
 package me.wheelershigley.www.solace_crates.crate;
 
 import me.wheelershigley.www.solace_crates.api.data.Savable;
+import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -10,14 +11,20 @@ public class CrateDefinitions implements Savable< Set<CrateDefinition> > {
 
     public CrateDefinitions() {}
     public CrateDefinitions(CrateDefinition definition) {
-        definitions.add(definition);
+        addDefinition(definition);
     }
     public CrateDefinitions(Set<CrateDefinition> definitions) {
-        this.definitions = definitions;
+        definitions.forEach(this::addDefinition);
     }
 
     public boolean addDefinition(CrateDefinition definition) {
-        return definitions.add(definition);
+        boolean wasAdded = definitions.add(definition);
+        if(
+            !CrateRegistry.contains( definition.IDENTIFIER() )
+        ) {
+            CrateRegistry.register(definition);
+        }
+        return wasAdded;
     }
     public boolean removeDefinition(CrateDefinition definition) {
         return definitions.remove(definition);

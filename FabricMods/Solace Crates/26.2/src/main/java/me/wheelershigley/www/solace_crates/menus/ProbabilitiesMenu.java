@@ -7,8 +7,6 @@ import me.wheelershigley.www.solace_crates.blocks.CrateBlockEntity;
 import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
 import me.wheelershigley.www.solace_crates.loot.ItemStackOddsTables;
-import me.wheelershigley.www.solace_crates.loot.LootHelper;
-import me.wheelershigley.www.solace_crates.loot.LootTableEvaluator;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.TypedDataComponent;
@@ -17,18 +15,14 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemLore;
-import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import org.apache.logging.log4j.core.config.builder.api.ComponentBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -327,7 +321,7 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
             }
 
             return getMetaMenuItem(
-                crateDefinition.STANDARD_KEY,
+                    crateDefinition.STANDARD_KEY(),
                 "solace_crates.menu.probabilities.standard_key",
                 Style.EMPTY.withColor(TextColor.GRAY).withItalic(true),
                 Style.EMPTY.withColor(TextColor.YELLOW).withBold(true)
@@ -339,7 +333,7 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
             }
 
             return getMetaMenuItem(
-                crateDefinition.PREMIUM_KEY,
+                    crateDefinition.PREMIUM_KEY(),
                 "solace_crates.menu.probabilities.premium_key",
                 Style.EMPTY.withColor(TextColor.GRAY).withItalic(true),
                 Style.EMPTY.withColor(TextColor.GOLD).withBold(true)

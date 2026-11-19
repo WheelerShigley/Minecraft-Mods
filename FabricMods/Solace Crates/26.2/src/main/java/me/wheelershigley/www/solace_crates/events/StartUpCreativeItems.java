@@ -38,7 +38,7 @@ public class StartUpCreativeItems {
                         ItemStack itemStack = new ItemStack( ModBlocks.CRATE.asItem() );
                         itemStack.set(
                             DataComponents.ITEM_MODEL,
-                            crateDefinition.MODEL
+                                crateDefinition.MODEL()
                         );
                         itemStack.set(
                             DataComponents.CUSTOM_NAME,

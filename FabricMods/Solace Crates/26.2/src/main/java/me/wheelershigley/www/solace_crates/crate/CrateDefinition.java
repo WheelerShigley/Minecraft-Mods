@@ -9,44 +9,41 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CrateDefinition {
-    public final Identifier IDENTIFIER;
-    public final Identifier MODEL;
-    public final Identifier LOOTTABLE;
-
-    public final Identifier STANDARD_KEY;
-    public final Identifier PREMIUM_KEY;
-    public final int PITY_THRESHOLD;
-
+public record CrateDefinition(
+    Identifier IDENTIFIER,
+    Identifier MODEL,
+    Identifier LOOTTABLE,
+    Identifier STANDARD_KEY,
+    Identifier PREMIUM_KEY,
+    int PITY_THRESHOLD
+) {
     public CrateDefinition(
-        @NotNull Identifier identifier,
-        @NotNull  Identifier modelIdentifier,
-        @NotNull  Identifier lootTable,
-        @Nullable Identifier standardKeyIdentifier,
-        @Nullable Identifier premiumKeyIdentifier,
-                  int pity_threshold
+        @NotNull  Identifier IDENTIFIER,
+        @NotNull  Identifier MODEL,
+        @NotNull  Identifier LOOTTABLE,
+        @Nullable Identifier STANDARD_KEY,
+        @Nullable Identifier PREMIUM_KEY,
+        int PITY_THRESHOLD
     ) {
-        IDENTIFIER     = identifier;
-        MODEL          = modelIdentifier;
-        LOOTTABLE      = lootTable;
-        STANDARD_KEY   = standardKeyIdentifier;
-        PREMIUM_KEY    = premiumKeyIdentifier;
-        PITY_THRESHOLD = pity_threshold;
-
-        CrateRegistry.register(this);
+        this.IDENTIFIER     = IDENTIFIER;
+        this.MODEL          = MODEL;
+        this.LOOTTABLE      = LOOTTABLE;
+        this.STANDARD_KEY   = STANDARD_KEY;
+        this.PREMIUM_KEY    = PREMIUM_KEY;
+        this.PITY_THRESHOLD = PITY_THRESHOLD;
     }
 
     public String getIdentifiedTranslationKey() {
-            return
-                IDENTIFIER.getNamespace() +
-                ".crate." +
-                IDENTIFIER.getPath() +
-                ".name"
-            ;
-        }
+        return
+            IDENTIFIER.getNamespace() +
+            ".crate." +
+            IDENTIFIER.getPath() +
+            ".name"
+        ;
+    }
 
     public @Nullable LootTable getLootTable(MinecraftServer server) {
-        Holder<LootTable> moddedLootTableHolder = CrateLootTablesLocation.INSTANCE.getData().get( this.LOOTTABLE.getPath() );
+        Holder<LootTable> moddedLootTableHolder = CrateLootTablesLocation.INSTANCE.getData().get(this.LOOTTABLE.getPath());
         return moddedLootTableHolder.value();
 
         // TODO: vanilla compatibility (fallback)

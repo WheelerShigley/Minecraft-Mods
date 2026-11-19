@@ -107,7 +107,7 @@ public class CrateBlockEntity extends BlockEntity {
         if(crateDefinition == null) {
             return ModBlocks.UNSET_CRATE;
         } else {
-            Block crateBlock = BlocksHelper.getBlock(crateDefinition.MODEL);
+            Block crateBlock = BlocksHelper.getBlock(crateDefinition.MODEL());
             return (crateBlock == null ? ModBlocks.CRATE : crateBlock);
         }
     }

@@ -3,6 +3,7 @@ package me.wheelershigley.www.solace_crates.api.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
+import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.Identifier;
 
@@ -12,6 +13,7 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Set;
 
 public interface Codec< T extends Savable<D>, D > {
     T getDefaultCodec();
@@ -21,9 +23,13 @@ public interface Codec< T extends Savable<D>, D > {
 
     String getConfigName();
     default Path getDataPath() {
-        Path   configDir = FabricLoader.getInstance().getConfigDir();
-               configDir = configDir.resolve(SolaceCrates.MOD_ID).resolve( getConfigName() );
-        return configDir;
+        return FabricLoader.getInstance()
+            .getConfigDir()
+            .resolve(SolaceCrates.MOD_ID)
+            .resolve( getConfigName() )
+            .toAbsolutePath()
+            .normalize()
+        ;
     }
 
     default Gson getGson() {
@@ -47,17 +53,21 @@ public interface Codec< T extends Savable<D>, D > {
         }
 
         try( Reader reader = Files.newBufferedReader(path) ) {
+            String json = reader.readAllAsString();
             D data = getGson().fromJson(
-                reader,
+                json,
                 getDataType()
             );
             if(data == null) {
                 return getDefaultCodec();
             }
 
-            T newData = getEmptyData();
-            newData.setData(data);
             SolaceCrates.LOGGER.info( "Successfully loaded \"{}\"", path.toAbsolutePath() );
+            T newData = getInstanceData();
+            if(newData == null) {
+                newData = getDefaultCodec();
+            }
+            newData.setData(data);
             return newData;
         } catch(IOException exception) {
             throw new RuntimeException(
@@ -68,28 +78,25 @@ public interface Codec< T extends Savable<D>, D > {
     default boolean save() {
         Path path = getDataPath();
 
+        final T DATA_SOURCE = getInstanceData();
+        if(DATA_SOURCE == null) {
+            SolaceCrates.LOGGER.warn("No instance data.");
+            return false;
+        }
+
+        final D DATA = DATA_SOURCE.getData();
+        if(DATA == null) {
+            SolaceCrates.LOGGER.warn("No data available.");
+            return false;
+        }
+
         try {
             Files.createDirectories( path.getParent() );
 
             try( BufferedWriter writer = Files.newBufferedWriter(path) ) {
-                final T DATA_SOURCE = getInstanceData();
-                if(DATA_SOURCE == null) {
-                    SolaceCrates.LOGGER.warn( "Failed to load from \"{}\".", path.toAbsolutePath() );
-                    return false;
-                }
-                final D DATA = DATA_SOURCE.getData();
-                if(DATA == null) {
-                    SolaceCrates.LOGGER.warn( "Failed to save from \"{}\".", path.toAbsolutePath() );
-                    return false;
-                }
-
-                getGson().toJson(
-                    DATA,
-                    getDataType(),
-                    writer
-                );
+                getGson().toJson(DATA, getDataType(), writer);
             }
-
+            SolaceCrates.LOGGER.info("Saved configuration: {}", path);
             return true;
         } catch(IOException exception) {
             throw new RuntimeException(

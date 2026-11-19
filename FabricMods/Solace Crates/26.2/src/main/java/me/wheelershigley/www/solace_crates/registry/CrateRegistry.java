@@ -15,13 +15,13 @@ public final class CrateRegistry {
     public static void initialize() {}
 
     public static void register(@NotNull CrateDefinition crate) {
-        if( CRATES.containsKey(crate.IDENTIFIER) ) {
+        if( CRATES.containsKey(crate.IDENTIFIER()) ) {
             throw new IllegalArgumentException(
-                "Crate, \"" + crate.IDENTIFIER + "\", already registered."
+                "Crate, \"" + crate.IDENTIFIER() + "\", already registered."
             );
         }
 
-        CRATES.put(crate.IDENTIFIER, crate);
+        CRATES.put(crate.IDENTIFIER(), crate);
     }
 
     public static @Nullable CrateDefinition get(@NotNull Identifier identifier) {
