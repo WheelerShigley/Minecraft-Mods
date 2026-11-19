@@ -36,6 +36,15 @@ public class CrateDefinition {
         CrateRegistry.register(this);
     }
 
+    public String getIdentifiedTranslationKey() {
+            return
+                IDENTIFIER.getNamespace() +
+                ".crate." +
+                IDENTIFIER.getPath() +
+                ".name"
+            ;
+        }
+
     public @Nullable LootTable getLootTable(MinecraftServer server) {
         Holder<LootTable> moddedLootTableHolder = CrateLootTablesLocation.INSTANCE.getData().get( this.LOOTTABLE.getPath() );
         return moddedLootTableHolder.value();
