@@ -42,18 +42,8 @@ public record CrateDefinition(
         ;
     }
 
-    public @Nullable LootTable getLootTable(MinecraftServer server) {
+    public @Nullable LootTable getLootTable() {
         Holder<LootTable> moddedLootTableHolder = CrateLootTablesLocation.INSTANCE.getData().get(this.LOOTTABLE.getPath());
         return moddedLootTableHolder.value();
-
-        // TODO: vanilla compatibility (fallback)
-        /*
-        LootTable vanillaLootTable = server
-            .reloadableRegistries()
-            .getLootTable(
-                ResourceKey.create(Registries.LOOT_TABLE, this.LOOTTABLE)
-            )
-        ;
-         */
     }
 }

@@ -22,13 +22,14 @@ public class SolaceCrates implements ModInitializer {
      * "**" is required to meet 0.7.0 (functional alpha release)
      *
      * ## Prototyping
-     ** Premium-Key Menu + Premium-Key Functionality
+     ** Choice-Menu Clean-up
      ** Next Items (in-menu)
      * Opening Sound(s)
+     * Remove unnecessary logging
      *
      * ## Appearance
      ** Players Configuration for current seed (UUID -> #)
-     ** Store-Link in ProbabilitiesMenu
+     * Store-Link in ProbabilitiesMenu
      * Fix Double-Messaging for unset/unknown/invalid crates
      * Custom Icons
      *

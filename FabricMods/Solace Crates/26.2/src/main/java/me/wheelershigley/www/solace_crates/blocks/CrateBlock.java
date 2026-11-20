@@ -11,6 +11,7 @@ import me.wheelershigley.www.solace_crates.items.ItemsHelper;
 import me.wheelershigley.www.solace_crates.loot.ItemStackOddsTables;
 import me.wheelershigley.www.solace_crates.loot.LootHelper;
 import me.wheelershigley.www.solace_crates.loot.LootTableEvaluator;
+import me.wheelershigley.www.solace_crates.menus.ChoiceMenu;
 import me.wheelershigley.www.solace_crates.menus.ProbabilitiesMenu;
 import me.wheelershigley.www.solace_crates.mixin.LootTableAccessor;
 import me.wheelershigley.www.solace_crates.permissions.PermissionsHelper;
@@ -134,7 +135,7 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
             return InteractionResult.FAIL;
         }
 
-        LootTable table = crateDefinition.getLootTable( serverPlayer.level().getServer() );
+        LootTable table = crateDefinition.getLootTable();
         if(table == null) {
             serverPlayer.sendSystemMessage(
                 getTranslatedSolaceCrateComponent("solace_crates.messages.loottable_missing")
@@ -176,6 +177,12 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
         final Item STANDARD_KEY = ItemsHelper.getItem(crateDefinition.STANDARD_KEY());
         final Item PREMIUM_KEY  = ItemsHelper.getItem(crateDefinition.PREMIUM_KEY());
         if( itemStack.getItem().equals(PREMIUM_KEY) ) {
+            ItemStackOddsTables odds = LootTableEvaluator.evaluate(table, context);
+            ChoiceMenu menu = new ChoiceMenu(
+                serverPlayer, crateDefinition, context, odds.getAllEntries(context), null
+            );
+            menu.open();
+
             player.sendSystemMessage(
                 Component.literal("TODO: premium key usage")
             );

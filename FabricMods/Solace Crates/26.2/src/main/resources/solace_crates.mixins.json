@@ -8,6 +8,7 @@
     "LootPoolAccessor",
     "LootPoolSingletonContainerAccessor",
     "LootTableAccessor",
+    "LootTableBuilderAccessor",
     "SetItemCountFunctionAccessor"
   ],
   "injectors": {

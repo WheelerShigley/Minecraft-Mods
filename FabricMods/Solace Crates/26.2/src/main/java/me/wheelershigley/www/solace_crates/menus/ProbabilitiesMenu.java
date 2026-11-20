@@ -1,7 +1,5 @@
 package me.wheelershigley.www.solace_crates.menus;
 
-import eu.pb4.sgui.api.elements.GuiElement;
-import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import me.wheelershigley.www.solace_crates.api.EntryOutcome;
 import me.wheelershigley.www.solace_crates.blocks.CrateBlockEntity;
 import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
@@ -29,8 +27,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 
-import static me.wheelershigley.www.solace_crates.SolaceCrates.getTranslatedSolaceCrateComponent;
-
 public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
     private int page_index = 0;
     private int tick = 0;
@@ -52,11 +48,8 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
         this.context = lootContext;
         this.poolNumberProviders = poolNumberProviders;
 
-        List<EntryOutcome> displayOutcomes = sanitizeItems(
-            oddsTables.getAllEntries(lootContext),
-            lootContext
-        );
-        super(player, displayOutcomes, parent);
+        List<EntryOutcome> displayOutcomes = oddsTables.getAllEntries(lootContext);
+        super(player, displayOutcomes, lootContext, parent);
         this.displayOutcomes = displayOutcomes;
 
         initializeMenu(page_index);
@@ -88,52 +81,7 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
     }
 
     @Override
-    public void setFooter() {
-        CrateMetaItems menuItemsMaker = new CrateMetaItems(crateDefinition);
-
-        final int PAGE_COUNT = getPageCount();
-        final int FOOTER_POSITION; {
-            if(page_index != 0) {
-                FOOTER_POSITION = 5*ROW_LENGTH;
-            } else {
-                FOOTER_POSITION = getTotalLength() - ROW_LENGTH;
-            }
-        }
-
-        if(0 < page_index && page_index <= PAGE_COUNT-1) {
-            GuiElement backArrow = GuiElementBuilder
-                .from(
-                    menuItemsMaker.getBackArrowItem()
-                ).setCallback(
-                    (_, _, _, _) -> {
-                        page_index--;
-                        refresh();
-                    }
-                )
-                .build()
-            ;
-            setSlot(FOOTER_POSITION + 0, backArrow);
-        } else {
-            setSlot(FOOTER_POSITION + 0, FILLER);
-        }
-
-        if(0 <= page_index && page_index < PAGE_COUNT-1) {
-            GuiElement forwardArrow = GuiElementBuilder
-                .from(
-                    menuItemsMaker.getForwardArrowItem()
-                ).setCallback(
-                    (_, _, _, _) -> {
-                        page_index++;
-                        refresh();
-                    }
-                )
-                .build()
-            ;
-            setSlot(FOOTER_POSITION + 8, forwardArrow);
-        } else {
-            setSlot(FOOTER_POSITION + 8, FILLER);
-        }
-    }
+    public void onBodyClick(int index) {}
 
     @Override
     public String getTranslationKey() {
@@ -154,67 +102,6 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
         }
 
         tick++;
-    }
-
-    public void refresh() {
-        clearBody();
-        initializeMenu(this.page_index);
-    }
-
-    private void clearBody() {
-        for(int index = ROW_LENGTH; index < getTotalLength() - ROW_LENGTH; index++) {
-            setSlot(index, ItemStack.EMPTY);
-        }
-    }
-
-    private static List<EntryOutcome> sanitizeItems(
-        @NotNull List<EntryOutcome> entries,
-        @NotNull LootContext lootContext
-    ) {
-        List<EntryOutcome> sanitizedEntries = new LinkedList<>();
-        for(EntryOutcome entry : entries) {
-            EntryOutcome.IntRange range = entry.getRange(lootContext);
-
-            List<ItemStack> entryStacks = entry.getStacks();
-            List<ItemStack> sanitizedStacks = new LinkedList<>();
-            for(ItemStack stack : entryStacks) {
-                sanitizedStacks.add( sanitizeItem(stack, range) );
-            }
-
-            EntryOutcome sanitizedEntry = new EntryOutcome(
-                entry.getEntry(),
-                entry.getNumberProvider(),
-                sanitizedStacks
-            );
-            sanitizedEntries.add(sanitizedEntry);
-        }
-
-        return sanitizedEntries;
-    }
-    private static ItemStack sanitizeItem(
-        @NotNull final ItemStack datumStack,
-        @Nullable final EntryOutcome.IntRange range
-    ) {
-        ItemStack sanitizedStack = new ItemStack(Items.PAPER);
-        if( EntryOutcome.IntRange.isSimple(range, datumStack) ) {
-            sanitizedStack.setCount( datumStack.getCount() );
-        }
-
-        sanitizedStack.set(
-            DataComponents.ITEM_MODEL,
-            ItemsHelper.getIdentifier( datumStack.getItem() )
-        );
-
-        DataComponentMap components = datumStack.getComponents();
-        for (TypedDataComponent<?> component : components) {
-            if (component.type() == DataComponents.ITEM_MODEL) {
-                continue;
-            }
-
-            setComponent(sanitizedStack, component);
-        }
-
-        return sanitizedStack;
     }
 
     public static class Builder {
@@ -333,7 +220,7 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
             }
 
             return getMetaMenuItem(
-                    crateDefinition.PREMIUM_KEY(),
+                crateDefinition.PREMIUM_KEY(),
                 "solace_crates.menu.probabilities.premium_key",
                 Style.EMPTY.withColor(TextColor.GRAY).withItalic(true),
                 Style.EMPTY.withColor(TextColor.GOLD).withBold(true)
@@ -418,21 +305,6 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
                 Items.WRITTEN_BOOK,
                 false,
                 "solace_crates.menu.probabilities.link." + "todo"
-            );
-        }
-
-        public ItemStack getBackArrowItem() {
-            return getMenuItem(
-                Items.ARROW,
-                false,
-                "solace_crates.menu.probabilities.previous_page"
-            );
-        }
-        public ItemStack getForwardArrowItem() {
-            return getMenuItem(
-                Items.ARROW,
-                false,
-                "solace_crates.menu.probabilities.next_page"
             );
         }
     }
