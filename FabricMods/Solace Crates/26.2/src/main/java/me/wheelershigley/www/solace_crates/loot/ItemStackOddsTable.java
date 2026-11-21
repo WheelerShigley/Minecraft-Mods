@@ -19,10 +19,6 @@ public class ItemStackOddsTable extends OddsTable<EntryOutcome> {
         @NotNull LootContext context
     ) {
         for(LootPoolEntry entry : entries) {
-
-            NumberProvider entryProvider = LootTableEvaluator.getProvider(entry);
-            System.out.println( "entry-rolls: "+ entryProvider );
-
             List<ItemStack> stacks = new LinkedList<>();
             entry.createItemStack(stacks::add, context);
 

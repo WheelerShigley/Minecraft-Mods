@@ -25,7 +25,6 @@ public class SolaceCrates implements ModInitializer {
      ** Next Items (in-menu)
      * (Probabilities Menu) Pity, Link
      * Opening Sound(s)
-     * Remove unnecessary logging
      *
      * ## Appearance
      ** Players Configuration for current seed (UUID -> #)
