@@ -249,7 +249,7 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
             serverPlayer.awardStat(
                 Stats.ITEM_USED.get( stackToInsert.getItem() )
             );
-            stackToInsert.consume( stackToInsert.getCount(), serverPlayer );
+            stackToInsert.consume(1, serverPlayer);
             ItemsHelper.giveItemsToPlayer(serverPlayer, stacks);
             return true;
         }
