@@ -73,11 +73,11 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
             }
         }
 
-        // TODO -(s)
         setSlot( 4, menuItemsMaker.getNextItem()                        );
         setSlot( 5, menuItemsMaker.getPoolInformationItem(this.context) );
-        setSlot( 7, menuItemsMaker.getPityItem()                        );
-        setSlot( 8, menuItemsMaker.getStoreLinkItem()                   );
+        // TODO s
+        //setSlot( 7, menuItemsMaker.getPityItem()                        );
+        //setSlot( 8, menuItemsMaker.getStoreLinkItem()                   );
     }
 
     @Override

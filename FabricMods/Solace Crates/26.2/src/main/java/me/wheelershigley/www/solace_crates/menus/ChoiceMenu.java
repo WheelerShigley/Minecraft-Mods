@@ -2,6 +2,7 @@ package me.wheelershigley.www.solace_crates.menus;
 
 import me.wheelershigley.www.solace_crates.SolaceCrates;
 import me.wheelershigley.www.solace_crates.api.EntryOutcome;
+import me.wheelershigley.www.solace_crates.blocks.CrateBlock;
 import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
 import me.wheelershigley.www.solace_crates.mixin.LootTableAccessor;
@@ -11,12 +12,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.level.block.entity.vault.VaultBlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -81,9 +84,7 @@ public class ChoiceMenu extends WrappedImmutableSimpleGui {
     public void onBodyClick(int index) {
         EntryOutcome forcedOutcome = displayOutcomes.get(index);
         if(forcedOutcome == null) {
-            player.sendSystemMessage(
-                SolaceCrates.getTranslatedSolaceCrateComponent("solace_crates.messages.choice_missing")
-            );
+            CrateBlock.fail(player, "solace_crates.messages.choice_missing");
             return;
         }
         attemptChoice(forcedOutcome);
@@ -92,35 +93,27 @@ public class ChoiceMenu extends WrappedImmutableSimpleGui {
     private void attemptChoice(EntryOutcome forcedOutcome) {
         Item keyItem = ItemsHelper.getItem( definition.PREMIUM_KEY() );
         if(keyItem == null) {
-            player.sendSystemMessage(
-                SolaceCrates.getTranslatedSolaceCrateComponent("solace_crates.message.key_definition_missing")
-            );
+            CrateBlock.fail(player, "solace_crates.message.key_definition_missing");
             return;
         }
 
         LootTable table = definition.getLootTable();
         if(table == null) {
-            player.sendSystemMessage(
-                SolaceCrates.getTranslatedSolaceCrateComponent("solace_crates.messages.loottable_missing")
-            );
+            CrateBlock.fail(player, "solace_crates.messages.loottable_missing");
             return;
         }
 
         //take a key, return if not
         ItemStack usedStack = player.getActiveItem();
         if(usedStack.getItem() != keyItem) {
-            player.sendSystemMessage(
-                SolaceCrates.getTranslatedSolaceCrateComponent(
-                    "solace_crates.message.key_missing.none"
-                )
-            );
+            CrateBlock.fail(player, "solace_crates.message.key_missing.none");
             return;
         }
         usedStack.consume(1, player);
 
         List<ItemStack> outcome = attemptAdjustedRoll(forcedOutcome, table);
         ItemsHelper.giveItemsToPlayer(player, outcome);
-        //TODO: sound
+        CrateBlock.succeede(player);
         player.awardStat(
             Stats.ITEM_USED.get( usedStack.getItem() )
         );

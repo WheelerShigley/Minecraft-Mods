@@ -23,8 +23,6 @@ public class SolaceCrates implements ModInitializer {
      *
      * ## Prototyping
      ** Next Items (in-menu)
-     * (Probabilities Menu) Pity, Link
-     * Opening Sound(s)
      *
      * ## Appearance
      ** Players Configuration for current seed (UUID -> #)
@@ -43,6 +41,7 @@ public class SolaceCrates implements ModInitializer {
      *
      * ## User-friendliness
      * set crate-type with a menu
+     * default example.json (loot-table)
      *
      * item-component can set identifier (when placing) + creative-registration integration
      *

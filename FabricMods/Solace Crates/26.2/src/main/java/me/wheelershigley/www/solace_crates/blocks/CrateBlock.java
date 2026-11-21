@@ -18,11 +18,12 @@ import me.wheelershigley.www.solace_crates.permissions.PermissionsHelper;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -44,18 +45,16 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.wheelershigley.www.solace_crates.SolaceCrates.getTranslatedSolaceCrateComponent;
-
 public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock, BlockWithElementHolder {
     public static final Identifier DEFAULT_BLOCK_IDENTIFIER = SolaceCrates.id("crate");
     public static final BlockBehaviour.Properties PROPERTIES;
-    private long lastInsertFailTimestamp;
 
     public CrateBlock(Properties properties) {
         super(properties);
@@ -88,14 +87,6 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
         return new CrateBlockEntity(position, blockState);
     }
 
-    void setLastInsertFailTimestamp(final long lastInsertFailTimestamp) {
-        this.lastInsertFailTimestamp = lastInsertFailTimestamp;
-    }
-
-    long getLastInsertFailTimestamp() {
-        return this.lastInsertFailTimestamp;
-    }
-
     @Override
     protected @NonNull InteractionResult useItemOn(
         final @NonNull ItemStack itemStack,
@@ -116,30 +107,26 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
         }
 
         if( crateBlockEntity.getCrateIdentifier().equals(CrateBlockEntity.DEFAULT_IDENTIFIER) ) {
-            boolean hasPermission = PermissionsHelper.hasCommandPermission(serverPlayer);
-            serverPlayer.sendSystemMessage(
-                getTranslatedSolaceCrateComponent(
-                    "solace_crates.message.crate_unset." + (hasPermission ? "allowed" : "disallowed")
-                )
-            );
+            String translationKey;
+            if( PermissionsHelper.hasCommandPermission(serverPlayer) ) {
+                translationKey = "solace_crates.message.crate_unset.allowed";
+            } else {
+                translationKey = "solace_crates.message.crate_unset.disallowed";
+            }
+
+            fail(serverPlayer, translationKey);
             return InteractionResult.SUCCESS_SERVER;
         }
 
         CrateDefinition crateDefinition = CrateRegistry.get( crateBlockEntity.getCrateIdentifier() );
         if(crateDefinition == null) {
-            serverPlayer.sendSystemMessage(
-                getTranslatedSolaceCrateComponent(
-                    "solace_crates.message.definition_missing"
-                )
-            );
+            fail(serverPlayer, "solace_crates.message.definition_missing");
             return InteractionResult.FAIL;
         }
 
         LootTable table = crateDefinition.getLootTable();
         if(table == null) {
-            serverPlayer.sendSystemMessage(
-                getTranslatedSolaceCrateComponent("solace_crates.messages.loottable_missing")
-            );
+            fail(serverPlayer, "solace_crates.messages.loottable_missing");
             return InteractionResult.FAIL;
         }
         // TODO: seeding
@@ -163,12 +150,8 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
         final boolean itemAccepted = CrateBlock.Server.tryInsertKey(
             serverPlayer,
             serverPlayer.getItemInHand( serverPlayer.getUsedItemHand() ),
-            serverPlayer.level(),
-            crateBlockEntity.getBlockPos(),
-            this,
             crateDefinition,
-            table,
-            context
+            table, context
         );
         if(itemAccepted) {
             return InteractionResult.SUCCESS_SERVER;
@@ -208,10 +191,41 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
                 (Object[])translations.toArray( new Component[0] )
             );
         }
-        player.sendSystemMessage(
-            getTranslatedSolaceCrateComponent(missingKeysMessage)
-        );
+        fail(serverPlayer, missingKeysMessage);
         return InteractionResult.SUCCESS;
+    }
+
+    public static void succeede(ServerPlayer player) {
+        player.connection.send(
+            new ClientboundSoundPacket(
+                BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.VAULT_OPEN_SHUTTER),
+                SoundSource.BLOCKS,
+                player.getX(), player.getY(), player.getZ(),
+                1.0f, 1.0f,
+                player.getRandom().nextLong()
+            )
+        );
+    }
+    public static void fail(ServerPlayer player, @NotNull String messageTranslationKey) {
+        fail(
+            player,
+            Component.translatable(messageTranslationKey)
+        );
+    }
+    public static void fail(ServerPlayer player, @NotNull Component message) {
+        player.sendSystemMessage(message);
+        fail(player);
+    }
+    public static void fail(ServerPlayer player) {
+        player.connection.send(
+            new ClientboundSoundPacket(
+                BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.VAULT_INSERT_ITEM_FAIL),
+                SoundSource.BLOCKS,
+                player.getX(), player.getY(), player.getZ(),
+                1.0f, 1.0f,
+                player.getRandom().nextLong()
+            )
+        );
     }
 
     @Override
@@ -224,25 +238,23 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
         public static boolean tryInsertKey(
             final ServerPlayer serverPlayer,
             final ItemStack stackToInsert,
-            final ServerLevel serverLevel,
-            final BlockPos pos,
-            final CrateBlock crateBlock,
             final CrateDefinition crateDefinition,
             final LootTable lootTable,
             final LootContext lootContext
         ) {
             if( !isValidToInsert(crateDefinition, stackToInsert.getItem() ) ) {
-                playInsertFailSound(serverLevel, crateBlock, pos, SoundEvents.VAULT_INSERT_ITEM_FAIL);
+                CrateBlock.fail(serverPlayer);
                 return false;
             }
 
             List<ItemStack> stacks = new ArrayList<>();
             lootTable.getRandomItemsRaw(lootContext, stacks::add);
             if( stacks.isEmpty() ) {
+                CrateBlock.fail(serverPlayer);
                 return false;
             }
 
-            //TODO: sound
+            CrateBlock.succeede(serverPlayer);
             serverPlayer.awardStat(
                 Stats.ITEM_USED.get( stackToInsert.getItem() )
             );
@@ -260,19 +272,7 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
             }
 
             Identifier itemIdentifier = ItemsHelper.getIdentifier(item);
-            return itemIdentifier.equals(crateDefinition.STANDARD_KEY());
-        }
-
-        private static void playInsertFailSound(
-            final ServerLevel serverLevel,
-            final CrateBlock crateBlock,
-            final BlockPos pos,
-            final SoundEvent sound
-        ) {
-            if( crateBlock.getLastInsertFailTimestamp() + 15L <= serverLevel.getGameTime() ) {
-                serverLevel.playSound(null, pos, sound, SoundSource.BLOCKS);
-                crateBlock.setLastInsertFailTimestamp( serverLevel.getGameTime() );
-            }
+            return itemIdentifier.equals( crateDefinition.STANDARD_KEY() );
         }
     }
 
