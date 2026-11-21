@@ -9,11 +9,16 @@
   "solace_crates.message.crate_unset.allowed":    "§cError§7: Set Crate-Identifier with \"§8/solace_crates set_crate {X} {Y} {Z} {namespace}:{path}§7\".",
   "solace_crates.message.crate_unset.disallowed": "§cError§7: To use this, contact a server-administrator about this unset crate.",
   "solace_crates.message.definition_missing":     "§cError§7: Crate-Definition not found.",
+  "solace_crates.message.key_definition_missing": "§cError§7: Key-Definition not found.",
   "solace_crates.messages.loottable_missing":     "§cError§7: LootTable not found.",
+  "solace_crates.messages.choice_missing":        "§cError§7: Choice not found.",
 
   "solace_crates.message.key_missing.none":   "§cKey missing!",
   "solace_crates.message.key_missing.single": "§cKey missing!§7 Use a %1$s§r§7 to open.",
   "solace_crates.message.key_missing.double": "§cKey missing!§7 Use a %1$s§r§7 or %2$s§r§7 to open.",
+
+  "solace_crates.menu.choice.next_item": "Next Item",
+  "solace_crates.menu.choice.description": "What's chosen is a guaranteed result.",
 
   "solace_crates.menu.probabilities.standard_key":  "Standard Key",
   "solace_crates.menu.probabilities.premium_key":   "Premium Key",

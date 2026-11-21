@@ -1,14 +1,22 @@
 package me.wheelershigley.www.solace_crates.menus;
 
+import me.wheelershigley.www.solace_crates.SolaceCrates;
 import me.wheelershigley.www.solace_crates.api.EntryOutcome;
 import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
 import me.wheelershigley.www.solace_crates.mixin.LootTableAccessor;
 import me.wheelershigley.www.solace_crates.mixin.LootTableBuilderAccessor;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -48,45 +56,74 @@ public class ChoiceMenu extends WrappedImmutableSimpleGui {
 
     @Override
     public void setHeader() {
-        //TODO
+        ItemStack descriptionStack; {
+            descriptionStack = new ItemStack(Items.PAPER);
+            descriptionStack.set(
+                DataComponents.CUSTOM_NAME,
+                Component
+                    .translatable("solace_crates.menu.choice.next_item")
+                    .withStyle( Style.EMPTY.withColor(TextColor.GRAY).withItalic(false) )
+            );
+            descriptionStack.set(
+                DataComponents.LORE,
+                ItemLore.EMPTY.withLineAdded(
+                    Component
+                        .translatable("solace_crates.menu.choice.description")
+                        .withStyle( Style.EMPTY.withColor(TextColor.WHITE).withItalic(false) )
+                )
+            );
+        }
+
+        setSlot(4, descriptionStack);
     }
 
     @Override
     public void onBodyClick(int index) {
         EntryOutcome forcedOutcome = displayOutcomes.get(index);
         if(forcedOutcome == null) {
-            //TODO: notify
+            player.sendSystemMessage(
+                SolaceCrates.getTranslatedSolaceCrateComponent("solace_crates.messages.choice_missing")
+            );
             return;
         }
         attemptChoice(forcedOutcome);
+        this.close();
     }
     private void attemptChoice(EntryOutcome forcedOutcome) {
         Item keyItem = ItemsHelper.getItem( definition.PREMIUM_KEY() );
         if(keyItem == null) {
-            //TODO: notify
+            player.sendSystemMessage(
+                SolaceCrates.getTranslatedSolaceCrateComponent("solace_crates.message.key_definition_missing")
+            );
             return;
         }
 
         LootTable table = definition.getLootTable();
         if(table == null) {
-            //TODO: notify
+            player.sendSystemMessage(
+                SolaceCrates.getTranslatedSolaceCrateComponent("solace_crates.messages.loottable_missing")
+            );
             return;
         }
 
         //take a key, return if not
         ItemStack usedStack = player.getActiveItem();
         if(usedStack.getItem() != keyItem) {
-            //TODO: notify
+            player.sendSystemMessage(
+                SolaceCrates.getTranslatedSolaceCrateComponent(
+                    "solace_crates.message.key_missing.none"
+                )
+            );
             return;
         }
         usedStack.consume(1, player);
 
         List<ItemStack> outcome = attemptAdjustedRoll(forcedOutcome, table);
         ItemsHelper.giveItemsToPlayer(player, outcome);
-        /*TODO stats
+        //TODO: sound
         player.awardStat(
-            Stats.ITEM_USED.get( c.getItem() )
-        );*/
+            Stats.ITEM_USED.get( usedStack.getItem() )
+        );
     }
     private List<ItemStack> attemptAdjustedRoll(
         EntryOutcome forcedOutcome,
@@ -131,19 +168,6 @@ public class ChoiceMenu extends WrappedImmutableSimpleGui {
             }
         }
         return false;
-    }
-    private LootPool copyWithout(LootPool pool, LootPoolEntry entry) {
-        LootPool.Builder builder = LootPool.lootPool();
-        List<LootPoolEntry> entries = new ArrayList<>();
-        for(LootPoolEntryContainer container : pool.entries) {
-            entries.clear();
-            container.expand(context, entries::add);
-            if( entries.contains(entry) ) {
-                continue;
-            }
-            builder.add(container);
-        }
-        return builder.build();
     }
     private NumberProvider decrement(NumberProvider provider, double amount) {
         if(provider instanceof ConstantValue(float value) ) {

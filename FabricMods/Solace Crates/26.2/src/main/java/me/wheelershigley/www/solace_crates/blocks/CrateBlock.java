@@ -182,10 +182,6 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
                 serverPlayer, crateDefinition, context, odds.getAllEntries(context), null
             );
             menu.open();
-
-            player.sendSystemMessage(
-                Component.literal("TODO: premium key usage")
-            );
             return InteractionResult.SUCCESS_SERVER;
         }
 
@@ -246,6 +242,7 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
                 return false;
             }
 
+            //TODO: sound
             serverPlayer.awardStat(
                 Stats.ITEM_USED.get( stackToInsert.getItem() )
             );

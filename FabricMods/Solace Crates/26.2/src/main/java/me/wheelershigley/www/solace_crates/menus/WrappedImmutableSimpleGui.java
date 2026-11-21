@@ -130,7 +130,7 @@ public abstract class WrappedImmutableSimpleGui extends ImmutableSimpleGui {
 
         int position = 1*ROW_LENGTH;
         for(int index = STARTING_POSITION; index < ENDING_POSITION; index++) {
-            int true_index = page_index * BODY_LENGTH + index;
+            int true_index = index;
             SimpleGuiElement guiElement = GuiElementBuilder
                 .from( displayOutcomes.get(index).tick() )
                 .setCallback(
