@@ -79,9 +79,16 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
 
         setSlot( 4, menuItemsMaker.getNextItem()                        );
         setSlot( 5, menuItemsMaker.getPoolInformationItem(this.context) );
-        // TODO s
-        //setSlot( 7, menuItemsMaker.getPityItem()                        );
-        //setSlot( 8, menuItemsMaker.getStoreLinkItem()                   );
+
+        /* Meta */ {
+            int position = ROW_LENGTH-1;
+
+            //TODO
+            //setSlot( position--, menuItemsMaker.getStoreLinkItem()                   );
+
+
+            setSlot( position--, menuItemsMaker.getPityItem()                        );
+        }
     }
 
     @Override
@@ -325,13 +332,19 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
                 "solace_crates.menu.probabilities.rolls"
             );
         }
-        // TODO
         public ItemStack getPityItem() {
-            return getMenuItem(
+            ItemStack result = getMenuItem(
                 Items.SUNFLOWER,
                 false,
                 "solace_crates.menu.probabilities.pity"
             );
+
+            Component description = getPityDescription(player, crateDefinition);
+            result.set(
+                DataComponents.LORE,
+                ItemLore.EMPTY.withLineAdded(description)
+            );
+            return result;
         }
         // TODO
         public ItemStack getStoreLinkItem() {
@@ -339,6 +352,51 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
                 Items.WRITTEN_BOOK,
                 false,
                 "solace_crates.menu.probabilities.link." + "todo"
+            );
+        }
+
+        private Component getPityDescription(ServerPlayer player, CrateDefinition crateDefinition) {
+            if( LootHelper.isPityRoll(player, crateDefinition) ) {
+                return Component
+                    .translatable("solace_crates.menu.probabilities.pity_ready")
+                    .withStyle(
+                        Style.EMPTY
+                            .withColor(TextColor.GOLD)
+                            .withBold(true)
+                            .withItalic(false)
+                    )
+                ;
+            }
+
+            int pity = LootHelper.getPity(player, crateDefinition);
+            Component currentPityComponent = Component
+                .literal( Integer.toString(pity) )
+                .withStyle(
+                    Style.EMPTY
+                        .withColor(TextColor.GOLD)
+                        .withItalic(false)
+                        .withBold(true)
+                )
+            ;
+            int pity_threshold = crateDefinition.PITY_THRESHOLD();
+            Component thresholdPityComponent = Component
+                .literal( Integer.toString(pity_threshold) )
+                .withStyle(
+                    Style.EMPTY
+                        .withColor(TextColor.GOLD)
+                        .withItalic(false)
+                        .withBold(true)
+                )
+            ;
+
+            return Component.translatable(
+                "solace_crates.menu.probabilities.pity_pity",
+                currentPityComponent,
+                thresholdPityComponent
+            ).withStyle(
+                Style.EMPTY
+                    .withColor(TextColor.YELLOW)
+                    .withItalic(false)
             );
         }
     }

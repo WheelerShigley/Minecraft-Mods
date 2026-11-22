@@ -35,6 +35,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Blocks;
@@ -139,6 +140,7 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
         ;
         LootContext context = LootHelper.createLootContext(serverPlayer, crateDefinition);
 
+
         if( serverPlayer.isCrouching() ) {
             ItemStackOddsTables odds = LootTableEvaluator.evaluate(table, context);
             List<LootPool> pools = ( (LootTableAccessor)table ).solace_crates$getPools();
@@ -154,6 +156,32 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
             return InteractionResult.SUCCESS;
         }
 
+        final Item STANDARD_KEY = ItemsHelper.getItem( crateDefinition.STANDARD_KEY() );
+        final Item PREMIUM_KEY  = ItemsHelper.getItem( crateDefinition.PREMIUM_KEY()  );
+        Item usedItem = itemStack.getItem();
+        if(
+            !( usedItem.equals(STANDARD_KEY) || usedItem.equals(PREMIUM_KEY) )
+        ) {
+            fail(serverPlayer, crateDefinition.getTranslatedKeyMissing() );
+            return InteractionResult.SUCCESS;
+        }
+
+
+        final boolean isPityRoll = LootHelper.isPityRoll(serverPlayer, crateDefinition);
+        //TODO: pity sound
+
+        if( isPityRoll || itemStack.getItem().equals(PREMIUM_KEY) ) {
+            ItemStackOddsTables odds = LootTableEvaluator.evaluate(table, context);
+            ChoiceMenu menu = new ChoiceMenu(
+                serverPlayer,
+                crateDefinition, context, isPityRoll,
+                odds.getAllEntries(context),
+                null
+            );
+            menu.open();
+            return InteractionResult.SUCCESS_SERVER;
+        }
+
         final boolean itemAccepted = CrateBlock.Server.tryInsertKey(
             serverPlayer,
             serverPlayer.getItemInHand( serverPlayer.getUsedItemHand() ),
@@ -167,41 +195,8 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
             return InteractionResult.SUCCESS_SERVER;
         }
 
-        final Item STANDARD_KEY = ItemsHelper.getItem(crateDefinition.STANDARD_KEY());
-        final Item PREMIUM_KEY  = ItemsHelper.getItem(crateDefinition.PREMIUM_KEY());
-        if( itemStack.getItem().equals(PREMIUM_KEY) ) {
-            ItemStackOddsTables odds = LootTableEvaluator.evaluate(table, context);
-            ChoiceMenu menu = new ChoiceMenu(
-                serverPlayer, crateDefinition, context, odds.getAllEntries(context), null
-            );
-            menu.open();
-            return InteractionResult.SUCCESS_SERVER;
-        }
-
-        Component missingKeysMessage; {
-            List<Component> translations = new ArrayList<>();
-            if(STANDARD_KEY != null) {
-                translations.add(
-                    Component.translatable( STANDARD_KEY.getDescriptionId() )
-                );
-            }
-            if(PREMIUM_KEY  != null) {
-                translations.add(
-                    Component.translatable(  PREMIUM_KEY.getDescriptionId() )
-                );
-            }
-
-            String translationIndex = switch( translations.size() ) {
-                case 1 -> "single";
-                case 2 -> "double";
-                default -> "none";
-            };
-            missingKeysMessage = Component.translatable(
-                "solace_crates.message.key_missing." + translationIndex,
-                (Object[])translations.toArray( new Component[0] )
-            );
-        }
-        fail(serverPlayer, missingKeysMessage);
+        // Impossible state?
+        fail(serverPlayer, crateDefinition.getIdentifiedTranslationKey() );
         return InteractionResult.SUCCESS;
     }
 

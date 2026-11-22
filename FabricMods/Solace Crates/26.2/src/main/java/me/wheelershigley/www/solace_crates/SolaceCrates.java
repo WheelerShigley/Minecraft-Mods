@@ -19,11 +19,6 @@ public class SolaceCrates implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     /* TODO
-     * "**" is required to meet 0.7.0 (functional alpha release)
-     *
-     * ## Prototyping
-     ** Pity
-     *
      * ## Appearance
      * Items in NEXT specify metadata (component displays)
      * Store-Link in ProbabilitiesMenu

@@ -2,6 +2,7 @@ package me.wheelershigley.www.solace_crates.menus;
 
 import me.wheelershigley.www.solace_crates.api.EntryOutcome;
 import me.wheelershigley.www.solace_crates.blocks.CrateBlock;
+import me.wheelershigley.www.solace_crates.configurations.PlayersHistoryCodec;
 import me.wheelershigley.www.solace_crates.data.CrateDefinition;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
 import me.wheelershigley.www.solace_crates.mixin.LootTableAccessor;
@@ -39,16 +40,19 @@ public class ChoiceMenu extends WrappedImmutableSimpleGui {
     private final List<EntryOutcome> displayOutcomes;
     private final CrateDefinition definition;
     private final LootContext context;
+    private final boolean useAnyKey;
 
     public ChoiceMenu(
         @Nullable ServerPlayer player,
         @Nullable CrateDefinition crateDefinition,
-        @NotNull LootContext lootContext,
-        @NotNull List<EntryOutcome> displayOutcomes,
+        @NotNull  LootContext lootContext,
+                  boolean useAnyKey,
+        @NotNull  List<EntryOutcome> displayOutcomes,
         @Nullable ImmutableSimpleGui parent
     ) {
         this.displayOutcomes = displayOutcomes;
         this.definition = crateDefinition;
+        this.useAnyKey = useAnyKey;
         this.context = lootContext;
 
         super(player, displayOutcomes, lootContext, parent);
@@ -88,10 +92,14 @@ public class ChoiceMenu extends WrappedImmutableSimpleGui {
         this.close();
     }
     private void attemptChoice(EntryOutcome forcedOutcome) {
-        Item keyItem = ItemsHelper.getItem( definition.PREMIUM_KEY() );
-        if(keyItem == null) {
-            CrateBlock.fail(player, "solace_crates.message.key_definition_missing");
-            return;
+        List<Item> keyItems = new ArrayList<>();
+        keyItems.add(
+            ItemsHelper.getItem( definition.PREMIUM_KEY() )
+        );
+        if(useAnyKey) {
+            keyItems.add(
+                ItemsHelper.getItem( definition.STANDARD_KEY() )
+            );
         }
 
         LootTable table = definition.getLootTable();
@@ -100,17 +108,26 @@ public class ChoiceMenu extends WrappedImmutableSimpleGui {
             return;
         }
 
-        //take a key, return if not
+        // take a key, return if not
         ItemStack usedStack = player.getActiveItem();
-        if(usedStack.getItem() != keyItem) {
+        if( !keyItems.contains( usedStack.getItem() ) ) {
             CrateBlock.fail(player, "solace_crates.message.key_missing.none");
             return;
         }
-        usedStack.consume(1, player);
 
+        // Success
+        usedStack.consume(1, player);
         List<ItemStack> outcome = attemptAdjustedRoll(forcedOutcome, table);
         ItemsHelper.giveItemsToPlayer(player, outcome);
         CrateBlock.succeede(player);
+
+        if(useAnyKey) {
+            PlayersHistoryCodec.INSTANCE
+                .getInstanceData()
+                .get( player.getUUID() )
+                .increment( definition.IDENTIFIER() )
+            ;
+        }
         player.awardStat(
             Stats.ITEM_USED.get( usedStack.getItem() )
         );
