@@ -126,7 +126,7 @@ public abstract class ImmutableSimpleGui extends SimpleGui {
                     continue;
                 }
 
-                this.setComponent(itemStack, component);
+                setComponent(itemStack, component);
             }
         }
 

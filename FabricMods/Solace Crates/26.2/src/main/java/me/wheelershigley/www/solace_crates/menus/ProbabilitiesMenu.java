@@ -234,7 +234,7 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
             ItemStack result = getMenuItem(
                 Items.PAPER,
                 false,
-                "solace_crates.menu.probabilities.next_item"
+                "solace_crates.menu.probabilities.next_result"
             );
 
             LootContext context = LootHelper.createLootContext( getPlayer(), crateDefinition );
@@ -252,8 +252,16 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
                 for(ItemStack stack : realizedOutcomes) {
                     list.add(
                         Component
-                            .translatable( stack.getItem().getDescriptionId() )
-                            .setStyle( Style.EMPTY.withColor(TextColor.WHITE).withItalic(false) )
+                            .translatable(
+                                "solace_crates.menu.probabilities.rolls.entry_prefix"
+                            )
+                            .setStyle( Style.EMPTY.withColor(TextColor.GRAY).withItalic(false) )
+                            .append( Component.literal(" ") )
+                            .append(
+                                Component.translatable(
+                                    stack.getItem().getDescriptionId()
+                                )
+                            )
                     );
                 }
             }

@@ -22,10 +22,10 @@ public class SolaceCrates implements ModInitializer {
      * "**" is required to meet 0.7.0 (functional alpha release)
      *
      * ## Prototyping
-     ** Next Items Determinism
      ** Pity
      *
      * ## Appearance
+     * Items in NEXT specify metadata (component displays)
      * Store-Link in ProbabilitiesMenu
      * Fix Double-Messaging for unset/unknown/invalid crates
      * Custom Icons

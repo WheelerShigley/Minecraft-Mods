@@ -34,6 +34,10 @@ public class LootHelper {
     }
 
     private static long getSeed(UUID uuid, int offset) {
-        return uuid.hashCode() + offset;
+        return
+            uuid.getMostSignificantBits()
+            ^ Long.rotateLeft( uuid.getLeastSignificantBits(), 32 )
+            ^ offset
+        ;
     }
 }

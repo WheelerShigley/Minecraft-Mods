@@ -133,13 +133,11 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
             return InteractionResult.FAIL;
         }
 
-        //TODO: determinism
         CrateHistory history = PlayersHistoryCodec.INSTANCE
             .getInstanceData()
             .get( serverPlayer.getUUID() )
         ;
         LootContext context = LootHelper.createLootContext(serverPlayer, crateDefinition);
-        history.increment( crateDefinition.IDENTIFIER() );
 
         if( serverPlayer.isCrouching() ) {
             ItemStackOddsTables odds = LootTableEvaluator.evaluate(table, context);
@@ -160,9 +158,12 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
             serverPlayer,
             serverPlayer.getItemInHand( serverPlayer.getUsedItemHand() ),
             crateDefinition,
-            table, context
+            table,
+            LootHelper.createLootContext(serverPlayer, crateDefinition)
         );
         if(itemAccepted) {
+            history.increment( crateDefinition.IDENTIFIER() );
+            PlayersHistoryCodec.INSTANCE.save();
             return InteractionResult.SUCCESS_SERVER;
         }
 
