@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_crates.crate;
+package me.wheelershigley.www.solace_crates.data;
 
 import eu.pb4.polymer.virtualentity.api.ElementHolder;
 import me.wheelershigley.www.solace_crates.blocks.CrateBlockEntity;

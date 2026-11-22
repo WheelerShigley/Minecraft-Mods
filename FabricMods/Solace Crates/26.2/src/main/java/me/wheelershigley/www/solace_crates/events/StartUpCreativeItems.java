@@ -2,7 +2,7 @@ package me.wheelershigley.www.solace_crates.events;
 
 import me.wheelershigley.www.solace_crates.blocks.BlocksHelper;
 import me.wheelershigley.www.solace_crates.blocks.ModBlocks;
-import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
+import me.wheelershigley.www.solace_crates.data.CrateDefinition;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.component.DataComponents;

@@ -25,7 +25,6 @@ public class SolaceCrates implements ModInitializer {
      ** Next Items (in-menu)
      *
      * ## Appearance
-     ** Players Configuration for current seed (UUID -> #)
      * Store-Link in ProbabilitiesMenu
      * Fix Double-Messaging for unset/unknown/invalid crates
      * Custom Icons

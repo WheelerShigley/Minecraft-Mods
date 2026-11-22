@@ -1,4 +1,4 @@
-package me.wheelershigley.www.solace_crates.crate;
+package me.wheelershigley.www.solace_crates.data;
 
 import me.wheelershigley.www.solace_crates.api.data.Savable;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;

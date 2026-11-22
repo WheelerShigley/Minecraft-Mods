@@ -5,8 +5,11 @@ import eu.pb4.polymer.blocks.api.PolymerTexturedBlock;
 import eu.pb4.polymer.virtualentity.api.BlockWithElementHolder;
 import eu.pb4.polymer.virtualentity.api.ElementHolder;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
-import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
-import me.wheelershigley.www.solace_crates.crate.CrateElementHolder;
+import me.wheelershigley.www.solace_crates.configurations.CrateDefinitionsCodec;
+import me.wheelershigley.www.solace_crates.configurations.PlayersHistoryCodec;
+import me.wheelershigley.www.solace_crates.data.CrateDefinition;
+import me.wheelershigley.www.solace_crates.data.CrateElementHolder;
+import me.wheelershigley.www.solace_crates.data.CrateHistory;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
 import me.wheelershigley.www.solace_crates.loot.ItemStackOddsTables;
 import me.wheelershigley.www.solace_crates.loot.LootHelper;
@@ -129,8 +132,17 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
             fail(serverPlayer, "solace_crates.messages.loottable_missing");
             return InteractionResult.FAIL;
         }
-        // TODO: seeding
-        LootContext context = LootHelper.createLootContext(serverPlayer, 0);
+
+        //TODO: determinism
+        CrateHistory history = PlayersHistoryCodec.INSTANCE
+            .getInstanceData()
+            .get( serverPlayer.getUUID() )
+        ;
+        LootContext context = LootHelper.createLootContext(
+            serverPlayer,
+            history.get( crateDefinition.IDENTIFIER() )
+        );
+        history.increment( crateDefinition.IDENTIFIER() );
 
         if( serverPlayer.isCrouching() ) {
             ItemStackOddsTables odds = LootTableEvaluator.evaluate(table, context);

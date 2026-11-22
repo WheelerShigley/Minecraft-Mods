@@ -3,7 +3,6 @@ package me.wheelershigley.www.solace_crates.api.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
-import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.Identifier;
 
@@ -13,7 +12,6 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Set;
 
 public interface Codec< T extends Savable<D>, D > {
     T getDefaultCodec();

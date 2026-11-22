@@ -5,7 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
+import me.wheelershigley.www.solace_crates.data.CrateDefinition;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 import net.minecraft.commands.CommandSourceStack;
 

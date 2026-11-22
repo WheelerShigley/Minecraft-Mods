@@ -1,9 +1,8 @@
 package me.wheelershigley.www.solace_crates.menus;
 
-import me.wheelershigley.www.solace_crates.SolaceCrates;
 import me.wheelershigley.www.solace_crates.api.EntryOutcome;
 import me.wheelershigley.www.solace_crates.blocks.CrateBlock;
-import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
+import me.wheelershigley.www.solace_crates.data.CrateDefinition;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
 import me.wheelershigley.www.solace_crates.mixin.LootTableAccessor;
 import me.wheelershigley.www.solace_crates.mixin.LootTableBuilderAccessor;
@@ -12,14 +11,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemLore;
-import net.minecraft.world.level.block.entity.vault.VaultBlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -132,7 +129,7 @@ public class ChoiceMenu extends WrappedImmutableSimpleGui {
                 boolean found = false;
                 if( !found && poolContains(pool, entry) ) {
                     adjustedPools.add(
-                            copyWithRolls( pool, decrement(pool.rolls, 1) )
+                        copyWithRolls( pool, decrement(pool.rolls, 1) )
                     );
                     found = true;
                 } else {

@@ -3,7 +3,7 @@ package me.wheelershigley.www.solace_crates.blocks;
 import eu.pb4.polymer.virtualentity.api.ElementHolder;
 import eu.pb4.polymer.virtualentity.api.elements.BlockDisplayElement;
 import me.wheelershigley.www.solace_crates.SolaceCrates;
-import me.wheelershigley.www.solace_crates.crate.CrateDefinition;
+import me.wheelershigley.www.solace_crates.data.CrateDefinition;
 import me.wheelershigley.www.solace_crates.registry.CrateRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.server.IntegratedServer;
