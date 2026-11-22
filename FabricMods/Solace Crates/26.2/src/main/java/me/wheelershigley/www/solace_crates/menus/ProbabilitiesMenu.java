@@ -2,9 +2,11 @@ package me.wheelershigley.www.solace_crates.menus;
 
 import me.wheelershigley.www.solace_crates.api.EntryOutcome;
 import me.wheelershigley.www.solace_crates.blocks.CrateBlockEntity;
+import me.wheelershigley.www.solace_crates.configurations.PlayersHistoryCodec;
 import me.wheelershigley.www.solace_crates.data.CrateDefinition;
 import me.wheelershigley.www.solace_crates.items.ItemsHelper;
 import me.wheelershigley.www.solace_crates.loot.ItemStackOddsTables;
+import me.wheelershigley.www.solace_crates.loot.LootHelper;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -19,12 +21,15 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
     private int page_index = 0;
@@ -225,16 +230,38 @@ public class ProbabilitiesMenu extends WrappedImmutableSimpleGui {
                 Style.EMPTY.withColor(TextColor.GOLD).withBold(true)
             );
         }
-        // TODO
         public ItemStack getNextItem() {
-            ServerPlayer player = getPlayer();
-            int seed = 0;
-
-            return getMenuItem(
+            ItemStack result = getMenuItem(
                 Items.PAPER,
                 false,
                 "solace_crates.menu.probabilities.next_item"
             );
+
+            LootContext context = LootHelper.createLootContext( getPlayer(), crateDefinition );
+            LootTable table = crateDefinition.getLootTable();
+            if(table == null) {
+                return result;
+            }
+
+            List<Component> list; {
+                list = new LinkedList<>();
+
+                List<ItemStack> realizedOutcomes = new ArrayList<>();
+                table.getRandomItems(context, realizedOutcomes::add);
+
+                for(ItemStack stack : realizedOutcomes) {
+                    list.add(
+                        Component
+                            .translatable( stack.getItem().getDescriptionId() )
+                            .setStyle( Style.EMPTY.withColor(TextColor.WHITE).withItalic(false) )
+                    );
+                }
+            }
+            result.set(
+                DataComponents.LORE,
+                new ItemLore(list)
+            );
+            return result;
         }
         private static final Style ROLL_STYLE = Style.EMPTY.withColor(TextColor.GRAY).withItalic(false);
         public ItemStack getPoolInformationItem(LootContext context) {

@@ -138,10 +138,7 @@ public class CrateBlock extends BaseEntityBlock implements PolymerTexturedBlock,
             .getInstanceData()
             .get( serverPlayer.getUUID() )
         ;
-        LootContext context = LootHelper.createLootContext(
-            serverPlayer,
-            history.get( crateDefinition.IDENTIFIER() )
-        );
+        LootContext context = LootHelper.createLootContext(serverPlayer, crateDefinition);
         history.increment( crateDefinition.IDENTIFIER() );
 
         if( serverPlayer.isCrouching() ) {

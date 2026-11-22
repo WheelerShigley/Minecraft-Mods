@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import me.wheelershigley.www.solace_crates.api.data.Codec;
 import me.wheelershigley.www.solace_crates.data.CrateHistory;
 import me.wheelershigley.www.solace_crates.data.PlayersHistory;
+import net.minecraft.util.RandomSource;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;

@@ -22,7 +22,8 @@ public class SolaceCrates implements ModInitializer {
      * "**" is required to meet 0.7.0 (functional alpha release)
      *
      * ## Prototyping
-     ** Next Items (in-menu)
+     ** Next Items Determinism
+     ** Pity
      *
      * ## Appearance
      * Store-Link in ProbabilitiesMenu
